@@ -1,0 +1,237 @@
+[
+ {
+  "t": 0.85,
+  "sfx": "pop",
+  "what": "'AI' (red) slams in"
+ },
+ {
+  "t": 0.86,
+  "sfx": "scribble",
+  "dur": 0.42,
+  "what": "red bubble loop round him"
+ },
+ {
+  "t": 1.01,
+  "sfx": "pop",
+  "what": "'bubble' lands as the red loop closes",
+  "gain_db": -2
+ },
+ {
+  "t": 1.3,
+  "sfx": "scribble",
+  "dur": 0.16,
+  "what": "ink soap-bubble highlight arc"
+ },
+ {
+  "t": 2.1,
+  "sfx": "pop",
+  "what": "ChatGPT sticker slaps on",
+  "gain_db": -3
+ },
+ {
+  "t": 2.24,
+  "sfx": "pop",
+  "what": "Claude sticker slaps on",
+  "gain_db": -3
+ },
+ {
+  "t": 2.4,
+  "sfx": "pop",
+  "what": "Codex sticker slaps on",
+  "gain_db": -3
+ },
+ {
+  "t": 3.0,
+  "sfx": "pop",
+  "what": "Anthropic sticker slaps on",
+  "gain_db": -3
+ },
+ {
+  "t": 3.37,
+  "sfx": "tick",
+  "what": "'entire'",
+  "gain_db": -6
+ },
+ {
+  "t": 3.52,
+  "sfx": "scribble",
+  "dur": 0.2,
+  "what": "red star doodle 1"
+ },
+ {
+  "t": 3.67,
+  "sfx": "pop",
+  "what": "'world.' + red doodle twinkles",
+  "gain_db": -4
+ },
+ {
+  "t": 4.26,
+  "sfx": "pop",
+  "what": "OpenAI sticker slaps on",
+  "gain_db": -3
+ },
+ {
+  "t": 4.7,
+  "sfx": "pop",
+  "what": "Claude sticker #2",
+  "gain_db": -3
+ },
+ {
+  "t": 4.84,
+  "sfx": "tick",
+  "what": "'every'",
+  "gain_db": -6
+ },
+ {
+  "t": 4.98,
+  "sfx": "scribble",
+  "dur": 0.2,
+  "what": "red star doodle 2"
+ },
+ {
+  "t": 5.12,
+  "sfx": "pop",
+  "what": "ChatGPT sticker #2",
+  "gain_db": -3
+ },
+ {
+  "t": 5.26,
+  "sfx": "tick",
+  "what": "'single'",
+  "gain_db": -6
+ },
+ {
+  "t": 5.36,
+  "sfx": "scribble",
+  "dur": 0.2,
+  "what": "red star doodle 3"
+ },
+ {
+  "t": 5.55,
+  "sfx": "pop",
+  "what": "Anthropic sticker #2 \u2014 bubble crowded",
+  "gain_db": -3
+ },
+ {
+  "t": 5.7,
+  "sfx": "tick",
+  "what": "'place.'",
+  "gain_db": -6
+ },
+ {
+  "t": 5.74,
+  "sfx": "scribble",
+  "dur": 0.2,
+  "what": "red star doodle 4"
+ },
+ {
+  "t": 6.18,
+  "sfx": "tick",
+  "what": "anticipation push-in",
+  "gain_db": -6
+ },
+ {
+  "t": 6.3,
+  "sfx": "impact",
+  "what": "camera yanks back on 'zoom' \u2014 'zoom' lands"
+ },
+ {
+  "t": 6.42,
+  "sfx": "whoosh",
+  "what": "pull-back 1 -> 0.125, grid rushes in",
+  "gain_db": -3
+ },
+ {
+  "t": 6.5,
+  "sfx": "scribble",
+  "dur": 0.4,
+  "what": "globe outline (sweeping in with the pull-back)"
+ },
+ {
+  "t": 6.72,
+  "sfx": "pop",
+  "what": "'out' lands, globe sweeping in"
+ },
+ {
+  "t": 6.8,
+  "sfx": "scribble",
+  "dur": 0.2,
+  "what": "latitude arcs"
+ },
+ {
+  "t": 6.96,
+  "sfx": "scribble",
+  "dur": 0.4,
+  "what": "meridians + continent outlines"
+ },
+ {
+  "t": 7.24,
+  "sfx": "scribble",
+  "dur": 0.52,
+  "what": "pencil hatch on the continents"
+ },
+ {
+  "t": 7.4,
+  "sfx": "ping",
+  "what": "red loop calls out the speck (the bubble)",
+  "gain_db": -6
+ },
+ {
+  "t": 7.4,
+  "sfx": "scribble",
+  "dur": 0.34,
+  "what": "red loop round the speck"
+ },
+ {
+  "t": 8.98,
+  "sfx": "pop",
+  "what": "'barely'"
+ },
+ {
+  "t": 9.24,
+  "sfx": "scribble",
+  "dur": 0.1,
+  "what": "scratch mark 1"
+ },
+ {
+  "t": 9.26,
+  "sfx": "tick",
+  "what": "scratch 1",
+  "gain_db": -5
+ },
+ {
+  "t": 9.36,
+  "sfx": "scribble",
+  "dur": 0.1,
+  "what": "scratch mark 2"
+ },
+ {
+  "t": 9.4,
+  "sfx": "pop",
+  "what": "'scratched' (red)"
+ },
+ {
+  "t": 9.48,
+  "sfx": "scribble",
+  "dur": 0.1,
+  "what": "scratch mark 3"
+ },
+ {
+  "t": 9.5,
+  "sfx": "tick",
+  "what": "scratch 3",
+  "gain_db": -5
+ },
+ {
+  "t": 9.68,
+  "sfx": "tick",
+  "what": "'the'",
+  "gain_db": -6
+ },
+ {
+  "t": 10.14,
+  "sfx": "pop",
+  "what": "'surface.'",
+  "gain_db": -3
+ }
+]

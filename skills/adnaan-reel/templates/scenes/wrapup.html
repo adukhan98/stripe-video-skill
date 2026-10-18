@@ -1,0 +1,73 @@
+<!doctype html>
+<!-- adnaan-reel scene starter: WRAP-UP — thesis restated: portrait card + big accent word; the card shrinks aside,
+     the list's coins orbit a dotted ring, then a prompt box gets the items pasted in as plain-text pills (no logos). -->
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>wrap-up</title>
+    <link rel="stylesheet" href="brand.css" />
+    <link rel="stylesheet" href="paper.css" />
+    <link rel="stylesheet" href="marker.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+    <script src="paper.js"></script>
+    <script src="marker.js"></script>
+  </head>
+  <body data-face="0.43">
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="6.500">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+      <div id="cam"><div id="punch">
+
+        <!-- MODE A (v6): his footage edge to edge in the TOP half (no border/shadow/tilt/float); the paper below is yours:
+             content band y 1000–1480, keep x <= 900 below y 1200 (IG icons). P.splitOut / P.splitIn switch modes mid-scene. -->
+        <div id="spk" class="spk split" data-h="960">
+          <div class="spk-card">
+            <div class="spk-vid"><video id="speaker" class="clip" src="assets/speaker.mp4" muted playsinline data-start="0" data-duration="6.500" data-track-index="1"></video></div>
+          </div>
+        </div>
+        <div class="line sup kin" data-x="76" data-base="1240" data-size="96" data-exit="2.6">
+          <span class="w" data-t="0.3">copy</span><span class="w gap-s" data-t="0.5">and</span>
+          <span class="w hero ocean gap-s" style="font-size: 170px" data-t="0.9" data-hero data-punch="0.9">paste</span>
+        </div>
+
+        <svg class="paths"><path id="ring" class="dotted" d="M 540 1120 m -300 0 a 300 300 0 1 0 600 0 a 300 300 0 1 0 -600 0" /></svg>
+        <div class="coin" id="k1" data-n="01" data-x="540" data-y="1120" style="opacity:0"></div>
+        <div class="coin" id="k2" data-n="02" data-x="540" data-y="1120" style="opacity:0"></div>
+        <div class="coin" id="k3" data-n="03" data-x="540" data-y="1120" style="opacity:0"></div>
+
+        <div id="box" class="uicard" style="left: 90px; top: 1180px; width: 900px; height: 280px">
+          <i class="g" style="left: 36px; top: 40px; width: 420px; height: 20px"></i>
+          <i class="g" style="left: 36px; top: 84px; width: 300px; height: 20px"></i>
+        </div>
+        <div id="t1" class="pill light sm" style="left: 130px; top: 1330px">Claude Code</div>
+        <div id="t2" class="pill light sm" style="left: 420px; top: 1330px">Codex</div>
+        <div id="t3" class="pill light sm" style="left: 640px; top: 1330px">Cursor</div>
+
+        <div class="line sup" data-x="76" data-base="1180" data-size="90">
+          <span class="w" data-t="3.2">into</span><span class="w gap-s" data-t="3.4">any</span>
+          <span class="w hero ink gap-s" style="font-size: 130px" data-t="3.8" data-pop>agent</span>
+        </div>
+      </div></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const P = await Paper.init({ extraFonts: ['700 60px "Caveat"'] });
+        const M = Marker.init(P);   // hand-drawn marker layer (hf/marker.js header): loops, underlines, arrows, highlighter, notes
+        const { tl, D, F } = P;
+        // Mode A → B: the split band shoots up on the turn to make the whole canvas the stage; coins orbit on the ring
+        P.splitOut("#spk", 2.4);
+        P.drawPath("#ring", 2.6, 0.6);
+        P.marchPath("#ring", 2.6, D - 2.6, 90);
+        ["#k1", "#k2", "#k3"].forEach((s, i) => {
+          tl.set(s, { opacity: 1 }, 2.7 + i * 3 * F);
+          P.pop(s, 2.8 + i * 3 * F);
+          P.ride(s, "#ring", 2.8 + i * 3 * F, D - 3.0, { start: i / 3, end: i / 3 + 0.8 });
+        });
+        P.cardIn("#box", 3.0, { fromY: 140 });
+        P.pillIn("#t1, #t2, #t3", 4.0, { stagger: 5 * F });
+      })();
+    </script>
+  </body>
+</html>

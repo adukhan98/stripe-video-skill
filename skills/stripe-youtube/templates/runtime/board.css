@@ -1,0 +1,121 @@
+/* stripe-youtube runtime — board.css: the 16:9 board world in two themes (Greg Light / Greg Dark), type, tiles,
+   coins, chapter headings, real-page cards. One system: the layouts are identical, only the theme changes.
+   <body data-theme="light|dark">. Category hue per element: class blue | green | yellow | violet | orange | teal.
+   Never edit per scene — change it here, then `board.py runtime` + re-render (references/style.md). */
+
+@font-face { font-family: "Inter Tight"; src: url("fonts/InterTight-Variable.ttf") format("truetype"); font-weight: 100 900; font-display: block; }
+@font-face { font-family: "Inter"; src: url("fonts/Inter-Variable.ttf") format("truetype"); font-weight: 100 900; font-display: block; }
+@font-face { font-family: "Geist Mono"; src: url("fonts/GeistMono-Medium.ttf") format("truetype"); font-weight: 500; font-display: block; }
+
+/* ---------- themes ---------- */
+:root, body[data-theme="light"] {
+  --bg: #E4DED9; --card: #FBFAF8; --ink: #141414; --muted: #8E8780; --hl: #FFEC99;
+  --tag: #141414; --tag-text: #FFFFFF; --emph-fixed: none;
+  --marker: #1d1b1a; --marker-text: #1d1b1a; --marker-ink: #1d1b1a; --pencil: #8e8780;
+  --callout: #1d1b1a;                        /* strokes drawn ON a screen recording (screens are light) */
+  --tile-text: #141414; --tile-rim: 4px;
+  --shadow: 0 30px 50px -12px rgba(60, 50, 40, 0.28);
+  --grid-a: rgba(20, 20, 20, 0.05);
+  --blue-f: #A5D8FF;   --blue-s: #1971C2;
+  --green-f: #B2F2BB;  --green-s: #2F9E44;
+  --yellow-f: #FFEC99; --yellow-s: #E67700;
+  --violet-f: #D0BFFF; --violet-s: #7048E8;
+  --orange-f: #FFD8A8; --orange-s: #E8590C;
+  --teal-f: #96F2D7;   --teal-s: #0C8599;
+}
+body[data-theme="dark"] {
+  --bg: #1E1E1E; --card: #2A2A2A; --ink: #F1EFEC; --muted: #9A958F; --hl: #FFD43B;
+  --tag: #D9611B; --tag-text: #FFFFFF; --emph-fixed: #FFD43B;
+  --marker: #F1EFEC; --marker-text: #F1EFEC; --marker-ink: #F1EFEC; --pencil: #8A8580;
+  --callout: #E8590C;                        /* white would vanish on a light screen recording */
+  --tile-text: #FFFFFF; --tile-rim: 3px;
+  --shadow: 0 30px 50px -16px rgba(0, 0, 0, 0.6);
+  --blue-f: #1C6FBF;   --blue-s: rgba(255,255,255,.55);
+  --green-f: #237A35;  --green-s: rgba(255,255,255,.55);
+  --yellow-f: #C77700; --yellow-s: rgba(255,255,255,.55);
+  --violet-f: #8E3CB8; --violet-s: rgba(255,255,255,.55);
+  --orange-f: #D2611B; --orange-s: rgba(255,255,255,.55);
+  --teal-f: #0E7C8C;   --teal-s: rgba(255,255,255,.55);
+}
+/* hue classes: --hue-solid (coins, light-theme emphasis, accent marker), --fill, --rim */
+.blue   { --hue-solid: #1971C2; --fill: var(--blue-f);   --rim: var(--blue-s); }
+.green  { --hue-solid: #2F9E44; --fill: var(--green-f);  --rim: var(--green-s); }
+.yellow { --hue-solid: #E67700; --fill: var(--yellow-f); --rim: var(--yellow-s); }
+.violet { --hue-solid: #7048E8; --fill: var(--violet-f); --rim: var(--violet-s); }
+.orange { --hue-solid: #E8590C; --fill: var(--orange-f); --rim: var(--orange-s); }
+.teal   { --hue-solid: #0C8599; --fill: var(--teal-f);   --rim: var(--teal-s); }
+
+/* ---------- frame ---------- */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--bg); }
+body[data-bg="transparent"], body[data-bg="transparent"] #root { background: transparent; }
+#root { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: var(--bg);
+  font-family: "Inter Tight", system-ui, sans-serif; color: var(--ink); }
+#bg { position: absolute; inset: 0; overflow: hidden; }
+body[data-bg="transparent"] #bg { display: none; }
+#grid { position: absolute; left: -128px; top: -128px; width: 2176px; height: 1336px;
+  background-image: linear-gradient(to right, var(--grid-a) 1.5px, transparent 1.5px),
+                    linear-gradient(to bottom, var(--grid-a) 1.5px, transparent 1.5px);
+  background-size: 64px 64px; }
+body[data-theme="dark"] #grid { background-image: radial-gradient(rgba(255,255,255,.13) 1.6px, transparent 1.8px); background-size: 40px 40px; }
+#vignette { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 45%, transparent 50%, rgba(90,80,72,.2) 100%); }
+body[data-theme="dark"] #vignette { background: radial-gradient(ellipse at 50% 45%, transparent 55%, rgba(0,0,0,.35) 100%); }
+#cam, #punch { position: absolute; inset: 0; transform-origin: 0 0; }
+.layer { position: absolute; inset: 0; }
+
+/* the speaker card is composited by ffmpeg (compose.py) — scenes keep this rect EMPTY. data-debug shows it. */
+#card-zone { position: absolute; left: 1574px; top: 614px; width: 312px; height: 398px; pointer-events: none; display: none;
+  outline: 3px dashed rgba(232, 89, 12, .8); border-radius: 30px; }
+body[data-debug] #card-zone { display: block; }
+
+/* ---------- type ---------- */
+.k { position: absolute; white-space: nowrap; line-height: .9; letter-spacing: -.035em; font-weight: 800; }
+.k900, .hero { font-weight: 900; letter-spacing: -.045em; }
+.k700 { font-weight: 700; letter-spacing: -.02em; }
+.w { display: inline-block; will-change: transform, opacity; }
+.gap { margin-left: .24em; }
+.emph { color: var(--hue-solid); }
+body[data-theme="dark"] .emph { color: var(--emph-fixed); }
+.label { position: absolute; font-family: "Inter", sans-serif; font-weight: 600; white-space: nowrap; }
+.small { position: absolute; font-family: "Inter", sans-serif; font-weight: 600; font-size: 26px; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+.mono { font-family: "Geist Mono", ui-monospace, monospace; font-weight: 500; }
+.muted { color: var(--muted); }
+
+/* ---------- objects ---------- */
+.card { position: absolute; background: var(--card); border-radius: 28px; box-shadow: var(--shadow); }
+/* real pages and screenshots stay LIGHT in both themes — they read as the real thing */
+.page { position: absolute; background: #FBFAF8; color: #141414; border-radius: 22px; box-shadow: var(--shadow); overflow: hidden; }
+.page img { display: block; }
+.chip { position: absolute; display: flex; align-items: center; gap: 16px; height: 84px; padding: 0 30px 0 24px; border-radius: 42px;
+  background: #FBFAF8; color: #141414; box-shadow: var(--shadow); font-family: "Inter"; font-weight: 600; font-size: 36px; white-space: nowrap; }
+.chip img { height: 40px; }
+/* tiles: light = pastel fill + darker rim of the same hue; dark = saturated fill + soft white rim, white text */
+.tile { position: absolute; background: var(--fill); color: var(--tile-text); border-radius: 22px;
+  box-shadow: inset 0 0 0 var(--tile-rim) var(--rim), var(--shadow); }
+.tile .k, .tile .label { color: var(--tile-text); }
+.coin { position: absolute; width: 84px; height: 84px; border-radius: 50%; background: var(--hue-solid); color: #fff;
+  display: grid; place-items: center; font-weight: 900; font-size: 54px; letter-spacing: -.04em; }
+body[data-theme="dark"] .coin { background: #1E1E1E; box-shadow: inset 0 0 0 3px #fff; }
+/* chapter heading: coin + title (light) / orange tag with the number (dark) */
+.chap { position: absolute; left: 120px; top: 84px; display: flex; align-items: center; gap: 24px; }
+.chap .coin { position: static; }
+.chap .t { font-weight: 800; font-size: 60px; letter-spacing: -.035em; white-space: nowrap; }
+.chap .num { display: none; }
+body[data-theme="dark"] .chap .coin { display: none; }
+body[data-theme="dark"] .chap .num { display: inline; }
+body[data-theme="dark"] .chap .t { background: var(--tag); color: var(--tag-text); font-family: "Inter"; font-weight: 700; font-size: 34px;
+  letter-spacing: .02em; text-transform: uppercase; padding: 12px 24px; border-radius: 10px; }
+.pill { position: absolute; display: inline-flex; align-items: center; gap: 12px; padding: 12px 26px; border-radius: 999px;
+  background: #141414; color: #fff; font-family: "Inter"; font-weight: 600; font-size: 30px; white-space: nowrap; }
+body[data-theme="dark"] .pill { background: #FBFAF8; color: #141414; }
+.arrowline { position: absolute; height: 4px; background: var(--marker); border-radius: 2px; transform-origin: 0 50%; }
+.arrowline::after { content: ""; position: absolute; right: -4px; top: -9px; border: 11px solid transparent; border-left: 16px solid var(--marker); border-right: 0; }
+.hatch { position: absolute; border-radius: 14px; background: repeating-linear-gradient(-45deg, var(--marker) 0 5px, transparent 5px 16px); opacity: .8; }
+/* window frame for a screenshot or still of a screen inside a scene */
+.window { position: absolute; background: #FBFAF8; border-radius: 24px; box-shadow: var(--shadow); overflow: hidden; }
+.window .bar { height: 46px; display: flex; align-items: center; gap: 10px; padding-left: 20px; background: #F1EEEA; }
+.window .bar i { width: 14px; height: 14px; border-radius: 50%; background: #D8D3CD; display: block; }
+body[data-theme="dark"] .window { background: #2A2A2A; }
+body[data-theme="dark"] .window .bar { background: #2A2A2A; }
+body[data-theme="dark"] .window .bar i { background: #555; }

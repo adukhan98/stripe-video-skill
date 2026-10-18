@@ -1,0 +1,144 @@
+[
+ {
+  "t": 0.53,
+  "sfx": "pop",
+  "what": "\"using\" pops in under the speaker card",
+  "gain_db": -3
+ },
+ {
+  "t": 0.64,
+  "sfx": "whoosh",
+  "what": "speaker card slides up to the top-right corner"
+ },
+ {
+  "t": 1.03,
+  "sfx": "scribble",
+  "dur": 0.3,
+  "what": "red crown zig-zag drawn on the search bar"
+ },
+ {
+  "t": 1.12,
+  "sfx": "pop",
+  "what": "search-bar card lands (overshoot)"
+ },
+ {
+  "t": 1.34,
+  "sfx": "scribble",
+  "dur": 0.12,
+  "what": "three jewel dots on the crown points"
+ },
+ {
+  "t": 1.36,
+  "sfx": "ding",
+  "what": "marker crown finished on \"glorified\" \u2014 jewels dot on, crown wobbles"
+ },
+ {
+  "t": 1.46,
+  "sfx": "scribble",
+  "dur": 0.12,
+  "what": "sparkle 1 (two crossing ticks)"
+ },
+ {
+  "t": 1.47,
+  "sfx": "tick",
+  "what": "sparkle 1 off the crown",
+  "gain_db": -4
+ },
+ {
+  "t": 1.6,
+  "sfx": "scribble",
+  "dur": 0.12,
+  "what": "sparkle 2"
+ },
+ {
+  "t": 1.61,
+  "sfx": "tick",
+  "what": "sparkle 2 off the crown",
+  "gain_db": -4
+ },
+ {
+  "t": 1.7,
+  "sfx": "tick",
+  "what": "magnifier swings on \"search\"",
+  "gain_db": -3
+ },
+ {
+  "t": 2.36,
+  "sfx": "whoosh",
+  "what": "email card deals in on an arc"
+ },
+ {
+  "t": 2.52,
+  "sfx": "tick",
+  "what": "email line 1 typing",
+  "gain_db": -6
+ },
+ {
+  "t": 2.72,
+  "sfx": "tick",
+  "what": "email line 2 typing",
+  "gain_db": -6
+ },
+ {
+  "t": 2.88,
+  "sfx": "tick",
+  "what": "email line 3 typing",
+  "gain_db": -6
+ },
+ {
+  "t": 3.01,
+  "sfx": "pop",
+  "what": "\"stupid\" lands"
+ },
+ {
+  "t": 3.08,
+  "sfx": "scribble",
+  "dur": 0.26,
+  "what": "wobbly underline under \"stupid\""
+ },
+ {
+  "t": 3.43,
+  "sfx": "pop",
+  "what": "\"emails\" lands + send button squashes"
+ },
+ {
+  "t": 3.66,
+  "sfx": "whoosh",
+  "what": "LinkedIn post card deals in, search card slips out"
+ },
+ {
+  "t": 3.9,
+  "sfx": "pop",
+  "what": "LinkedIn logo pops onto the post",
+  "gain_db": -3
+ },
+ {
+  "t": 4.22,
+  "sfx": "scribble",
+  "dur": 0.35,
+  "what": "fast messy zig-zag scrawl across the LinkedIn post"
+ },
+ {
+  "t": 4.37,
+  "sfx": "impact",
+  "what": "SLOPPY \u2014 red scrawl hits the post, punch + shake"
+ },
+ {
+  "t": 4.56,
+  "sfx": "scribble",
+  "dur": 0.3,
+  "what": "loop around the LinkedIn logo"
+ },
+ {
+  "t": 4.64,
+  "sfx": "ping",
+  "what": "red loop closes around the LinkedIn logo on \"LinkedIn\"",
+  "gain_db": -3
+ },
+ {
+  "t": 5.01,
+  "sfx": "pop",
+  "what": "\"posts\" + reaction row pops",
+  "gain_db": -3
+ }
+]

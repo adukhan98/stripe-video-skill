@@ -1,0 +1,46 @@
+[
+ {
+  "t": 0.08,
+  "sfx": "whoosh",
+  "what": "the one slide lands centre",
+  "gain_db": -4
+ },
+ {
+  "t": 1.39,
+  "sfx": "tick",
+  "what": "cursor clicks \"fix\""
+ },
+ {
+  "t": 1.73,
+  "sfx": "pop",
+  "what": "\"one\" lands (red)",
+  "gain_db": -3
+ },
+ {
+  "t": 2.2,
+  "sfx": "tick",
+  "what": "red ✗ over the slide, slide flinches",
+  "gain_db": -4
+ },
+ {
+  "t": 2.55,
+  "sfx": "whoosh",
+  "what": "slide deals into a spread of 8 slides"
+ },
+ {
+  "t": 3.37,
+  "sfx": "impact",
+  "what": "DECK — the stack lands on \"deck\", punch + shake"
+ },
+ {
+  "t": 3.85,
+  "sfx": "whoosh",
+  "what": "deck rides the dotted path to the boss on \"convince\"",
+  "gain_db": -3
+ },
+ {
+  "t": 4.37,
+  "sfx": "ding",
+  "what": "boss smiles, nods, red ✓ pops on \"boss\""
+ }
+]

@@ -1,0 +1,58 @@
+<!doctype html>
+<!-- s04_chores — BOARD. A pile of white chore cards grows on a tray left of centre; each chore he names lands as a card
+     (slate icon disc + his word, disc turns accent while it is the newest). Verbs fly in on the right as kinetic hero words.
+     Camera drifts up with the pile. Ends in the exact state s05_chores2 opens on (chores.js is shared). -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>s04_chores</title>
+    <link rel="stylesheet" href="board.css" />
+    <link rel="stylesheet" href="v7yt.css" />
+    <link rel="stylesheet" href="brand.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="board.js"></script>
+    <script src="v7yt.js"></script>
+    <script src="chores.js"></script>
+    <style>
+      .kick { position: absolute; left: 120px; top: 62px; font: 600 34px/1 "Inter", sans-serif; letter-spacing: .12em; color: var(--muted); }
+      .kv { font-size: 150px; left: 1010px; }
+      .ks { font-size: 84px; left: 1014px; }
+    </style>
+  </head>
+  <body data-theme="light">
+    <div id="root" class="mint" data-composition-id="main" data-start="0" data-width="1920" data-height="1080" data-duration="5.7666">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+      <div id="cam"><div id="punch"></div></div>
+      <div class="kick">EDITING</div>
+      <div class="k k900 kv" style="top:300px"><span class="w mint" data-t="0.06" data-out="1.0" data-hero>cut</span><span class="w gap mint" data-t="0.22" data-out="1.0" data-hero>out</span></div>
+      <div class="k k700 ks" style="top:450px"><span class="w" data-t="0.46" data-out="1.0">every</span></div>
+      <div class="k k900 kv" style="top:300px"><span class="w mint" data-t="1.22" data-out="2.0" data-hero>type</span></div>
+      <div class="k k900 kv" style="top:300px"><span class="w mint" data-t="2.16" data-out="3.7" data-hero>find</span></div>
+      <div class="k k700 ks" style="top:450px"><span class="w" data-t="2.88" data-out="3.7">every</span><span class="w gap" data-t="3.04" data-out="3.7">tool</span></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const B = await Board.init();
+        const V = V7Y.init(B);
+        const { tl, F } = B;
+        const C = Chores, E = C.CAM_END4;
+        B.camSet(900, 660, 1);
+        // frame 0: "EDITING" is a big heading; it shrinks into the small kicker as the first chore lands
+        const kk = document.querySelector(".kick"), cs = getComputedStyle(document.documentElement);
+        const ink = getComputedStyle(kk).getPropertyValue("--ink") || cs.getPropertyValue("--ink");
+        const colEnd = getComputedStyle(kk).color;
+        kk.style.color = cs.getPropertyValue("--ink").trim();
+        gsap.set(kk, { transformOrigin: "0 0" });
+        tl.fromTo(kk, { scale: 4.4, color: cs.getPropertyValue("--ink").trim() }, { scale: 1, color: colEnd, duration: 0.7, ease: "power3.inOut", immediateRender: true }, 0.3);
+        const st = C.stack(V, "#punch", "sA", 0);
+        [[0.82, 0], [1.62, 1], [2.5, 2], [3.92, 3]].forEach(([t, i]) => C.land(B, V, st, i, t + 0.04, { hard: i === 0 }));
+        V.cam(0.7, 900, 660, 1, { dur: 0.01 });
+        V.cam(1.6, 900, 618, 1, { dur: 0.9 });
+        V.cam(2.45, 900, 576, 1, { dur: 0.9 });
+        V.cam(3.9, 900, E.cy, 1, { dur: 0.95 });
+      })();
+    </script>
+  </body>
+</html>

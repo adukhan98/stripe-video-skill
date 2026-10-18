@@ -1,0 +1,90 @@
+<!doctype html>
+<!-- s19_table — PROOF: THE BEAT TABLE CARD (tablecard.js, shared byte-identical with s20_approve and s38_reveal).
+     The real chapter-3 rows of beat_table.md rise onto the board ('Before anything is built'), the card lands with a punch
+     and its file disc turns accent on 'beat table'. 'Every few seconds' = the camera travels to the Out column (accent ring);
+     'what I'm saying' / 'what's on the screen' / 'what sound' = the camera arcs across and the highlighter lands on the
+     He says, What happens and SFX headers in turn. Runtime untouched; the world is clipped out of the card zone at every frame. -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>s19_table</title>
+    <link rel="stylesheet" href="board.css" />
+    <link rel="stylesheet" href="v7yt.css" />
+    <link rel="stylesheet" href="brand.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="board.js"></script>
+    <script src="v7yt.js"></script>
+    <script src="tablecard.js"></script>
+  </head>
+  <body data-theme="light">
+    <div id="root" class="mint" data-composition-id="main" data-start="0" data-width="1920" data-height="1080" data-duration="8.900">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+      <!-- the speaker-card box (x 1574–1886, y 614–1012) holds nothing at any pose: the world is clipped out of the
+           bottom-right corner from x 1540 / y 590 (rounded notch), so zoomed rows end left of and above his card -->
+      <div id="clip" style="position:absolute;inset:0;clip-path:path('M0 0 H1920 V590 H1564 A24 24 0 0 0 1540 614 V1080 H0 Z')">
+        <div id="cam"><div id="punch"></div></div>
+      </div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const B = await Board.init();
+        const V = V7Y.init(B);
+        const { tl, D, F } = B;
+        const CX = 80, CY = 100;                                   // the card in world px
+        const tc = TableCard.build("#punch", { x: CX, y: CY, id: "table" });
+        const card = tc.el;
+        // camera helper: put card-local point (lx, ly) at screen (sx, sy) at scale s
+        const pose = (lx, ly, sx, sy, s) => [CX + lx + (960 - sx) / s, CY + ly + (540 - sy) / s, s];
+        const hy = 96 + 30;                                        // header row centre, card-local
+
+        // ---------------------------------------------------------------- landing: frame 0 = the card rising into the frame
+        const WIDE = [1130, 612, 0.8];
+        B.camSet(1110, 640, 0.78);
+        gsap.set(card, { transformOrigin: "50% 40%" });
+        tl.fromTo(card, { y: 330, rotation: -2.6 }, { y: -10, rotation: -0.4, duration: 0.62, ease: "power3.out", immediateRender: true }, 0);
+        tl.to(card, { y: 0, rotation: -0.8, duration: 0.3, ease: "power2.inOut" }, 0.62);
+        tl.to("#cam", { x: 960 - WIDE[0] * WIDE[2], y: 540 - WIDE[1] * WIDE[2], scale: WIDE[2], duration: 0.9, ease: "power2.out" }, 0);
+        // 'Before anything is built' — the rows drop in one by one, built under his words
+        TableCard.rowsIn(B, tc, 0.22, { gap: 0.16 });
+        // 'beat table' — the card lands (punch + straighten), its file disc turns accent
+        tl.to(card, { scale: 1.025, rotation: 0, duration: 4 * F, ease: "power2.out" }, 2.12);
+        tl.to(card, { scale: 1, duration: 9 * F, ease: "back.out(2)" }, 2.12 + 4 * F);
+        const acc = V.disc(tc.file.parentNode, { x: 29, y: 29, d: 58, icon: "file-text", mint: true });
+        tl.fromTo(acc, { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1.18, duration: 5 * F, ease: "power3.out", immediateRender: true }, 2.16);
+        tl.to(acc, { scale: 1, duration: 7 * F, ease: "power2.inOut" }, 2.16 + 5 * F);
+        // 'and a storyboard' — slow push toward the top of the table (never a dead hold)
+        const P0 = pose(560, 300, 760, 420, 0.86);
+        tl.to("#cam", { x: 960 - P0[0] * P0[2], y: 540 - P0[1] * P0[2], scale: P0[2], duration: 3.72 - 2.4, ease: "sine.inOut" }, 2.4);
+
+        // ---------------------------------------------------------------- 'Every few seconds of the video' → the Out column
+        const Z = 1.28;                                            // 27 px type → 34.6 px on screen
+        let p = pose(tc.colCenter("out"), hy, 520, 270, Z); V.cam(3.72, p[0], p[1], Z, { dur: 0.95 });
+        const [ox, oy, ow, oh] = tc.head("out");
+        V.ringRect(card, ox - 2, oy - 4, ow + 4, oh + 8, 4.22, { r: 16, width: 5, dur: 0.32 });
+        // the times in that column nod once as the ring closes (secondary action)
+        const outs = tc.rows.map((r) => r.querySelector(".tc-c.out > span"));
+        tl.to(outs, { y: -5, duration: 4 * F, ease: "sine.out", yoyo: true, repeat: 1, stagger: 2 * F }, 4.5);
+
+        // ---------------------------------------------------------------- 'what I'm saying' → He says
+        p = pose(tc.colCenter("says"), hy, 700, 270, Z); V.cam(5.08, p[0], p[1], Z, { dur: 0.85 });
+        V.hl(card, tc.headText("says"), 5.5, { dur: 0.3 });
+
+        // ---------------------------------------------------------------- 'what's on the screen' → What happens
+        p = pose(tc.colCenter("what"), hy, 900, 270, Z); V.cam(6.3, p[0], p[1], Z, { dur: 0.8 });
+        V.hl(card, tc.headText("what"), 6.86, { dur: 0.3 });
+
+        // ---------------------------------------------------------------- 'what sound is playing' → SFX
+        p = pose(tc.colCenter("sfx"), hy, 1180, 270, Z); V.cam(7.5, p[0], p[1], Z, { dur: 0.75 });
+        V.hl(card, tc.headText("sfx"), 8.06, { dur: 0.24 });
+        // the one real SFX cell ('whoosh (chapter)') lifts on 'playing'
+        const w0 = tc.rows[0].querySelector(".tc-c.sfx > span");
+        tl.fromTo(w0, { scale: 1 }, { scale: 1.12, duration: 4 * F, ease: "power2.out", transformOrigin: "0% 50%" }, 8.5);
+        tl.to(w0, { scale: 1, duration: 8 * F, ease: "power2.inOut" }, 8.5 + 4 * F);
+        tl.to("#cam", { x: "-=14", duration: D - 8.25, ease: "sine.inOut" }, 8.25);
+        window.__tc = tc;
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,128 @@
+[
+ {
+  "t": 0.02,
+  "sfx": "scribble",
+  "dur": 0.53,
+  "what": "red arrow down to tier 1 (shaft + head)"
+ },
+ {
+  "t": 0.45,
+  "sfx": "tick",
+  "what": "arrow head flicks into tier 1",
+  "gain_db": -4
+ },
+ {
+  "t": 0.96,
+  "sfx": "scribble",
+  "dur": 0.48,
+  "what": "tier 1 pencil hatch"
+ },
+ {
+  "t": 1.19,
+  "sfx": "impact",
+  "what": "20% stamps (hero) + punch/shake"
+ },
+ {
+  "t": 1.99,
+  "sfx": "whoosh",
+  "what": "post strip flips up",
+  "gain_db": -3
+ },
+ {
+  "t": 2.22,
+  "sfx": "scribble",
+  "dur": 0.3,
+  "what": "highlighter behind 1-2B (~20%)"
+ },
+ {
+  "t": 2.37,
+  "sfx": "pop",
+  "what": "'2' lands"
+ },
+ {
+  "t": 2.6,
+  "sfx": "scribble",
+  "dur": 0.25,
+  "what": "note '1-2B' written"
+ },
+ {
+  "t": 2.71,
+  "sfx": "pop",
+  "what": "'billion' lands",
+  "gain_db": -3
+ },
+ {
+  "t": 3.13,
+  "sfx": "tick",
+  "what": "first pile figure lands in tier 1",
+  "gain_db": -6
+ },
+ {
+  "t": 3.33,
+  "sfx": "tick",
+  "what": "last figures land in tier 1",
+  "gain_db": -6
+ },
+ {
+  "t": 3.94,
+  "sfx": "whoosh",
+  "what": "post recedes",
+  "gain_db": -6
+ },
+ {
+  "t": 4.18,
+  "sfx": "tick",
+  "what": "tape slapped on for the string"
+ },
+ {
+  "t": 4.22,
+  "sfx": "scribble",
+  "dur": 0.32,
+  "what": "string + price-tag outline drawn"
+ },
+ {
+  "t": 4.32,
+  "sfx": "whoosh",
+  "what": "price tag swings in",
+  "gain_db": -3
+ },
+ {
+  "t": 4.48,
+  "sfx": "scribble",
+  "dur": 0.2,
+  "what": "tag hole + red ring"
+ },
+ {
+  "t": 4.65,
+  "sfx": "ding",
+  "what": "'free' lands"
+ },
+ {
+  "t": 4.86,
+  "sfx": "scribble",
+  "dur": 0.24,
+  "what": "underline under 'free'"
+ },
+ {
+  "t": 5.81,
+  "sfx": "pop",
+  "what": "ChatGPT chip lands"
+ },
+ {
+  "t": 5.91,
+  "sfx": "tick",
+  "what": "tape on ChatGPT",
+  "gain_db": -3
+ },
+ {
+  "t": 6.73,
+  "sfx": "pop",
+  "what": "Claude chip lands"
+ },
+ {
+  "t": 6.83,
+  "sfx": "tick",
+  "what": "tape on Claude",
+  "gain_db": -3
+ }
+]

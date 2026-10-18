@@ -1,0 +1,131 @@
+<!doctype html>
+<!-- s04_bars — v7 "MINT" CANVAS / data: the Turkey-study two-bar chart (Bastani et al., PNAS 2025, GPT Base vs control):
+     practice +48 %, exam −17 %. Bars + numbers PEACH (data, the negative a darker peach, never red); mint only for the
+     current category disc, the hero caption word and the clean underline bar. No marker, no handwriting.
+     CAMERA: frame 0 frames the empty chart (axes + 'practice' / 'exam'), pushes in on practice for '48 % better', travels
+     right to the exam column for 'took the AI away' (charcoal chat disc gets struck through), pulls back to the whole
+     chart for '17 %' (exam bar drops below the baseline).
+     CHART FAMILY (for s05_hints): the ".ch-*" CSS block + world geometry below — baseline y 560, 6.5 px per %, practice
+     column x 380–680, exam column x 840–1140, label row centre y 760 (discs d 96), axis x 240.
+     Runtime (board.css/js, v7yt.css/js) untouched. Keep the card zone (x 1574–1886, y 614–1012) empty at every pose. -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>s04_bars</title>
+    <link rel="stylesheet" href="board.css" />
+    <link rel="stylesheet" href="v7yt.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="board.js"></script>
+    <script src="v7yt.js"></script>
+    <style>
+      /* ===================== CHART FAMILY (v7) — s04 + s05 ===================== */
+      .ch-axis { position: absolute; left: 237px; top: 150px; width: 6px; height: 560px; border-radius: 3px; background: var(--brand-deep); }
+      .ch-base { position: absolute; left: 237px; top: 557px; width: 913px; height: 6px; border-radius: 3px; background: var(--brand-deep); z-index: 2; }
+      .ch-bar { position: absolute; width: 300px; background: var(--peach); box-shadow: var(--shadow); }
+      .ch-bar.pos { border-radius: 22px 22px 0 0; transform-origin: 50% 100%; }
+      .ch-bar.neg { border-radius: 0 0 22px 22px; transform-origin: 50% 0%; background: var(--peach-dark); }
+      .ch-cat { position: absolute; top: 738px; font-family: "Inter", sans-serif; font-weight: 600; font-size: 44px; line-height: 44px;
+        letter-spacing: -.01em; color: var(--ink); white-space: nowrap; }
+      .ch-val { position: absolute; font-family: "Inter Tight", sans-serif; font-weight: 900; letter-spacing: -.045em; line-height: .9;
+        white-space: nowrap; color: var(--peach); text-shadow: 0 3px 14px rgba(30, 30, 30, .14); }
+      .ch-val .w { transform-origin: 50% 80%; }
+      /* ===================== CHART FAMILY — END ===================== */
+      .layer { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+      #aiWrap { pointer-events: none; }
+    </style>
+  </head>
+  <body data-theme="light">
+    <div id="root" data-composition-id="main" data-start="0" data-width="1920" data-height="1080" data-duration="7.800">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+      <div id="cam"><div id="punch">
+
+        <!-- the world (authored in world px; the camera frames parts of it) -->
+        <div id="world" class="layer">
+          <div class="ch-axis"></div>
+          <div id="barP" class="ch-bar pos" style="left:380px;top:248px;height:312px"></div>   <!-- +48 % × 6.5 px -->
+          <div id="barE" class="ch-bar neg" style="left:840px;top:560px;height:111px"></div>   <!-- −17 % × 6.5 px -->
+          <div class="ch-base"></div>
+          <div id="catP" class="ch-cat" style="left:490px">practice</div>
+          <div id="catE" class="ch-cat" style="left:993px">exam</div>
+          <!-- numbers (data → peach) -->
+          <div class="ch-val" style="left:380px;top:120px;width:300px;text-align:center;font-size:132px"><span id="vP" class="w" data-t="1.66" data-hero>+0%</span></div>
+          <div class="ch-val" style="left:1172px;top:572px;font-size:118px;color:var(--peach-dark)"><span id="vE" class="w" data-t="6.00" data-hero>−0%</span></div>
+
+          <!-- kinetic caption (his words), framed by the exam pose, gone before the pull-back -->
+          <div class="k k700" style="left:1258px;top:150px;font-size:80px"><span class="w" data-t="3.58" data-out="5.28">took</span><span class="w gap" data-t="3.76" data-out="5.28">the</span></div>
+          <div class="k k900" style="left:1246px;top:222px;font-size:184px"><span class="w mint" data-t="3.94" data-hero data-out="5.30">AI</span></div>
+          <div class="k k900" style="left:1466px;top:274px;font-size:124px"><span class="w" data-t="4.22" data-hero data-out="5.32">away</span></div>
+
+          <!-- the AI above the exam column: chat disc + its strike ride one wrapper so the droop carries both -->
+          <div id="aiWrap" class="layer"></div>
+        </div>
+
+      </div></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const B = await Board.init();
+        const V = V7Y.init(B);
+        const { tl, F, D } = B;
+        const CT = (cx, cy, s) => ({ x: 960 - cx * s, y: 540 - cy * s, scale: s });
+
+        // ---------------- category discs (practice = pencil, exam = exam sheet); mint = the current one
+        const dP = V.disc("#world", { x: 428, y: 760, d: 96, icon: "pencil-simple-line" });
+        const dE = V.disc("#world", { x: 931, y: 760, d: 96, icon: "exam" });
+
+        // ---------------- camera: P0 (frame 0, whole empty chart) → P1 practice → P2 exam + caption → P3 the contrast
+        B.camSet(700, 450, 1.1);
+        tl.to("#cam", { ...CT(690, 444, 1.13), duration: 1.4, ease: "sine.inOut" }, 0);
+        V.cam(1.40, 620, 510, 1.2, { dur: 0.95 });            // 'they did 48%'
+        tl.to("#cam", { ...CT(626, 506, 1.215), duration: 3.25 - 2.35, ease: "sine.inOut" }, 2.35);
+        V.cam(3.25, 1080, 416, 1.2, { dur: 0.95 });           // 'Then they took the AI away' — travel right
+        tl.to("#cam", { ...CT(1074, 420, 1.215), duration: 5.34 - 4.2, ease: "sine.inOut" }, 4.2);
+        V.cam(5.34, 910, 440, 1.0, { dur: 0.9 });             // 'and they did 17%' — pull back to both bars
+        tl.to("#cam", { ...CT(916, 444, 1.02), duration: D - 6.24, ease: "sine.inOut" }, 6.24);
+
+        // ---------------- 'on practice problems': practice becomes the current category
+        V.mintTo(dP, 0.44);
+        B.punch("#catP", 0.48, 1.06);
+
+        // ---------------- '48% better': practice bar grows UP, +48% counts (squash on contact, shapes only)
+        const grow = (sel, at, dur) => {
+          tl.fromTo(sel, { scaleY: 0, scaleX: 1 }, { scaleY: 1.06, duration: dur * 0.7, ease: "power3.out", immediateRender: true }, at);
+          tl.to(sel, { scaleY: 0.97, scaleX: 1.025, duration: dur * 0.14, ease: "power1.inOut" }, at + dur * 0.7);
+          tl.to(sel, { scaleY: 1, scaleX: 1, duration: dur * 0.3, ease: "back.out(2)" }, at + dur * 0.84);
+        };
+        grow("#barP", 1.62, 0.8);
+        B.countTo("#vP", 1.66, 0, 48, 0.62, (v) => "+" + Math.round(v) + "%");
+        B.punch("#vP", 2.62, 1.08);                           // 'better'
+        tl.to("#barP", { scaleY: 1.025, duration: 4 * F, ease: "power2.out" }, 2.62)
+          .to("#barP", { scaleY: 1, duration: 8 * F, ease: "back.out(2)" }, 2.62 + 4 * F);
+
+        // ---------------- 'took the AI away': chat disc above the exam column, struck through on 'away'
+        const ai = V.disc("#aiWrap", { x: 990, y: 420, d: 120, icon: "chat-circle-dots" });
+        V.discIn(ai, 3.36);
+        tl.to(ai, { y: -10, duration: 0.3, ease: "sine.inOut", yoyo: true, repeat: 1 }, 3.62);        // idle bob ('took')
+        B.punch(ai, 4.04, 1.1);                                                                        // 'AI'
+        V.line("#aiWrap", [[947, 377], [1033, 463]], 4.30, { width: 30, color: "var(--bg)", dur: 0.2 }); // paper halo
+        V.line("#aiWrap", [[947, 377], [1033, 463]], 4.30 + F, { width: 11, color: "var(--brand-deep)", dur: 0.2 });
+        tl.to(ai, { backgroundColor: "#8E8780", duration: 8 * F, ease: "power2.out" }, 4.42);
+        gsap.set("#aiWrap", { transformOrigin: "990px 470px" });
+        tl.to("#aiWrap", { rotation: -7, y: 12, scale: 0.94, duration: 0.32, ease: "power2.out" }, 4.52);  // it droops
+
+        // ---------------- 'for the exam': exam becomes the current category
+        V.charcoalTo(dP, 4.92);
+        V.mintTo(dE, 4.94);
+        B.punch("#catE", 4.98, 1.08);
+
+        // ---------------- '17%': exam bar grows DOWN below the baseline, −17% counts, lands (thud)
+        grow("#barE", 5.96, 0.72);
+        B.countTo("#vE", 6.00, 0, 17, 0.5, (v) => "−" + Math.round(v) + "%");
+        // 'bad': clean mint bar under −17%
+        const vE = document.querySelector("#vE");
+        const keep = vE.textContent; vE.textContent = "−17%"; const wE = vE.offsetWidth; vE.textContent = keep;
+        V.bar("#world", 1178, 692, Math.round(wE) - 10, 6.90, { h: 14 });
+        B.punch("#vE", 6.94, 1.06);
+      })();
+    </script>
+  </body>
+</html>

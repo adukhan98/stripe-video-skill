@@ -1,0 +1,27 @@
+[
+ {
+  "t": 2.2,
+  "sfx": "whoosh",
+  "gain_db": -25
+ },
+ {
+  "t": 2.33,
+  "sfx": "tick",
+  "gain_db": -24
+ },
+ {
+  "t": 3.38,
+  "sfx": "whoosh",
+  "gain_db": -25
+ },
+ {
+  "t": 4.1,
+  "sfx": "impact",
+  "gain_db": -17
+ },
+ {
+  "t": 4.25,
+  "sfx": "riser",
+  "gain_db": -21
+ }
+]

@@ -1,0 +1,12 @@
+[
+  {"t": 0.24, "sfx": "whoosh", "gain_db": -6, "what": "notebook slides in at the bottom"},
+  {"t": 0.59, "sfx": "pop", "what": "'two' lands"},
+  {"t": 0.99, "sfx": "pop", "gain_db": -2, "what": "'problems' pops"},
+  {"t": 1.02, "sfx": "whoosh", "gain_db": -8, "what": "copy 1 rides the dotted arc (lands 1.30)"},
+  {"t": 1.33, "sfx": "whoosh", "gain_db": -8, "what": "copy 2 rides the dotted arc (lands 1.55)"},
+  {"t": 1.95, "sfx": "pop", "what": "notebook tab rises"},
+  {"t": 2.86, "sfx": "tick", "what": "tape pressed onto the 'homework' tab"},
+  {"t": 3.30, "sfx": "ding", "what": "red check 1 on the board / 'solved'"},
+  {"t": 3.48, "sfx": "ding", "what": "red check 2 on the board"},
+  {"t": 3.59, "sfx": "impact", "what": "'both' RED lands + punch (hero beat)"}
+]

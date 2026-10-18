@@ -1,0 +1,42 @@
+<!doctype html>
+<!-- stripe-youtube starter: PROOF — the real page he names (capture.py), taped on the board, the official logo in a chip
+     (fetch.py logo), the date/source as a handwritten note, his line as kinetic type beside it, emphasis word in the hue
+     (light) / yellow (dark). Pages stay light in both themes. Keep #card-zone empty. -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>proof</title>
+    <link rel="stylesheet" href="board.css" />
+    <link rel="stylesheet" href="marker.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="board.js"></script>
+    <script src="marker.js"></script>
+  </head>
+  <body data-theme="{{THEME}}">
+    <div id="root" class="{{HUE}}" data-composition-id="main" data-start="0" data-width="1920" data-height="1080" data-duration="{{DURATION}}">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+      <div id="cam"><div id="punch">
+        <div id="page" class="page" style="left:150px;top:250px;width:960px;height:480px;background:#F9F8F5">
+          <img src="assets/page.png" style="width:940px;margin:20px 10px" alt="" />
+        </div>
+        <div class="chip" style="left:150px;top:118px" data-in="pop" data-at="0.3"><img src="assets/logo.svg" alt="" /><span>Anthropic</span></div>
+        <div class="k" style="left:1170px;top:240px;font-size:90px"><span class="w" data-t="1.4">ask</span><span class="w gap" data-t="1.55">for</span></div>
+        <div id="hero" class="k k900 emph" style="left:1160px;top:340px;font-size:170px"><span class="w" data-t="1.9" data-hero>flaws,</span></div>
+        <div class="k" style="left:1170px;top:545px;font-size:72px"><span class="w" data-t="2.5">not</span><span class="w gap" data-t="2.65">opinions</span></div>
+      </div></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const B = await Board.init();
+        const M = Marker.init(B);
+        B.pageIn("#page", 0, { rot: -1.6 });            // frame 0 = the page arriving, never an empty board
+        M.tape(560, 226, -4, 0.7);
+        M.note("Oct 23, 2023", 820, 760, 1.0, { size: 58, rot: -3 });
+        M.underline(1170, 1580, 525, 2.1, { color: "accent" });
+        M.arrow(1150, 420, 1060, 470, 2.3, { bend: -0.3 });
+      })();
+    </script>
+  </body>
+</html>

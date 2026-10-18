@@ -1,0 +1,18 @@
+[
+ {"t": 0.04, "sfx": "scribble", "dur": 0.42, "what": "red loop drawn round the chapter number 2"},
+ {"t": 0.22, "sfx": "pop", "what": "digit 2 pops into its loop"},
+ {"t": 0.61, "sfx": "pop", "what": "'set' lands", "gain_db": -4},
+ {"t": 0.8, "sfx": "scribble", "dur": 0.34, "what": "mountain ridge drawn left to right (black marker)"},
+ {"t": 0.97, "sfx": "pop", "what": "'goals' lands"},
+ {"t": 1.12, "sfx": "scribble", "dur": 0.12, "what": "mountain ground line"},
+ {"t": 1.22, "sfx": "scribble", "dur": 0.22, "what": "pencil hatch on the shadow face + snow line"},
+ {"t": 1.24, "sfx": "whoosh", "what": "article strip slides up", "gain_db": -4},
+ {"t": 1.32, "sfx": "tick", "what": "red flag stabbed into the summit (then wobbles)"},
+ {"t": 1.48, "sfx": "tick", "what": "tape left", "gain_db": -2},
+ {"t": 1.58, "sfx": "tick", "what": "tape right", "gain_db": -4},
+ {"t": 1.62, "sfx": "scribble", "dur": 0.38, "what": "highlighter line 1: Pick unreasonable goals and tell"},
+ {"t": 2.0, "sfx": "scribble", "dur": 0.3, "what": "highlighter line 2: the model that they're very rea-"},
+ {"t": 2.18, "sfx": "whoosh", "what": "letters lift before the slam", "gain_db": -3},
+ {"t": 2.33, "sfx": "impact", "what": "HERO: 'unreasonable' slams down + camera shake; mountain shoots up 1.35x with the flag"},
+ {"t": 2.42, "sfx": "scribble", "dur": 0.25, "what": "red shake lines at both ends of the word"}
+]

@@ -1,0 +1,227 @@
+<!doctype html>
+<!-- s06_tryfirst — v7 MINT board. Habit 1 'Try it yourself first' as a disc chain on a world wider than the frame:
+     ① a charcoal/mint STOPWATCH disc (hero: its hand sweeps a mint wedge on 'five minutes', then it rings) →
+     ② a NOTE disc whose three lines a flat pencil writes on 'write down / best guesses / best answers' →
+     ③ a flat white card 'your AI tool' with the official ChatGPT + Claude logos (pop on their names).
+     'even if they're bad.' collage under the chain, mint 'bad.' + solid mint bar. On 'bring that' a little white note
+     rides the connector from ② into the AI-tool card. Camera travels ①→②→pull back→③→whole. No marker, no Caveat. -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>s06_tryfirst</title>
+    <link rel="stylesheet" href="board.css" />
+    <link rel="stylesheet" href="v7yt.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="board.js"></script>
+    <script src="v7yt.js"></script>
+    <style>
+      .chap .t { font-size: 66px; }
+      .lab { width: 800px; margin-left: -400px; text-align: center; font-size: 72px; }
+      .glyph { position: absolute; left: 50%; top: 50%; overflow: visible; }
+      #tmr { width: 66%; height: 66%; margin: -36% 0 0 -33%; }
+      #note { width: 62%; height: 62%; margin: -31% 0 0 -31%; }
+      .tok { position: absolute; width: 74px; height: 90px; margin: -45px 0 0 -37px; border-radius: 12px;
+        background: var(--brand-card); box-shadow: var(--disc-shadow); opacity: 0; }
+      .tok i { position: absolute; left: 14px; height: 7px; border-radius: 4px; background: var(--brand-deep); }
+      #aicard { left: 1480px; top: 266px; width: 560px; height: 348px; }
+      #aicard .lab { left: 280px; top: 34px; width: 560px; margin-left: -280px; }
+      .slot { position: absolute; top: 140px; width: 172px; height: 172px; border-radius: 40px;
+        background: color-mix(in srgb, var(--ink) 7%, transparent); }
+      .logo { position: absolute; top: 140px; width: 172px; height: 172px; border-radius: 40px; display: block;
+        box-shadow: 0 16px 26px -12px rgba(40, 36, 32, .42); opacity: 0; }
+      .head { position: absolute; width: 0; height: 0; overflow: visible; }
+    </style>
+  </head>
+  <body data-theme="light">
+    <div id="root" data-composition-id="main" data-start="0" data-width="1920" data-height="1080" data-duration="8.5666">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+      <div id="cam"><div id="punch">
+        <!-- ① five minutes -->
+        <div class="k lab" style="left:430px;top:590px">
+          <span class="w" data-t="1.08">five</span><span class="w gap" data-t="1.30">minutes</span>
+        </div>
+        <!-- ② your best guesses -->
+        <div class="k lab" style="left:1060px;top:590px;line-height:.98">
+          <span class="w" data-t="2.14">your</span><span class="w gap" data-t="2.32">best</span><br><span class="w" data-t="2.60">guesses</span>
+        </div>
+
+        <!-- ③ your AI tool -->
+        <div id="aicard" class="v7-card">
+          <div class="k lab"><span class="w" data-t="5.98">your</span><span class="w gap" data-t="6.12">AI</span><span class="w gap" data-t="6.32">tool</span></div>
+          <div class="slot" style="left:95px"></div><div class="slot" style="left:293px"></div>
+          <img id="lgG" class="logo" src="assets/chatgpt.png" style="left:95px" alt="ChatGPT" />
+          <img id="lgC" class="logo" src="assets/claude.png" style="left:293px" alt="Claude" />
+        </div>
+
+        <!-- even if they're bad. (collage) -->
+        <div class="k k700" id="l1" style="left:214px;top:770px;font-size:84px">
+          <span class="w" data-t="4.06">even</span><span class="w gap" data-t="4.22">if</span><span class="w gap" data-t="4.38">they’re</span>
+        </div>
+        <div class="k k900" id="l3" style="left:372px;top:850px;font-size:190px">
+          <span class="w mint" id="bad" data-t="4.56" data-hero>bad.</span>
+        </div>
+
+        <!-- the note that gets carried to the AI tool -->
+        <div class="tok" id="tok"><i style="top:22px;width:44px"></i><i style="top:40px;width:46px"></i><i style="top:58px;width:32px"></i></div>
+      </div></div>
+      <!-- heading: fixed on screen (the camera travels the world beneath it) -->
+      <div class="chap" id="chap" style="left:120px;top:66px"><div class="coin mint" id="coin">1</div><div class="t">Try it yourself first</div></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const B = await Board.init();
+        const V = V7Y.init(B);
+        const { tl, D, F } = B;
+        const NS = "http://www.w3.org/2000/svg";
+        const P = document.querySelector("#punch");
+
+        // ---------------------------------------------------------------- world geometry (world px)
+        const S1 = [430, 430], S2 = [1060, 430], DD = 250;
+        const CARD = { x: 1480, y: 266, w: 560, h: 348 };
+
+        // ---------------------------------------------------------------- camera: ① → ② → pull back → ③ → whole
+        B.camSet(520, 430, 1.5);
+        V.cam(0, 530, 434, 1.54, { dur: 1.38 });          // slow push on the stopwatch (frame 0 = heading + ①)
+        V.cam(1.4, 830, 450, 1.2, { dur: 0.8 });         // travel to ② as 'minutes' lands, arriving on 'write down'
+        V.cam(2.22, 846, 454, 1.23, { dur: 1.45 });       // drift
+        V.cam(3.7, 800, 570, 1.0, { dur: 0.82 });        // pull back for 'even if they're bad'
+        V.cam(4.54, 806, 566, 1.015, { dur: 0.72 });     // drift
+        V.cam(5.28, 1600, 450, 1.15, { dur: 0.95 });     // travel to ③ on 'bring that to your AI tool'
+        V.cam(6.25, 1612, 448, 1.17, { dur: 1.45 });     // drift
+        V.cam(7.72, 1100, 560, 0.84, { dur: 0.82 });     // pull out to the whole chain on 'whatever'
+
+        // ---------------------------------------------------------------- connectors (behind the discs)
+        function arrow(x1, x2, y, t, dur) {
+          const path = V.line(P, [[x1, y], [x2 - 10, y]], t, { dur, width: 6, ease: "power2.inOut" });
+          const head = document.createElementNS(NS, "polygon");
+          head.setAttribute("points", `${x2 - 14},${y - 15} ${x2 + 8},${y} ${x2 - 14},${y + 15}`);
+          head.style.fill = "var(--brand-deep)";
+          path.parentNode.appendChild(head);
+          tl.fromTo(head, { scale: 0, svgOrigin: `${x2 - 6} ${y}` }, { scale: 1.25, duration: 3 * F, ease: "power2.out" }, t + dur - 2 * F);
+          tl.to(head, { scale: 1, duration: 5 * F, ease: "power2.inOut" }, t + dur + F);
+          return path;
+        }
+        arrow(S1[0] + DD / 2 + 26, S2[0] - DD / 2 - 26, 430, 1.66, 0.26);
+        arrow(S2[0] + DD / 2 + 26, CARD.x - 30, 430, 5.4, 0.48);
+
+        // ---------------------------------------------------------------- ① the STOPWATCH disc (hero), on screen at frame 0
+        const d1 = V.disc(P, { x: S1[0], y: S1[1], d: DD, mint: true, id: "d1" });
+        d1.innerHTML = `<svg id="tmr" class="glyph" viewBox="0 0 100 100">
+            <rect x="42" y="2" width="16" height="9" rx="3.5" style="fill:#fff"/>
+            <rect x="46.5" y="9" width="7" height="9" style="fill:#fff"/>
+            <rect x="75" y="15" width="8" height="12" rx="3" style="fill:#fff" transform="rotate(45 79 21)"/>
+            <circle cx="50" cy="57" r="39" style="fill:#fff"/>
+            <circle id="wedge" cx="50" cy="57" r="15.5" pathLength="1" transform="rotate(-90 50 57)"
+              style="fill:none;stroke:var(--brand-primary);stroke-width:31;stroke-dasharray:1 1;stroke-dashoffset:1"/>
+            <g style="stroke:var(--brand-deep);stroke-width:3.6;stroke-linecap:round">
+              <line x1="50" y1="23" x2="50" y2="29"/><line x1="84" y1="57" x2="78" y2="57"/>
+              <line x1="50" y1="91" x2="50" y2="85"/><line x1="16" y1="57" x2="22" y2="57"/>
+            </g>
+            <line id="hand" x1="50" y1="57" x2="50" y2="29" style="stroke:var(--brand-deep);stroke-width:5.5;stroke-linecap:round"/>
+            <circle cx="50" cy="57" r="5" style="fill:var(--brand-deep)"/>
+          </svg>`;
+        gsap.set("#hand", { svgOrigin: "50 57" });
+        gsap.set("#tmr", { transformOrigin: "50% 60%" });
+        // 'Even' (0.48): the stopwatch is primed — a little dip, the hand winds back (anticipation)
+        tl.to(d1, { scale: 0.95, duration: 4 * F, ease: "power2.in" }, 0.5);
+        tl.to(d1, { scale: 1.05, duration: 5 * F, ease: "power3.out" }, 0.5 + 4 * F);
+        tl.to(d1, { scale: 1, duration: 8 * F, ease: "power2.inOut" }, 0.5 + 9 * F);
+        tl.fromTo("#hand", { rotation: 0 }, { rotation: -22, duration: 0.3, ease: "power2.out" }, 0.62);
+        // 'five minutes' (1.18–1.9): one full sweep, the mint wedge fills behind the hand
+        tl.to("#hand", { rotation: 360, duration: 0.8, ease: "power2.inOut" }, 1.06);
+        tl.fromTo("#wedge", { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.72, ease: "power2.inOut" }, 1.12);
+        // time's up: the stopwatch rings (secondary action) as the chain hands over to ②
+        tl.to("#tmr", { rotation: 7, duration: 2 * F, ease: "sine.out" }, 1.88);
+        tl.to("#tmr", { rotation: -6, duration: 3 * F, ease: "sine.inOut" }, 1.88 + 2 * F);
+        tl.to("#tmr", { rotation: 4, duration: 3 * F, ease: "sine.inOut" }, 1.88 + 5 * F);
+        tl.to("#tmr", { rotation: 0, duration: 5 * F, ease: "sine.out" }, 1.88 + 8 * F);
+        V.charcoalTo(d1, 1.9);
+        // afterwards it keeps ticking (a hold is never dead)
+        [2.9, 3.9, 4.9, 5.9, 6.9, 7.9].forEach((t, i) => tl.to("#hand", { rotation: 360 + 30 * (i + 1), duration: 4 * F, ease: "back.out(3)" }, t));
+
+        // ---------------------------------------------------------------- ② the NOTE disc: a flat pencil writes three lines
+        const d2 = V.disc(P, { x: S2[0], y: S2[1], d: DD, mint: true, id: "d2" });
+        d2.innerHTML = `<svg id="note" class="glyph" viewBox="0 0 100 100">
+            <path d="M25 8 H64 L81 25 V87 Q81 92 76 92 H25 Q20 92 20 87 V13 Q20 8 25 8 Z" style="fill:#fff"/>
+            <path d="M64 8 V20 Q64 25 69 25 H81 Z" style="fill:#D6CFC8"/>
+            <g style="fill:none;stroke:var(--brand-deep);stroke-width:5.2;stroke-linecap:round">
+              <path id="n1" d="M31 41 H67"/><path id="n2" d="M31 57 H70"/><path id="n3" d="M31 73 H58"/>
+            </g>
+            <g id="pen"><g transform="translate(0 0)">
+              <polygon points="3.8,-10.2 22.8,-29.2 29.2,-22.8 10.2,-3.8" style="fill:var(--brand-deep)"/>
+              <polygon points="22.8,-29.2 26.4,-32.8 32.8,-26.4 29.2,-22.8" style="fill:var(--brand-primary-dark)"/>
+              <polygon points="0,0 3.8,-10.2 10.2,-3.8" style="fill:#D6CFC8"/>
+              <polygon points="0,0 1.5,-4.1 4.1,-1.5" style="fill:var(--brand-deep)"/>
+            </g></g>
+          </svg>`;
+        V.discIn(d2, 1.94);
+        tl.fromTo("#note", { scale: 0.3, opacity: 0, transformOrigin: "50% 50%" }, { scale: 1.12, opacity: 1, duration: 5 * F, ease: "power3.out" }, 1.94 + 2 * F);
+        tl.to("#note", { scale: 1, duration: 6 * F, ease: "power2.inOut" }, 1.94 + 7 * F);
+        const lines = [["#n1", 31, 67, 41, 2.12, 0.3], ["#n2", 31, 70, 57, 2.5, 0.36], ["#n3", 31, 58, 73, 3.3, 0.3]];
+        lines.forEach(([id, x0, x1, y, t, dur]) => {
+          const L = x1 - x0;
+          gsap.set(id, { strokeDasharray: `${L} ${L + 4}`, strokeDashoffset: L });
+          tl.to(id, { strokeDashoffset: 0, duration: dur, ease: "power1.inOut" }, t);
+        });
+        // the pencil: pops in at the first line, writes, hops (arcs) to the next line, lifts away
+        tl.fromTo("#pen", { x: 34, y: 30, opacity: 0, scale: 0.6, svgOrigin: "0 0" },
+          { x: 31, y: 41, opacity: 1, scale: 1, duration: 5 * F, ease: "back.out(2)" }, 1.98);
+        tl.to("#pen", { x: 67, duration: 0.3, ease: "power1.inOut" }, 2.12);
+        tl.to("#pen", { x: 31, duration: 0.08, ease: "power2.inOut" }, 2.42);
+        tl.to("#pen", { y: 57, duration: 0.08, ease: "back.out(2)" }, 2.42);
+        tl.to("#pen", { x: 70, duration: 0.36, ease: "power1.inOut" }, 2.5);
+        tl.to("#pen", { y: 52, rotation: -8, duration: 0.2, ease: "sine.inOut", yoyo: true, repeat: 1 }, 2.88);   // taps, thinking
+        tl.to("#pen", { x: 31, duration: 0.14, ease: "power2.inOut" }, 3.16);
+        tl.to("#pen", { y: 73, duration: 0.14, ease: "back.out(2)" }, 3.16);
+        tl.to("#pen", { x: 58, duration: 0.3, ease: "power1.inOut" }, 3.3);
+        tl.to("#pen", { x: 74, y: 52, opacity: 0, scale: 0.7, duration: 7 * F, ease: "power2.in" }, 3.72);
+        // the disc nods on 'guesses' and 'answers'
+        [2.7, 3.52].forEach((t) => {
+          tl.to(d2, { scale: 1.05, duration: 4 * F, ease: "power2.out" }, t);
+          tl.to(d2, { scale: 1, duration: 8 * F, ease: "power2.inOut" }, t + 4 * F);
+        });
+        // 'bad.': the note gives a little shrug
+        tl.to("#note", { rotation: -7, duration: 4 * F, ease: "power2.out" }, 4.66);
+        tl.to("#note", { rotation: 4, duration: 5 * F, ease: "sine.inOut" }, 4.66 + 4 * F);
+        tl.to("#note", { rotation: 0, duration: 6 * F, ease: "sine.out" }, 4.66 + 9 * F);
+
+        // ---------------------------------------------------------------- 'even if they're bad.' — solid mint bar under 'bad.'
+        const bad = document.querySelector("#bad"), l3 = document.querySelector("#l3");
+        const bx = l3.offsetLeft + bad.offsetLeft + 10, by = l3.offsetTop + bad.offsetTop + bad.offsetHeight + 4;
+        V.bar(P, bx, by, bad.offsetWidth * 0.84, 4.78, { h: 16 });
+
+        // ---------------------------------------------------------------- ③ 'bring that to your AI tool'
+        V.charcoalTo(d2, 5.4);
+        // the note leaves ② (anticipation dip), rides the connector on an arc, drops into the card
+        tl.to(d2, { scale: 0.94, duration: 3 * F, ease: "power2.in" }, 5.3);
+        tl.to(d2, { scale: 1, duration: 8 * F, ease: "back.out(2)" }, 5.3 + 3 * F);
+        gsap.set("#tok", { left: S2[0], top: S2[1] });
+        tl.fromTo("#tok", { opacity: 0, scale: 0.4, x: 0, y: 0, rotation: 0 },
+          { opacity: 1, scale: 1.1, x: 70, y: -70, rotation: -8, duration: 7 * F, ease: "power3.out" }, 5.38);
+        tl.to("#tok", { scale: 1, duration: 5 * F, ease: "power2.inOut" }, 5.38 + 7 * F);
+        tl.to("#tok", { x: CARD.x + 40 - S2[0], duration: 0.62, ease: "power2.inOut" }, 5.62);
+        tl.to("#tok", { y: -150, duration: 0.31, ease: "sine.out" }, 5.62);
+        tl.to("#tok", { y: 10, rotation: 6, duration: 0.31, ease: "sine.in" }, 5.93);
+        tl.to("#tok", { opacity: 0, scale: 0.35, x: CARD.x + 140 - S2[0], y: 40, duration: 5 * F, ease: "power2.in" }, 6.22);
+        // the card: pops ahead of the note, swallows it (squash on contact), mint ring = the current step
+        B.in("#aicard", 5.95, { type: "pop", dur: 14 * F });
+        gsap.set("#aicard", { transformOrigin: "0% 50%" });
+        tl.to("#aicard", { scaleX: 0.97, scaleY: 1.03, duration: 3 * F, ease: "power2.out" }, 6.3);
+        tl.to("#aicard", { scaleX: 1, scaleY: 1, duration: 9 * F, ease: "back.out(2.2)" }, 6.3 + 3 * F);
+        V.ringRect(P, CARD.x - 16, CARD.y - 16, CARD.w + 32, CARD.h + 32, 6.4, { r: 42, width: 7, dur: 0.4 });
+        // official logos pop on 'ChatGPT' and 'Claude' (anticipation + overshoot, no squash on logos)
+        [["#lgG", 6.76], ["#lgC", 7.44]].forEach(([id, t]) => {
+          tl.fromTo(id, { opacity: 0, scale: 0.4, y: 26 }, { opacity: 1, scale: 1.12, y: -6, duration: 5 * F, ease: "power3.out" }, t);
+          tl.to(id, { scale: 1, y: 0, duration: 7 * F, ease: "power2.inOut" }, t + 5 * F);
+        });
+        tl.to("#lgG", { y: -5, duration: 0.45, ease: "sine.inOut", yoyo: true, repeat: 1 }, 7.58);
+        tl.to("#lgC", { y: -5, duration: 0.45, ease: "sine.inOut", yoyo: true, repeat: 1 }, 7.9);
+        // the heading coin answers the pull-out to the whole chain
+        tl.to("#coin", { scale: 1.12, duration: 4 * F, ease: "power2.out" }, 8.0);
+        tl.to("#coin", { scale: 1, duration: 8 * F, ease: "power2.inOut" }, 8.0 + 4 * F);
+      })();
+    </script>
+  </body>
+</html>

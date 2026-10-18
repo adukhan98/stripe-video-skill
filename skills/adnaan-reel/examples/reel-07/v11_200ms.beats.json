@@ -1,0 +1,89 @@
+[
+ {
+  "t": 0.05,
+  "sfx": "whoosh",
+  "what": "browser card settles in",
+  "gain_db": -6
+ },
+ {
+  "t": 1.05,
+  "sfx": "pop",
+  "what": "spinner pops in, loading bar starts crawling",
+  "gain_db": -4
+ },
+ {
+  "t": 1.15,
+  "sfx": "tick",
+  "what": "readout odometer rolling",
+  "gain_db": -6
+ },
+ {
+  "t": 1.43,
+  "sfx": "tick",
+  "what": "readout locks on 10 s"
+ },
+ {
+  "t": 1.77,
+  "sfx": "pop",
+  "what": "'seconds' lands",
+  "gain_db": -4
+ },
+ {
+  "t": 2.08,
+  "sfx": "tick",
+  "what": "stopwatch slow tick",
+  "gain_db": -8
+ },
+ {
+  "t": 2.87,
+  "sfx": "pop",
+  "what": "'5 s' pill bumps the readout"
+ },
+ {
+  "t": 3.0,
+  "sfx": "whoosh",
+  "what": "'5 s' falls off, phrase 1 clears (5 f)",
+  "gain_db": -6
+ },
+ {
+  "t": 3.88,
+  "sfx": "whoosh",
+  "what": "anticipation: readout dips, hand pulls back",
+  "gain_db": -8
+ },
+ {
+  "t": 4.07,
+  "sfx": "impact",
+  "what": "HERO: 200 ms red slam, bar zips full, hand snaps, punch + shake"
+ },
+ {
+  "t": 4.18,
+  "sfx": "ding",
+  "what": "page loaded (skeleton \u2192 content)",
+  "gain_db": -5
+ },
+ {
+  "t": 4.48,
+  "sfx": "pop",
+  "what": "'milliseconds' lands",
+  "gain_db": -4
+ },
+ {
+  "t": 4.6,
+  "sfx": "whoosh",
+  "what": "article strip rises",
+  "gain_db": -5
+ },
+ {
+  "t": 4.92,
+  "sfx": "tick",
+  "what": "tape pressed on",
+  "gain_db": -6
+ },
+ {
+  "t": 5.56,
+  "sfx": "pop",
+  "what": "'going' lands",
+  "gain_db": -4
+ }
+]

@@ -1,0 +1,10 @@
+[
+  {"t": 0.33, "sfx": "pop", "gain_db": -4, "what": "'read' lands"},
+  {"t": 0.87, "sfx": "pop", "gain_db": -4, "what": "'thing' lands (red underline under whole thing at 0.74)"},
+  {"t": 1.50, "sfx": "whoosh", "gain_db": -6, "what": "numbers tuck under the footage band, about to spring out"},
+  {"t": 1.64, "sfx": "impact", "what": "'1' springs out from behind the footage band (three)"},
+  {"t": 1.76, "sfx": "pop", "what": "'2' lands"},
+  {"t": 1.86, "sfx": "pop", "what": "'3' lands"},
+  {"t": 2.07, "sfx": "tick", "what": "'key' lands (three red above it)"},
+  {"t": 2.29, "sfx": "tick", "gain_db": -3, "what": "'takeaways' lands"}
+]

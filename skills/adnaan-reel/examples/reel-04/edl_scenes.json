@@ -1,0 +1,171 @@
+{
+ "version": 2,
+ "sources": {
+  "A": "<source take>.MP4"
+ },
+ "output": {
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "fit": "crop",
+  "focus_x": 0.5,
+  "focus_y": 0.4
+ },
+ "mirror": false,
+ "grade": "auto",
+ "ranges": [
+  {
+   "source": "A",
+   "start": 0.0,
+   "end": 2.98,
+   "sfx": "subdrop"
+  },
+  {
+   "source": "A",
+   "start": 3.21,
+   "end": 4.64
+  },
+  {
+   "source": "A",
+   "start": 5.18,
+   "end": 19.18
+  },
+  {
+   "source": "A",
+   "start": 19.29,
+   "end": 25.3
+  },
+  {
+   "source": "A",
+   "start": 25.68,
+   "end": 27.09
+  },
+  {
+   "source": "A",
+   "start": 27.43,
+   "end": 36.53
+  },
+  {
+   "source": "A",
+   "start": 38.24,
+   "end": 43.94
+  },
+  {
+   "source": "A",
+   "start": 44.23,
+   "end": 53.17
+  },
+  {
+   "source": "A",
+   "start": 53.48,
+   "end": 57.09
+  },
+  {
+   "source": "A",
+   "start": 57.3,
+   "end": 68.64
+  },
+  {
+   "source": "A",
+   "start": 68.89,
+   "end": 70.61
+  },
+  {
+   "source": "A",
+   "start": 70.91,
+   "end": 72.95
+  },
+  {
+   "source": "A",
+   "start": 74.98,
+   "end": 81.54
+  },
+  {
+   "source": "A",
+   "start": 81.98,
+   "end": 83.5
+  }
+ ],
+ "end_hold": 1.6,
+ "sfx_gain_db": -13,
+ "overlays": [
+  {
+   "file": "animations/v01_hook/render.mov",
+   "start_in_output": 0.0,
+   "duration": 4.43333,
+   "hold": 0.1
+  },
+  {
+   "file": "animations/v02_rea/render.mov",
+   "start_in_output": 4.42133,
+   "duration": 6.87867,
+   "hold": 0.1,
+   "sfx": "chime"
+  },
+  {
+   "file": "animations/v03_inside/render.mov",
+   "start_in_output": 11.288,
+   "duration": 7.14533,
+   "hold": 0.1,
+   "sfx": "whoosh"
+  },
+  {
+   "file": "animations/v04_evidence/render.mov",
+   "start_in_output": 18.42133,
+   "duration": 3.97867,
+   "hold": 0.1
+  },
+  {
+   "file": "animations/v05_making/render.mov",
+   "start_in_output": 22.388,
+   "duration": 8.512,
+   "hold": 0.1
+  },
+  {
+   "file": "animations/v06_github/render.mov",
+   "start_in_output": 30.888,
+   "duration": 4.24533,
+   "hold": 0.1
+  },
+  {
+   "file": "animations/v07_adobe/render.mov",
+   "start_in_output": 35.12133,
+   "duration": 5.57867,
+   "hold": 0.1,
+   "sfx": "chime"
+  },
+  {
+   "file": "animations/v08_perfect/render.mov",
+   "start_in_output": 40.688,
+   "duration": 3.812,
+   "hold": 0.1
+  },
+  {
+   "file": "animations/v09_dead/render.mov",
+   "start_in_output": 44.488,
+   "duration": 5.24533,
+   "hold": 0.1,
+   "sfx": "whoosh"
+  },
+  {
+   "file": "animations/v10_copy/render.mov",
+   "start_in_output": 49.72133,
+   "duration": 8.512,
+   "hold": 0.1
+  },
+  {
+   "file": "animations/v11_personal/render.mov",
+   "start_in_output": 58.22133,
+   "duration": 10.24533,
+   "hold": 0.1,
+   "sfx": "whoosh"
+  },
+  {
+   "file": "animations/v12_cta/render.mov",
+   "start_in_output": 68.45467,
+   "duration": 9.862,
+   "hold": true,
+   "sfx": "ping"
+  }
+ ]
+}

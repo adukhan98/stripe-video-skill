@@ -1,0 +1,885 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>v04 taste</title>
+    <link rel="stylesheet" href="brand.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: var(--brand-background);
+      }
+      #root {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: var(--brand-background);
+        font-family: var(--font-heading);
+        color: var(--brand-text);
+      }
+
+      /* ---------- shared v2 background: paper + 60px grid + vignette ---------- */
+      #bg {
+        position: absolute;
+        inset: 0;
+        background: var(--brand-background);
+        overflow: hidden;
+      }
+      #grid {
+        position: absolute;
+        left: -120px;
+        top: -120px;
+        width: 1320px;
+        height: 2160px;
+        background-image:
+          linear-gradient(to right, rgba(20, 20, 20, 0.055) 1.5px, transparent 1.5px),
+          linear-gradient(to bottom, rgba(20, 20, 20, 0.055) 1.5px, transparent 1.5px);
+        background-size: 60px 60px;
+      }
+      #vignette {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(ellipse at 50% 45%, transparent 45%, rgba(90, 80, 72, 0.22) 100%);
+      }
+
+      /* ---------- camera ---------- */
+      #cam,
+      #punch,
+      .beat {
+        position: absolute;
+        inset: 0;
+      }
+
+      /* ---------- kinetic serif (same system as v01_hook) ---------- */
+      .line {
+        position: absolute;
+        display: flex;
+        align-items: baseline;
+        white-space: nowrap;
+        line-height: 0.95;
+        letter-spacing: -0.015em;
+      }
+      .bl {
+        display: block;
+        width: 0;
+        height: 0;
+        align-self: baseline;
+      }
+      .w {
+        display: inline-block;
+        will-change: transform, opacity, filter;
+      }
+      .serif {
+        font-family: var(--font-heading);
+        font-weight: 600;
+        color: var(--brand-text);
+      }
+      .ital {
+        font-family: var(--font-accent);
+        font-weight: 700;
+        font-style: italic;
+        letter-spacing: -0.02em;
+      }
+      .ocean {
+        color: var(--brand-primary);
+      }
+      .ink {
+        color: var(--brand-text);
+      }
+      .gap-s {
+        margin-left: 0.24em;
+      }
+
+      /* chapter */
+      #c1 {
+        font-size: 100px;
+      }
+      #c2,
+      #c3 {
+        font-size: 256px;
+        line-height: 0.9;
+      }
+      /* page, phrase 1 */
+      #p1a {
+        font-size: 104px;
+      }
+      #p1m {
+        font-size: 166px;
+        line-height: 0.9;
+      }
+      #p1b {
+        font-size: 94px;
+      }
+      /* page, phrase 2 */
+      #p2a {
+        font-size: 88px;
+      }
+      #p2a .ital {
+        font-size: 136px;
+      }
+      #p2b {
+        font-size: 100px;
+      }
+      #p2c {
+        font-size: 214px;
+        line-height: 0.9;
+      }
+      /* slop */
+      #s1 {
+        font-size: 112px;
+      }
+      #s2 {
+        font-size: 250px;
+        line-height: 0.9;
+      }
+      #s3 {
+        font-size: 100px;
+      }
+      #strike {
+        position: absolute;
+        height: 20px;
+        border-radius: 10px;
+        background: linear-gradient(90deg, var(--brand-primary), var(--brand-primary-dark));
+      }
+
+      /* ---------- coin 01 ---------- */
+      #coin {
+        position: absolute;
+        width: 230px;
+        height: 230px;
+        margin-left: -115px;
+        margin-top: -115px;
+      }
+      #coin-bob {
+        position: absolute;
+        inset: 0;
+      }
+      .coin-layer {
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+      }
+      #coin-white {
+        background: radial-gradient(circle at 35% 30%, #ffffff, #f1eeea 70%);
+        box-shadow:
+          0 18px 30px rgba(60, 50, 40, 0.22),
+          inset 0 -6px 12px rgba(60, 50, 40, 0.06);
+      }
+      #coin-ocean {
+        background: radial-gradient(circle at 35% 30%, #7cc3e2, var(--brand-primary) 52%, var(--brand-primary-dark) 100%);
+        box-shadow:
+          0 20px 34px rgba(31, 126, 168, 0.32),
+          inset 0 -6px 12px rgba(13, 39, 49, 0.12);
+        opacity: 0;
+      }
+      #coin-print {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-body);
+        font-weight: 600;
+        font-size: 92px;
+        letter-spacing: -0.03em;
+        color: var(--brand-text);
+      }
+      #coin-print .tick {
+        position: absolute;
+        background: #cfc9c2;
+        border-radius: 2px;
+      }
+
+      /* ---------- browser card ---------- */
+      #br-float {
+        position: absolute;
+        left: 80px;
+        top: 300px;
+        width: 760px;
+        height: 510px;
+      }
+      #browser {
+        position: absolute;
+        inset: 0;
+        border-radius: 28px;
+        overflow: hidden;
+        background: var(--brand-card);
+        box-shadow:
+          0 30px 50px -12px rgba(60, 50, 40, 0.3),
+          0 50px 70px -10px rgba(40, 30, 20, 0.22);
+        opacity: 0;
+      }
+      #chrome {
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        height: 66px;
+        background: #f1eeea;
+        z-index: 2;
+      }
+      .dot {
+        position: absolute;
+        top: 26px;
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        background: #d6d0ca;
+      }
+      #url {
+        position: absolute;
+        left: 50%;
+        top: 12px;
+        width: 330px;
+        margin-left: -165px;
+        height: 42px;
+        border-radius: 21px;
+        background: #e4ded9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-body);
+        font-weight: 500;
+        font-size: 30px;
+        letter-spacing: -0.01em;
+        color: var(--brand-muted);
+      }
+      #viewport {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 66px;
+        bottom: 0;
+        overflow: hidden;
+        background: #f6f4f1;
+      }
+      #page {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 760px;
+        height: 3659px;
+        display: block;
+      }
+      .sheen {
+        position: absolute;
+        inset: 0;
+        border-radius: 28px;
+        background: linear-gradient(
+          105deg,
+          transparent 30%,
+          rgba(255, 255, 255, 0.26) 45%,
+          rgba(255, 255, 255, 0.06) 55%,
+          transparent 65%
+        );
+        background-size: 300% 100%;
+        background-position: 100% 0;
+        opacity: 0;
+        z-index: 3;
+      }
+
+      /* ---------- GitHub pill ---------- */
+      #pill-wrap {
+        position: absolute;
+        left: 548px;
+        top: 358px;
+      }
+      #pill {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        height: 88px;
+        padding: 0 38px 0 32px;
+        border-radius: 44px;
+        background: #141414;
+        color: #ffffff;
+        font-family: var(--font-body);
+        font-weight: 600;
+        font-size: 36px;
+        letter-spacing: -0.01em;
+        white-space: nowrap;
+        box-shadow: 0 24px 40px -10px rgba(20, 20, 20, 0.38);
+        opacity: 0;
+      }
+      #pill svg {
+        width: 34px;
+        height: 34px;
+        display: block;
+      }
+
+      /* ---------- secondary speaker card ---------- */
+      #spk-float {
+        position: absolute;
+        left: 380px;
+        top: 592px;
+        width: 560px;
+        height: 390px;
+      }
+      #spk-card {
+        position: absolute;
+        inset: 0;
+        border-radius: 30px;
+        overflow: hidden;
+        background: #1b1b1b;
+        box-shadow:
+          0 16px 0 -2px var(--brand-primary),
+          0 50px 70px -10px rgba(40, 30, 20, 0.35);
+        opacity: 0;
+      }
+      #vid-wrap {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        border-radius: 30px;
+      }
+      /* source 1080x1920 scaled to 560 wide; window = 21.6%–60.8% of the source height (face centred) */
+      #speaker {
+        position: absolute;
+        left: 0;
+        top: -215px;
+        width: 560px;
+        height: 996px;
+        object-fit: cover;
+      }
+
+      /* ---------- slop pile ---------- */
+      .gcard {
+        position: absolute;
+        width: 300px;
+        height: 390px;
+        margin-left: -150px;
+        margin-top: -195px;
+        border-radius: 26px;
+        background: #f1eeea;
+        box-shadow: 0 30px 50px -12px rgba(60, 50, 40, 0.3);
+      }
+      .gcard i {
+        position: absolute;
+        display: block;
+        background: #dcd6cf;
+      }
+      #teal-wrap {
+        position: absolute;
+        left: 210px;
+        top: 450px;
+        width: 660px;
+        height: 460px;
+      }
+      #teal {
+        position: absolute;
+        inset: 0;
+        border-radius: 30px;
+        overflow: hidden;
+        background: var(--brand-deep);
+        box-shadow:
+          0 40px 60px -14px rgba(13, 39, 49, 0.45),
+          0 14px 24px -8px rgba(13, 39, 49, 0.3);
+        opacity: 0;
+      }
+      #teal i {
+        position: absolute;
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-width="1080"
+      data-height="1920"
+      data-duration="6.8"
+    >
+      <div id="bg">
+        <div id="grid"></div>
+        <div id="vignette"></div>
+      </div>
+
+      <div id="cam">
+        <div id="punch">
+          <!-- ================= PAGE beat (1.1–5.1) ================= -->
+          <div id="page-beat" class="beat">
+            <div id="br-float">
+              <div id="browser">
+                <div id="chrome">
+                  <span class="dot" style="left: 28px"></span>
+                  <span class="dot" style="left: 54px"></span>
+                  <span class="dot" style="left: 80px"></span>
+                  <div id="url">tasteskill.dev</div>
+                </div>
+                <div id="viewport">
+                  <img id="page" src="assets/taste_site.png" alt="" />
+                </div>
+                <div id="br-sheen" class="sheen"></div>
+              </div>
+            </div>
+
+            <div id="spk-float">
+              <div id="spk-card">
+                <div id="vid-wrap">
+                  <video
+                    id="speaker"
+                    class="clip"
+                    src="assets/speaker.mp4"
+                    muted
+                    playsinline
+                    data-start="0"
+                    data-duration="6.8"
+                    data-track-index="1"
+                  ></video>
+                </div>
+                <div id="spk-sheen" class="sheen" style="border-radius: 30px"></div>
+              </div>
+            </div>
+
+            <div id="pill-wrap">
+              <div id="pill">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    fill="#ffffff"
+                    d="M12 2.2l2.95 6.2 6.8.85-4.98 4.7 1.27 6.75L12 17.4l-6.04 3.3 1.27-6.75-4.98-4.7 6.8-.85z"
+                  />
+                </svg>
+                <span>94.5k on GitHub</span>
+              </div>
+            </div>
+
+            <!-- phrase 1: I've personally used this a lot, -->
+            <div id="p1a" class="line serif" data-x="104" data-base="1118">
+              <span class="bl"></span>
+              <span class="w" data-t="1.31">I've</span>
+            </div>
+            <div id="p1m" class="line ital ocean" data-x="92" data-base="1290">
+              <span class="bl"></span>
+              <span class="w" data-t="1.53" data-accent="1">personally</span>
+            </div>
+            <div id="p1b" class="line serif" data-right="950" data-base="1444">
+              <span class="bl"></span>
+              <span class="w" data-t="1.85">used</span>
+              <span class="w gap-s" data-t="2.19">this</span>
+              <span class="w gap-s" data-t="2.35">a</span>
+              <span class="w gap-s" data-t="2.51">lot,</span>
+            </div>
+
+            <!-- phrase 2: for designing my own personal website. -->
+            <div id="p2a" class="line serif" data-x="96" data-base="1150">
+              <span class="bl"></span>
+              <span class="w" data-t="3.11">for</span>
+              <span class="w ital ink gap-s" data-t="3.29" data-accent="1">designing</span>
+            </div>
+            <div id="p2b" class="line serif" data-right="944" data-base="1272">
+              <span class="bl"></span>
+              <span class="w" data-t="3.63">my</span>
+              <span class="w gap-s" data-t="3.87">own</span>
+              <span class="w gap-s" data-t="4.11">personal</span>
+            </div>
+            <div id="p2c" class="line ital ocean" data-x="84" data-base="1464">
+              <span class="bl"></span>
+              <span class="w" data-t="4.47" data-hero="1" data-origin="30% 85%">website.</span>
+            </div>
+          </div>
+
+          <!-- ================= SLOP beat (4.9–6.8) ================= -->
+          <div id="slop-beat" class="beat">
+            <div id="pile"></div>
+            <div id="teal-wrap">
+              <div id="teal">
+                <!-- nav -->
+                <i style="left: 40px; top: 34px; width: 24px; height: 24px; border-radius: 50%; background: var(--brand-primary)"></i>
+                <i style="left: 76px; top: 40px; width: 112px; height: 12px; border-radius: 6px; background: rgba(228, 222, 217, 0.85)"></i>
+                <i style="left: 356px; top: 41px; width: 46px; height: 10px; border-radius: 5px; background: rgba(228, 222, 217, 0.3)"></i>
+                <i style="left: 414px; top: 41px; width: 46px; height: 10px; border-radius: 5px; background: rgba(228, 222, 217, 0.3)"></i>
+                <i style="left: 472px; top: 41px; width: 46px; height: 10px; border-radius: 5px; background: rgba(228, 222, 217, 0.3)"></i>
+                <i style="left: 536px; top: 32px; width: 84px; height: 28px; border-radius: 14px; background: var(--brand-primary)"></i>
+                <!-- art: ocean disc + diagonal -->
+                <i style="left: 392px; top: 104px; width: 200px; height: 200px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #7cc3e2, var(--brand-primary) 55%, var(--brand-primary-dark))"></i>
+                <i style="left: 0; top: 0; width: 660px; height: 460px; background: var(--brand-primary-dark); clip-path: polygon(100% 54%, 100% 100%, 44% 100%); opacity: 0.92"></i>
+                <!-- headline -->
+                <i style="left: 40px; top: 112px; width: 318px; height: 36px; border-radius: 10px; background: rgba(228, 222, 217, 0.94)"></i>
+                <i style="left: 40px; top: 160px; width: 236px; height: 36px; border-radius: 10px; background: rgba(228, 222, 217, 0.94)"></i>
+                <i style="left: 40px; top: 220px; width: 286px; height: 12px; border-radius: 6px; background: rgba(228, 222, 217, 0.36)"></i>
+                <i style="left: 40px; top: 242px; width: 214px; height: 12px; border-radius: 6px; background: rgba(228, 222, 217, 0.36)"></i>
+                <!-- buttons -->
+                <i style="left: 40px; top: 290px; width: 172px; height: 52px; border-radius: 26px; background: var(--brand-primary)"></i>
+                <i style="left: 226px; top: 290px; width: 128px; height: 52px; border-radius: 26px; background: rgba(228, 222, 217, 0.13)"></i>
+                <!-- logo row -->
+                <i style="left: 40px; top: 396px; width: 64px; height: 12px; border-radius: 6px; background: rgba(228, 222, 217, 0.22)"></i>
+                <i style="left: 120px; top: 396px; width: 64px; height: 12px; border-radius: 6px; background: rgba(228, 222, 217, 0.22)"></i>
+                <i style="left: 200px; top: 396px; width: 64px; height: 12px; border-radius: 6px; background: rgba(228, 222, 217, 0.22)"></i>
+              </div>
+              <div id="teal-sheen" class="sheen" style="border-radius: 30px"></div>
+            </div>
+
+            <div id="s1" class="line serif" data-x="128" data-base="1104">
+              <span class="bl"></span>
+              <span class="w" data-t="5.73" data-pop="1">reduce</span>
+            </div>
+            <div id="s2" class="line ital ink" data-x="318" data-base="1314">
+              <span class="bl"></span>
+              <span class="w" id="w-slop" data-t="6.11" data-hero="1" data-origin="40% 85%">slop</span>
+            </div>
+            <div id="strike"></div>
+            <div id="s3" class="line serif" data-right="944" data-base="1458">
+              <span class="bl"></span>
+              <span class="w" data-t="6.37">a</span>
+              <span class="w gap-s" data-t="6.59">lot.</span>
+            </div>
+          </div>
+
+          <!-- ================= CHAPTER beat (0–1.36) ================= -->
+          <div id="chapter-beat" class="beat">
+            <div id="c1" class="line serif" data-x="118" data-base="684">
+              <span class="bl"></span>
+              <span class="w" data-t="0.12">first</span>
+              <span class="w gap-s" data-t="0.25">one</span>
+              <span class="w gap-s" data-t="0.45">is</span>
+            </div>
+            <div id="c2" class="line ital ocean" data-x="100" data-base="990">
+              <span class="bl"></span>
+              <span class="w" data-t="0.69" data-hero="1" data-origin="30% 85%">Taste</span>
+            </div>
+            <div id="c3" class="line ital ink" data-right="956" data-base="1226">
+              <span class="bl"></span>
+              <span class="w" data-t="0.79" data-hero="1" data-origin="40% 85%">Skill.</span>
+            </div>
+            <div id="coin">
+              <div id="coin-bob">
+                <div id="coin-white" class="coin-layer"></div>
+                <div id="coin-ocean" class="coin-layer"></div>
+                <div id="coin-print">01</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (async () => {
+        const fontSpecs = ['600 64px "Newsreader"', 'italic 700 64px "Fraunces"', '600 30px "Geist"', '500 30px "Geist"'];
+        await Promise.all(fontSpecs.map((f) => document.fonts.load(f)));
+        await document.fonts.ready;
+        for (const f of fontSpecs) {
+          if (!document.fonts.check(f)) throw new Error("brand font missing: " + f);
+        }
+        const pageImg = document.getElementById("page");
+        if (!pageImg.complete) {
+          await new Promise((res) => {
+            pageImg.addEventListener("load", res, { once: true });
+            pageImg.addEventListener("error", res, { once: true });
+          });
+        }
+
+        const D = 6.8;
+        const F = 1 / 30;
+        const $ = (s) => document.querySelector(s);
+        const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+
+        // ---- place each line by its baseline (deterministic layout, measured once) ----
+        for (const line of $$(".line")) {
+          const bl = line.querySelector(".bl");
+          line.style.top = "0px";
+          line.style.left = "0px";
+          const baseOff = bl.offsetTop;
+          line.style.top = parseFloat(line.dataset.base) - baseOff + "px";
+          if (line.dataset.right) {
+            line.style.left = parseFloat(line.dataset.right) - line.offsetWidth + "px";
+          } else {
+            line.style.left = line.dataset.x + "px";
+          }
+        }
+
+        // ---- coin: ticks, final spot right of "first one is", roll distance ----
+        const print = $("#coin-print");
+        for (const [x, y, w, h] of [
+          [111, 12, 8, 20],
+          [111, 198, 8, 20],
+          [12, 111, 20, 8],
+          [198, 111, 20, 8],
+        ]) {
+          const t = document.createElement("span");
+          t.className = "tick";
+          Object.assign(t.style, { left: x + "px", top: y + "px", width: w + "px", height: h + "px" });
+          print.appendChild(t);
+        }
+        const c1 = $("#c1");
+        const coinX = Math.min(822, c1.offsetLeft + c1.offsetWidth + 150);
+        const coinY = 650;
+        const coin = $("#coin");
+        coin.style.left = coinX + "px";
+        coin.style.top = coinY + "px";
+        const rollFrom = 245; // left edge 130, inside the zone
+        const rollDist = coinX - rollFrom;
+        const rollDeg = (rollDist / 115) * (180 / Math.PI);
+
+        // ---- strike-through across "slop" ----
+        const s2 = $("#s2");
+        const slopW = $("#w-slop");
+        const strike = $("#strike");
+        const sx0 = s2.offsetLeft + slopW.offsetLeft - 18;
+        const sx1 = s2.offsetLeft + slopW.offsetLeft + slopW.offsetWidth + 6;
+        strike.style.left = sx0 + "px";
+        strike.style.width = sx1 - sx0 + "px";
+        strike.style.top = parseFloat(s2.dataset.base) - 72 + "px";
+
+        // ---- bland grey cards (identical hero → 3 boxes → button rhythm) ----
+        const wire = [
+          [24, 26, 20, 20, 10],
+          [54, 30, 92, 12, 6],
+          [214, 30, 62, 12, 6],
+          [24, 64, 252, 118, 14],
+          [24, 200, 186, 16, 8],
+          [24, 226, 138, 12, 6],
+          [24, 258, 74, 64, 12],
+          [113, 258, 74, 64, 12],
+          [202, 258, 74, 64, 12],
+          [90, 340, 120, 30, 15],
+        ];
+        // centre x, centre y, rotation — messy but inside the zone (center card last, on top)
+        const pileSpec = [
+          [300, 574, -9],
+          [768, 570, 7],
+          [424, 746, 5],
+          [692, 784, -6],
+          [262, 790, 10],
+          [776, 750, -8],
+          [566, 534, 3],
+          [540, 678, -3],
+        ];
+        const pile = $("#pile");
+        const gcards = pileSpec.map(([x, y, r]) => {
+          const c = document.createElement("div");
+          c.className = "gcard";
+          c.style.left = x + "px";
+          c.style.top = y + "px";
+          for (const [l, t, w, h, br] of wire) {
+            const i = document.createElement("i");
+            Object.assign(i.style, { left: l + "px", top: t + "px", width: w + "px", height: h + "px", borderRadius: br + "px" });
+            c.appendChild(i);
+          }
+          pile.appendChild(c);
+          return c;
+        });
+
+        // ================= timeline =================
+        const tl = gsap.timeline({ paused: true });
+
+        // background drift (continuous, linear on purpose) + slow camera push
+        tl.fromTo("#grid", { x: 0, y: 0 }, { x: -24, y: -14, duration: D, ease: "none" }, 0);
+        tl.fromTo("#cam", { scale: 1, transformOrigin: "540px 882px" }, { scale: 1.018, duration: D, ease: "none" }, 0);
+
+        // ---- word entrances (contact frame on the spoken word) ----
+        function wordIn(w) {
+          const t = parseFloat(w.dataset.t);
+          if (w.dataset.hero) {
+            const s = Math.max(0, t - 0.2);
+            gsap.set(w, { transformOrigin: w.dataset.origin || "50% 80%" });
+            tl.fromTo(
+              w,
+              { opacity: 0, y: 90, scale: 0.55, rotation: -7, filter: "blur(8px)" },
+              { opacity: 1, y: -8, scale: 1.1, rotation: 1.5, filter: "blur(0px)", duration: 0.2, ease: "power3.out" },
+              s,
+            );
+            tl.to(w, { y: 0, scale: 1, rotation: 0, duration: 0.32, ease: "back.out(1.6)" }, s + 0.2);
+          } else if (w.dataset.pop) {
+            const s = Math.max(0, t - 0.16);
+            gsap.set(w, { transformOrigin: "50% 85%" });
+            tl.fromTo(
+              w,
+              { opacity: 0, y: 60, scale: 0.72, rotation: -5, filter: "blur(6px)" },
+              { opacity: 1, y: -5, scale: 1.06, rotation: 1, filter: "blur(0px)", duration: 0.16, ease: "power3.out" },
+              s,
+            );
+            tl.to(w, { y: 0, scale: 1, rotation: 0, duration: 0.28, ease: "back.out(1.5)" }, s + 0.16);
+          } else if (w.dataset.accent) {
+            const s = Math.max(0, t - 0.16);
+            gsap.set(w, { transformOrigin: "50% 85%" });
+            tl.fromTo(
+              w,
+              { opacity: 0, y: 56, scale: 0.78, rotation: -6, filter: "blur(6px)" },
+              { opacity: 1, y: 0, scale: 1, rotation: 0, filter: "blur(0px)", duration: 0.46, ease: "back.out(2.2)" },
+              s,
+            );
+          } else {
+            const s = Math.max(0, t - 0.13);
+            tl.fromTo(
+              w,
+              { opacity: 0, y: 40, filter: "blur(5px)" },
+              { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.38, ease: "power3.out" },
+              s,
+            );
+          }
+        }
+        $$(".line .w").forEach(wordIn);
+
+        function lineOut(sel, t, dy = -50) {
+          tl.to(sel, { y: dy, opacity: 0, filter: "blur(6px)", duration: 0.2, ease: "power2.in" }, t);
+        }
+
+        // ================= CHAPTER 0–1.36 =================
+        // coin 01 rolls in (rotation matches the distance travelled), contact ≈ 0.45
+        tl.fromTo("#coin", { opacity: 0 }, { opacity: 1, duration: 0.1, ease: "power1.out" }, 0);
+        tl.fromTo("#coin", { x: -rollDist }, { x: 0, duration: 0.56, ease: "power3.out", immediateRender: false }, 0);
+        tl.fromTo("#coin-print", { rotation: -rollDeg }, { rotation: 0, duration: 0.56, ease: "power3.out" }, 0);
+        // tiny squash on arrival (shape only) and settle
+        tl.to("#coin-bob", { scaleX: 1.04, scaleY: 0.96, duration: 0.065, ease: "power2.out" }, 0.34);
+        tl.to("#coin-bob", { scaleX: 1, scaleY: 1, duration: 0.11, ease: "power2.out" }, 0.41);
+        // turns ocean on "Taste Skill." — anticipation dip, pop, settle
+        tl.to("#coin-bob", { scale: 0.94, duration: 0.08, ease: "power2.in" }, 0.53);
+        tl.to("#coin-bob", { scale: 1.12, duration: 0.14, ease: "power3.out" }, 0.61);
+        tl.to("#coin-bob", { scale: 1, duration: 0.3, ease: "back.out(1.6)" }, 0.75);
+        tl.fromTo("#coin-ocean", { opacity: 0 }, { opacity: 1, duration: 0.14, ease: "power2.out" }, 0.6);
+        tl.to("#coin-print", { color: "#0D2731", duration: 0.14, ease: "power2.out" }, 0.6);
+        tl.to("#coin-print .tick", { backgroundColor: "rgba(13,39,49,0.35)", duration: 0.14, ease: "power2.out" }, 0.6);
+        // float while holding
+        tl.to("#coin-bob", { y: -6, duration: 0.5, ease: "sine.inOut", yoyo: true, repeat: 1 }, 0.9);
+        // exit: rows lift away 2 f apart
+        // all rows lift away 1 f apart so the stage is clear before the browser card and "I've" arrive
+        // bottom row ("Skill.") leaves first so it is gone before "I've" rises on its row
+        const cOut = 1.0;
+        const chOut = (sel, t, dy) =>
+          tl.to(sel, { y: dy, opacity: 0, filter: "blur(6px)", duration: 0.18, ease: "power2.in" }, t);
+        chOut("#c3", cOut, -60);
+        chOut("#c2", cOut + F, -60);
+        chOut("#c1", cOut + 2 * F, -50);
+        tl.to("#coin", { y: -60, opacity: 0, scale: 0.9, filter: "blur(6px)", duration: 0.18, ease: "power2.in" }, cOut + 2 * F);
+
+        // ================= PAGE 1.12–5.1 =================
+        // browser card: rise + soft 3D settle + sheen
+        gsap.set("#browser", { transformPerspective: 1600, transformOrigin: "50% 50%" });
+        const bIn = 1.14;
+        tl.fromTo("#browser", { opacity: 0 }, { opacity: 1, duration: 0.16, ease: "power1.out" }, bIn + 0.05);
+        tl.fromTo("#browser", { y: 120 }, { y: 0, duration: 0.5, ease: "power3.out", immediateRender: false }, bIn);
+        tl.fromTo("#browser", { scale: 0.88 }, { scale: 1, duration: 0.48, ease: "back.out(1.5)", immediateRender: false }, bIn);
+        tl.fromTo("#browser", { rotationX: 26 }, { rotationX: 4, duration: 0.62, ease: "back.out(1.8)", immediateRender: false }, bIn);
+        tl.fromTo("#browser", { rotationY: -20 }, { rotationY: -7, duration: 0.55, ease: "power3.out", immediateRender: false }, bIn);
+        tl.to("#browser", { rotationY: -4.5, rotationX: 2.5, duration: 4.8 - (bIn + 0.62), ease: "sine.inOut" }, bIn + 0.62);
+        tl.fromTo("#br-sheen", { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "power1.out" }, bIn + 0.1);
+        tl.fromTo(
+          "#br-sheen",
+          { backgroundPosition: "100% 0" },
+          { backgroundPosition: "0% 0", duration: 0.7, ease: "power2.inOut", immediateRender: false },
+          bIn + 0.1,
+        );
+        tl.to("#br-sheen", { opacity: 0, duration: 0.25, ease: "power1.in" }, bIn + 0.58);
+        // slow internal scroll of the real page
+        tl.fromTo("#page", { y: 0 }, { y: -520, duration: 3.4, ease: "sine.inOut" }, 1.42);
+        tl.to("#br-float", { y: -6, duration: 1.2, ease: "sine.inOut", yoyo: true, repeat: 2 }, 1.6);
+
+        // GitHub pill pops over the card's top-right (contact ≈ 2.08)
+        gsap.set("#pill", { transformOrigin: "30% 60%" });
+        tl.fromTo("#pill", { opacity: 0 }, { opacity: 1, duration: 0.08, ease: "power1.out" }, 1.9);
+        tl.fromTo("#pill", { scale: 0.55, y: 26 }, { scale: 1.08, y: -3, duration: 0.18, ease: "power3.out", immediateRender: false }, 1.9);
+        tl.to("#pill", { scale: 1, y: 0, duration: 0.3, ease: "back.out(1.6)" }, 2.08);
+        tl.to("#pill-wrap", { y: -5, duration: 0.9, ease: "sine.inOut", yoyo: true, repeat: 2 }, 2.4);
+
+        // phrase 1 exits before phrase 2 starts
+        lineOut("#p1a", 2.82);
+        lineOut("#p1m", 2.82 + F);
+        lineOut("#p1b", 2.82 + 2 * F);
+
+        // secondary speaker card tucks in at the lower-right corner (contact ≈ 2.9)
+        gsap.set("#spk-card", { transformPerspective: 1600, transformOrigin: "60% 60%" });
+        const sIn = 2.62;
+        tl.fromTo("#spk-card", { opacity: 0 }, { opacity: 1, duration: 0.14, ease: "power1.out" }, sIn);
+        tl.fromTo("#spk-card", { x: 50, y: 110 }, { x: 0, y: 0, duration: 0.5, ease: "power3.out", immediateRender: false }, sIn);
+        tl.fromTo("#spk-card", { scale: 0.86 }, { scale: 1, duration: 0.48, ease: "back.out(1.5)", immediateRender: false }, sIn);
+        tl.fromTo("#spk-card", { rotationX: 24 }, { rotationX: 4, duration: 0.6, ease: "back.out(1.8)", immediateRender: false }, sIn);
+        tl.fromTo("#spk-card", { rotationY: 22 }, { rotationY: 8, duration: 0.55, ease: "power3.out", immediateRender: false }, sIn);
+        tl.to("#spk-card", { rotationY: 6, rotationX: 3, duration: 4.8 - (sIn + 0.6), ease: "sine.inOut" }, sIn + 0.6);
+        tl.fromTo("#vid-wrap", { scale: 1.16 }, { scale: 1, duration: 0.7, ease: "power3.out" }, sIn);
+        tl.to("#vid-wrap", { scale: 1.03, duration: 4.8 - (sIn + 0.7), ease: "none" }, sIn + 0.7);
+        tl.fromTo("#spk-sheen", { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "power1.out" }, sIn + 0.08);
+        tl.fromTo(
+          "#spk-sheen",
+          { backgroundPosition: "100% 0" },
+          { backgroundPosition: "0% 0", duration: 0.7, ease: "power2.inOut", immediateRender: false },
+          sIn + 0.08,
+        );
+        tl.to("#spk-sheen", { opacity: 0, duration: 0.25, ease: "power1.in" }, sIn + 0.55);
+        tl.to("#spk-float", { y: -5, duration: 0.95, ease: "sine.inOut", yoyo: true, repeat: 1 }, sIn + 0.5);
+
+        // "website." — tiny camera punch
+        tl.fromTo("#punch", { scale: 1, transformOrigin: "540px 882px" }, { scale: 1.012, duration: 0.45, ease: "power2.out" }, 4.42);
+
+        // page beat clears (2 f apart), punch resets underneath
+        const out = 4.8;
+        tl.to("#pill", { scale: 0.85, opacity: 0, duration: 0.18, ease: "power2.in" }, out);
+        lineOut("#p2a", out, -46);
+        lineOut("#p2b", out + F, -46);
+        lineOut("#p2c", out + 2 * F, -46);
+        tl.to("#spk-card", { y: 50, scale: 0.94, opacity: 0, filter: "blur(4px)", duration: 0.2, ease: "power2.in" }, out + F);
+        tl.to("#browser", { y: 60, scale: 0.94, opacity: 0, filter: "blur(4px)", duration: 0.2, ease: "power2.in" }, out + 2 * F);
+        tl.to("#punch", { scale: 1, duration: 0.3, ease: "power2.inOut" }, out + 0.08);
+
+        // ================= SLOP 4.9–6.8 =================
+        // messy pile drops in, 1.5 f apart (centre card last, on top)
+        const pIn = 5.03;
+        gcards.forEach((c, i) => {
+          const r = pileSpec[i][2];
+          const s = pIn + i * 1.25 * F;
+          tl.fromTo(c, { opacity: 0 }, { opacity: 1, duration: 0.08, ease: "power1.out" }, s);
+          tl.fromTo(c, { y: -70 }, { y: 0, duration: 0.28, ease: "power3.out" }, s);
+          tl.fromTo(c, { scale: 1.12 }, { scale: 1, duration: 0.3, ease: "back.out(1.4)" }, s);
+          tl.fromTo(c, { rotation: r - Math.sign(r) * 7 }, { rotation: r, duration: 0.34, ease: "back.out(1.6)" }, s);
+        });
+
+        // vacuum on "reduce": outer cards first, each swells 2 f then is sucked away
+        const order = pileSpec
+          .slice(0, 7)
+          .map(([x, y], i) => ({ i, d: Math.hypot(x - 540, y - 678) }))
+          .sort((a, b) => b.d - a.d)
+          .map((o) => o.i);
+        const vIn = 5.5;
+        order.forEach((ci, k) => {
+          const c = gcards[ci];
+          const [x, y, r] = pileSpec[ci];
+          const s = vIn + k * 1.5 * F;
+          // back.in = a small swell (anticipation) before it is sucked in, spinning, toward the centre
+          tl.to(c, { scale: 0.08, duration: 0.28, ease: "back.in(2.2)" }, s);
+          tl.to(c, { x: (540 - x) * 0.62, y: (678 - y) * 0.62, duration: 0.28, ease: "power3.in" }, s);
+          tl.to(c, { rotation: r + Math.sign(r) * 40, duration: 0.28, ease: "power2.in" }, s);
+          tl.to(c, { opacity: 0, filter: "blur(6px)", duration: 0.14, ease: "power1.in" }, s + 0.14);
+        });
+        // the centre card becomes the crisp deep-teal design (contact ≈ 5.98)
+        const tIn = 5.78;
+        tl.to(gcards[7], { scale: 0.9, opacity: 0, duration: 0.12, ease: "power2.in" }, tIn);
+        gsap.set("#teal", { transformPerspective: 1600, transformOrigin: "50% 55%" });
+        tl.fromTo("#teal", { opacity: 0 }, { opacity: 1, duration: 0.1, ease: "power1.out" }, tIn + 0.02);
+        tl.fromTo("#teal", { scale: 0.46, rotation: -3, y: 24 }, { scale: 1.05, rotation: 0.8, y: -6, duration: 0.2, ease: "power3.out", immediateRender: false }, tIn);
+        tl.to("#teal", { scale: 1, rotation: 0, y: 0, duration: 0.34, ease: "back.out(1.5)" }, tIn + 0.2);
+        tl.fromTo("#teal", { rotationX: 18 }, { rotationX: 3, duration: 0.55, ease: "back.out(1.6)", immediateRender: false }, tIn);
+        tl.fromTo("#teal", { rotationY: 14 }, { rotationY: -5, duration: 0.55, ease: "power3.out", immediateRender: false }, tIn);
+        tl.to("#teal", { rotationY: -3.5, rotationX: 2, duration: D - (tIn + 0.55), ease: "sine.inOut" }, tIn + 0.55);
+        tl.fromTo("#teal-sheen", { opacity: 0 }, { opacity: 1, duration: 0.1, ease: "power1.out" }, tIn + 0.12);
+        tl.fromTo(
+          "#teal-sheen",
+          { backgroundPosition: "100% 0" },
+          { backgroundPosition: "0% 0", duration: 0.6, ease: "power2.inOut", immediateRender: false },
+          tIn + 0.12,
+        );
+        tl.to("#teal-sheen", { opacity: 0, duration: 0.2, ease: "power1.in" }, tIn + 0.55);
+        tl.to("#teal-wrap", { y: -6, duration: 0.42, ease: "sine.inOut", yoyo: true, repeat: 1 }, tIn + 0.5);
+
+        // ocean strike-through draws across "slop"
+        gsap.set(strike, { rotation: -4, transformOrigin: "0% 50%" });
+        tl.fromTo(strike, { scaleX: 0 }, { scaleX: 1, duration: 0.3, ease: "power3.out" }, 6.18);
+
+        window.__timelines["main"] = tl;
+        if (window.__hfForceTimelineRebind) window.__hfForceTimelineRebind();
+      })();
+    </script>
+  </body>
+</html>

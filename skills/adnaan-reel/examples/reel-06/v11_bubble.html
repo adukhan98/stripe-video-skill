@@ -1,0 +1,262 @@
+<!doctype html>
+<!-- adnaan-reel scene starter: BLANK — the world + a portrait speaker card + kinetic words, nothing else.
+     Use when no other starter fits: add the scene's bespoke hero object in the <style> and the script. Keep data-duration. -->
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>v11_bubble</title>
+    <link rel="stylesheet" href="brand.css" />
+    <link rel="stylesheet" href="paper.css" />
+    <link rel="stylesheet" href="marker.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+    <script src="paper.js"></script>
+    <script src="marker.js"></script>
+    <style>
+      @font-face { font-family: "Inter Tight"; src: url("fonts/InterTight-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Inter"; src: url("fonts/Inter-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Caveat"; src: url("fonts/Caveat-Variable.ttf") format("truetype"); font-weight: 400 700; font-style: normal; font-display: block; }
+
+      /* ---- camera: the zoomable world (#zoom) sits inside two feathered masks that hold it to the zone
+         while the globe sweeps in (vars are parked off-frame until the pull-back) ---- */
+      #zwrap, #zwrap2, #zoom { position: absolute; inset: 0; }
+      #zwrap { --mt: -300; --mb: 2300;
+        -webkit-mask-image: linear-gradient(to bottom, transparent calc(var(--mt) * 1px), #000 calc(var(--mt) * 1px + 24px), #000 calc(var(--mb) * 1px - 18px), transparent calc(var(--mb) * 1px));
+        mask-image: linear-gradient(to bottom, transparent calc(var(--mt) * 1px), #000 calc(var(--mt) * 1px + 24px), #000 calc(var(--mb) * 1px - 18px), transparent calc(var(--mb) * 1px)); }
+      #zwrap2 { --ml: -300; --mr: 1400;
+        -webkit-mask-image: linear-gradient(to right, transparent calc(var(--ml) * 1px), #000 calc(var(--ml) * 1px + 18px), #000 calc(var(--mr) * 1px - 18px), transparent calc(var(--mr) * 1px));
+        mask-image: linear-gradient(to right, transparent calc(var(--ml) * 1px), #000 calc(var(--ml) * 1px + 18px), #000 calc(var(--mr) * 1px - 18px), transparent calc(var(--mr) * 1px)); }
+      #zoom { transform-origin: 510px 880px; }
+      svg.zl { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; overflow: visible; pointer-events: none; }
+      svg.zl path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+
+      /* ---- zoom grid: two copies of the paper grid that shrink by octaves during the pull-back ---- */
+      .zg { position: absolute; left: -900px; top: -1260px; width: 2880px; height: 4320px; opacity: 0;
+        background-image: linear-gradient(to right, rgba(20, 20, 20, 0.055) 1.5px, transparent 1.5px),
+                          linear-gradient(to bottom, rgba(20, 20, 20, 0.055) 1.5px, transparent 1.5px); }
+      #zg1 { background-size: 60px 60px; }
+      #zg2 { background-size: 120px 120px; }
+
+      /* ---- die-cut logo stickers (official files; white sticker border, soft lifted shadow) ---- */
+      .stk { position: absolute; border-radius: 50%; background: var(--brand-card); padding: 12px; box-sizing: border-box;
+        box-shadow: 0 12px 20px -6px rgba(60, 50, 40, 0.34), 0 2px 4px rgba(60, 50, 40, 0.16); opacity: 0; }
+      .stk img { display: block; width: 100%; height: 100%; object-fit: contain; border-radius: 50%; }
+      .stk.sq { border-radius: 30%; padding: 10px; }
+      .stk.sq img { border-radius: 24%; object-fit: cover; }
+      .stk.pad img { padding: 7%; box-sizing: border-box; }
+      .stk.zi { overflow: hidden; }
+      .stk.zi img { transform: scale(1.22); }
+    </style>
+  </head>
+  <body data-face="0.42">
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="10.2167">
+      <div id="bg"><div id="grid"></div><div id="zg1" class="zg"></div><div id="zg2" class="zg"></div><div id="vignette"></div></div>
+      <div id="cam"><div id="punch">
+
+        <div id="zwrap"><div id="zwrap2">
+          <!-- the hand-drawn globe: screen-space drawing in its own svg, scaled in step with the camera -->
+          <svg id="gsvg" class="zl" viewBox="0 0 1080 1920" width="1080" height="1920">
+            <defs><clipPath id="globeClip"><circle cx="510" cy="990" r="338" /></clipPath></defs>
+            <g id="gscale"><g id="globeG"></g><g clip-path="url(#globeClip)"><g id="contG"></g></g></g>
+          </svg>
+
+          <div id="zoom">
+            <svg id="zback" class="zl" viewBox="0 0 1080 1920" width="1080" height="1920">
+              <circle id="speckFill" cx="510" cy="880" r="396" style="fill: var(--marker); opacity: 0" />
+            </svg>
+
+            <div class="spk secondary" data-x="230" data-y="635" data-w="560" data-h="500" data-face-at="0.555" data-float="3">
+              <div class="spk-card">
+                <div class="spk-vid"><video id="speaker" class="clip" src="assets/speaker.mp4" muted playsinline data-start="0" data-duration="10.2167" data-track-index="1"></video></div>
+                <div class="spk-sheen"></div>
+              </div>
+            </div>
+
+            <!-- stickers: slot centre via left/top + negative margins (size S) -->
+            <div class="stk pad" id="s1" style="left:370px;top:575px;width:142px;height:142px;margin:-71px 0 0 -71px"><img src="assets/chatgpt.svg" alt="ChatGPT" /></div>
+            <div class="stk pad" id="s2" style="left:628px;top:1190px;width:144px;height:144px;margin:-72px 0 0 -72px"><img src="assets/claude.svg" alt="Claude" /></div>
+            <div class="stk zi" id="s3" style="left:255px;top:1075px;width:146px;height:146px;margin:-73px 0 0 -73px"><img src="assets/codex.png" alt="Codex" /></div>
+            <div class="stk sq" id="s4" style="left:790px;top:702px;width:140px;height:140px;margin:-70px 0 0 -70px"><img src="assets/anthropic.png" alt="Anthropic" /></div>
+            <div class="stk zi" id="s5" style="left:178px;top:880px;width:140px;height:140px;margin:-70px 0 0 -70px"><img src="assets/openai.png" alt="OpenAI" /></div>
+            <div class="stk pad" id="s6" style="left:650px;top:572px;width:140px;height:140px;margin:-70px 0 0 -70px"><img src="assets/claude.svg" alt="Claude" /></div>
+            <div class="stk pad" id="s7" style="left:398px;top:1196px;width:144px;height:144px;margin:-72px 0 0 -72px"><img src="assets/chatgpt.svg" alt="ChatGPT" /></div>
+            <div class="stk sq" id="s8" style="left:776px;top:1062px;width:142px;height:142px;margin:-71px 0 0 -71px"><img src="assets/anthropic.png" alt="Anthropic" /></div>
+
+            <svg id="zfront" class="zl" viewBox="0 0 1080 1920" width="1080" height="1920">
+              <g id="bubWob"><g id="bubJig"></g></g><g id="doodles"></g>
+            </svg>
+
+            <!-- beat A words live inside the camera, so the pull-back sucks them away with the bubble -->
+            <div class="line hero" data-x="96" data-base="440" data-size="176" data-exit="6.10">
+              <span class="w ocean" data-t="0.85" data-hero>AI</span><span class="w gap-s" data-t="1.01" data-hero>bubble</span>
+            </div>
+            <div class="line sup" data-right="950" data-base="1446" data-size="112" data-rise="30" data-exit="4.62">
+              <span class="w" data-t="3.37" data-rise="30">entire</span><span class="w gap-s" data-t="3.67" data-pop data-rise="30">world.</span>
+            </div>
+            <div class="line sup" data-x="76" data-base="1436" data-size="110" data-fit="900" data-exit="6.22">
+              <span class="w" data-t="4.84" data-rise="20">every</span><span class="w gap-s" data-t="5.26" data-rise="20">single</span><span class="w gap-s" data-t="5.70" data-pop data-rise="20">place.</span>
+            </div>
+          </div>
+        </div></div>
+
+        <!-- beat B / C words: outside the camera, always readable -->
+        <div class="line hero ocean" id="zoomout" data-cx="510" data-base="474" data-size="212" data-fit="900" data-exit="8.62">
+          <span class="w" data-t="6.44" data-hero>zoom</span><span class="w gap-s" data-t="6.72" data-hero>out</span>
+        </div>
+        <div class="line hero" data-x="84" data-base="438" data-size="128">
+          <span class="w" data-t="8.98" data-hero>barely</span>
+        </div>
+        <div class="line hero ocean" data-right="934" data-base="572" data-size="118">
+          <span class="w" data-t="9.40" data-hero>scratched</span>
+        </div>
+        <div class="line sup" data-x="150" data-base="1448" data-size="112">
+          <span class="w" data-t="9.68" data-rise="30">the</span><span class="w gap-s" data-t="10.14" data-pop data-rise="30">surface.</span>
+        </div>
+
+      </div></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const P = await Paper.init({ extraFonts: ['700 60px "Caveat"'] });
+        const M = Marker.init(P);
+        const { tl, D, F, $, $$ } = P;
+        const NS = "http://www.w3.org/2000/svg";
+        const O = [510, 880];                         // bubble centre = camera origin = the speck
+        const gNode = (parent) => { const g = document.createElementNS(NS, "g"); parent.appendChild(g); return g; };
+
+        // ================================================================ BEAT A — inside the bubble
+        // the bubble: red marker loop drawn round him on "bubble" (contact 1.01), soap highlight arc after it
+        const bubJig = $("#bubJig"), bubWob = $("#bubWob");
+        const bubble = M.circle(O[0], O[1], 392, 392, 0.86, { parent: bubJig, width: 13, dur: 0.42, turns: 1.1, seed: 1301 });
+        const hlPts = (a0, a1, r) => Array.from({ length: 7 }, (_, k) => { const a = ((a0 + (a1 - a0) * k / 6) * Math.PI) / 180; return [O[0] + Math.cos(a) * r, O[1] + Math.sin(a) * r]; });
+        const hl1 = M.line(hlPts(193, 218, 352), 1.30, { color: "ink", width: 9, dur: 0.16, parent: bubJig, amp: 1.2 });
+        const hl2 = M.line(hlPts(224, 230, 352), 1.48, { color: "ink", width: 9, dur: 0.07, parent: bubJig, amp: 0.6 });
+        const bubblePaths = [...bubble.paths, ...hl1.paths, ...hl2.paths];
+        // soap-bubble wobble (secondary action): the loop breathes out of phase in x/y
+        gsap.set(bubWob, { svgOrigin: O.join(" ") });
+        gsap.set(bubJig, { svgOrigin: O.join(" ") });
+        tl.fromTo(bubWob, { scaleX: 1, scaleY: 1 }, { scaleX: 1.012, scaleY: 0.99, duration: 0.55, ease: "sine.inOut", yoyo: true, repeat: 8, immediateRender: false }, 1.3);
+
+        // stickers slap onto the inside of the bubble: lifted & big → pressed (tiny squash) → settle at their tilt
+        const STK = [
+          ["#s1", 2.10, -9], ["#s2", 2.24, 8], ["#s3", 2.40, -6], ["#s4", 3.00, 10],
+          ["#s5", 4.26, -11], ["#s6", 4.70, 7], ["#s7", 5.12, -5], ["#s8", 5.55, 12],
+        ];
+        const LIFT = "0 46px 40px -14px rgba(60, 50, 40, 0.16), 0 2px 4px rgba(60, 50, 40, 0)";
+        const DOWN = "0 12px 20px -6px rgba(60, 50, 40, 0.34), 0 2px 4px rgba(60, 50, 40, 0.16)";
+        STK.forEach(([sel, t, rot], i) => {
+          const el = $(sel);
+          gsap.set(el, { transformOrigin: "50% 50%" });
+          tl.fromTo(el, { opacity: 0, scale: 1.55, rotation: rot - 16, y: -36, boxShadow: LIFT },
+            { opacity: 1, scale: 0.93, rotation: rot + 2, y: 0, boxShadow: DOWN, duration: 5 * F, ease: "power3.in", immediateRender: true }, t - 5 * F);
+          tl.to(el, { scaleX: 1.05, scaleY: 0.95, duration: 2 * F, ease: "power2.out" }, t);
+          tl.to(el, { scaleX: 1, scaleY: 1, rotation: rot, duration: 9 * F, ease: "back.out(2.2)" }, t + 2 * F);
+          // the bubble flinches on every slap (follow-through)
+          tl.to(bubJig, { scale: 1.014, duration: 2 * F, ease: "power2.out" }, t)
+            .to(bubJig, { scale: 1, duration: 9 * F, ease: "back.out(2)" }, t + 2 * F);
+          // stickers then idle-sway a hair (never dead)
+          tl.to(el, { rotation: rot + (i % 2 ? 2 : -2), duration: 0.9, ease: "sine.inOut", yoyo: true, repeat: Math.floor((6.1 - t - 0.4) / 0.9), immediateRender: false }, t + 0.4);
+        });
+
+        // red ✦ doodles in the gaps (they twinkle after they are drawn)
+        const star = (cx, cy, r) => [[cx, cy - r], [cx + r * 0.22, cy - r * 0.22], [cx + r, cy], [cx + r * 0.22, cy + r * 0.22], [cx, cy + r],
+          [cx - r * 0.22, cy + r * 0.22], [cx - r, cy], [cx - r * 0.22, cy - r * 0.22], [cx, cy - r - 3]];
+        const DOOD = [[512, 540, 24, 3.52], [842, 880, 22, 4.98], [512, 1232, 22, 5.36], [296, 1182, 20, 5.74]];
+        const doodlePaths = [];
+        DOOD.forEach(([x, y, r, t], i) => {
+          const g = gNode($("#doodles"));
+          const d = M.line(star(x, y, r), t, { parent: g, width: 7, dur: 0.2, amp: 0.8 });
+          doodlePaths.push(...d.paths);
+          gsap.set(g, { svgOrigin: `${x} ${y}` });
+          tl.fromTo(g, { scale: 0.6, rotation: -20 }, { scale: 1, rotation: 0, duration: 0.3, ease: "back.out(2.4)", immediateRender: false }, t + 0.1);
+          tl.to(g, { scale: 1.18, rotation: 12, duration: 0.42, ease: "sine.inOut", yoyo: true, repeat: Math.max(1, Math.floor((6.2 - t - 0.4) / 0.42)), immediateRender: false }, t + 0.4);
+        });
+
+        // ================================================================ BEAT B — the camera pull-back
+        const T0 = 6.28, TD = 0.85, ZS = 1.035, ZE = 0.125;
+        const g3 = (p) => 1 - Math.pow(1 - p, 3);                       // slow-out on the log of the zoom
+        const Zp = (p) => ZS * Math.pow(ZE / ZS, g3(p));
+        const zoomEase = (p) => (Zp(p) - ZS) / (ZE - ZS);
+        const zoom = $("#zoom");
+        // anticipation: a 3-frame push IN, then the yank back
+        tl.fromTo(zoom, { scale: 1 }, { scale: ZS, duration: 3 * F, ease: "power2.out", immediateRender: false }, T0 - 3 * F);
+        tl.fromTo(zoom, { scale: ZS }, { scale: ZE, duration: TD, ease: zoomEase, immediateRender: false }, T0);
+        // keep strokes legible while they shrink: the bubble loop thickens in its own units (13 → 36 local ≈ 4.5 px)
+        const invEase = (p) => (1 / Zp(p) - 1 / ZS) / (1 / ZE - 1 / ZS);
+        bubblePaths.forEach((p) => { const w = parseFloat(p.getAttribute("stroke-width")); tl.fromTo(p, { attr: { "stroke-width": w } }, { attr: { "stroke-width": w * 2.8 }, duration: TD, ease: invEase, immediateRender: false }, T0); });
+        // the bubble's inside turns into a red speck
+        tl.fromTo("#speckFill", { opacity: 0 }, { opacity: 0.3, duration: 0.5, ease: "power2.in", immediateRender: false }, T0 + 0.15);
+
+        // masks: feather the camera layer to the zone for the move (top edge drops below "zoom out" once the bubble is small)
+        tl.set("#zwrap", { "--mt": 285, "--mb": 1480 }, T0 - 4 * F);
+        tl.set("#zwrap2", { "--ml": 60, "--mr": 960 }, T0 - 4 * F);
+        tl.fromTo("#zwrap", { "--mt": 285 }, { "--mt": 540, duration: 0.2, ease: "power1.inOut", immediateRender: false }, T0 + 0.1);
+
+        // the paper grid zooms too (octave cross-fade, so it lands back on the identical grid)
+        const L2 = Math.log2(ZS / ZE);
+        const oAt = (p) => -Math.log2(Zp(p));
+        const pFor = (k) => 1 - Math.pow(1 - (k + Math.log2(ZS)) / L2, 1 / 3);
+        const zg = ["#zg1", "#zg2"];
+        gsap.set(zg, { transformOrigin: "1440px 2160px" });
+        tl.fromTo(zg, { x: 0, y: 0 }, { x: -20, y: -12, duration: D, ease: "none" }, 0);   // same drift as #grid
+        const p0 = pFor(0);
+        tl.set("#grid", { opacity: 0 }, T0 + TD * p0);
+        for (let k = 0; k < 3; k++) {
+          const pa = pFor(k), pb = pFor(k + 1), s = T0 + TD * pa, dur = TD * (pb - pa);
+          const fOf = (q) => Math.min(1, Math.max(0, oAt(pa + q * (pb - pa)) - k));
+          const eS = (q) => (1 - Math.pow(2, -fOf(q))) / 0.5;
+          tl.fromTo(zg, { scale: 1 }, { scale: 0.5, duration: dur, ease: eS, immediateRender: false }, s);
+          tl.fromTo("#zg1", { opacity: 1 }, { opacity: 0, duration: dur, ease: fOf, immediateRender: false }, s);
+          tl.fromTo("#zg2", { opacity: 0 }, { opacity: 1, duration: dur, ease: fOf, immediateRender: false }, s);
+        }
+        tl.set(zg, { opacity: 0 }, T0 + TD);
+        tl.set("#grid", { opacity: 1 }, T0 + TD);
+
+        // the globe: drawn in screen units (centre 510,990 r≈340), scaled down in step with the camera so it
+        // arrives from "outside the frame"; strokes counter-scaled so the line weight lands at house width
+        const GC = [510, 990], GR = 340;
+        const gscale = $("#gscale");
+        const S0 = ZS / ZE;
+        gsap.set(gscale, { svgOrigin: O.join(" ") });
+        tl.set(gscale, { scale: S0 }, 0);
+        tl.fromTo(gscale, { scale: S0 }, { scale: 1, duration: TD, ease: zoomEase, immediateRender: false }, T0);
+        const globePaths = [];
+        const outline = M.circle(GC[0], GC[1], GR, GR, 6.50, { parent: $("#globeG"), color: "ink", width: 11, dur: 0.40, turns: 1.08, seed: 7001 });
+        globePaths.push(...outline.paths);
+        // latitude arcs (front halves of ellipses) + two meridians — thinner, softer ink
+        const lat = (d) => { const w = Math.sqrt(GR * GR - d * d) * 0.985; return Array.from({ length: 13 }, (_, k) => { const u = -1 + (2 * k) / 12; return [GC[0] + u * w, GC[1] + d + (1 - u * u) * 0.17 * w]; }); };
+        const mer = (sgn, k0) => Array.from({ length: 13 }, (_, k) => { const th = (-82 + (164 * k) / 12) * Math.PI / 180; return [GC[0] + sgn * k0 * GR * Math.cos(th), GC[1] + GR * Math.sin(th) * 0.985]; });
+        const grid = [[lat(-238), 6.80], [lat(62), 6.86], [lat(236), 6.92], [mer(-1, 0.5), 6.97], [mer(1, 0.5), 7.02]];
+        grid.forEach(([pts, t]) => { const r = M.line(pts, t, { parent: $("#globeG"), color: "ink", width: 6, dur: 0.2, amp: 1.6, opacity: 0.5 }); globePaths.push(...r.paths); });
+        // continents: rough closed blobs, then a quick pencil hatch; they keep turning to the cut
+        const CONT = [
+          [[265, 800], [330, 758], [402, 774], [422, 830], [388, 880], [398, 936], [352, 968], [306, 932], [270, 876], [266, 806]],
+          [[345, 1032], [410, 1014], [452, 1076], [432, 1150], [396, 1236], [364, 1192], [348, 1110], [345, 1036]],
+          [[648, 776], [722, 752], [792, 794], [820, 860], [780, 900], [732, 894], [712, 950], [736, 1030], [708, 1116], [664, 1154], [638, 1084], [626, 1000], [648, 938], [630, 864], [646, 780]],
+          [[772, 1092], [826, 1082], [842, 1130], [802, 1162], [766, 1138], [770, 1096]],
+        ];
+        const contG = $("#contG");
+        CONT.forEach((pts, i) => { const r = M.line(pts, 6.96 + i * 0.07, { parent: contG, color: "ink", width: 8, dur: 0.2, amp: 2.4 }); globePaths.push(...r.paths); });
+        CONT.forEach((pts, i) => M.hatch(pts, 7.24 + i * 0.12, { parent: contG, color: "pencil", spacing: 17, width: 6, dur: 0.16, opacity: 0.55 }));
+        // counter-scale every globe stroke while the group shrinks (screen weight stays at its house width)
+        const cEase = (p) => (ZE / Zp(p) - ZE / ZS) / (1 - ZE / ZS);
+        globePaths.forEach((p) => { const w = parseFloat(p.getAttribute("stroke-width")); tl.set(p, { attr: { "stroke-width": w / S0 } }, 0); tl.fromTo(p, { attr: { "stroke-width": w / S0 } }, { attr: { "stroke-width": w }, duration: TD, ease: cEase, immediateRender: false }, T0); });
+        // the world keeps turning (continuous → linear)
+        tl.fromTo(contG, { x: 0 }, { x: -34, duration: D - 7.15, ease: "none", immediateRender: false }, 7.15);
+
+        // the speck: once small, a red loop calls it out on "realize"
+        M.circle(O[0], O[1], 70, 68, 7.40, { width: 9, dur: 0.34, turns: 1.12, seed: 9100 });
+        // "zoom out" breathes while it holds
+        gsap.set("#zoomout", { transformOrigin: "50% 80%" });
+        tl.fromTo("#zoomout", { scale: 1 }, { scale: 1.014, duration: 0.6, ease: "sine.inOut", yoyo: true, repeat: 2, immediateRender: false }, 7.05);
+
+        // ================================================================ BEAT C — barely scratched the surface
+        // three tiny red scratch marks on the surface beside the speck, 0.1 s each, on "scratched"
+        const SCR = [[[518, 1012], [542, 980]], [[538, 1020], [564, 986]], [[558, 1028], [584, 994]]];
+        SCR.forEach((pts, i) => M.line(pts, 9.24 + i * 0.12, { width: 8, dur: 0.1, amp: 0.6, seed: 9300 + i }));
+      })();
+    </script>
+  </body>
+</html>

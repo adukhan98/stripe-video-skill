@@ -1,0 +1,116 @@
+[
+ {
+  "t": 0.02,
+  "sfx": "scribble",
+  "dur": 0.32,
+  "what": "red loop drawn round the chapter number 3"
+ },
+ {
+  "t": 0.15,
+  "sfx": "pop",
+  "what": "3 + \"third\" land on \"Third\""
+ },
+ {
+  "t": 0.22,
+  "sfx": "whoosh",
+  "what": "test paper deals in centre-right",
+  "gain_db": -3
+ },
+ {
+  "t": 0.36,
+  "sfx": "scribble",
+  "dur": 0.22,
+  "what": "robot head drawn in black marker"
+ },
+ {
+  "t": 0.46,
+  "sfx": "tick",
+  "what": "answer lines type themselves on the paper",
+  "gain_db": -6
+ },
+ {
+  "t": 0.6,
+  "sfx": "scribble",
+  "dur": 0.15,
+  "what": "antenna, bulb, smug eyes, smirk"
+ },
+ {
+  "t": 0.65,
+  "sfx": "tick",
+  "what": "answer lines typing",
+  "gain_db": -6
+ },
+ {
+  "t": 0.8,
+  "sfx": "scribble",
+  "dur": 0.16,
+  "what": "robot body, legs, hand-on-hip arm"
+ },
+ {
+  "t": 0.96,
+  "sfx": "ping",
+  "what": "antenna bulb lights red on \"AI\"",
+  "gain_db": -3
+ },
+ {
+  "t": 1.05,
+  "sfx": "scribble",
+  "dur": 0.18,
+  "what": "robot writes the red A"
+ },
+ {
+  "t": 1.23,
+  "sfx": "impact",
+  "what": "GRADE: the A lands + \"grade\" red, punch + shake"
+ },
+ {
+  "t": 1.26,
+  "sfx": "whoosh",
+  "what": "real strip slides in low",
+  "gain_db": -4
+ },
+ {
+  "t": 1.34,
+  "sfx": "scribble",
+  "dur": 0.08,
+  "what": "crossbar done, the + written"
+ },
+ {
+  "t": 1.44,
+  "sfx": "scribble",
+  "dur": 0.18,
+  "what": "big red X stroke 1 over robot + paper"
+ },
+ {
+  "t": 1.52,
+  "sfx": "pop",
+  "what": "tape slaps onto the strip",
+  "gain_db": -5
+ },
+ {
+  "t": 1.54,
+  "sfx": "scribble",
+  "dur": 0.13,
+  "what": "highlighter on \"Do not ask\"",
+  "gain_db": -3
+ },
+ {
+  "t": 1.65,
+  "sfx": "scribble",
+  "dur": 0.18,
+  "what": "red X stroke 2 - robot droops"
+ },
+ {
+  "t": 1.75,
+  "sfx": "scribble",
+  "dur": 0.19,
+  "what": "highlighter on \"the model to judge itself\"",
+  "gain_db": -3
+ },
+ {
+  "t": 1.92,
+  "sfx": "tick",
+  "what": "the dropped marker hits the floor and bounces",
+  "gain_db": -3
+ }
+]

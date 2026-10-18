@@ -1,0 +1,103 @@
+[
+ {
+  "t": 0.12,
+  "sfx": "whoosh",
+  "what": "checklist card rises in (Mode B)",
+  "gain_db": -7
+ },
+ {
+  "t": 0.52,
+  "sfx": "pop",
+  "what": "row 1 'run a test' drops into its slot"
+ },
+ {
+  "t": 0.8,
+  "sfx": "tick",
+  "what": "red check into box 1"
+ },
+ {
+  "t": 0.95,
+  "sfx": "pop",
+  "what": "'check' pops (red)",
+  "gain_db": -3
+ },
+ {
+  "t": 1.46,
+  "sfx": "pop",
+  "what": "row 2 'a real number' drops in"
+ },
+ {
+  "t": 1.74,
+  "sfx": "tick",
+  "what": "red check into box 2"
+ },
+ {
+  "t": 1.88,
+  "sfx": "tick",
+  "what": "odometer columns land on ###",
+  "gain_db": -4
+ },
+ {
+  "t": 2.42,
+  "sfx": "pop",
+  "what": "row 3 'a real scenario' drops in"
+ },
+ {
+  "t": 2.56,
+  "sfx": "pop",
+  "what": "map pin squash-lands, ripple",
+  "gain_db": -4
+ },
+ {
+  "t": 2.62,
+  "sfx": "whoosh",
+  "what": "Mode B -> A: footage band drops in (lands 2.95), checklist compacts into the bottom band",
+  "gain_db": -4
+ },
+ {
+  "t": 2.7,
+  "sfx": "tick",
+  "what": "red check into box 3"
+ },
+ {
+  "t": 2.86,
+  "sfx": "ding",
+  "what": "third segment fills: 3 of 3",
+  "gain_db": -4
+ },
+ {
+  "t": 3.36,
+  "sfx": "pop",
+  "what": "'know' pops",
+  "gain_db": -4
+ },
+ {
+  "t": 3.5,
+  "sfx": "tick",
+  "what": "three check boxes pulse on 'know'",
+  "gain_db": -6
+ },
+ {
+  "t": 3.7,
+  "sfx": "whoosh",
+  "what": "checklist drops out",
+  "gain_db": -8
+ },
+ {
+  "t": 3.97,
+  "sfx": "pop",
+  "what": "'actually' lands",
+  "gain_db": -4
+ },
+ {
+  "t": 4.45,
+  "sfx": "impact",
+  "what": "'worked' (red hero) + big marker check stamp slam, punch + shake"
+ },
+ {
+  "t": 4.58,
+  "sfx": "ping",
+  "what": "sparkle ticks around the stamp",
+  "gain_db": -7
+ }
+]

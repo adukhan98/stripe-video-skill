@@ -1,0 +1,150 @@
+<!doctype html>
+<!-- s21_ibm — v7 "MINT" PROOF: the real 1979 IBM slide (photo, untouched) on the board with the official IBM logo chip,
+     mint highlighter sweeping its 'CAN NEVER BE HELD ACCOUNTABLE' line on 'cannot be held accountable'.
+     HERO (sentence 2): a flat jail cell + a mint ROBOT disc (the AI). 'It' → the robot pops on the cell roof; 'go to' →
+     it hops into the cell; 'jail' → the bars slam down (robot squashes); 'if' → it springs straight up through the bars
+     and lands back on the roof (it cannot be held); 'something' → a charcoal cross disc stamps the cell; 'wrong' → shrug.
+     CAMERA: frame 0 close on the slide → pull out to slide + kinetic sentence 1 → travel down-right to the jail.
+     Runtime (board.css/js, v7yt.css/js) untouched, no marker.js. Card zone (x 1574–1886, y 614–1012) clear at every pose. -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>s21_ibm</title>
+    <link rel="stylesheet" href="board.css" />
+    <link rel="stylesheet" href="v7yt.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="board.js"></script>
+    <script src="v7yt.js"></script>
+    <style>
+      #page { left: 110px; top: 236px; width: 880px; height: 645px; background: #E9E8E3; }
+      #page img { width: 880px; height: 645px; }
+      #chip { left: 110px; top: 112px; height: 92px; gap: 12px; padding: 0 34px 0 10px; overflow: hidden; }
+      #chip img { height: 140px; width: 140px; margin: -24px -6px; mix-blend-mode: multiply; }
+      #chip span { font-size: 42px; letter-spacing: -.01em; }
+      /* the jail cell: flat white back, charcoal rails + bars (in front of the robot) */
+      #cell { left: 1500px; top: 700px; width: 320px; height: 280px; overflow: hidden; }
+      #cell .floor { position: absolute; left: 0; right: 0; bottom: 0; height: 68px; background: #D6CFC8; }
+      #bars { position: absolute; left: 1500px; top: 700px; width: 320px; height: 280px; border-radius: 28px; overflow: hidden; }
+      #bars .rail { position: absolute; left: 0; width: 320px; background: var(--brand-deep); }
+      #bars .bar { position: absolute; top: 24px; width: 18px; height: 234px; border-radius: 9px; background: var(--brand-deep);
+        transform-origin: 50% 0%; }
+      #rob .v7-gl { width: 60%; height: 60%; }
+      #robotWrap { position: absolute; left: 1660px; top: 628px; width: 0; height: 0; }
+    </style>
+  </head>
+  <body data-theme="light">
+    <div id="root" data-composition-id="main" data-start="0" data-width="1920" data-height="1080" data-duration="4.6995">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+      <div id="cam"><div id="punch">
+
+        <!-- the proof: the real slide + the official logo chip -->
+        <div id="page" class="page"><img src="assets/ibm_1979_slide.jpg" alt="" /></div>
+        <div id="chip" class="chip"><img src="assets/ibm.png" alt="IBM" /><span>1979</span></div>
+
+        <!-- sentence 1 (collage) -->
+        <div class="k k900" id="l1" style="left:1060px;top:104px;font-size:196px"><span class="w" data-t="0.68" data-hero>AI</span></div>
+        <div class="k k800" id="l1b" style="left:1316px;top:172px;font-size:112px"><span class="w" data-t="0.93">cannot</span></div>
+        <div class="k k800" id="l2" style="left:1112px;top:288px;font-size:112px"><span class="w" data-t="1.23">be</span><span class="w gap" data-t="1.50">held</span></div>
+        <div class="k k900" id="l3" style="left:1052px;top:398px;font-size:134px"><span class="w mint" id="acc" data-t="1.72" data-hero>accountable.</span></div>
+
+        <!-- sentence 2 -->
+        <div class="k k700" style="left:1090px;top:666px;font-size:84px"><span class="w" data-t="2.56">It</span><span class="w gap" data-t="2.66">cannot</span></div>
+        <div class="k k700" style="left:1124px;top:756px;font-size:84px"><span class="w" data-t="2.89">go</span><span class="w gap" data-t="3.11">to</span></div>
+        <div class="k k900" style="left:1080px;top:834px;font-size:206px"><span class="w" id="jail" data-t="3.25" data-hero>jail</span></div>
+
+        <!-- hero: the jail cell, the robot (between back and bars), the bars -->
+        <div id="cell" class="v7-card"><div class="floor"></div></div>
+        <div id="robotWrap"></div>
+        <div id="bars">
+          <div class="rail" style="top:0;height:30px"></div>
+          <div class="bar" style="left:44px"></div><div class="bar" style="left:100px"></div><div class="bar" style="left:151px"></div>
+          <div class="bar" style="left:202px"></div><div class="bar" style="left:258px"></div>
+          <div class="rail" style="bottom:0;height:26px"></div>
+        </div>
+        <div id="xWrap" style="position:absolute;left:0;top:0"></div>
+      </div></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const B = await Board.init();
+        const V = V7Y.init(B);
+        const { tl, F, D } = B;
+        const CT = (cx, cy, s) => ({ x: 960 - cx * s, y: 540 - cy * s, scale: s });
+
+        // ---------------- camera: P0 close on the slide (frame 0) → P1 slide + sentence 1 → P2 the jail
+        B.camSet(600, 524, 1.13);
+        tl.to("#cam", { ...CT(604, 520, 1.15), duration: 0.4, ease: "sine.inOut" }, 0);
+        V.cam(0.4, 960, 476, 1.0, { dur: 0.8 });                // 'AI cannot be held accountable' — pull out to the words
+        tl.to("#cam", { ...CT(966, 480, 1.012), duration: 2.2 - 1.2, ease: "sine.inOut" }, 1.2);
+        V.cam(2.2, 1362, 578, 1.0, { dur: 0.72 });              // 'It cannot go to jail' — travel right/down to the cell
+        tl.to("#cam", { ...CT(1346, 574, 1.02), duration: D - 2.92, ease: "sine.inOut" }, 2.92);
+
+        // ---------------- the slide: already on the board at frame 0, settles; chip pops; 'remember' nudge
+        gsap.set("#page", { rotation: -1.8, scale: 1.01, transformOrigin: "50% 50%" });
+        tl.to("#page", { rotation: -1.4, scale: 1, duration: 12 * F, ease: "power2.out" }, 0);
+        tl.to("#page", { rotation: -1.1, duration: D - 12 * F, ease: "sine.inOut" }, 12 * F);
+        B.punch("#chip", 0.2, 1.07);                            // 'remember'
+        B.punch("#page", 0.24, 1.015);
+        // highlighter sweeps the real line while he says 'cannot be held accountable'
+        V.hl("#page", [48, 147, 734, 46], 1.0, { dur: 0.95 });
+        B.punch("#chip", 1.9, 1.06);
+
+        // ---------------- sentence 1 beats: 'accountable.' gets the solid mint bar and a punch
+        const acc = document.querySelector("#acc"), l3 = document.querySelector("#l3");
+        V.bar("#punch", l3.offsetLeft + 8, l3.offsetTop + acc.offsetHeight + 6, acc.offsetWidth * 0.86, 2.02, { h: 14 });
+        B.punch("#acc", 2.06, 1.04);
+
+        // ---------------- the jail cell pops on 'It'
+        B.in("#cell", 2.6, { type: "pop", dur: 12 * F });
+        B.in("#bars", 2.6, { type: "pop", dur: 12 * F });
+        gsap.set("#bars .bar", { scaleY: 0 });
+
+        // ---------------- the robot (the AI): pops on the roof, hops in on 'go to', bars slam on 'jail'
+        const rob = V.disc("#robotWrap", { x: 0, y: 0, d: 144, icon: "robot", mint: true, id: "rob" });
+        gsap.set(rob, { transformOrigin: "50% 100%" });
+        V.discIn(rob, 2.74);
+        // hop into the cell (arc: x and y on different eases; anticipation dip first)
+        tl.to(rob, { scaleY: 0.86, scaleX: 1.08, duration: 3 * F, ease: "power2.in" }, 2.94);
+        tl.to(rob, { scaleY: 1.06, scaleX: 0.96, duration: 4 * F, ease: "power2.out" }, 2.94 + 3 * F);
+        tl.to("#robotWrap", { y: -70, duration: 0.13, ease: "power2.out" }, 3.04);
+        tl.to("#robotWrap", { y: 212, duration: 0.17, ease: "power2.in" }, 3.17);
+        tl.to(rob, { scaleY: 1, scaleX: 1, duration: 4 * F, ease: "power1.out" }, 3.1);
+        tl.to(rob, { scaleY: 0.86, scaleX: 1.1, duration: 3 * F, ease: "power2.out" }, 3.34);     // lands (squash)
+        tl.to(rob, { scaleY: 1, scaleX: 1, duration: 6 * F, ease: "back.out(2)" }, 3.34 + 3 * F);
+        // bars slam down (accelerating), tiny rebound
+        document.querySelectorAll("#bars .bar").forEach((b, i) => {
+          const t = 3.3 + i * 2 * F;
+          tl.fromTo(b, { scaleY: 0 }, { scaleY: 1.04, duration: 0.1, ease: "power3.in", immediateRender: false }, t);
+          tl.to(b, { scaleY: 1, duration: 4 * F, ease: "power2.out" }, t + 0.1);
+        });
+        tl.to(rob, { scaleY: 0.9, scaleX: 1.06, duration: 2 * F, ease: "power2.out" }, 3.44);    // flinch as they hit
+        tl.to(rob, { scaleY: 1, scaleX: 1, duration: 5 * F, ease: "power2.inOut" }, 3.44 + 2 * F);
+        B.punch("#cell", 3.44, 1.03);
+
+        // ---------------- 'if': it can't be held — springs straight up through the bars, back onto the roof
+        tl.to(rob, { scaleY: 0.82, scaleX: 1.1, duration: 3 * F, ease: "power2.in" }, 3.56);      // anticipation
+        tl.to(rob, { scaleY: 1.1, scaleX: 0.92, duration: 4 * F, ease: "power3.out" }, 3.56 + 3 * F);
+        tl.to("#robotWrap", { y: -46, duration: 0.2, ease: "power2.out" }, 3.66);
+        tl.to(rob, { scaleY: 1, scaleX: 1, duration: 5 * F, ease: "power1.out" }, 3.8);
+        tl.to("#robotWrap", { y: 0, duration: 0.15, ease: "power2.in" }, 3.88);
+        tl.to(rob, { scaleY: 0.84, scaleX: 1.12, duration: 3 * F, ease: "power2.out" }, 4.03);    // lands on the roof
+        tl.to(rob, { scaleY: 1, scaleX: 1, duration: 7 * F, ease: "back.out(2.2)" }, 4.03 + 3 * F);
+        // the bars rattle from the landing
+        tl.to("#bars", { x: 4, duration: 2 * F, ease: "sine.out" }, 4.04);
+        tl.to("#bars", { x: -3, duration: 3 * F, ease: "sine.inOut" }, 4.04 + 2 * F);
+        tl.to("#bars", { x: 0, duration: 4 * F, ease: "sine.out" }, 4.04 + 5 * F);
+
+        // ---------------- 'something': a charcoal cross stamps the cell
+        V.cross("#xWrap", 1794, 726, 3.86, { size: 104 });
+
+        // ---------------- 'wrong': the robot shrugs (secondary action on the last word)
+        tl.to("#robotWrap", { rotation: -11, duration: 4 * F, ease: "power2.out" }, 4.3);
+        tl.to("#robotWrap", { rotation: 8, duration: 5 * F, ease: "sine.inOut" }, 4.3 + 4 * F);
+        tl.to("#robotWrap", { rotation: 0, duration: 5 * F, ease: "sine.out" }, 4.3 + 9 * F);
+        B.punch("#jail", 4.34, 1.04);
+      })();
+    </script>
+  </body>
+</html>

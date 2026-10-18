@@ -1,0 +1,72 @@
+[
+ {
+  "t": 0.45,
+  "sfx": "pop",
+  "gain_db": -16
+ },
+ {
+  "t": 1.49,
+  "sfx": "ping",
+  "gain_db": -24
+ },
+ {
+  "t": 2.12,
+  "sfx": "tick",
+  "gain_db": -25
+ },
+ {
+  "t": 2.25,
+  "sfx": "tick",
+  "gain_db": -25
+ },
+ {
+  "t": 2.38,
+  "sfx": "tick",
+  "gain_db": -25
+ },
+ {
+  "t": 2.52,
+  "sfx": "tick",
+  "gain_db": -25
+ },
+ {
+  "t": 3.42,
+  "sfx": "ping",
+  "gain_db": -25
+ },
+ {
+  "t": 3.68,
+  "sfx": "ping",
+  "gain_db": -25
+ },
+ {
+  "t": 3.94,
+  "sfx": "ping",
+  "gain_db": -25
+ },
+ {
+  "t": 4.2,
+  "sfx": "ping",
+  "gain_db": -25
+ },
+ {
+  "t": 4.26,
+  "sfx": "pop",
+  "gain_db": -20
+ },
+ {
+  "t": 5.79,
+  "sfx": "ding",
+  "gain_db": -16
+ },
+ {
+  "t": 5.96,
+  "sfx": "impact",
+  "gain_db": -19
+ },
+ {
+  "t": 6.26,
+  "sfx": "pop",
+  "gain_db": -22
+ }
+]

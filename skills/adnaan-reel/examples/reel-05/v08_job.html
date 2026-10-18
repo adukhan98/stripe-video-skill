@@ -1,0 +1,112 @@
+<!doctype html>
+<!-- adnaan-reel scene starter: FULL-SCREEN SPEAKER — HE fills the frame edge to edge (no card, no tilt), kinetic
+     words land low on his chest / the bottom third with the paper glow. The minimal beat: nothing else on screen
+     unless the brief names ONE object. Use for the hook, verdict/opinion lines, the wrap-up, the CTA — 2–4 per reel,
+     alternating with paper-world scenes. (flashcheck knows this window is not paper: type "fullscreen" in slots.json.)
+     Optional: add <div class="paper-strip"></div> before the words if the background behind the words is busy.
+     Optional mid-scene version: start as a portrait card and call P.growFull("#spk", t) on the hero word. -->
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>v08_job</title>
+    <link rel="stylesheet" href="brand.css" />
+    <link rel="stylesheet" href="paper.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+    <script src="paper.js"></script>
+  </head>
+  <body data-face="0.47">
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="3.7500">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+
+      <!-- full-screen speaker: the whole frame, slow push only -->
+      <div id="spk" class="spk full" data-push="1.03">
+        <div class="spk-card">
+          <div class="spk-vid"><video id="speaker" class="clip" src="assets/speaker.mp4" muted playsinline data-start="0" data-duration="3.7500" data-track-index="1"></video></div>
+        </div>
+      </div>
+
+      <!-- navy sweatshirt: soft paper strip under the low words (fades in with the first word) -->
+      <div id="strip" class="paper-strip" style="height:700px"></div>
+
+      <div id="cam" data-push="1.006"><div id="punch">
+        <!-- shockwave ring (accent, thin) lands behind FDE on the impact -->
+        <svg id="ringsvg" width="1080" height="1920" viewBox="0 0 1080 1920" style="position:absolute;left:0;top:0;overflow:visible;pointer-events:none"><ellipse id="ring" cx="695" cy="1380" rx="30" ry="8" fill="none" stroke="var(--brand-primary)" stroke-width="7" opacity="0"/><ellipse id="ring2" cx="695" cy="1380" rx="30" ry="8" fill="none" stroke="var(--brand-card)" stroke-width="4" opacity="0"/></svg>
+        <!-- phase 1: 'the job / of the' stacked low-left, FDE right -->
+        <div class="line sup ink kin" data-x="76" data-base="1376" data-size="96" data-exit="2.4">
+          <span class="w" data-t="0.23" data-rise="34">the</span><span class="w gap-s" data-t="0.47" data-pop data-rise="34">job</span>
+        </div>
+        <div class="line sup ink kin" data-x="150" data-base="1460" data-size="96" data-exit="2.4" data-exit-lag="2">
+          <span class="w" data-t="0.77" data-rise="34">of</span><span class="w gap-s" data-t="0.97" data-rise="34">the</span>
+        </div>
+        <div id="fde" class="line hero ocean kin" data-right="926" data-base="1466" data-size="260" data-fit="860" data-exit="2.4" data-exit-lag="3">
+          <span class="w fl">F</span><span class="w fl">D</span><span class="w fl">E</span>
+        </div>
+        <!-- phase 2: 'aren't / that' stacked low-left, many right -->
+        <div class="line sup ink kin" data-x="76" data-base="1362" data-size="108">
+          <span class="w" data-t="2.76" data-pop data-rise="34">aren’t</span>
+        </div>
+        <div class="line sup ink kin" data-x="130" data-base="1448" data-size="108">
+          <span class="w" data-t="3.06" data-rise="34">that</span>
+        </div>
+        <div id="many" class="line hero ocean kin" data-right="930" data-base="1424" data-size="210" data-fit="860">
+          <span class="w ml">m</span><span class="w ml">a</span><span class="w ml">n</span><span class="w ml">y</span>
+        </div>
+      </div></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const P = await Paper.init();
+        const { tl, D, F } = P;
+        // strip fades in just before the first word; nothing else on screen
+        tl.fromTo("#strip", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" }, 0);
+        // ---- FDE: three heavy blocks drop 2 f apart (F 1.00, D 1.067, E 1.133 = IMPACT), shared settle + ring
+        const L = P.$$("#fde .fl");
+        const cs = [1.0, 1.0 + 2 * F, 1.0 + 4 * F], rot = [-6, 4, -5];
+        L.forEach((el, i) => {
+          gsap.set(el, { transformOrigin: "50% 100%" });
+          tl.set(el, { opacity: 0, y: -55, rotation: rot[i], filter: "blur(8px)" }, 0);
+          tl.to(el, { opacity: 1, filter: "blur(0px)", duration: 0.09, ease: "power1.out" }, cs[i] - 0.2);
+          tl.to(el, { y: 0, rotation: 0, duration: 0.2, ease: "power3.in" }, cs[i] - 0.2);
+        });
+        // shared settle: the whole word hops 10 px / 3 % on the last block and settles with overshoot (parts lag the whole)
+        gsap.set("#fde", { transformOrigin: "50% 100%" });
+        tl.to("#fde", { y: -10, scale: 1.03, duration: 0.07, ease: "power2.out" }, 1.133);
+        tl.to("#fde", { y: 0, scale: 1, duration: 0.3, ease: "back.out(2)" }, 1.203);
+        // the shockwave ring: thin accent ellipse expands behind the word and thins out (stays in the zone)
+        tl.to("#ring", { opacity: 0.9, duration: 0.03, ease: "none" }, 1.133);
+        tl.to("#ring", { attr: { rx: 262, ry: 96, "stroke-width": 2 }, duration: 0.45, ease: "power3.out" }, 1.133);
+        tl.to("#ring", { opacity: 0, duration: 0.3, ease: "power2.in" }, 1.22);
+        // paper-white echo lags the accent ring by 3 f so it reads on the navy sweatshirt
+        tl.to("#ring2", { opacity: 0.85, duration: 0.03, ease: "none" }, 1.133 + 3 * F);
+        tl.to("#ring2", { attr: { rx: 232, ry: 84, "stroke-width": 1.5 }, duration: 0.42, ease: "power3.out" }, 1.133 + 3 * F);
+        tl.to("#ring2", { opacity: 0, duration: 0.28, ease: "power2.in" }, 1.25);
+        // the ONE hero beat: 1 % camera punch on E's contact
+        P.punch(1.133, { scale: 1.01 });
+        // secondary action: FDE breathes while it holds
+        tl.fromTo("#fde", { scale: 1 }, { scale: 1.018, duration: 0.55, ease: "sine.inOut", yoyo: true, repeat: 1 }, 1.5);
+
+        // ---- many: letters rise 2 f apart (m lands 3.32), then the middle ones thin out like "not many"
+        const M = P.$$("#many .ml");
+        M.forEach((el, i) => {
+          gsap.set(el, { transformOrigin: "50% 85%" });
+          const s = 3.16 + i * 2 * F;
+          tl.set(el, { opacity: 0, y: 34, scale: 0.78, filter: "blur(8px)" }, 0);
+          tl.to(el, { opacity: 1, duration: 0.1, ease: "power1.out" }, s);
+          tl.to(el, { filter: "blur(0px)", duration: 0.16, ease: "power2.out" }, s);
+          tl.to(el, { y: 0, scale: 1, duration: 0.4, ease: "back.out(2.2)" }, s);
+        });
+        const flick = (el, t0, lo, end) => {
+          tl.to(el, { opacity: lo, duration: 0.05, ease: "power1.in" }, t0)
+            .to(el, { opacity: 0.8, duration: 0.05, ease: "power1.out" }, t0 + 0.07)
+            .to(el, { opacity: lo * 0.8, duration: 0.05, ease: "power1.in" }, t0 + 0.13)
+            .to(el, { opacity: end, duration: 0.1, ease: "power2.out" }, t0 + 0.18);
+        };
+        flick(M[1], 3.44, 0.25, 0.5);   // a
+        flick(M[2], 3.47, 0.3, 0.7);    // n
+      })();
+    </script>
+  </body>
+</html>

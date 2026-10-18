@@ -1,0 +1,237 @@
+<!doctype html>
+<!-- v09_anthropic: CHAPTER + REAL PAGE. Beat A: Anthropic (official logo chip + hero word) with the real Claude Frontier Academy page in a
+     tilted browser card, speaker card tucked over it. Beat B: the page's three stats pop OUT of it as big kinetic numbers. -->
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>v09_anthropic</title>
+    <link rel="stylesheet" href="brand.css" />
+    <link rel="stylesheet" href="paper.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+    <script src="paper.js"></script>
+    <style>
+      #pgm, #pgf { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+      #page-card { left: 90px; top: 780px; width: 840px; height: 680px; }
+      #scroller { position: absolute; left: 0; top: 0; width: 100%; }
+      #scroller .page { position: static; }
+      .mk { position: absolute; border-radius: 10px; opacity: 0; background: var(--brand-primary); transform-origin: 0% 50%; }
+      #crowd { position: absolute; left: 76px; top: 652px; width: 884px; height: 136px; }
+      .pp { position: absolute; width: 22px; height: 26px; opacity: 0; }
+      .pp svg { display: block; width: 100%; height: 100%; fill: var(--brand-primary); }
+      .rl { display: inline-block; }
+      .chip.logo { height: 112px; padding: 0 12px; border-radius: 34px; gap: 0; }
+      .chip.logo img { width: 88px; height: 88px; border-radius: 22px; }
+      #chipC { height: 84px; padding: 0 12px; border-radius: 28px; }
+      #chipC img { width: 60px; height: 60px; border-radius: 0; }
+      .num .w { text-shadow: var(--paper-glow); }
+    </style>
+  </head>
+  <body data-face="0.47">
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="5.8167">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+      <div id="cam" data-push="1.005"><div id="punch">
+
+        <!-- REAL PAGE: Claude Frontier Academy in a tilted browser card (move > float > card entrance, so no tween fights) -->
+        <div id="pgm"><div id="pgf">
+          <div id="page-card" class="browser">
+            <div class="chrome"><i class="dot"></i><i class="dot"></i><i class="dot"></i><div class="url" style="width:430px;margin-left:-215px">claude.com/programs/frontier-academy</div></div>
+            <div class="viewport"><div id="scroller">
+              <img id="page" class="page" src="assets/frontier_academy.png" alt="" />
+              <div id="mk1" class="mk"></div><div id="mk2" class="mk"></div><div id="mk3" class="mk"></div>
+            </div></div>
+            <div class="sheen"></div>
+          </div>
+        </div></div>
+
+        <div id="crowd"></div>
+
+        <!-- SECONDARY speaker card tucked over the page's right side -->
+        <div class="spk secondary" data-x="350" data-y="835" data-w="600" data-h="420" data-face-at="0.52" data-at="1.15" data-ry="-5" data-rx="3" data-float="3">
+          <div class="spk-card">
+            <div class="spk-vid"><video id="speaker" class="clip" src="assets/speaker.mp4" muted playsinline data-start="0" data-duration="5.8167" data-track-index="1"></video></div>
+            <div class="spk-sheen"></div>
+          </div>
+        </div>
+
+        <!-- BEAT A header -->
+        <div id="chipC" class="chip" style="left: 76px; top: 640px"><img src="assets/claude.png" alt="Claude" /></div>
+        <div id="chipA" class="chip logo" style="left: 826px; top: 296px"><img src="assets/anthropic.png" alt="Anthropic" /></div>
+        <div id="hdr" class="layer">
+          <div class="line sup" data-x="76" data-base="372" data-size="84" data-exit="1.76">
+            <span class="w" data-t="0.07">In</span><span class="w gap-s" data-t="0.41">fact,</span>
+          </div>
+          <div class="line hero" data-x="76" data-base="560" data-size="170" data-fit="880" data-exit="1.72">
+            <span class="w" data-t="0.81" data-hero data-peak="1.08">Anthropic</span>
+          </div>
+          <div class="line sup" data-right="944" data-base="655" data-size="84" data-exit="1.70">
+            <span class="w" data-t="1.21">has</span><span class="w gap-s ocean" data-t="1.61" data-pop>committed</span>
+          </div>
+        </div>
+
+        <!-- BEAT B: the stats pop out of the page -->
+        <div id="n1" class="line hero ocean num" data-x="76" data-base="484" data-size="220" data-fit="900" style="opacity:0">
+          <span id="n1w" class="w"><span>$</span><span class="rl" data-d="1">1</span><span class="rl" data-d="0">0</span><span class="rl" data-d="0">0</span></span>
+        </div>
+        <div id="n1b" class="line hero ocean num" data-right="944" data-base="636" data-size="185" data-fit="560">
+          <span class="w" data-t="2.33" data-hero data-rise="30" data-peak="1.07">million</span>
+        </div>
+        <div class="line sup" data-x="76" data-base="614" data-size="72">
+          <span class="w" data-t="2.89">to</span><span class="w gap-s" data-t="3.23">train</span>
+        </div>
+        <div id="n2" class="line hero num" data-x="76" data-base="790" data-size="195" data-fit="880" style="opacity:0">
+          <span id="n2w" class="w"><span class="rl" data-d="1">1</span><span class="rl" data-d="0">0</span><span>,</span><span class="rl" data-d="0">0</span><span class="rl" data-d="0">0</span><span class="rl" data-d="0">0</span></span><span class="w gap-s" data-t="4.43" data-pop data-rise="40" style="font-size:0.42em;font-weight:800;opacity:0">people</span>
+        </div>
+        <div class="line sup" data-right="944" data-base="1362" data-size="72">
+          <span class="w" data-t="4.63">by</span><span class="w gap-s" data-t="4.77">the</span>
+        </div>
+        <div class="line sup" data-right="944" data-base="1440" data-size="72">
+          <span class="w" data-t="4.95">end</span><span class="w gap-s" data-t="5.07">of</span>
+        </div>
+        <div id="n3" class="line hero ocean num" data-x="76" data-base="1440" data-size="220" data-fit="620" style="opacity:0">
+          <span id="n3w" class="w"><span class="rl" data-d="2">2</span><span class="rl" data-d="0">0</span><span class="rl" data-d="2">2</span><span class="rl" data-d="7">7</span><span>.</span></span>
+        </div>
+
+        <div id="cur" class="cursor"></div>
+
+      </div></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const P = await Paper.init();
+        const { tl, D, F, $, $$ } = P;
+
+        // ---- real-page geometry (page is 1080 wide, shown at k = 840/1080)
+        const k = 840 / 1080, CARD_X = 90, VP_Y = 780 + 66;
+        const S0 = 380, S1 = 1029, S_END = 1062, T_SCROLL = 1.5;
+        const scrollAt = (t) => (t <= T_SCROLL ? S1 : S1 + ((S_END - S1) * (t - T_SCROLL)) / (D - T_SCROLL));
+        const STAT = [ // page-px boxes of the three stat numbers (measured from the capture)
+          { mk: "#mk1", x0: 80, x1: 290, y0: 1400, y1: 1456 },
+          { mk: "#mk2", x0: 79, x1: 288, y0: 1747, y1: 1806 },
+          { mk: "#mk3", x0: 79, x1: 224, y0: 2053, y1: 2102 },
+        ];
+        for (const s of STAT) {
+          const m = $(s.mk);
+          Object.assign(m.style, { left: (s.x0 - 14) * k + "px", top: (s.y0 - 12) * k + "px", width: (s.x1 - s.x0 + 28) * k + "px", height: (s.y1 - s.y0 + 24) * k + "px" });
+          gsap.set(m, { rotation: -1.2 });
+        }
+        const sx = (s, which) => CARD_X + (which === "l" ? s.x0 - 8 : s.x1 + 8) * k;
+        const sy = (s, t) => VP_Y + ((s.y0 + s.y1) / 2) * k - scrollAt(t);
+
+        // ---- BEAT A: card slides in behind, chips land, page scrolls to the stat block
+        P.cardIn("#page-card", 0.2, { fromY: 130, rot: -3, ry: -5, dur: 0.6 });
+        tl.fromTo("#scroller", { y: -S0 }, { y: -S1, duration: T_SCROLL - 0.45, ease: "power2.inOut" }, 0.45);
+        tl.to("#scroller", { y: -S_END, duration: D - T_SCROLL, ease: "none" }, T_SCROLL);   // slow mechanical drift to the cut
+        tl.to("#pgf", { y: -6, duration: 1.3, ease: "sine.inOut", yoyo: true, repeat: Math.floor(D / 1.3) }, 0);
+
+        // Anthropic logo chip: gentle 3D flip-in (anticipation, flip past, settle), glint lags
+        gsap.set("#chipA", { transformPerspective: 700, transformOrigin: "50% 50%" });
+        tl.fromTo("#chipA", { opacity: 0, rotationY: -115, scale: 0.7, y: 34 }, { opacity: 1, rotationY: 14, scale: 1.1, y: -6, duration: 0.3, ease: "power3.out", immediateRender: false }, 0.55);
+        tl.to("#chipA", { rotationY: 0, scale: 1, y: 0, duration: 0.34, ease: "back.out(1.8)" }, 0.85);
+        P.enter("#chipC", 1.0, { rise: 40, scaleFrom: 0.75, rot: -4 });
+        P.pulse("#chipC", 1.38, 1.16);                       // Claude chip pings while the cursor finds the stat
+        tl.fromTo("#chipC", { rotation: 0 }, { rotation: -7, duration: 0.12, yoyo: true, repeat: 1, ease: "sine.inOut", immediateRender: false }, 1.38);
+        P.exitUp("#chipC", 1.68);
+        P.exitUp("#chipA", 1.8);
+
+        // ---- digit reels. odo = vertical roll, flap = split-flap squash. Each digit locks on its final value exactly.
+        const fix = (sel) => $$(".rl", $(sel)).forEach((el) => { el.style.width = el.offsetWidth + "px"; el.style.textAlign = "center"; });
+        fix("#n1"); fix("#n2"); fix("#n3");
+        const roll = (el, fin, t0, t1, steps, mode) => {
+          const fs = parseFloat(getComputedStyle(el.closest(".line")).fontSize);
+          const p = { v: fin - steps };
+          const draw = () => {
+            const n = Math.round(p.v), d = ((n % 10) + 10) % 10, fr = p.v - n;
+            el.textContent = d;
+            if (mode === "flap") { el.style.transform = `scaleY(${Math.abs(Math.cos(Math.PI * p.v)).toFixed(3)})`; el.style.opacity = 1; }
+            else { el.style.transform = `translateY(${(-fr * 0.24 * fs).toFixed(1)}px)`; el.style.opacity = (1 - Math.abs(fr) * 0.9).toFixed(2); }
+          };
+          tl.fromTo(p, { v: fin - steps }, { v: fin, duration: t1 - t0, ease: "power2.out", onUpdate: draw, immediateRender: false }, t0);
+        };
+
+        // ---- number pops OUT of the page: marker swipe + cursor, then the number arcs out of the stat, reels roll, lands on the word
+        const fly = (lineSel, stat, t, { dur = 0.48, from = 0.22, fade = true, tAt = t - 0.3, peak = 1.1, rotEnd = 2 } = {}) => {
+          const line = $(lineSel), s = STAT[stat];
+          const fx = line.offsetLeft + line.offsetWidth / 2, fy = line.offsetTop + line.offsetHeight / 2;
+          const ox = (sx(s, "l") + sx(s, "r")) / 2, oy = sy(s, tAt);
+          const t0 = t - dur;
+          gsap.set(line, { transformOrigin: "50% 60%" });
+          if (fade) tl.fromTo(line, { opacity: 0 }, { opacity: 1, duration: 0.1, ease: "none", immediateRender: false }, t0);
+          tl.fromTo(line, { x: ox - fx }, { x: 0, duration: dur, ease: "power2.out", immediateRender: false }, t0);
+          tl.fromTo(line, { y: oy - fy }, { y: 0, duration: dur, ease: "power3.out", immediateRender: false }, t0);
+          tl.fromTo(line, { scale: from, rotation: -7 }, { scale: peak, rotation: rotEnd, duration: dur, ease: "power2.in", immediateRender: false }, t0);
+          tl.to(line, { scale: 1, rotation: 0, duration: 0.32, ease: "back.out(1.8)" }, t);
+          return t0;
+        };
+        const swipe = (stat, t, cur) => {   // cursor arrives, clicks, drags a marker across the stat
+          const s = STAT[stat], m = $(s.mk), y = sy(s, t);
+          P.cursorTo("#cur", t - 0.45, sx(s, "l") + 6, y - 4, { dur: 0.4 });
+          P.cursorClick("#cur", t);
+          tl.fromTo(m, { opacity: 0, scaleX: 0 }, { opacity: 0.62, scaleX: 1, duration: 0.2, ease: "power2.inOut", immediateRender: false }, t + 0.02);
+          tl.to("#cur", { x: sx(s, "r") - 6, duration: 0.2, ease: "power2.inOut" }, t + 0.02);
+          tl.to(m, { opacity: 0, duration: 0.3, ease: "power2.in" }, t + 0.6);
+        };
+        gsap.set("#cur", { x: 112, y: 1330, scale: 0.72, transformOrigin: "0px 0px" });
+
+        // stat 1 — "$100" (word 2.05): swipe 1.47, fly 1.57 → 2.05, odometer locks 1.97 / 2.05 / 2.13
+        swipe(0, 1.47);
+        fly("#n1", 0, 2.05, { dur: 0.4 });
+        roll($$(".rl", $("#n1"))[0], 1, 1.65, 1.97, 8, "odo");
+        roll($$(".rl", $("#n1"))[1], 0, 1.65, 2.05, 14, "odo");
+        roll($$(".rl", $("#n1"))[2], 0, 1.65, 2.13, 20, "odo");
+        // "million" (2.33): a second, smaller pop from the same stat
+        fly("#n1b", 0, 2.33, { dur: 0.3, from: 0.4, fade: false, tAt: 2.1, peak: 1.0, rotEnd: 0 });
+
+        // stat 2 — "10,000" (3.69): swipe 3.11, fly 3.21 → 3.69, reels lock left→right 3.59 … 3.83
+        swipe(1, 3.11);
+        fly("#n2", 1, 3.69);
+        $$(".rl", $("#n2")).forEach((el, i) => roll(el, [1, 0, 0, 0, 0][i], 3.21, 3.6 + i * 0.06, [8, 12, 16, 20, 24][i], "odo"));
+
+        // stat 3 — "2027" (5.27): swipe 4.7, fly 4.79 → 5.27, split-flap digits lock 5.15 / 5.23 / 5.31 / 5.39
+        swipe(2, 4.7);
+        fly("#n3", 2, 5.27, { from: 0.25 });
+        $$(".rl", $("#n3")).forEach((el, i) => roll(el, [2, 0, 2, 7][i], 4.79, 5.15 + i * 0.08, [5, 7, 9, 11][i], "flap"));
+        tl.to("#cur", { opacity: 0, x: "+=36", y: "-=34", duration: 0.2, ease: "power2.in" }, 5.02);
+
+        // ---- staging: the page wakes when the cursor visits a stat, recedes as the number leaves it
+        P.recede("#page-card", 2.05, { opacity: 0.5, blur: 2.5, scale: 0.97, dur: 0.3 });
+        P.restore("#page-card", 2.7, 0.3);
+        P.recede("#page-card", 3.69, { opacity: 0.5, blur: 2.5, scale: 0.97, dur: 0.3 });
+        P.restore("#page-card", 4.2, 0.3);
+        P.recede("#page-card", 5.27, { opacity: 0.3, blur: 4, scale: 0.97, dur: 0.3 });
+
+        // ---- "10,000 people": a field of tiny people fills in behind the number in a quick wave, then a bright ripple on "people"
+        const crowd = $("#crowd"), COLS = 28, ROWS = 4, PX = 884 / COLS, PY = 136 / ROWS;
+        const hash = (i) => { const x = Math.sin(i * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
+        const svg = '<svg viewBox="0 0 22 26"><circle cx="11" cy="6.2" r="5.2"/><path d="M1.5 25.5c0-6.4 4.2-10.4 9.5-10.4s9.5 4 9.5 10.4z"/></svg>';
+        const CX = 340 - 76, CY = 735 - 652;     // wave origin = the landed number
+        for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) {
+          const i = r * COLS + c, el = document.createElement("div");
+          el.className = "pp"; el.innerHTML = svg;
+          const x = c * PX + (hash(i) - 0.5) * 6 + 2, y = r * PY + (hash(i + 99) - 0.5) * 5 + 2;
+          Object.assign(el.style, { left: x + "px", top: y + "px" });
+          crowd.appendChild(el);
+          const d = Math.hypot(x - CX, (y - CY) * 1.6) / 1000;
+          const base = 0.18 + 0.14 * hash(i + 7);
+          gsap.set(el, { transformOrigin: "50% 100%" });
+          tl.fromTo(el, { opacity: 0, scale: 0.2, y: y + 10 }, { opacity: base, scale: 1, y: y, duration: 0.32, ease: "back.out(2.4)", immediateRender: false }, 3.62 + d * 0.5);
+          // ripple on "people" (left→right) and a lighter return sweep into the 2027 beat
+          const dx = x / 884;
+          tl.to(el, { opacity: 0.7, scale: 1.3, duration: 0.14, ease: "power2.out" }, 4.43 + dx * 0.45);
+          tl.to(el, { opacity: base, scale: 1, duration: 0.3, ease: "sine.inOut" }, 4.57 + dx * 0.45);
+          tl.to(el, { opacity: 0.5, scale: 1.15, duration: 0.14, ease: "power2.out" }, 5.05 + (1 - dx) * 0.4);
+          tl.to(el, { opacity: base, scale: 1, duration: 0.3, ease: "sine.inOut" }, 5.19 + (1 - dx) * 0.4);
+        }
+
+        // secondary action in the long holds: the landed numbers breathe once
+        P.pulse("#n1", 3.0, 1.025);
+        P.pulse("#n1b", 3.08, 1.025);
+        // hero beat: 2027 impact punches the camera, accent underline draws after the flap settles
+        P.punch(5.27, { scale: 1.012 });
+        P.underline($("#n3w"), 5.5);
+      })();
+    </script>
+  </body>
+</html>

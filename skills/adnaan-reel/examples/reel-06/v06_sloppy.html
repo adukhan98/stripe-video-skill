@@ -1,0 +1,312 @@
+<!doctype html>
+<!-- adnaan-reel scene: v06_sloppy — EXPLAINER (bespoke, comedic): the misuse.
+     Secondary speaker card at the top, then it slides to the top-right corner. Three soft UI cards deal in on arcs,
+     one per phrase, fanned in the middle: a SEARCH BAR that gets a red-marker crown on "glorified", an EMAIL draft whose
+     lines write themselves ("stupid emails"), and a LinkedIn POST that the red marker scrawls over on "sloppy" (hero beat).
+     Connectives top-left, punchlines in the lower zone. Built on paper.js + marker.js (untouched). -->
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>v06_sloppy</title>
+    <link rel="stylesheet" href="brand.css" />
+    <link rel="stylesheet" href="paper.css" />
+    <link rel="stylesheet" href="marker.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+    <script src="paper.js"></script>
+    <script src="marker.js"></script>
+    <style>
+      @font-face { font-family: "Inter Tight"; src: url("fonts/InterTight-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Inter"; src: url("fonts/Inter-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Caveat"; src: url("fonts/Caveat-Variable.ttf") format("truetype"); font-weight: 400 700; font-style: normal; font-display: block; }
+
+      /* speaker move wrapper (full frame, so .spk keeps its own coordinates) */
+      #spkMove { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+
+      /* ---- the three UI cards: positioned wrapper (deal/arc) > float > tilt (static fan angle) > card + local marker svg ---- */
+      .deal { position: absolute; }
+      .deal .fl, .deal .tilt { position: absolute; inset: 0; }
+      .deal .sc { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
+      .deal .uicard { inset: 0; }
+      .deal svg.loc { position: absolute; left: 0; top: 0; overflow: visible; pointer-events: none; }
+      .deal svg.loc path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+
+      #w1 { left: 80px; top: 760px; width: 700px; height: 188px; }               /* design 560x150 ×1.25 */
+      #w1 .sc { width: 560px; height: 150px; transform: scale(1.25); }
+      #w1 .tilt { transform: rotate(-3.5deg); }
+      #w1 .uicard { border-radius: 75px; }
+      #mag { position: absolute; left: 44px; top: 39px; width: 72px; height: 72px; overflow: visible; }
+      #field { position: absolute; left: 136px; top: 44px; width: 300px; height: 62px; border-radius: 31px; background: var(--wire); opacity: 0.55; }
+      #caret { position: absolute; left: 156px; top: 52px; width: 6px; height: 46px; border-radius: 3px; background: var(--brand-text); }
+      #mic { position: absolute; left: 466px; top: 45px; width: 60px; height: 60px; }
+
+      #w2 { left: 196px; top: 836px; width: 736px; height: 437px; }              /* design 566x336 ×1.3 */
+      #w2 .sc { width: 566px; height: 336px; transform: scale(1.3); }
+      #w2 .tilt { transform: rotate(3.5deg); }
+      #env { position: absolute; left: 30px; top: 26px; width: 58px; height: 42px; overflow: visible; }
+      .hr { position: absolute; left: 30px; right: 30px; height: 3px; border-radius: 2px; background: var(--wire); }
+      .wr { transform-origin: 0% 50%; }
+      #ecaret { position: absolute; width: 5px; height: 30px; border-radius: 3px; background: var(--brand-text); opacity: 0; }
+      #send { position: absolute; left: 404px; top: 270px; width: 132px; height: 44px; border-radius: 22px; background: var(--brand-primary); }
+      #send i { position: absolute; left: 30px; top: 18px; width: 72px; height: 8px; border-radius: 4px; background: rgba(255, 255, 255, 0.85); }
+
+      #w3 { left: 90px; top: 738px; width: 780px; height: 400px; }               /* design 624x320 ×1.25 */
+      #w3 .sc { width: 624px; height: 320px; transform: scale(1.25); }
+      #w3 .tilt { transform: rotate(-1.5deg); }
+      #lilogo { position: absolute; left: 546px; top: 28px; width: 51px; height: 51px; border-radius: 10px; display: block; }
+      .react { position: absolute; top: 274px; height: 30px; }
+      .react .g { top: 0; }
+
+      /* "sloppy" letters boil (sloppy type) */
+      #wSloppy .lt { display: inline-block; }
+    </style>
+  </head>
+  <body data-face="0.42">
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="5.1833">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+      <div id="cam" data-push="1.004" data-origin="510px 1000px"><div id="punch">
+
+        <!-- secondary speaker card at the top (0–0.55), then it slides to the top-right corner (×0.7 → 420 wide) -->
+        <div id="spkMove">
+          <div class="spk secondary" data-x="240" data-y="306" data-w="600" data-h="540" data-face-at="0.555" data-ry="-6">
+            <div class="spk-card">
+              <div class="spk-vid"><video id="speaker" class="clip" src="assets/speaker.mp4" muted playsinline data-start="0" data-duration="5.1833" data-track-index="1"></video></div>
+              <div class="spk-sheen"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== CARD 1: search bar (crowned on "glorified") ===== -->
+        <div id="w1" class="deal"><div class="fl"><div class="tilt"><div class="sc">
+          <div class="uicard">
+            <svg id="mag" viewBox="0 0 72 72"><circle cx="30" cy="30" r="20" fill="none" stroke="var(--brand-text)" stroke-width="8"/><path d="M45 45 L62 62" stroke="var(--brand-text)" stroke-width="9" stroke-linecap="round"/></svg>
+            <div id="field"></div>
+            <div id="caret"></div>
+            <svg id="mic" viewBox="0 0 60 60"><rect x="21" y="8" width="18" height="30" rx="9" fill="var(--wire)"/><path d="M13 30 C13 42, 47 42, 47 30 M30 41 L30 52" fill="none" stroke="var(--wire)" stroke-width="5" stroke-linecap="round"/></svg>
+          </div>
+          <svg class="loc" id="loc1" width="560" height="150" viewBox="0 0 560 150"></svg>
+        </div></div></div></div>
+
+        <!-- ===== CARD 2: email draft (lines write themselves) ===== -->
+        <div id="w2" class="deal"><div class="fl"><div class="tilt"><div class="sc">
+          <div class="uicard">
+            <svg id="env" viewBox="0 0 58 42"><rect x="3" y="3" width="52" height="36" rx="6" fill="none" stroke="var(--brand-text)" stroke-width="5"/><path d="M6 7 L29 24 L52 7" fill="none" stroke="var(--brand-text)" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/></svg>
+            <i class="g" style="left: 108px; top: 38px; width: 170px; height: 18px"></i>
+            <i class="g" style="left: 30px; top: 98px; width: 46px; height: 16px; opacity: .9"></i>
+            <i class="g" style="left: 92px; top: 98px; width: 250px; height: 16px; opacity: .55"></i>
+            <i class="hr" style="top: 132px"></i>
+            <i class="g" style="left: 30px; top: 154px; width: 96px; height: 16px; opacity: .9"></i>
+            <i class="g" style="left: 142px; top: 154px; width: 210px; height: 16px; opacity: .55"></i>
+            <i class="hr" style="top: 188px"></i>
+            <i class="g wr" id="el1" style="left: 30px; top: 210px; width: 486px; height: 14px"></i>
+            <i class="g wr" id="el2" style="left: 30px; top: 238px; width: 430px; height: 14px"></i>
+            <i class="g wr" id="el3" style="left: 30px; top: 266px; width: 300px; height: 14px"></i>
+            <div id="ecaret"></div>
+            <div id="send"><i></i></div>
+          </div>
+        </div></div></div></div>
+
+        <!-- ===== CARD 3: the LinkedIn post (scrawled over on "sloppy") ===== -->
+        <div id="w3" class="deal"><div class="fl"><div class="tilt"><div class="sc">
+          <div class="uicard">
+            <i class="g round" style="left: 30px; top: 26px; width: 66px; height: 66px"></i>
+            <i class="g" style="left: 114px; top: 36px; width: 200px; height: 18px"></i>
+            <i class="g" style="left: 114px; top: 66px; width: 128px; height: 13px; opacity: .6"></i>
+            <img id="lilogo" src="assets/linkedin.png" alt="LinkedIn" />
+            <i class="g pl" style="left: 30px; top: 122px; width: 560px; height: 16px"></i>
+            <i class="g pl" style="left: 30px; top: 154px; width: 520px; height: 16px"></i>
+            <i class="g pl" style="left: 30px; top: 186px; width: 548px; height: 16px"></i>
+            <i class="g pl" style="left: 30px; top: 218px; width: 360px; height: 16px"></i>
+            <i class="hr" style="top: 254px"></i>
+            <div class="react" style="left: 30px"><i class="g round" style="left: 0; width: 30px; height: 30px"></i><i class="g" style="left: 40px; top: 8px; width: 70px; height: 14px"></i></div>
+            <div class="react" style="left: 220px"><i class="g round" style="left: 0; width: 30px; height: 30px"></i><i class="g" style="left: 40px; top: 8px; width: 84px; height: 14px"></i></div>
+            <div class="react" style="left: 420px"><i class="g round" style="left: 0; width: 30px; height: 30px"></i><i class="g" style="left: 40px; top: 8px; width: 76px; height: 14px"></i></div>
+          </div>
+          <svg class="loc" id="loc3" width="624" height="320" viewBox="0 0 624 320"></svg>
+        </div></div></div></div>
+
+        <!-- ===== kinetic words ===== -->
+        <!-- beat A: under the big speaker card -->
+        <div class="line sup" data-x="84" data-base="960" data-size="96" data-exit="0.58">
+          <span class="w" data-t="0.01">But</span><span class="w gap-s" data-t="0.19">they're</span>
+        </div>
+        <div class="line hero" data-right="950" data-base="1078" data-size="150" data-exit="0.96">
+          <span class="w" data-t="0.53" data-pop>using</span><span class="w gap-s" data-t="0.71" data-pop>it</span>
+        </div>
+
+        <!-- connectives top-left (beside the corner speaker card) -->
+        <div class="line sup" data-x="84" data-base="430" data-size="100" data-exit="1.92">
+          <span class="w" data-t="0.87">as</span><span class="w gap-s" data-t="1.01">a</span>
+        </div>
+        <div class="line sup" data-x="84" data-base="420" data-size="96" data-exit="3.34">
+          <span class="w" data-t="2.25">or</span><span class="w gap-s" data-t="2.39">to</span>
+        </div>
+        <div class="line sup" data-x="84" data-base="530" data-size="96" data-exit="3.34" data-exit-lag="2">
+          <span class="w" data-t="2.57">write</span><span class="w gap-s" data-t="2.73">their</span>
+        </div>
+        <div class="line sup" data-x="84" data-base="470" data-size="100">
+          <span class="w" data-t="3.73">or</span><span class="w gap-s" data-t="3.95">their</span>
+        </div>
+
+        <!-- punchlines in the lower zone -->
+        <div class="line hero" data-x="78" data-base="1302" data-size="180" data-exit="2.22">
+          <span class="w hero ocean" id="wGlor" data-t="1.19" data-hero>glorified</span>
+        </div>
+        <div class="line sup" data-right="950" data-base="1438" data-size="108" data-exit="2.22" data-exit-lag="2">
+          <span class="w" data-t="1.73" data-accent data-rise="16">search</span><span class="w gap-s" data-t="2.05" data-accent data-rise="16">engine</span>
+        </div>
+
+        <div class="line hero" data-x="80" data-base="1424" data-size="132" data-fit="880" data-exit="3.62">
+          <span class="w ink" id="wStupid" data-t="3.01" data-pop>stupid</span><span class="w ink gap-s" data-t="3.43" data-pop>emails</span>
+        </div>
+
+        <div class="line hero" data-x="96" data-base="1312" data-size="210">
+          <span class="w hero ocean" id="wSloppy" data-t="4.37" data-hero data-peak="1.08">sloppy</span>
+        </div>
+        <div class="line sup" data-right="950" data-base="1446" data-size="100">
+          <span class="w" data-t="4.69" data-accent data-rise="16">LinkedIn</span><span class="w gap-s" data-t="5.01" data-pop data-rise="10">posts</span>
+        </div>
+
+      </div></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const P = await Paper.init({ extraFonts: ['700 60px "Caveat"'] });
+        const M = Marker.init(P);
+        const { tl, D, F, $, $$ } = P;
+
+        // ---------------------------------------------------------------- speaker: top → top-right corner
+        // card box 240..840 x 306..846 (centre 540, 576) → ×0.7 (420x378), centre (727, 497) → x 517..937, y 308..686
+        gsap.set("#spkMove", { transformOrigin: "540px 576px" });
+        tl.to("#spkMove", { scale: 1.015, duration: 3 * F, ease: "power2.in" }, 0.50);                // anticipation
+        tl.to("#spkMove", { scale: 0.7, duration: 0.42, ease: "power3.inOut" }, 0.60);
+        tl.to("#spkMove", { y: -79, duration: 0.42, ease: "power3.inOut" }, 0.60);                      // y and x eased differently → arc
+        tl.to("#spkMove", { x: 187, duration: 0.42, ease: "power2.inOut" }, 0.60);
+
+        // ---------------------------------------------------------------- card deal (arc + fade + overshoot)
+        function deal(sel, t, fromX, fromY, tilt) {
+          const wrap = $(sel), card = $(".uicard", wrap);
+          gsap.set(wrap, { transformOrigin: "50% 60%" });
+          tl.fromTo(card, { opacity: 0 }, { opacity: 1, duration: 4 * F, ease: "power1.out" }, t);
+          P.arc(wrap, t, { fromX, fromY, dur: 14 * F, tilt });
+          tl.fromTo(wrap, { scale: 0.84 }, { scale: 1.025, duration: 10 * F, ease: "power3.out" }, t);
+          tl.to(wrap, { scale: 1, duration: 9 * F, ease: "back.out(1.8)" }, t + 10 * F);
+        }
+
+        // ================= CARD 1: search bar + crown on "glorified" (1.19) =================
+        deal("#w1", 0.80, -30, 0, -6);
+        P.floatY($("#w1 .fl"), 3, 1.3);
+        // blinking caret (on/off every 12 f; deterministic sets)
+        for (let t = 0.78 + 12 * F, on = false; t < D; t += 12 * F, on = !on) tl.set("#caret", { opacity: on ? 1 : 0 }, t);
+        // magnifier "looks around" on "search" (1.73): swings, overshoots, settles
+        gsap.set("#mag", { transformOrigin: "42% 42%" });
+        tl.to("#mag", { rotation: 14, scale: 0.94, duration: 3 * F, ease: "power2.in" }, 1.58);
+        tl.to("#mag", { rotation: -22, scale: 1.14, duration: 6 * F, ease: "power3.out" }, 1.58 + 3 * F);
+        tl.to("#mag", { rotation: 0, scale: 1, duration: 12 * F, ease: "back.out(2.2)" }, 1.58 + 9 * F);
+        tl.to("#mag", { x: 16, duration: 0.3, ease: "sine.inOut", yoyo: true, repeat: 1 }, 2.0);        // peeks along the empty field
+
+        // crown (card-local px; card top edge = y 0): zig-zag band drawn in ONE stroke, then three jewel dots
+        const loc1 = $("#loc1");
+        const cx0 = 120;  // crown spans x 120..320 local (×1.25 on screen: frame x ≈ 225..485, clear of the corner speaker card)
+        const crownPts = [[cx0 + 6, -10], [cx0 - 4, -104], [cx0 + 54, -50], [cx0 + 100, -124], [cx0 + 146, -50], [cx0 + 204, -104], [cx0 + 194, -10], [cx0 + 4, -12]];
+        const crown = M.line(crownPts, 1.03, { parent: loc1, width: 9, dur: 0.30, amp: 2.0, color: "marker" });
+        const j1 = M.circle(cx0 - 4, -118, 9, 9, 1.34, { parent: loc1, width: 9, dur: 0.06, turns: 1.05 });
+        const j2 = M.circle(cx0 + 100, -140, 10, 10, 1.37, { parent: loc1, width: 9, dur: 0.06, turns: 1.05 });
+        const j3 = M.circle(cx0 + 204, -118, 9, 9, 1.40, { parent: loc1, width: 9, dur: 0.06, turns: 1.05 });
+        // crown wobble on its base (damped), then a gentle sway while held
+        const crownG = [crown.g, j1.g, j2.g, j3.g];
+        const cg = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        loc1.appendChild(cg); crownG.forEach((g) => cg.appendChild(g));
+        gsap.set(cg, { svgOrigin: `${cx0 + 100} -10` });
+        tl.fromTo(cg, { rotation: 0, y: 0 }, { rotation: -9, y: -10, duration: 4 * F, ease: "power2.out", immediateRender: false }, 1.36);
+        tl.to(cg, { rotation: 7, y: 0, duration: 5 * F, ease: "sine.inOut" }, 1.36 + 4 * F);
+        tl.to(cg, { rotation: -4, duration: 5 * F, ease: "sine.inOut" }, 1.36 + 9 * F);
+        tl.to(cg, { rotation: 2, duration: 5 * F, ease: "sine.inOut" }, 1.36 + 14 * F);
+        tl.to(cg, { rotation: -6, duration: 0.5, ease: "sine.inOut" }, 1.36 + 19 * F);                 // sits a bit askew
+        tl.to(cg, { rotation: -3, duration: 0.7, ease: "sine.inOut", yoyo: true, repeat: 3 }, 2.15);
+        // two sparkle ticks off the crown points (little ✦ = two crossing strokes)
+        const spark = (x, y, s, t) => {
+          M.line([[x - s, y], [x + s, y]], t, { parent: loc1, width: 6, dur: 0.06, amp: 0.6 });
+          M.line([[x, y - s * 1.2], [x, y + s * 1.2]], t + 2 * F, { parent: loc1, width: 6, dur: 0.06, amp: 0.6 });
+        };
+        spark(cx0 - 52, -150, 16, 1.46);
+        spark(cx0 + 224, -26, 12, 1.60);
+
+        // ================= CARD 2: email draft, "or to write their stupid emails" =================
+        P.recede("#w1 .tilt", 2.28, { opacity: 0.55, blur: 3, scale: 0.97, dur: 0.3 });
+        deal("#w2", 2.34, -40, -50, 6);
+        P.floatY($("#w2 .fl"), 3, 1.5);
+        // body lines write themselves on "write" (2.57), a caret leading each line
+        const lines = ["#el1", "#el2", "#el3"].map((s) => $(s));
+        lines.forEach((l) => gsap.set(l, { scaleX: 0 }));
+        let tw = 2.48;
+        tl.set("#ecaret", { opacity: 1, left: 30, top: 202 }, tw);
+        lines.forEach((l, i) => {
+          const w = parseFloat(l.style.width), x0 = 30, y0 = parseFloat(l.style.top) - 8, dur = 0.12 + w / 2400;
+          tl.set("#ecaret", { left: x0, top: y0 }, tw);
+          tl.to(l, { scaleX: 1, duration: dur, ease: "steps(" + Math.round(w / 26) + ")" }, tw);            // typed, word by word
+          tl.to("#ecaret", { left: x0 + w + 6, duration: dur, ease: "steps(" + Math.round(w / 26) + ")" }, tw);
+          tw += dur + 2 * F;
+        });
+        for (let t = tw, on = false; t < 3.62; t += 10 * F, on = !on) tl.set("#ecaret", { opacity: on ? 1 : 0 }, t);
+        tl.set("#ecaret", { opacity: 0 }, 3.62);
+        // red marker underline under "stupid" (3.01) — drawn just after the word lands
+        const ls = $("#wStupid").closest(".line"), ws = $("#wStupid");
+        const sx0 = ls.offsetLeft + ws.offsetLeft + 8, sx1 = ls.offsetLeft + ws.offsetLeft + ws.offsetWidth - 10;
+        const sUL = M.underline(sx0, sx1, 1424 + 14, 3.08, { width: 11, dur: 0.26 });
+        M.erase(sUL, 3.60, 0.12);
+        // send pressed on "emails" (3.43): anticipation dip, squash, release
+        P.squash("#send", 3.43, 0.12);
+        tl.fromTo("#send i", { scaleX: 1 }, { scaleX: 0.7, duration: 3 * F, ease: "power2.out", yoyo: true, repeat: 1, transformOrigin: "50% 50%" }, 3.43);
+
+        // ================= CARD 3: the LinkedIn post, scrawled over on "sloppy" (4.37) =================
+        P.recede("#w2 .tilt", 3.64, { opacity: 0.5, blur: 4, scale: 0.96, dur: 0.3 });
+        tl.to("#w2", { y: -120, duration: 0.34, ease: "power3.inOut" }, 3.62);   // tucks back into the stack
+        // card 1 (and its crown) has done its job: it slips back out of the stack as the post deals in (exit 6 f)
+        tl.to("#w1 .tilt", { opacity: 0, y: -24, filter: "blur(8px)", duration: 6 * F, ease: "power2.in" }, 3.60);
+        deal("#w3", 3.62, -20, 60, -6);
+        P.floatY($("#w3 .fl"), 3, 1.25);
+        // logo pops in after the card (parts lag the whole), the post lines draw in 2 f apart
+        P.pop("#lilogo", 3.90, { peak: 1.12 });
+        tl.fromTo("#w3 .pl", { scaleX: 0, transformOrigin: "0% 50%" }, { scaleX: 1, duration: 8 * F, ease: "power3.out", stagger: 2 * F }, 3.82);
+        // THE SCRAWL: a fast, messy red zig-zag across the post body (card-local px), 0.35 s, contact on "sloppy"
+        const loc3 = $("#loc3"), zz = [];
+        let seed = 17;
+        const rnd = () => { seed = (seed * 16807) % 2147483647; return (seed % 1000) / 1000; };
+        for (let i = 0; i <= 16; i++) {
+          const x = 40 + i * 33 + (rnd() - 0.5) * 22;
+          const y = (i % 2 ? 236 : 116) + (rnd() - 0.5) * 34 + (i % 4 === 3 ? -24 : 0);
+          zz.push([x, y]);
+        }
+        zz.push([560, 150], [470, 214], [380, 160]);   // the hand loops back for a last swipe
+        M.line(zz, 4.22, { parent: loc3, width: 11, dur: 0.35, amp: 5, ease: "power1.inOut" });
+        // the post lines under the scrawl tremble once (they got hit)
+        tl.to("#w3 .pl", { x: 4, duration: 2 * F, ease: "power2.out", yoyo: true, repeat: 1, stagger: 1 * F }, 4.37);
+        P.punch(4.37, { scale: 1.01, origin: "510px 1260px", dur: 0.3 });
+        P.shake(4.37, 4);
+        // "sloppy" itself is sloppy: its letters boil out of line on fours after it lands
+        const wS = $("#wSloppy"), txt = wS.textContent;
+        wS.innerHTML = txt.split("").map((c) => `<span class="lt">${c}</span>`).join("");
+        const lts = $$("#wSloppy .lt");
+        let k = 0;
+        for (let t = 4.62; t < D; t += 4 * F, k++) {
+          lts.forEach((el, i) => {
+            const h = ((i * 7919 + k * 104729) >>> 0) % 1000 / 1000, h2 = ((i * 3571 + k * 7727) >>> 0) % 1000 / 1000;
+            tl.set(el, { rotation: (h - 0.5) * 9, y: (h2 - 0.5) * 10 }, t);
+          });
+        }
+        // red loop around the LinkedIn logo on "LinkedIn" (4.69)
+        M.circle(571, 53, 44, 41, 4.56, { parent: loc3, width: 8, dur: 0.3 });
+        P.pulse("#lilogo", 4.62, 1.1);
+        // "posts": the reaction row pops 2 f apart
+        $$("#w3 .react").forEach((r, i) => {
+          gsap.set(r, { transformOrigin: "15px 15px" });
+          tl.to(r, { scale: 1.18, duration: 3 * F, ease: "power2.out" }, 4.92 + i * 2 * F);
+          tl.to(r, { scale: 1, duration: 8 * F, ease: "back.out(2.2)" }, 4.92 + i * 2 * F + 3 * F);
+        });
+      })();
+    </script>
+  </body>
+</html>

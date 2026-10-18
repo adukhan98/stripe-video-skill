@@ -1,0 +1,116 @@
+[
+ {
+  "t": 0.0,
+  "sfx": "pop",
+  "what": "You're probably lands",
+  "gain_db": -4
+ },
+ {
+  "t": 0.58,
+  "sfx": "tick",
+  "what": "using",
+  "gain_db": -4
+ },
+ {
+  "t": 1.04,
+  "sfx": "scribble",
+  "dur": 0.34,
+  "what": "</> brackets and slash scribbled"
+ },
+ {
+  "t": 1.14,
+  "sfx": "tick",
+  "what": "</> slash drawn"
+ },
+ {
+  "t": 1.26,
+  "sfx": "pop",
+  "what": "coding lands"
+ },
+ {
+  "t": 1.36,
+  "sfx": "tick",
+  "what": "</> hops"
+ },
+ {
+  "t": 1.52,
+  "sfx": "scribble",
+  "dur": 0.38,
+  "what": "doc page outline and folded corner"
+ },
+ {
+  "t": 1.74,
+  "sfx": "pop",
+  "what": "knowledge lands"
+ },
+ {
+  "t": 1.9,
+  "sfx": "tick",
+  "what": "doc line 1",
+  "gain_db": -3
+ },
+ {
+  "t": 1.9,
+  "sfx": "scribble",
+  "dur": 0.42,
+  "what": "three scribbled lines written on the doc"
+ },
+ {
+  "t": 2.02,
+  "sfx": "tick",
+  "what": "doc line 2 + work",
+  "gain_db": -3
+ },
+ {
+  "t": 2.14,
+  "sfx": "tick",
+  "what": "doc line 3",
+  "gain_db": -3
+ },
+ {
+  "t": 2.2,
+  "sfx": "pop",
+  "what": "and all these",
+  "gain_db": -5
+ },
+ {
+  "t": 2.62,
+  "sfx": "whoosh",
+  "what": "words clear for fancy",
+  "gain_db": -4
+ },
+ {
+  "t": 2.84,
+  "sfx": "impact",
+  "what": "fancy lands (hero)"
+ },
+ {
+  "t": 2.84,
+  "sfx": "scribble",
+  "dur": 0.3,
+  "what": "first three sparkle stars"
+ },
+ {
+  "t": 2.92,
+  "sfx": "ping",
+  "what": "sparkles pop",
+  "gain_db": -3
+ },
+ {
+  "t": 3.0,
+  "sfx": "scribble",
+  "dur": 0.26,
+  "what": "last sparkles + ink swash under fancy"
+ },
+ {
+  "t": 3.04,
+  "sfx": "ping",
+  "what": "sparkles pop 2",
+  "gain_db": -5
+ },
+ {
+  "t": 3.14,
+  "sfx": "pop",
+  "what": "stuff. lands"
+ }
+]

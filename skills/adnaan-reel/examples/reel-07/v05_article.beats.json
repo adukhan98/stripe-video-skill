@@ -1,0 +1,16 @@
+[
+  {"t": 0.5, "sfx": "whoosh", "what": "solid paper strip slides in under the title", "gain_db": -8},
+  {"t": 0.85, "sfx": "pop", "what": "real page (dark browser card) lands behind him on 'article'"},
+  {"t": 2.62, "sfx": "scribble", "dur": 0.32, "what": "highlighter swipes 'ambitious:' in the real title", "gain_db": -3},
+  {"t": 2.79, "sfx": "pop", "what": "'ambitious' (red) lands on the strip"},
+  {"t": 2.92, "sfx": "scribble", "dur": 0.26, "what": "red marker underline under 'ambitious:'"},
+  {"t": 5.05, "sfx": "whoosh", "what": "page scrolls fast past the etching to 'I work on Claude.', card compacts, he sinks lower"},
+  {"t": 5.44, "sfx": "scribble", "dur": 0.42, "what": "'by Felix' handwritten + highlighter on 'I work on Claude'"},
+  {"t": 5.88, "sfx": "scribble", "dur": 0.22, "what": "red underline under 'by Felix'"},
+  {"t": 6.46, "sfx": "pop", "what": "'an engineer' lands", "gain_db": -2},
+  {"t": 6.78, "sfx": "pop", "what": "'working on' lands", "gain_db": -4},
+  {"t": 6.86, "sfx": "scribble", "dur": 0.42, "what": "red marker arrow from 'working on' to the hang point"},
+  {"t": 7.1, "sfx": "whoosh", "what": "Claude chip swings in on the arrow's end", "gain_db": -6},
+  {"t": 7.28, "sfx": "impact", "what": "HERO: Claude chip squash-lands + 'Claude' (red), camera punch + shake"},
+  {"t": 7.36, "sfx": "tick", "what": "tape pressed onto the Claude chip", "gain_db": -3}
+]

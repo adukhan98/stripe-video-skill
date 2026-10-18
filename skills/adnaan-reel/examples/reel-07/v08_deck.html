@@ -1,0 +1,299 @@
+<!doctype html>
+<!-- v08_deck — Mode B (full canvas, no speaker) — MECHANISM (bespoke): ONE slide (cursor clicks "fix", red ✗) → deals into a spread of 8 different slides →
+     squares up into a DECK with a riffle on "deck" (hero beat) → rides a dotted path to a hand-drawn stick-figure BOSS who
+     unfolds his arms, smiles and nods on "boss" (red ✓). Built on the shared runtime (paper.js + marker.js) + GSAP. -->
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>v08_deck</title>
+    <link rel="stylesheet" href="brand.css" />
+    <link rel="stylesheet" href="paper.css" />
+    <link rel="stylesheet" href="marker.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+    <script src="paper.js"></script>
+    <script src="marker.js"></script>
+    <style>
+      @font-face { font-family: "Inter Tight"; src: url("fonts/InterTight-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Inter"; src: url("fonts/Inter-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Caveat"; src: url("fonts/Caveat-Variable.ttf") format("truetype"); font-weight: 400 700; font-style: normal; font-display: block; }
+
+      /* ---- slide cards: .sl (positioned, dealt) > .sc (scale / riffle) > .uicard face. Design size 200x113 (16:9),
+              natural centre = (510, 640); the original slide #s0 starts at ×3.6 (720x407). ---- */
+      #deckWrap { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+      .sl { position: absolute; left: 410px; top: 583.5px; width: 200px; height: 113px; }
+      .sl .sc { position: absolute; inset: 0; transform-origin: 50% 50%; }
+      .sl .uicard { inset: 0; opacity: 1; border-radius: 14px; box-shadow: 0 16px 26px -10px rgba(60, 50, 40, 0.34), 0 2px 4px rgba(60, 50, 40, 0.10); }
+      .sl .g { border-radius: 3px; }
+      .g.ink { background: var(--brand-text); }
+      .g.mid { background: #cfc8c1; }
+      .bar { position: absolute; bottom: 15px; width: 13px; border-radius: 3px 3px 0 0; background: var(--wire); }
+      .bar.acc { background: var(--brand-primary); }
+      .pie { position: absolute; left: 16px; top: 34px; width: 62px; height: 62px; border-radius: 50%;
+        background: conic-gradient(var(--brand-primary) 0 28%, var(--wire) 28% 100%); }
+      .qm { position: absolute; width: 11px; height: 11px; border-radius: 50%; background: var(--brand-primary); }
+      .qm::after { content: ""; position: absolute; left: 4px; top: 8px; width: 5px; height: 9px; border-radius: 0 0 4px 4px; background: var(--brand-primary); transform: rotate(18deg); }
+      .dot { position: absolute; width: 8px; height: 8px; border-radius: 50%; background: var(--brand-primary); }
+      .ph { position: absolute; left: 14px; top: 14px; width: 100px; height: 64px; border-radius: 6px; background: var(--wire); overflow: hidden; }
+      .sl svg.w2 { position: absolute; left: 0; top: 0; overflow: visible; }
+
+      /* "fix" pill on the original slide (design px; ×3.6 on screen → 50 px text) */
+      #fix { position: absolute; left: 136px; top: 9px; width: 52px; height: 25px; border-radius: 13px; background: var(--brand-text);
+        color: #fff; font-family: var(--font-body); font-weight: 600; font-size: 14px; letter-spacing: -0.01em;
+        display: flex; align-items: center; justify-content: center; transform-origin: 50% 60%; }
+
+      /* the dotted path the deck rides to the boss */
+      svg.paths .dotted { stroke-width: 5; stroke-dasharray: 2 16; }
+    </style>
+  </head>
+  <body data-face="0.41">
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="4.6500">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+      <div id="cam" data-push="1.006" data-origin="510px 880px"><div id="punch">
+
+        <svg class="paths" width="1080" height="1920" viewBox="0 0 1080 1920">
+          <path id="trail" class="dotted" d="M 150 836 C 230 880, 330 880, 420 830" />
+        </svg>
+
+        <!-- ===== the deck: 8 different slides (DOM order = z during the deal; #s0 the original slide on top) ===== -->
+        <div id="deckWrap">
+          <!-- title slide -->
+          <div class="sl" id="sTitle" style="opacity:0"><div class="sc"><div class="uicard">
+            <i class="g ink" style="left: 38px; top: 38px; width: 124px; height: 14px"></i>
+            <i class="g mid" style="left: 62px; top: 62px; width: 76px; height: 8px"></i>
+            <i class="g acc" style="left: 88px; top: 84px; width: 24px; height: 5px"></i>
+          </div></div></div>
+          <!-- table -->
+          <div class="sl" id="sTable" style="opacity:0"><div class="sc"><div class="uicard">
+            <i class="g ink" style="left: 14px; top: 14px; width: 80px; height: 9px"></i>
+            <i class="g mid" style="left: 14px; top: 32px; width: 172px; height: 12px"></i>
+            <i class="g" style="left: 14px; top: 50px; width: 52px; height: 9px"></i><i class="g" style="left: 74px; top: 50px; width: 52px; height: 9px"></i><i class="g acc" style="left: 134px; top: 50px; width: 52px; height: 9px"></i>
+            <i class="g" style="left: 14px; top: 66px; width: 52px; height: 9px"></i><i class="g" style="left: 74px; top: 66px; width: 52px; height: 9px"></i><i class="g" style="left: 134px; top: 66px; width: 52px; height: 9px"></i>
+            <i class="g" style="left: 14px; top: 82px; width: 52px; height: 9px"></i><i class="g" style="left: 74px; top: 82px; width: 52px; height: 9px"></i><i class="g" style="left: 134px; top: 82px; width: 52px; height: 9px"></i>
+          </div></div></div>
+          <!-- quote -->
+          <div class="sl" id="sQuote" style="opacity:0"><div class="sc"><div class="uicard">
+            <i class="qm" style="left: 22px; top: 22px"></i><i class="qm" style="left: 38px; top: 22px"></i>
+            <i class="g ink" style="left: 40px; top: 46px; width: 136px; height: 10px"></i>
+            <i class="g ink" style="left: 40px; top: 62px; width: 112px; height: 10px"></i>
+            <i class="g mid" style="left: 40px; top: 86px; width: 58px; height: 7px"></i>
+          </div></div></div>
+          <!-- pie -->
+          <div class="sl" id="sPie" style="opacity:0"><div class="sc"><div class="uicard">
+            <i class="g ink" style="left: 14px; top: 14px; width: 92px; height: 9px"></i>
+            <i class="pie"></i>
+            <i class="dot" style="left: 96px; top: 44px"></i><i class="g" style="left: 110px; top: 44px; width: 70px; height: 8px"></i>
+            <i class="g round" style="left: 96px; top: 62px; width: 8px; height: 8px; background: var(--wire)"></i><i class="g" style="left: 110px; top: 62px; width: 56px; height: 8px"></i>
+            <i class="g round" style="left: 96px; top: 80px; width: 8px; height: 8px; background: var(--wire)"></i><i class="g" style="left: 110px; top: 80px; width: 64px; height: 8px"></i>
+          </div></div></div>
+          <!-- bullets -->
+          <div class="sl" id="sBul" style="opacity:0"><div class="sc"><div class="uicard">
+            <i class="g ink" style="left: 14px; top: 14px; width: 100px; height: 9px"></i>
+            <i class="dot" style="left: 16px; top: 36px"></i><i class="g" style="left: 32px; top: 36px; width: 140px; height: 8px"></i>
+            <i class="dot" style="left: 16px; top: 54px"></i><i class="g" style="left: 32px; top: 54px; width: 116px; height: 8px"></i>
+            <i class="dot" style="left: 16px; top: 72px"></i><i class="g" style="left: 32px; top: 72px; width: 150px; height: 8px"></i>
+            <i class="dot" style="left: 16px; top: 90px"></i><i class="g" style="left: 32px; top: 90px; width: 96px; height: 8px"></i>
+          </div></div></div>
+          <!-- line chart -->
+          <div class="sl" id="sLine" style="opacity:0"><div class="sc"><div class="uicard">
+            <i class="g ink" style="left: 14px; top: 14px; width: 84px; height: 9px"></i>
+            <svg class="w2" width="200" height="113" viewBox="0 0 200 113">
+              <path d="M18 96 L184 96 M18 96 L18 34" stroke="var(--wire)" stroke-width="3" fill="none" stroke-linecap="round"/>
+              <path d="M24 86 L58 70 L88 76 L120 52 L150 58 L180 32" stroke="var(--brand-primary)" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div></div></div>
+          <!-- image + caption -->
+          <div class="sl" id="sImg" style="opacity:0"><div class="sc"><div class="uicard">
+            <div class="ph"><svg class="w2" width="100" height="64" viewBox="0 0 100 64"><path d="M0 64 L32 30 L52 48 L70 34 L100 60 L100 64 Z" fill="#cfc8c1"/><circle cx="76" cy="16" r="7" fill="var(--brand-primary)"/></svg></div>
+            <i class="g ink" style="left: 126px; top: 18px; width: 60px; height: 9px"></i>
+            <i class="g" style="left: 126px; top: 36px; width: 56px; height: 7px"></i>
+            <i class="g" style="left: 126px; top: 50px; width: 48px; height: 7px"></i>
+            <i class="g mid" style="left: 14px; top: 88px; width: 120px; height: 8px"></i>
+          </div></div></div>
+          <!-- the ORIGINAL slide (chart + "fix" pill), ×2.6 at first -->
+          <div class="sl" id="s0" style="opacity:0"><div class="sc" style="transform: scale(3.6)"><div class="uicard">
+            <i class="g ink" style="left: 14px; top: 14px; width: 92px; height: 10px"></i>
+            <i class="g mid" style="left: 14px; top: 30px; width: 60px; height: 7px"></i>
+            <i class="bar" style="left: 20px; height: 34px"></i>
+            <i class="bar" style="left: 39px; height: 48px"></i>
+            <i class="bar" style="left: 58px; height: 40px"></i>
+            <i class="bar acc" id="fixBar" style="left: 77px; height: 26px"></i>
+            <i class="g" style="left: 18px; top: 98px; width: 80px; height: 3px"></i>
+            <i class="g" style="left: 112px; top: 50px; width: 74px; height: 7px"></i>
+            <i class="g" style="left: 112px; top: 64px; width: 60px; height: 7px"></i>
+            <i class="g" style="left: 112px; top: 78px; width: 68px; height: 7px"></i>
+            <div id="fix">fix</div>
+          </div></div></div>
+        </div>
+
+        <div id="cur" class="cursor"></div>
+
+        <!-- ===== kinetic words ===== -->
+        <!-- top line (one focal pair at a time: the object in the middle, its words around it) -->
+        <div class="line sup" data-x="84" data-base="384" data-size="88" data-exit="2.12" data-exit-dy="-24">
+          <span class="w" data-t="0.01">For</span><span class="w gap-s" data-t="0.35">example,</span>
+        </div>
+        <div class="line sup" data-x="84" data-base="384" data-size="88">
+          <span class="w" data-t="2.47" data-pop>Ask</span><span class="w gap-s" data-t="2.61">it</span><span class="w gap-s" data-t="2.73">to</span><span class="w gap-s" data-t="2.85" data-accent>make</span><span class="w gap-s" data-t="3.01">the</span>
+        </div>
+
+        <!-- beat A, lower zone -->
+        <div class="line sup" data-x="84" data-base="1062" data-size="104" data-exit="2.36">
+          <span class="w hero" data-t="0.71" data-pop>don't</span><span class="w gap-s" data-t="1.01">ask</span><span class="w gap-s" data-t="1.11">it</span>
+        </div>
+        <div class="line sup" data-right="888" data-base="1176" data-size="104" data-exit="2.36" data-exit-lag="2">
+          <span class="w" data-t="1.25">to</span><span class="w hero gap-s" id="wFix" data-t="1.39" data-pop>fix</span><span class="w gap-s" data-t="1.59">this</span>
+        </div>
+        <div class="line hero" data-x="84" data-base="1396" data-size="210" data-fit="880" data-exit="2.78">
+          <span class="w ocean" id="wOne" data-t="1.73" data-hero data-rise="40">one</span><span class="w gap-s" data-t="2.09" data-hero data-rise="40">slide</span>
+        </div>
+
+        <!-- beat B, lower zone -->
+        <div class="line hero" data-x="84" data-base="1160" data-size="200" data-fit="880">
+          <span class="w" data-t="3.23" data-hero>whole</span><span class="w ocean gap-s" id="wDeck" data-t="3.37" data-hero data-peak="1.1">deck</span>
+        </div>
+        <div class="line sup" data-x="84" data-base="1296" data-size="112">
+          <span class="w" data-t="3.59">to</span><span class="w hero gap-s" data-t="3.85" data-pop>convince</span>
+        </div>
+        <div class="line sup" data-right="884" data-base="1404" data-size="112">
+          <span class="w" data-t="4.11" data-rise="14">your</span><span class="w hero gap-s" id="wBoss" data-t="4.33" data-pop data-rise="14">boss</span>
+        </div>
+
+      </div></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const P = await Paper.init({ extraFonts: ['700 60px "Caveat"'] });
+        const M = Marker.init(P);
+        const { tl, D, F, $, $$ } = P;
+        const NS = "http://www.w3.org/2000/svg";
+
+        // =============================== BEAT A — one slide (focal: the slide + "don't ask it to fix this one slide") ===============================
+        P.cardIn("#s0", 0.05, { fromY: 120, rot: -3 });
+        tl.to("#s0 .uicard", { y: -5, duration: 0.6, ease: "sine.inOut", yoyo: true, repeat: 2 }, 0.6);
+
+        // cursor arcs in from lower right, press-dip ON "fix" (1.39) on the pill's lower-right (the word stays readable)
+        gsap.set("#cur", { x: 860, y: 930 });
+        P.cursorTo("#cur", 1.0, 800, 548, { dur: 0.36 });
+        P.cursorClick("#cur", 1.39);
+        tl.to("#fix", { scaleX: 1.14, scaleY: 0.84, duration: 2 * F, ease: "power2.out" }, 1.39)
+          .to("#fix", { scaleX: 1, scaleY: 1, duration: 8 * F, ease: "back.out(2.4)" }, 1.39 + 2 * F);
+        // the "fix" itself is tiny: ONE bar nudges up a little and settles
+        tl.to("#fixBar", { height: 44, duration: 0.18, ease: "power3.out" }, 1.47)
+          .to("#fixBar", { height: 40, duration: 0.3, ease: "back.out(2)" }, 1.65);
+        tl.to("#cur", { opacity: 0, x: 850, y: 700, duration: 0.24, ease: "power2.in" }, 1.78);   // exits inside the zone
+        P.pulse("#s0 .uicard", 1.70, 1.03);
+
+        // red ✗ across the slide's top-left corner (clear of the pill and every word); the slide flinches
+        const X = M.cross(196, 470, 150, 2.10, { width: 14, dur: 0.24, seed: 801 });
+        gsap.set("#s0 .uicard", { transformOrigin: "50% 50%" });
+        tl.to("#s0 .uicard", { rotation: -1.6, x: -6, duration: 2 * F, ease: "power2.out" }, 2.22)
+          .to("#s0 .uicard", { rotation: 1, x: 4, duration: 2 * F, ease: "sine.inOut" }, 2.22 + 2 * F)
+          .to("#s0 .uicard", { rotation: 0, x: 0, duration: 6 * F, ease: "back.out(2)" }, 2.22 + 4 * F);
+        M.erase(X, 2.44, 0.1);
+        tl.to("#fix", { scale: 0, opacity: 0, duration: 5 * F, ease: "back.in(2)" }, 2.40);
+
+        // =============================== BEAT B — deal → deck (focal: the spread, then the deck + "whole deck") ===============================
+        // spread slots (offsets from the natural centre 510,640): two tilted arcs of four across the full width
+        const SLOT = {
+          sTitle: [-322, -92, -7], s0: [-108, -102, -3], sTable: [108, -102, 3], sQuote: [322, -92, 7],
+          sPie: [-322, 92, -5], sBul: [-108, 82, -2], sLine: [108, 82, 2], sImg: [322, 92, 5],
+        };
+        tl.to("#s0 .sc", { scale: 3.7, duration: 3 * F, ease: "power2.in" }, 2.44);
+        tl.to("#s0 .sc", { scale: 1, duration: 0.34, ease: "power3.inOut" }, 2.44 + 3 * F);
+        tl.to("#s0", { x: SLOT.s0[0], duration: 0.34, ease: "power2.inOut" }, 2.44 + 3 * F);
+        tl.to("#s0", { y: SLOT.s0[1], duration: 0.34, ease: "power3.inOut" }, 2.44 + 3 * F);
+        tl.to("#s0", { rotation: SLOT.s0[2], duration: 0.4, ease: "back.out(1.6)" }, 2.44 + 3 * F);
+        const DEAL = [["sTitle", "sTable"], ["sQuote", "sPie"], ["sBul", "sLine"], ["sImg"]];
+        const T_DEAL = 2.52, FLY = 0.27;
+        DEAL.forEach((pair, j) => pair.forEach((id) => {
+          const el = $("#" + id), [x, y, r] = SLOT[id], t = T_DEAL + j * 2 * F;
+          gsap.set(el, { transformOrigin: "50% 50%" });
+          tl.fromTo(el, { opacity: 0 }, { opacity: 1, duration: 3 * F, ease: "power1.out" }, t);
+          tl.fromTo(el, { x: 0 }, { x, duration: FLY, ease: "power3.out" }, t);
+          tl.fromTo(el, { y: 0 }, { y, duration: FLY, ease: "power1.out" }, t);
+          tl.fromTo(el, { rotation: -r * 2.4 }, { rotation: r, duration: FLY * 1.2, ease: "back.out(1.6)" }, t);
+          tl.fromTo(el, { scale: 0.8 }, { scale: 1.04, duration: FLY * 0.65, ease: "power3.out" }, t);
+          tl.to(el, { scale: 1, duration: 8 * F, ease: "back.out(2)" }, t + FLY * 0.65);
+        }));
+
+        // SQUARE UP into one big stack at (380, 640), ×2.2, 1 f apart (a riffle you can hear); the last lands ON "deck"
+        const ORDER = ["sTable", "sQuote", "sPie", "sBul", "sLine", "sImg", "s0", "sTitle"];   // bottom → top (title on top)
+        const T_SQ = 3.03, SQ = 0.11;
+        ORDER.forEach((id, k) => {
+          const el = $("#" + id), t = T_SQ + k * F;
+          tl.set(el, { zIndex: k + 1 }, T_SQ - F);
+          tl.to(el, { x: -130 - k * 2.5, y: 4 - k * 6, rotation: k % 2 ? 1.4 : -1.1, scale: 2.2, duration: SQ, ease: "power3.in" }, t);
+        });
+        const T_DECK = T_SQ + 7 * F + SQ;   // = 3.373
+        gsap.set("#deckWrap", { transformOrigin: "380px 760px" });
+        tl.to("#deckWrap", { scaleY: 0.93, scaleX: 1.05, duration: 2 * F, ease: "power2.out" }, T_DECK)
+          .to("#deckWrap", { scaleY: 1, scaleX: 1, duration: 9 * F, ease: "back.out(2.4)" }, T_DECK + 2 * F);
+        P.punch(T_DECK, { scale: 1.008, origin: "510px 880px", dur: 0.3 });
+        P.shake(T_DECK, 4);
+        // thumb riffle through the corner: the top five flick their right edge up and drop back, 2 f apart
+        ORDER.slice(3).forEach((id, i) => {
+          const sc = $("#" + id + " .sc");
+          const t = 3.44 + i * 2 * F;
+          tl.set(sc, { transformOrigin: "0% 100%" }, 3.42);   // set in-timeline: #s0's .sc scales about its centre before this
+          tl.to(sc, { rotation: -5, y: -4, duration: 2 * F, ease: "power2.out" }, t)
+            .to(sc, { rotation: 0, y: 0, duration: 5 * F, ease: "back.out(2.2)" }, t + 2 * F);
+        });
+
+        // =============================== the BOSS — black felt-tip stick figure, ~425 px tall, right side ===============================
+        // geometry authored at 1× (head centre 815,772) and mapped ×1.55 onto (805, 520): head top ≈ 461 → feet ≈ 883
+        const K = 1.55, B = (pts) => pts.map(([x, y]) => [805 + (x - 815) * K, 520 + (y - 772) * K]);
+        const headG = document.createElementNS(NS, "g");
+        M.layer.appendChild(headG);
+        const ink = { color: "ink", width: 12 }, thin = { color: "ink", width: 9 };
+        M.circle(805, 520, 38 * K, 39 * K, 3.40, { ...ink, dur: 0.14, turns: 1.08, seed: 811, parent: headG });
+        M.line(B([[815, 812], [816, 872], [815, 932]]), 3.54, { ...ink, dur: 0.08, seed: 812 });
+        M.line(B([[807, 818], [823, 818], [815, 830], [807, 818], [815, 830], [806, 866], [815, 880], [824, 866], [815, 830]]), 3.60, { ...thin, dur: 0.09, amp: 1.2, seed: 813 });
+        M.line(B([[815, 932], [784, 1006]]), 3.66, { ...ink, dur: 0.05, seed: 814 });
+        M.line(B([[815, 932], [846, 1006]]), 3.71, { ...ink, dur: 0.05, seed: 815 });
+        const foldL = M.line(B([[815, 846], [780, 868], [796, 893], [852, 886]]), 3.76, { ...ink, dur: 0.08, seed: 816 });
+        const foldR = M.line(B([[815, 846], [850, 868], [834, 895], [778, 888]]), 3.84, { ...ink, dur: 0.08, seed: 817 });
+        const eyes = [M.line(B([[801, 770], [801.5, 771]]), 3.56, { ...ink, width: 14, dur: 0.03, amp: 0.2, seed: 818, parent: headG }),
+                      M.line(B([[829, 770], [829.5, 771]]), 3.58, { ...ink, width: 14, dur: 0.03, amp: 0.2, seed: 819, parent: headG })];
+        const browS = [M.line(B([[792, 752], [808, 759]]), 3.92, { ...thin, dur: 0.04, amp: 0.6, seed: 820, parent: headG }),
+                       M.line(B([[838, 752], [822, 759]]), 3.95, { ...thin, dur: 0.04, amp: 0.6, seed: 821, parent: headG })];
+        const frown = M.line(B([[803, 794], [815, 789], [827, 794]]), 3.98, { ...thin, dur: 0.05, amp: 0.6, seed: 822, parent: headG });
+        gsap.set(headG, { svgOrigin: "805 582" });
+        tl.to(headG, { rotation: -7, duration: 0.3, ease: "sine.inOut" }, 3.90);          // skeptical tilt while he waits
+        tl.to([eyes[0].g, eyes[1].g], { x: -6, duration: 0.2, ease: "power2.out" }, 4.02); // eyes slide to the incoming deck
+
+        // the deck rides the dotted path to him on "convince" (3.85): path draws, anticipation pull-back, arc, lands in his hand
+        P.drawPath("#trail", 3.66, 0.22);
+        P.marchPath("#trail", 3.88, D - 3.88, 120);
+        tl.to("#deckWrap", { x: -16, duration: 3 * F, ease: "power2.in" }, 3.72);
+        tl.to("#deckWrap", { x: 150, duration: 0.32, ease: "power2.inOut" }, 3.72 + 3 * F);
+        tl.to("#deckWrap", { y: -40, duration: 0.16, ease: "power2.out" }, 3.72 + 3 * F)
+          .to("#deckWrap", { y: 64, duration: 0.16, ease: "power2.in" }, 3.72 + 3 * F + 0.16);
+        tl.to("#deckWrap", { scale: 0.8, rotation: -3, duration: 0.32, ease: "power2.inOut" }, 3.72 + 3 * F);
+        tl.to("#deckWrap", { rotation: 0, y: 58, duration: 8 * F, ease: "back.out(2)" }, 4.14);
+
+        // on "boss" (4.33): arms unfold (one takes the deck, one goes up), brows lift, frown → smile, two nods, red ✓
+        const T_BOSS = 4.33;
+        tl.to([foldL.g, foldR.g], { opacity: 0, duration: 2 * F, ease: "power1.in" }, T_BOSS - 0.08);
+        M.line(B([[815, 846], [774, 874], [734, 884]]), T_BOSS - 0.06, { ...ink, dur: 0.07, seed: 830 });
+        M.line(B([[815, 846], [858, 866], [884, 832]]), T_BOSS - 0.01, { ...ink, dur: 0.07, seed: 831 });
+        tl.to([browS[0].g, browS[1].g, frown.g], { opacity: 0, duration: F, ease: "none" }, T_BOSS);
+        M.line(B([[792, 757], [800, 750], [809, 754]]), T_BOSS + F, { ...thin, dur: 0.04, amp: 0.5, seed: 832, parent: headG });
+        M.line(B([[821, 754], [830, 750], [838, 757]]), T_BOSS + 2 * F, { ...thin, dur: 0.04, amp: 0.5, seed: 833, parent: headG });
+        M.line(B([[801, 787], [815, 799], [829, 787]]), T_BOSS + 2 * F, { ...thin, dur: 0.06, amp: 0.5, seed: 834, parent: headG });
+        tl.to(headG, { rotation: 0, duration: 4 * F, ease: "power2.out" }, T_BOSS);
+        tl.to(headG, { y: 13, duration: 4 * F, ease: "power2.in" }, T_BOSS + 3 * F)
+          .to(headG, { y: -3, duration: 4 * F, ease: "power2.out" }, T_BOSS + 7 * F)
+          .to(headG, { y: 13, duration: 4 * F, ease: "power2.in" }, T_BOSS + 11 * F)
+          .to(headG, { y: 0, duration: 5 * F, ease: "back.out(2)" }, T_BOSS + 15 * F);
+        const ok = M.check(902, 446, 84, T_BOSS + 0.04, { width: 14, dur: 0.18, seed: 840 });
+        gsap.set(ok.g, { svgOrigin: "902 446" });
+        tl.fromTo(ok.g, { scale: 0.6 }, { scale: 1.1, duration: 5 * F, ease: "power3.out", immediateRender: false }, T_BOSS + 0.04)
+          .to(ok.g, { scale: 1, duration: 8 * F, ease: "back.out(2)" }, T_BOSS + 0.04 + 5 * F);
+        P.pulse("#sTitle .sc", T_BOSS, 1.05);   // on the inner layer: the .sl keeps its ×2.2 deck scale
+      })();
+    </script>
+  </body>
+</html>

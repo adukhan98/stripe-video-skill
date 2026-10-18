@@ -1,0 +1,266 @@
+<!doctype html>
+<!-- adnaan-reel scene starter: BLANK — the world + a speaker card + kinetic words + the scene's bespoke hero object.
+     v04_funnel: THE FUNNEL IS DRAWN — post card → hand-drawn funnel, stick people tumbling in, 6,000,000,000 odometer,
+     an empty chat bubble crossed out. Keep data-duration. -->
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>v04_funnel</title>
+    <link rel="stylesheet" href="brand.css" />
+    <link rel="stylesheet" href="paper.css" />
+    <link rel="stylesheet" href="marker.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+    <script src="paper.js"></script>
+    <script src="marker.js"></script>
+    <style>
+      @font-face { font-family: "Inter Tight"; src: url("fonts/InterTight-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Inter"; src: url("fonts/Inter-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Caveat"; src: url("fonts/Caveat-Variable.ttf") format("truetype"); font-weight: 400 700; font-style: normal; font-display: block; }
+
+      /* the real post strip on a soft white card (same look as v03): taped, X chip on its corner */
+      #post { position: absolute; left: 80px; top: 345px; width: 873px; height: 231px; border-radius: 26px;
+        background: var(--brand-card); box-shadow: var(--card-shadow); }
+      #post .strip { position: absolute; left: 20px; top: 18px; width: 958px; height: 224px; transform-origin: 0 0; transform: scale(0.87); }
+      #post .strip img { position: absolute; left: 0; top: 0; width: 958px; height: 224px; display: block; z-index: 1; }
+      #post .xchip { position: absolute; right: 14px; top: -22px; width: 70px; height: 70px; border-radius: 18px; overflow: hidden;
+        box-shadow: 0 14px 24px -8px rgba(20, 20, 20, 0.4); z-index: 3; }
+      #post .xchip img { width: 100%; height: 100%; display: block; }
+      #post .mk-tape { z-index: 4; }
+
+      /* odometer: tabular digits so rolling reels never shift the line */
+      #lodo { font-variant-numeric: tabular-nums; }
+      #lodo .rl { display: inline-block; will-change: transform, opacity; }
+
+      /* hand-drawn characters + bubble live on the marker layer's level (inside #punch) */
+      .stick { position: absolute; left: 0; top: 0; width: 0; height: 0; pointer-events: none; }
+      .stick svg { position: absolute; left: -60px; top: -60px; width: 120px; height: 120px; overflow: visible; }
+      #bubble { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; pointer-events: none; }
+      #bubble svg { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; overflow: visible; }
+      .stick svg path, #bubble svg path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+  </head>
+  <body data-face="0.42">
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="9.2500">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+      <div id="cam"><div id="punch">
+
+        <!-- small speaker card, top-right, arcs in on "which" (B→C) -->
+        <div class="spk small" data-x="510" data-y="300" data-w="420" data-h="360" data-face-at="0.62" data-at="4.25">
+          <div class="spk-card">
+            <div class="spk-vid"><video id="speaker" class="clip" src="assets/speaker.mp4" muted playsinline data-start="0" data-duration="9.2500" data-track-index="1"></video></div>
+            <div class="spk-sheen"></div>
+          </div>
+        </div>
+
+        <!-- the REAL post strip (already on screen from v03), highlighter swipes behind "sharp funnel" -->
+        <div id="post">
+          <div class="strip" id="strip"><img src="assets/post_funnel.png" alt="" /></div>
+          <div class="xchip"><img src="assets/x.png" alt="" /></div>
+          <div class="mk-tape" style="left: 8px; top: -26px; transform: rotate(-9deg)"></div>
+          <div class="mk-tape" style="left: 676px; top: 200px; transform: rotate(7deg)"></div>
+        </div>
+
+        <!-- BEAT A: he describes it as a … funnel. -->
+        <div id="lA" class="line sup" data-x="76" data-base="1330" data-size="120" data-exit="1.30">
+          <span class="w small" style="font-size: 0.7em" data-t="0.24">he</span><span class="w gap-s" data-t="0.64">describes</span>
+        </div>
+        <div id="lB" class="line small" data-x="420" data-base="1440" data-size="84" data-exit="1.30" data-exit-lag="2">
+          <span class="w" data-t="0.90" data-rise="30">it</span><span class="w gap-s" data-t="1.12" data-rise="30">as</span><span class="w gap-s" data-t="1.24" data-rise="30">a</span>
+        </div>
+        <div id="lfun" class="line hero ocean" data-x="90" data-base="495" data-size="220" data-fit="860" data-exit="3.60" data-exit-dy="-36">
+          <span class="w" data-t="1.46" data-hero>funnel.</span>
+        </div>
+
+        <!-- BEAT B: the biggest chunk … 75% people -->
+        <div id="lbig" class="line sup" data-x="76" data-base="1340" data-size="110" data-exit="2.96">
+          <span class="w" data-t="1.90" data-pop>biggest</span>
+        </div>
+        <div id="lchunk" class="line sup" data-x="330" data-base="1450" data-size="110" data-exit="2.96" data-exit-lag="2">
+          <span class="w" data-t="2.18" data-pop data-rise="26">chunk</span>
+        </div>
+        <div id="l75" class="line hero ocean" data-right="935" data-base="1350" data-size="230" data-fit="880">
+          <span class="w" data-t="3.20" data-hero data-peak="1.08">75%</span>
+        </div>
+        <div id="lpeople" class="line sup" data-x="76" data-base="1322" data-size="100">
+          <span class="w" data-t="3.90">people,</span>
+        </div>
+
+        <!-- BEAT C: about 6 billion → odometer 6,000,000,000 -->
+        <div id="lodo" class="line hero" data-x="76" data-base="1446" data-size="110">
+          <span class="w" data-t="5.12" data-accent data-rise="10"><span class="rl">6</span>,<span class="rl">0</span><span class="rl">0</span><span class="rl">0</span>,<span class="rl">0</span><span class="rl">0</span><span class="rl">0</span>,<span class="rl">0</span><span class="rl">0</span><span class="rl">0</span></span>
+        </div>
+        <div id="lent" class="line sup" data-x="76" data-base="425" data-size="96" data-exit="7.04">
+          <span class="w small" style="font-size: 0.72em" data-t="6.22">the</span><span class="w gap-s" data-t="6.56">entire</span>
+        </div>
+        <div id="lworld" class="line sup" data-x="76" data-base="565" data-size="150" data-fit="410" data-exit="7.04" data-exit-lag="2">
+          <span class="w" data-t="6.86" data-accent>world</span>
+        </div>
+        <div id="lnever" class="line hero ocean" data-x="76" data-base="440" data-size="150" data-fit="410">
+          <span class="w" data-t="7.46" data-pop>never</span>
+        </div>
+        <div id="linter" class="line sup" data-x="76" data-base="545" data-size="92" data-fit="410">
+          <span class="w" data-t="8.00">interacted</span>
+        </div>
+        <div id="lwith" class="line sup" data-x="76" data-base="645" data-size="92">
+          <span class="w" data-t="8.30">with</span><span class="w gap-s" data-t="8.60">AI</span>
+        </div>
+        <div id="lall" class="line sup" data-x="76" data-base="745" data-size="92">
+          <span class="w" data-t="8.97">at</span><span class="w gap-s" data-t="9.12">all.</span>
+        </div>
+
+      </div></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const P = await Paper.init({ extraFonts: ['700 60px "Caveat"'] });
+        const { tl, D, F, $, $$ } = P;
+        const M = Marker.init(P);
+        const NS = "http://www.w3.org/2000/svg";
+        const host = $("#punch");
+
+        // ------------------------------------------------------------ BEAT A — the post card, then the funnel
+        const post = $("#post");
+        gsap.set(post, { rotation: -1, transformOrigin: "50% 0%" });
+        P.floatY(post, 3, 1.2);
+        // highlighter swipe behind "sharp funnel" (strip px) on "describes"
+        M.highlight($("#strip"), [273, 139, 259, 54], 0.47, { dur: 0.3 });
+        // on "funnel": anticipation dip, then the card whips up and out (fast, blurred) — stays inside the zone
+        tl.to(post, { y: 10, scale: 1.005, duration: 3 * F, ease: "power2.in" }, 0.98);
+        tl.to(post, { y: -34, scale: 0.94, rotation: -2.5, opacity: 0, filter: "blur(10px)", duration: 6 * F, ease: "power2.in" }, 1.08);
+
+        // THE FUNNEL — shared geometry, drawn like a hand: rim, left wall, right wall, spout
+        const FUN = M.funnel({ x: 150, y: 820, w: 560, h: 330, neck: 0.16, tiers: 4, split: [0, 0.38, 0.66, 0.86, 1], spout: 56, color: "ink" });
+        FUN.draw(0.85, { dur: 0.8 });
+        // tier 0 pencil hatch (created before the people so it sits under the pile)
+        FUN.fill(0, 3.02, { color: "pencil", opacity: 0.45 });
+        // dividers in quick succession
+        FUN.divider(0, 1.95);
+        FUN.divider(1, 2.07);
+        FUN.divider(2, 2.19);
+        // the one exaggerated hero beat: 1 % punch on "funnel"
+        P.punch(1.46, { scale: 1.01, origin: "510px 1000px" });
+
+        // ------------------------------------------------------------ BEAT B — stick people tumble into the rim
+        // final pile (feet x, feet y, tilt) — v05/v07/v10 can rebuild it at t=0 from this table (see NOTES.md)
+        const PILE = [
+          [305, 966, -8], [557, 966, -6], [431, 975, -3], [368, 972, 5], [494, 972, 9],     // row 1
+          [274, 930, 12], [526, 934, 8], [400, 937, 4], [337, 935, -10], [463, 937, -14],   // row 2
+          [368, 900, -12], [494, 900, 15], [431, 897, 6],                                   // row 3
+        ];
+        const S = 0.86; // figure scale: head top → feet ≈ 41 px
+        const people = [];
+        PILE.forEach(([fx, fy, tilt], i) => {
+          const wrap = document.createElement("div");
+          wrap.className = "stick";
+          const svg = document.createElementNS(NS, "svg");
+          svg.setAttribute("viewBox", "-60 -60 120 120");
+          wrap.appendChild(svg);
+          host.appendChild(wrap);
+          const o = (k) => ({ parent: svg, color: "ink", width: 5, amp: 0.7, seed: 7000 + i * 61 + k * 7 });
+          M.circle(0, -27 * S, 6.6 * S, 6.6 * S, 0, { ...o(1), turns: 1.06, width: 5 });
+          M.line([[0, -19.5 * S], [0, 0]], 0, o(2));
+          M.line([[-8 * S, 14 * S], [0, 0], [8 * S, 14 * S]], 0, o(3));
+          const up = M.line([[-11 * S, -28 * S], [0, -14 * S], [11 * S, -28 * S]], 0, o(4));
+          const down = M.line([[-11 * S, -3 * S], [0, -14 * S], [11 * S, -3 * S]], 0, o(5));
+          const hx = fx, hy = fy - 14 * S;                 // wrap origin = hips
+          const row = i < 5 ? 0 : i < 10 ? 1 : 2;
+          const a = 1.92 + i * 0.045;                      // appears at the top-right
+          const L = a + [0.44, 0.4, 0.37][row];            // lands in the pile
+          const sx = 812 + ((i * 53) % 104), sy = 330 + ((i * 29) % 40);
+          const spin = (i % 2 ? 1 : -1) * (360 + (i % 3) * 90);
+          gsap.set(wrap, { transformOrigin: "0px 0px" });
+          gsap.set(svg, { transformOrigin: `60px ${60 + 14 * S}px` });
+          tl.set(wrap, { opacity: 0 }, 0);
+          tl.set(down.g, { opacity: 0 }, 0);
+          // pop in (anticipation-free: they are thrown in), then the arc: y falls with gravity, x is sucked in late
+          tl.fromTo(wrap, { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 5 * F, ease: "back.out(2)", immediateRender: false }, a);
+          tl.fromTo(wrap, { x: sx }, { x: hx, duration: L - a, ease: "power2.in", immediateRender: true }, a);
+          tl.fromTo(wrap, { y: sy }, { y: hy, duration: L - a, ease: "power1.in", immediateRender: true }, a);
+          tl.fromTo(wrap, { rotation: tilt + spin }, { rotation: tilt, duration: L - a, ease: "power2.out", immediateRender: true }, a);
+          // contact: squash on the feet, arms drop, little bounce
+          tl.set(up.g, { opacity: 0 }, L);
+          tl.set(down.g, { opacity: 0.96 }, L);
+          tl.to(svg, { scaleX: 1.2, scaleY: 0.76, duration: 2 * F, ease: "power2.out" }, L);
+          tl.to(svg, { scaleX: 1, scaleY: 1, duration: 8 * F, ease: "back.out(2.5)" }, L + 2 * F);
+          tl.to(wrap, { y: hy - 9, duration: 4 * F, ease: "power2.out" }, L + 2 * F);
+          tl.to(wrap, { y: hy, duration: 4 * F, ease: "power2.in" }, L + 6 * F);
+          people.push({ wrap, svg, up, down, hx, hy, L, row, i });
+        });
+        // the 75 % stamp jolts the pile (centre outward, 1 f apart)
+        people.forEach((p) => {
+          const t = 3.21 + Math.round(Math.abs(p.hx - 431) / 65) * F;
+          if (p.L + 10 * F > t) return;
+          tl.to(p.wrap, { y: p.hy - 8, duration: 3 * F, ease: "power2.out" }, t);
+          tl.to(p.wrap, { y: p.hy, duration: 5 * F, ease: "power2.in" }, t + 3 * F);
+        });
+        // idle life: each figure breathes on its own period (svg y, separate from the wrap moves)
+        people.forEach((p, k) => {
+          const per = 0.55 + (k % 4) * 0.09, t0 = 3.6 + (k % 5) * 0.07;
+          tl.fromTo(p.svg, { y: 0 }, { y: -1.8, duration: per, ease: "sine.inOut", yoyo: true, repeat: Math.floor((D - t0) / per) - 1 }, t0);
+        });
+        // on "world": the top row waves (arms up/down twice)
+        people.filter((p) => p.row === 2).forEach((p, k) => {
+          for (let n = 0; n < 2; n++) {
+            const t = 6.88 + k * 2 * F + n * 0.24;
+            tl.set(p.down.g, { opacity: 0 }, t); tl.set(p.up.g, { opacity: 0.96 }, t);
+            tl.set(p.up.g, { opacity: 0 }, t + 0.12); tl.set(p.down.g, { opacity: 0.96 }, t + 0.12);
+          }
+        });
+
+        // ------------------------------------------------------------ BEAT C — odometer 6,000,000,000
+        const reels = $$("#lodo .rl");
+        const fs = parseFloat(getComputedStyle($("#lodo")).fontSize);
+        reels.forEach((el, i) => {
+          const fin = i === 0 ? 6 : 0, steps = 14 + i * 2;
+          const t0 = 4.96, t1 = 5.30 + i * 0.055;          // '6' locks on "6", zeros lock left → right
+          const p = { v: fin - steps };
+          const draw = () => {
+            const n = Math.round(p.v), d = ((n % 10) + 10) % 10, fr = p.v - n;
+            el.textContent = d;
+            el.style.transform = `translateY(${(-fr * 0.18 * fs).toFixed(1)}px)`;
+            el.style.opacity = (1 - Math.abs(fr) * 0.85).toFixed(2);
+          };
+          draw();
+          tl.fromTo(p, { v: fin - steps }, { v: fin, duration: t1 - t0, ease: "power2.out", onUpdate: draw, immediateRender: false }, t0);
+        });
+        // red Caveat note "6B" beside tier 0 + a short arrow into the tier
+        M.note("6B", 784, 776, 5.42, { size: 104, rot: -6 });
+        M.arrow(772, 846, 668, 886, 5.66, { bend: 0.28, width: 8, head: 24, dur: 0.32 });
+
+        // ------------------------------------------------------------ "never interacted … at all" — empty chat bubble
+        const bub = document.createElement("div");
+        bub.id = "bubble";
+        const bsvg = document.createElementNS(NS, "svg");
+        bsvg.setAttribute("viewBox", "0 0 1080 1920");
+        bub.appendChild(bsvg);
+        host.appendChild(bub);
+        // rounded bubble body (x 742–938, y 878–1000) + tail toward the funnel
+        const bx0 = 742, bx1 = 938, by0 = 878, by1 = 1000, r = 34;
+        const rr = [];
+        const corner = (cx, cy, a0) => { for (let k = 0; k <= 5; k++) { const a = a0 + (k / 5) * (Math.PI / 2); rr.push([cx + Math.cos(a) * r, cy + Math.sin(a) * r]); } };
+        corner(bx0 + r, by0 + r, Math.PI); corner(bx1 - r, by0 + r, -Math.PI / 2); corner(bx1 - r, by1 - r, 0); corner(bx0 + r, by1 - r, Math.PI / 2);
+        rr.push([bx0, by0 + r + 4]);
+        const body = M.line(rr, 7.3, { parent: bsvg, color: "marker", width: 9, amp: 1.6, dur: 0.48, seed: 9101 });
+        const tail = M.line([[790, by1 + 2], [758, 1044], [826, by1 + 2]], 7.82, { parent: bsvg, color: "marker", width: 9, amp: 1, dur: 0.14, seed: 9131 });
+        const dots = [800, 840, 880].map((x, k) => M.circle(x, 940, 8, 8, 7.92 + k * 0.05, { parent: bsvg, color: "marker", width: 9, dur: 0.07, turns: 1.1, seed: 9151 + k * 11 }));
+        // typing indicator: dots bounce in a wave … and nothing ever arrives
+        dots.forEach((d, k) => {
+          for (let n = 0; n < 2; n++) {
+            const t = 8.12 + k * 0.1 + n * 0.3;
+            tl.to(d.g, { y: -9, duration: 0.11, ease: "power2.out" }, t);
+            tl.to(d.g, { y: 0, duration: 0.13, ease: "power2.in" }, t + 0.11);
+          }
+        });
+        // black marker ✗ slashes across it on "at all", the bubble shakes once
+        M.cross(840, 952, 176, 8.82, { color: "ink", width: 14, dur: 0.28, parent: bsvg, seed: 9191 });
+        gsap.set(bub, { transformOrigin: "840px 950px" });
+        tl.to(bub, { rotation: 4, x: 5, duration: 2 * F, ease: "power2.out" }, 9.0);
+        tl.to(bub, { rotation: -3, x: -4, duration: 3 * F, ease: "sine.inOut" }, 9.0 + 2 * F);
+        tl.to(bub, { rotation: 0, x: 0, duration: 4 * F, ease: "back.out(2)" }, 9.0 + 5 * F);
+      })();
+    </script>
+  </body>
+</html>

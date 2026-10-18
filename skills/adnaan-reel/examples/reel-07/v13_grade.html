@@ -1,0 +1,334 @@
+<!doctype html>
+<!-- adnaan-reel scene: v13_grade — CHAPTER ③ "don't let AI grade its own work" (blank starter, bespoke).
+     ③ circled top-left (same chapter-number style as v07 ① / v10 ②). HERO: a test paper (400×480, tilted 4°) and a little
+     black-marker ROBOT doodle beside it that smugly writes a red "A+" on its own paper on "grade" (pen tracks the strokes,
+     head-bob of pride), then a big red marker ✗ over the robot + paper on "own work" and the robot droops (sad eyes, frown,
+     antenna sags, the marker drops and bounces). MICRO: the real strip art_judge.png at 0.9 slides in low, taped, with the
+     highlighter on "Do not ask the model to judge itself". No speaker (2.6 s chapter beat). Runtime untouched. -->
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>v13_grade</title>
+    <link rel="stylesheet" href="brand.css" />
+    <link rel="stylesheet" href="paper.css" />
+    <link rel="stylesheet" href="marker.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+    <script src="paper.js"></script>
+    <script src="marker.js"></script>
+    <style>
+      @font-face { font-family: "Inter Tight"; src: url("fonts/InterTight-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Inter"; src: url("fonts/Inter-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Caveat"; src: url("fonts/Caveat-Variable.ttf") format("truetype"); font-weight: 400 700; font-style: normal; font-display: block; }
+
+      /* ---- the test paper: positioned wrapper > static 4° tilt > card (cardIn animates the card) ---- */
+      #paper { position: absolute; left: 530px; top: 605px; width: 400px; height: 480px; }
+      #paper .tilt { position: absolute; inset: 0; transform: rotate(4deg); }
+      #paperCard { inset: 0; border-radius: 14px; }
+      #paperCard .rule { position: absolute; left: 26px; right: 26px; height: 3px; border-radius: 2px; background: var(--wire); }
+      #paperCard .num { position: absolute; left: 30px; width: 16px; height: 16px; border-radius: 50%; background: var(--wire); }
+      #paperCard .ans { position: absolute; left: 62px; height: 13px; border-radius: 7px; background: var(--brand-muted); opacity: 0.55; transform-origin: 0% 50%; }
+      #paperCard .hd { position: absolute; border-radius: 6px; background: var(--wire); }
+
+      /* ---- robot + its pen + the A+ live in one frame-sized svg (between the paper and the marker layer) ---- */
+      #rob path, #rob circle { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+      #rob .fill { stroke: none; }
+
+      /* ---- the real article strip (×0.9), white card ---- */
+      #stripWrap { position: absolute; left: 95px; top: 1240px; width: 849px; height: 205px; }
+      #stripWrap .tilt { position: absolute; inset: 0; transform: rotate(-1deg); }
+      #strip { position: absolute; inset: 0; border-radius: 22px; background: var(--brand-card); box-shadow: var(--shadow-card); overflow: hidden; }
+      .mk-hl path { fill: none; }   /* highlighter stroke only (no sliver fill while it draws on) */
+      #strip img { position: absolute; left: 22px; top: 20px; width: 805px; height: 165px; display: block; }
+    </style>
+  </head>
+  <body data-face="0.41">
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="2.0833">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+      <div id="cam" data-push="1.004" data-origin="510px 880px"><div id="punch">
+
+        <!-- ===== the test paper ===== -->
+        <div id="paper"><div class="tilt">
+          <div class="uicard" id="paperCard">
+            <i class="hd" style="left: 262px; top: 34px; width: 110px; height: 16px"></i>
+            <i class="hd" style="left: 290px; top: 62px; width: 82px; height: 12px; opacity: .7"></i>
+            <i class="rule" style="top: 232px"></i>
+            <i class="rule" style="top: 286px"></i>
+            <i class="rule" style="top: 340px"></i>
+            <i class="rule" style="top: 394px"></i>
+            <i class="rule" style="top: 448px"></i>
+            <i class="num" style="top: 206px"></i>
+            <i class="num" style="top: 260px"></i>
+            <i class="num" style="top: 314px"></i>
+            <i class="num" style="top: 368px"></i>
+            <i class="num" style="top: 422px"></i>
+            <i class="ans" style="top: 208px; width: 250px"></i>
+            <i class="ans" style="top: 262px; width: 290px"></i>
+            <i class="ans" style="top: 316px; width: 200px"></i>
+            <i class="ans" style="top: 370px; width: 270px"></i>
+            <i class="ans" style="top: 424px; width: 170px"></i>
+          </div>
+        </div></div>
+
+        <!-- ===== the robot (black felt-tip), its rubber-hose arm, the marker it holds, and the A+ it writes ===== -->
+        <svg id="rob" class="mk-layer" viewBox="0 0 1080 1920" width="1080" height="1920">
+          <g id="robBody"></g>
+          <g id="robHead">
+            <g id="antenna"><circle id="bulb" class="fill" cx="243" cy="776" r="10" style="fill: var(--marker-ink)"></circle></g>
+            <g id="eyesSmug">
+              <path class="fill" d="M 192 889 A 13 13 0 0 0 218 889 Z" style="fill: var(--marker-ink)"></path>
+              <path class="fill" d="M 262 889 A 13 13 0 0 0 288 889 Z" style="fill: var(--marker-ink)"></path>
+            </g>
+            <g id="eyesSad" style="opacity: 0">
+              <path class="fill" d="M 192 896 A 13 13 0 0 0 218 896 Z" style="fill: var(--marker-ink)"></path>
+              <path class="fill" d="M 262 896 A 13 13 0 0 0 288 896 Z" style="fill: var(--marker-ink)"></path>
+            </g>
+          </g>
+          <g id="aplus"></g>
+          <path id="arm" d="M 308 1004 L 309 1004" style="stroke: var(--marker-ink); stroke-width: 10; opacity: 0" filter="url(#mk-tex)"></path>
+          <g id="handPos"><g id="handPop"><circle cx="0" cy="0" r="14" style="fill: var(--brand-card); stroke: var(--marker-ink); stroke-width: 8"></circle></g></g>
+          <g id="penPos"><g id="penPop">
+            <rect class="fill" x="12" y="-10" width="78" height="20" rx="7" style="fill: var(--marker-ink)"></rect>
+            <rect class="fill" x="84" y="-11" width="22" height="22" rx="6" style="fill: var(--marker)"></rect>
+            <path class="fill" d="M 0 0 L 14 -8 L 14 8 Z" style="fill: var(--marker)"></path>
+          </g></g>
+        </svg>
+
+        <!-- ===== the real strip ===== -->
+        <div id="stripWrap"><div class="tilt"><div id="strip"><img src="assets/art_judge.png" alt="Use an outside judge: Do not ask the model to judge itself." /></div></div></div>
+
+        <!-- ===== kinetic words ===== -->
+        <!-- chapter number ③ (digit; the loop is a marker stroke) -->
+        <div class="line hero ink" data-cx="195" data-base="492" data-size="210">
+          <span class="w" id="num3" data-t="0.15" data-pop>3</span>
+        </div>
+        <div class="line sup ink" data-x="345" data-base="398" data-size="90">
+          <span class="w" data-t="0.15" data-pop>third</span>
+        </div>
+        <div class="line sup ink" data-x="345" data-base="532" data-size="120">
+          <span class="w" data-t="0.45">don’t</span><span class="w gap-s" data-t="0.75">let</span><span class="w gap-s" id="wAI" data-t="1.03" data-pop>AI</span>
+        </div>
+        <div class="line hero" data-x="78" data-base="712" data-size="176">
+          <span class="w ocean" id="wGrade" data-t="1.23" data-hero>grade</span>
+        </div>
+        <div class="line sup ink" data-right="940" data-base="1198" data-size="130">
+          <span class="w" data-t="1.43">its</span><span class="w gap-s" data-t="1.61" data-accent>own</span><span class="w gap-s" data-t="1.93" data-pop>work</span>
+        </div>
+
+      </div></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const P = await Paper.init({ extraFonts: ['700 60px "Caveat"'] });
+        const M = Marker.init(P);   // hand-drawn marker layer (hf/marker.js header)
+        const { tl, D, F, $, $$ } = P;
+        const BOIL = 4 / 30;
+
+        // ================= ③ chapter number: red loop round the digit (contact on "Third", 0.15) =================
+        M.circle(195, 422, 110, 110, 0.02, { dur: 0.32, width: 11, seed: 1303 });
+
+        // ================= the test paper deals in, answers type themselves =================
+        P.cardIn("#paperCard", 0.20, { fromY: 90, rot: -3 });
+        const ans = $$("#paperCard .ans");
+        ans.forEach((a) => gsap.set(a, { scaleX: 0 }));
+        ans.forEach((a, i) => {
+          const w = parseFloat(a.style.width);
+          tl.to(a, { scaleX: 1, duration: 0.10 + w / 2600, ease: `steps(${Math.round(w / 30)})` }, 0.42 + i * 0.09);
+        });
+
+        // ================= the robot draws itself on (black felt-tip), "don't let AI" =================
+        const NS = "http://www.w3.org/2000/svg";
+        const body = $("#robBody"), head = $("#robHead"), ant = $("#antenna"), aplus = $("#aplus");
+        const rrect = (x, y, w, h, r) => {
+          const pts = [], arc = (cx, cy, a0) => { for (let k = 0; k <= 3; k++) { const a = a0 + (k / 3) * Math.PI / 2; pts.push([cx + Math.cos(a) * r, cy + Math.sin(a) * r]); } };
+          pts.push([x + r, y]); arc(x + w - r, y + r, -Math.PI / 2); arc(x + w - r, y + h - r, 0); arc(x + r, y + h - r, Math.PI / 2); arc(x + r, y + r, Math.PI);
+          pts.push([x + r + 14, y + 1]);                       // overlap past the start, like a hand closing a box
+          return pts;
+        };
+        const ink = { color: "ink", width: 10 };
+        M.line(rrect(158, 830, 164, 130, 24), 0.36, { ...ink, parent: head, dur: 0.22, amp: 2.2, seed: 1311 });          // head
+        M.line([[240, 830], [242, 789]], 0.60, { ...ink, parent: ant, dur: 0.06, amp: 1, seed: 1312 });                  // antenna
+        M.circle(243, 776, 13, 13, 0.65, { ...ink, parent: ant, dur: 0.07, turns: 1.05, seed: 1313 });                   // bulb ring
+        tl.fromTo("#bulb", { opacity: 0 }, { opacity: 1, duration: F, ease: "none", immediateRender: true }, 0.70);
+        // smug half-lidded eyes: lids + half-disc pupils
+        const lidS1 = M.line([[187, 888], [223, 887]], 0.70, { ...ink, width: 8, parent: $("#eyesSmug"), dur: 0.05, amp: 0.8, seed: 1314 });
+        const lidS2 = M.line([[257, 887], [293, 888]], 0.73, { ...ink, width: 8, parent: $("#eyesSmug"), dur: 0.05, amp: 0.8, seed: 1315 });
+        tl.fromTo("#eyesSmug .fill", { opacity: 0 }, { opacity: 1, duration: 2 * F, stagger: F, ease: "none", immediateRender: true }, 0.72);
+        const smirk = M.line([[214, 926], [240, 933], [268, 920], [275, 912]], 0.77, { ...ink, width: 8, parent: head, dur: 0.08, amp: 1, seed: 1316 });
+        // sad set (shown on the droop): slanted lids + a frown
+        M.line([[187, 893], [222, 881]], 0, { ...ink, width: 8, parent: $("#eyesSad"), amp: 0.8, seed: 1317 });
+        M.line([[258, 881], [293, 893]], 0, { ...ink, width: 8, parent: $("#eyesSad"), amp: 0.8, seed: 1318 });
+        const frownG = document.createElementNS(NS, "g"); frownG.style.opacity = 0; head.appendChild(frownG);
+        M.line([[216, 938], [241, 926], [266, 938]], 0, { ...ink, width: 8, parent: frownG, amp: 0.8, seed: 1319 });
+        // neck, body, chest dots, legs, hand-on-hip arm
+        M.line([[240, 960], [240, 983]], 0.80, { ...ink, parent: body, dur: 0.04, amp: 0.6, seed: 1320 });
+        M.line(rrect(172, 982, 136, 88, 16), 0.82, { ...ink, parent: body, dur: 0.14, amp: 1.8, seed: 1321 });
+        M.circle(214, 1018, 7, 7, 0.90, { ...ink, width: 8, parent: body, dur: 0.04, turns: 1.05, seed: 1322 });
+        M.circle(240, 1018, 7, 7, 0.92, { color: "marker", width: 8, parent: body, dur: 0.04, turns: 1.05, seed: 1323 });
+        M.line([[260, 1018], [288, 1017]], 0.94, { ...ink, width: 8, parent: body, dur: 0.04, amp: 0.6, seed: 1324 });
+        M.line([[205, 1070], [203, 1097], [183, 1099]], 0.88, { ...ink, parent: body, dur: 0.06, amp: 0.8, seed: 1325 });
+        M.line([[275, 1070], [278, 1097], [298, 1099]], 0.92, { ...ink, parent: body, dur: 0.06, amp: 0.8, seed: 1326 });
+        M.line([[172, 1004], [130, 1030], [168, 1054]], 0.90, { ...ink, parent: body, dur: 0.08, amp: 0.8, seed: 1327 });  // hand on hip
+
+        // "AI" (1.03): the antenna bulb lights up red, blinks, three little rays
+        gsap.set("#bulb", { svgOrigin: "243 776" });
+        tl.set("#bulb", { attr: { r: 10 }, fill: "var(--marker)" }, 0.92);
+        tl.fromTo("#bulb", { scale: 0.6 }, { scale: 1.35, duration: 4 * F, ease: "power3.out", immediateRender: false }, 0.92);
+        tl.to("#bulb", { scale: 1, duration: 8 * F, ease: "back.out(2.2)" }, 0.92 + 4 * F);
+        [1.18, 1.30, 1.42, 1.54].forEach((t, i) => tl.set("#bulb", { opacity: i % 2 ? 1 : 0.15 }, t));   // blink (a light, not text)
+        const rays = [
+          M.line([[214, 760], [200, 750]], 0.98, { color: "marker", width: 7, parent: ant, dur: 0.04, amp: 0.4, seed: 1331 }),
+          M.line([[243, 746], [243, 730]], 1.00, { color: "marker", width: 7, parent: ant, dur: 0.04, amp: 0.4, seed: 1332 }),
+          M.line([[272, 760], [286, 750]], 1.02, { color: "marker", width: 7, parent: ant, dur: 0.04, amp: 0.4, seed: 1333 }),
+        ];
+        rays.forEach((r) => M.erase(r, 1.36, 0.12));
+
+        // ================= the A+ (paper-local points → frame px through the paper's 4° tilt) =================
+        const PC = [730, 845], th = (4 * Math.PI) / 180;
+        const P2F = ([lx, ly]) => { const dx = lx - 200, dy = ly - 240; return [PC[0] + dx * Math.cos(th) - dy * Math.sin(th), PC[1] + dx * Math.sin(th) + dy * Math.cos(th)]; };
+        const sA = [[52, 188], [108, 50], [166, 188]].map(P2F);
+        const sBar = [[80, 138], [144, 134]].map(P2F);
+        const sPh = [[196, 118], [274, 114]].map(P2F);
+        const sPv = [[235, 78], [233, 156]].map(P2F);
+        const red = { color: "marker", width: 13, amp: 1.6 };
+        M.line(sA, 1.05, { ...red, parent: aplus, dur: 0.18, seed: 1341 });
+        M.line(sBar, 1.26, { ...red, parent: aplus, dur: 0.07, seed: 1342 });
+        M.line(sPh, 1.34, { ...red, parent: aplus, dur: 0.06, seed: 1343 });
+        M.line(sPv, 1.42, { ...red, parent: aplus, dur: 0.06, seed: 1344 });
+        // smug sparkles off the A+ (two tiny ✦)
+        const spark = (x, y, s, t, sd) => {
+          M.line([[x - s, y], [x + s, y]], t, { color: "marker", width: 7, parent: aplus, dur: 0.05, amp: 0.4, seed: sd });
+          M.line([[x, y - s * 1.2], [x, y + s * 1.2]], t + 2 * F, { color: "marker", width: 7, parent: aplus, dur: 0.05, amp: 0.4, seed: sd + 1 });
+        };
+        spark(...P2F([186, 30]), 22, 1.50, 1351);
+        spark(...P2F([302, 160]), 18, 1.56, 1353);
+
+        // ================= the robot's pen + rubber-hose arm (computed per frame, seek-safe) =================
+        // pen tip track: rest → anticipation → the A+ strokes (power2.out like the marker) → proud pose → drop
+        const SH = [308, 1004];
+        const p2o = (u) => 1 - (1 - u) * (1 - u), sio = (u) => 0.5 - 0.5 * Math.cos(Math.PI * u), p2i = (u) => u * u;
+        const along = (pts, u) => {
+          const L = []; let tot = 0;
+          for (let i = 0; i < pts.length - 1; i++) { const l = Math.hypot(pts[i + 1][0] - pts[i][0], pts[i + 1][1] - pts[i][1]); L.push(l); tot += l; }
+          let d = u * tot;
+          for (let i = 0; i < L.length; i++) { if (d <= L[i] || i === L.length - 1) { const k = Math.min(1, d / L[i]); return [pts[i][0] + (pts[i + 1][0] - pts[i][0]) * k, pts[i][1] + (pts[i + 1][1] - pts[i][1]) * k]; } d -= L[i]; }
+        };
+        const REST = [522, 862], PROUD = [548, 838];
+        const track = [
+          { t0: 0.84, t1: 0.92, pts: [REST, [530, 846]], e: sio },
+          { t0: 0.92, t1: 1.00, pts: [[530, 846], [506, 880]], e: p2i },          // anticipation: pulls back down-left
+          { t0: 1.00, t1: 1.05, pts: [[506, 880], sA[0]], e: p2o },
+          { t0: 1.05, t1: 1.23, pts: sA, e: p2o },
+          { t0: 1.23, t1: 1.26, pts: [sA[2], sBar[0]], e: sio },
+          { t0: 1.26, t1: 1.31, pts: sBar, e: p2o },
+          { t0: 1.31, t1: 1.34, pts: [sBar[1], sPh[0]], e: sio },
+          { t0: 1.34, t1: 1.39, pts: sPh, e: p2o },
+          { t0: 1.39, t1: 1.42, pts: [sPh[1], sPv[0]], e: sio },
+          { t0: 1.42, t1: 1.47, pts: sPv, e: p2o },
+          { t0: 1.47, t1: 1.55, pts: [sPv[1], PROUD], e: p2o },
+        ];
+        const tipAt = (t) => {
+          if (t <= track[0].t0) return REST;
+          for (const s of track) if (t <= s.t1) return t < s.t0 ? s.pts[0] : along(s.pts, s.e((t - s.t0) / (s.t1 - s.t0)));
+          // proud bob (1.55–1.68): two little nods with the head
+          const u = Math.min(1, (t - 1.55) / 0.13);
+          return [PROUD[0], PROUD[1] - 7 * Math.sin(u * Math.PI * 2)];
+        };
+        const TDROP = 1.68, G = 9000, FLOOR = 1086, LANDX = 60;   // pen falls under gravity, lands flat, bounces once
+        const penAt = (t) => {
+          if (t < TDROP) {
+            const [x, y] = tipAt(t);
+            // the pen leans with the writing (a little wobble per stroke), held at ~125°
+            const wob = t > 1.05 && t < 1.47 ? 6 * Math.sin((t - 1.05) * 40) : 0;
+            return { x, y, a: 125 + wob };
+          }
+          const [x0, y0] = tipAt(TDROP), tf = Math.sqrt((2 * (FLOOR - y0)) / G), dt = t - TDROP;
+          if (dt < tf) { const u = dt / tf; return { x: x0 + LANDX * u, y: y0 + 0.5 * G * dt * dt, a: 125 + 55 * p2i(u) }; }
+          const b = dt - tf, x = x0 + LANDX;
+          if (b < 0.1) { const u = b / 0.1; return { x, y: FLOOR - 18 * Math.sin(Math.PI * u), a: 180 - 9 * Math.sin(Math.PI * u) }; }
+          const c = b - 0.1;
+          if (c < 0.06) { const u = c / 0.06; return { x, y: FLOOR - 5 * Math.sin(Math.PI * u), a: 180 + 3 * Math.sin(Math.PI * u) }; }
+          return { x, y: FLOOR, a: 180 };
+        };
+        const GRIP = 72;
+        const handAt = (t) => {
+          if (t < TDROP) { const p = penAt(t), r = (p.a * Math.PI) / 180; return [p.x + GRIP * Math.cos(r), p.y + GRIP * Math.sin(r)]; }
+          const p = penAt(TDROP), r = (p.a * Math.PI) / 180, h0 = [p.x + GRIP * Math.cos(r), p.y + GRIP * Math.sin(r)], h1 = [388, 1060];
+          const u = Math.min(1, (t - TDROP) / 0.18);
+          const k = u < 0.8 ? p2i(u / 0.8) * 1.06 : 1.06 - 0.06 * sio((u - 0.8) / 0.2);   // drops, overshoots, settles (dangling)
+          return [h0[0] + (h1[0] - h0[0]) * k, h0[1] + (h1[1] - h0[1]) * k];
+        };
+        const arm = $("#arm"), penPos = $("#penPos"), handPos = $("#handPos");
+        const hsh = (n) => (((n * 2654435761) >>> 0) % 1000) / 1000;
+        function drawRig(t) {
+          const p = penAt(t), h = handAt(t);
+          penPos.setAttribute("transform", `translate(${p.x.toFixed(2)} ${p.y.toFixed(2)}) rotate(${p.a.toFixed(2)})`);
+          handPos.setAttribute("transform", `translate(${h[0].toFixed(2)} ${h[1].toFixed(2)})`);
+          const dx = h[0] - SH[0], dy = h[1] - SH[1], L = Math.hypot(dx, dy) || 1, bend = 0.2 * L;
+          const bi = Math.floor(t / BOIL), j = (hsh(bi + 7) - 0.5) * 6;                  // the arm boils on fours too
+          const cx = (SH[0] + h[0]) / 2 + (-dy / L) * bend + j, cy = (SH[1] + h[1]) / 2 + (dx / L) * bend - j;
+          arm.setAttribute("d", `M ${SH[0]} ${SH[1]} Q ${cx.toFixed(1)} ${cy.toFixed(1)} ${h[0].toFixed(1)} ${h[1].toFixed(1)}`);
+          // draw-on 0.70–0.82 (the hand + pen pop on at its end)
+          const len = arm.getTotalLength() + 2, u = Math.max(0, Math.min(1, (t - 0.70) / 0.12));
+          arm.style.opacity = u > 0 ? 1 : 0;
+          arm.style.strokeDasharray = `${len} ${len}`;
+          arm.style.strokeDashoffset = (len * (1 - p2o(u))).toFixed(1);
+        }
+        const rig = { t: 0 };
+        tl.fromTo(rig, { t: 0 }, { t: D, duration: D, ease: "none", immediateRender: true, onUpdate: () => drawRig(rig.t), onStart: () => drawRig(rig.t) }, 0);
+        drawRig(0);
+        tl.set(["#handPop", "#penPop"], { opacity: 0 }, 0);
+        P.pop("#handPop", 0.93, { peak: 1.15 });
+        P.pop("#penPop", 0.96, { peak: 1.12 });
+
+        // ================= "grade" (1.23): the A lands — the one hero beat =================
+        P.punch(1.23, { scale: 1.008, origin: "640px 760px", dur: 0.3 });
+        P.shake(1.23, 3);
+        // head: chin up while writing (smug), then a head-bob of pride, then the droop
+        gsap.set(head, { svgOrigin: "240 972" });
+        gsap.set(ant, { svgOrigin: "240 830" });
+        tl.to(head, { rotation: -6, y: -4, duration: 6 * F, ease: "power2.out" }, 1.10);
+        tl.to(head, { rotation: 5, y: -10, duration: 3 * F, ease: "sine.inOut" }, 1.50);
+        tl.to(head, { rotation: -5, y: -2, duration: 3 * F, ease: "sine.inOut" }, 1.50 + 3 * F);
+        tl.to(head, { rotation: 0, y: 0, duration: 2 * F, ease: "sine.inOut" }, 1.50 + 6 * F);
+        tl.to(ant, { rotation: -10, duration: 3 * F, ease: "sine.inOut", yoyo: true, repeat: 1 }, 1.52);   // antenna lags the nod
+        // smirk widens on the A+ (mouth squash on a shape)
+        gsap.set(smirk.g, { svgOrigin: "244 924" });
+        tl.to(smirk.g, { scaleX: 1.12, duration: 4 * F, ease: "power2.out" }, 1.25);
+
+        // ================= "own work" (1.61 / 1.93): the big red ✗ over robot + paper, the robot droops =================
+        M.line([[204, 800], [520, 930], [906, 1092]], 1.44, { color: "marker", width: 16, dur: 0.18, amp: 3, seed: 1361, ease: "power2.inOut" });
+        M.line([[916, 790], [560, 940], [196, 1098]], 1.65, { color: "marker", width: 16, dur: 0.18, amp: 3, seed: 1362, ease: "power2.inOut" });
+        // droop (from 1.68): head sinks + tilts, antenna sags after it (parts lag), sad eyes + frown on the swap frame
+        tl.to(head, { rotation: 13, y: 18, duration: 5 * F, ease: "power2.in" }, 1.68);
+        tl.to(head, { rotation: 10, y: 14, duration: 6 * F, ease: "back.out(2)" }, 1.68 + 5 * F);
+        tl.to(ant, { rotation: 34, duration: 5 * F, ease: "power2.in" }, 1.68 + 2 * F);
+        tl.to(ant, { rotation: 26, duration: 6 * F, ease: "back.out(2.4)" }, 1.68 + 7 * F);
+        tl.set("#eyesSmug", { opacity: 0 }, 1.68);
+        tl.set("#eyesSad", { opacity: 1 }, 1.68);
+        tl.set(smirk.g, { opacity: 0 }, 1.68);
+        tl.set(frownG, { opacity: 1 }, 1.68);
+        tl.set("#bulb", { fill: "var(--marker-ink)", opacity: 1 }, 1.68);           // the light goes out
+        gsap.set(body, { svgOrigin: "240 1099" });
+        tl.to(body, { scaleY: 0.95, scaleX: 1.03, duration: 4 * F, ease: "power2.out" }, 1.70);   // slump (shape squash)
+        tl.to(body, { scaleY: 0.97, scaleX: 1.015, duration: 7 * F, ease: "back.out(2)" }, 1.70 + 4 * F);
+
+        // ================= the real strip slides in low (1.26), taped, highlighter on the spoken idea =================
+        const sw = $("#stripWrap");
+        gsap.set(sw, { transformOrigin: "50% 60%" });
+        tl.fromTo(sw, { opacity: 0 }, { opacity: 1, duration: 4 * F, ease: "power1.out", immediateRender: true }, 1.26);
+        P.arc(sw, 1.26, { fromX: -22, fromY: 26, dur: 14 * F, tilt: 2.5 });
+        tl.fromTo(sw, { scale: 0.94 }, { scale: 1.012, duration: 9 * F, ease: "power3.out", immediateRender: false }, 1.26);
+        tl.to(sw, { scale: 1, duration: 8 * F, ease: "back.out(1.8)" }, 1.26 + 9 * F);
+        M.tape(84, 1224, -8, 1.50);
+        M.tape(782, 1222, 7, 1.55);
+        const st = $("#strip"), k = 0.9;
+        M.highlight(st, [22 + 605 * k, 20 + 9 * k, 247 * k, 75 * k], 1.52, { dur: 0.15 });
+        M.highlight(st, [22 + 66 * k, 20 + 93 * k, 577 * k, 75 * k], 1.70, { dur: 0.24 });
+        P.floatY($("#stripWrap .tilt"), 2, 1.2);
+      })();
+    </script>
+  </body>
+</html>

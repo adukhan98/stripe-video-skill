@@ -1,0 +1,173 @@
+<!doctype html>
+<!-- v18_cta — MODE A (split): his footage edge to edge in the top half (y 0-960) for the whole scene; the bottom half is paper.
+     Hero: Comment + red “ambitious” (double underline). Then the REAL article title strip folds twice into a paper plane and
+     flies into a black "→ your inbox" pill (bottom-centre, never in the lower-right icon corner). End hold stays alive. -->
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>v18_cta</title>
+    <link rel="stylesheet" href="brand.css" />
+    <link rel="stylesheet" href="paper.css" />
+    <link rel="stylesheet" href="marker.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+    <script src="paper.js"></script>
+    <script src="marker.js"></script>
+    <style>
+      @font-face { font-family: "Inter Tight"; src: url("fonts/InterTight-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Inter"; src: url("fonts/Inter-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      /* the real article title, cropped to its first two lines, as a paper sheet that folds into a plane */
+      #sheet { position: absolute; left: 0; top: 0; width: 468px; height: 134px; opacity: 0; perspective: 900px; z-index: 6; }
+      #shBot, #shTop { position: absolute; left: 0; width: 468px; height: 67px; background-image: url(assets/art_title.png); background-size: 468px auto; background-color: #F7F5F0; }
+      #shBot { top: 67px; background-position: 0 -67px; border-radius: 0 0 14px 14px; box-shadow: 0 6px 10px -8px rgba(60,50,40,.34); }
+      #shTop { top: 0; transform-origin: 50% 100%; transform-style: preserve-3d; background: none; }
+      #shTop .fr, #shTop .bk { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; border-radius: 14px 14px 0 0; }
+      #shTop .fr { background-image: url(assets/art_title.png); background-size: 468px auto; background-position: 0 0; background-color: #F7F5F0; }
+      #shTop .bk { transform: rotateX(180deg); background: linear-gradient(180deg, #E9E3DA, #F3EFE8); }
+      #plane { position: absolute; left: 0; top: 0; width: 108px; height: 65px; opacity: 0; overflow: visible; z-index: 6; }
+      /* inbox pill: phone-size (50 px Inter 600); bottom-centre, tight shadow */
+      #inbox { height: 92px; padding: 0 40px 0 32px; gap: 18px; border-radius: 46px; font-size: 50px; box-shadow: 0 6px 12px -6px rgba(20,20,20,.40); z-index: 6; }
+      #inbox svg { width: 46px; height: 46px; }
+      #badge { position: absolute; width: 56px; height: 56px; border-radius: 50%; background: var(--brand-primary); opacity: 0; z-index: 7;
+        display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 8px -4px rgba(120,30,34,.45); }
+      #badge svg { width: 36px; height: 36px; display: block; }
+      .ring { position: absolute; border: 6px solid var(--brand-primary); opacity: 0; pointer-events: none; z-index: 6; }
+    </style>
+  </head>
+  <body data-face="0.41">
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="5.0167">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+      <div id="cam" data-push="1.002"><div id="punch">
+
+        <!-- MODE A: him edge to edge in the top half, from frame 0 to the last frame -->
+        <div class="spk split" data-h="960" data-face="0.41">
+          <div class="spk-card">
+            <div class="spk-vid"><video id="speaker" class="clip" src="assets/speaker.mp4" muted playsinline data-start="0" data-duration="5.0167" data-track-index="1"></video></div>
+            <div class="spk-sheen"></div>
+          </div>
+        </div>
+
+        <div id="head" class="layer">
+          <div id="comment" class="line hero" data-x="76" data-base="1125" data-size="150">
+            <span class="w" data-t="0.17" data-hero data-peak="1.05">Comment</span>
+          </div>
+          <div id="word" class="line hero ocean" data-cx="465" data-base="1300" data-size="210" data-fit="770">
+            <span class="w" data-t="0.63" data-hero data-peak="1.06" data-punch="0.63">“ambitious”</span>
+          </div>
+        </div>
+
+        <div id="rs" class="line sup" data-x="76" data-base="1464" data-size="70">
+          <span data-rise="-24" class="w" data-t="1.0">I'll</span><span data-rise="-24" class="w gap-s" data-t="1.17" data-pop>send</span><span data-rise="-24" class="w gap-s" data-t="1.31">you</span><span data-rise="-24" class="w gap-s" data-t="1.41">the</span><span data-rise="-24" class="w gap-s ocean" data-t="1.62" data-pop>article</span>
+        </div>
+        <div id="rd" class="line sup" data-x="76" data-base="1464" data-size="70">
+          <span data-rise="-24" class="w" data-t="2.57">you</span><span data-rise="-24" class="w gap-s" data-t="2.75">can</span><span data-rise="-24" class="w gap-s ocean" data-t="2.89" data-pop>read</span><span data-rise="-24" class="w gap-s" data-t="3.07">it</span><span data-rise="-24" class="w gap-s" data-t="3.13">too.</span>
+        </div>
+
+        <svg class="paths"><path id="trail" class="dotted accent" d="M 310 1358 C 350 1290, 450 1280, 495 1334" /></svg>
+
+        <div id="sheet">
+          <div id="shBot"></div>
+          <div id="shTop"><div class="fr"></div><div class="bk"></div></div>
+        </div>
+        <svg id="plane" viewBox="0 0 200 120">
+          <path d="M 192 60 L 60 60 L 14 108 Z" fill="#CFC8C0"/>
+          <path d="M 192 60 L 14 12 L 60 60 Z" fill="var(--brand-card)"/>
+          <path d="M 14 12 L 60 60 L 38 36 Z" fill="var(--brand-primary)"/>
+          <path d="M 60 60 L 192 60" stroke="#9A938B" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+        </svg>
+
+        <div id="pw" style="position:absolute; left:0; top:0; width:0; height:0">
+          <div id="inbox" class="pill" style="left: 440px; top: 1288px"><svg viewBox="0 0 24 24"><path d="M4 12h14M13 6l6 6-6 6" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>your inbox</div>
+          <div id="ring1" class="ring"></div><div id="ring2" class="ring"></div>
+          <div id="badge"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></div>
+        </div>
+
+      </div></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const P = await Paper.init({ extraFonts: ['700 60px "Caveat"'] });
+        const M = Marker.init(P);
+        const { tl, D, F, $ } = P;
+        gsap.registerPlugin(MotionPathPlugin);
+        const set = (sel, v, t = 0) => tl.set(sel, v, t);
+
+        // ---------------- geometry (frame px)
+        const word = $("#word"), pill = $("#inbox");
+        const wx = word.offsetLeft, ww = word.offsetWidth;
+        const PW = pill.offsetWidth, PH = pill.offsetHeight, PL = 820 - PW, PT = 1288;   // pill: bottom-centre, right edge x 820
+        pill.style.left = PL + "px"; pill.style.top = PT + "px";
+        const arrowX = PL + 55, arrowY = PT + PH / 2;                    // the "→" icon receives the plane
+        gsap.set("#pw", { transformOrigin: "0 0" });
+        $("#trail").setAttribute("d", `M 310 1358 C 350 1290, ${arrowX - 50} 1280, ${arrowX} ${arrowY}`);
+
+        // ---------------- 1) HERO: Comment “ambitious” + double red underline (marker never crosses type)
+        const ul = M.underline(wx + 6, wx + ww - 6, parseFloat(word.dataset.base) + 26, 0.6, { double: true, width: 13, dur: 0.42, seed: 1701 });
+        P.shake(0.66, 3);
+        P.punch(0.63, { scale: 1.012 });
+        P.breathe("#word", 1.012);
+
+        // staging: after the hero lands the headline steps back (scale only, words never fade) to make room for the object
+        set("#head", { transformOrigin: "76px 1000px" });
+        tl.to("#head", { scale: 0.68, duration: 0.3, ease: "power2.inOut" }, 1.0);
+        tl.to(ul.g, { scale: 0.68, svgOrigin: "76 1000", duration: 0.3, ease: "power2.inOut" }, 1.0);
+        // final 3 s energy lift: the pill has delivered and leaves (2.85-3.05), the headline returns to full hero size by 3.3 and breathes to the last frame
+        tl.to("#head", { scale: 1, duration: 0.25, ease: "power3.out" }, 3.05);
+        tl.to(ul.g, { scale: 1, svgOrigin: "76 1000", duration: 0.25, ease: "power3.out" }, 3.05);
+        P.pulse("#word .w", 3.3, 1.02);
+
+        // ---------------- 2) the article sheet: pops out, folds twice, becomes a plane
+        const SX = 76, SY = 1258, SH = 134;
+        gsap.set("#sheet", { x: SX, y: SY, transformOrigin: "50% 75%" });
+        gsap.set("#shTop", { rotationX: 0 });
+        tl.fromTo("#sheet", { opacity: 0, y: SY - 26, scale: 0.45, rotation: -8 }, { opacity: 1, y: SY + 4, scale: 1.04, rotation: 1.5, duration: 0.2, ease: "power3.out", immediateRender: false }, 1.28);
+        tl.to("#sheet", { y: SY, scale: 1, rotation: 0, duration: 0.28, ease: "back.out(1.8)" }, 1.48);
+        // fold 1: top half lifts a hair (anticipation), then flips down over the bottom half
+        tl.to("#shTop", { rotationX: 14, duration: 0.07, ease: "power2.out" }, 1.5);
+        tl.to("#shTop", { rotationX: -180, duration: 0.2, ease: "power2.inOut" }, 1.57);
+        tl.to("#shBot", { boxShadow: "0 3px 6px -5px rgba(60,50,40,.4)", duration: 0.2 }, 1.57);
+        // fold 2: cut to a dart (nose right), tightens toward the plane
+        set("#sheet", { clipPath: "polygon(0% 50%, 100% 50%, 100% 75%, 100% 100%, 0% 100%)" }, 1.77);
+        tl.to("#sheet", { clipPath: "polygon(0% 50%, 62% 50%, 100% 75%, 62% 100%, 0% 100%)", duration: 0.12, ease: "power2.inOut" }, 1.77);
+        tl.to("#sheet", { scale: 0.52, rotation: -5, duration: 0.14, ease: "power2.inOut" }, 1.78);
+        // swap to the drawn plane, pop with overshoot
+        const P0 = [310, 1358];
+        gsap.set("#plane", { x: P0[0] - 54, y: P0[1] - 33, transformOrigin: "50% 50%" });
+        tl.set("#sheet", { opacity: 0 }, 1.92);
+        tl.fromTo("#plane", { opacity: 0, scale: 0.55, rotation: 6 }, { opacity: 1, scale: 1.06, rotation: -10, duration: 0.07, ease: "power3.out", immediateRender: false }, 1.9);
+        tl.to("#plane", { scale: 1, duration: 0.1, ease: "back.out(2)" }, 1.97);
+        // the pill drops in once the sheet has folded away
+        P.pillIn("#inbox", 1.86, { fromY: -40 });
+        // anticipation: the plane tilts back, then launches on `right away` and flies the arc
+        tl.to("#plane", { rotation: -22, x: P0[0] - 54 - 12, scale: 0.94, duration: 0.07, ease: "power2.in" }, 1.96);
+        const flight = 0.27;
+        P.drawPath("#trail", 2.03, flight);
+        P.marchPath("#trail", 2.03 + flight, D - 2.03 - flight, 90);
+        tl.to("#plane", { motionPath: { path: "#trail", align: "#trail", alignOrigin: [0.5, 0.5], autoRotate: true }, duration: flight, ease: "power1.inOut" }, 2.03);
+        // arrival: plane tucks into the arrow, pill squashes, ripple + delivered badge
+        tl.to("#plane", { scale: 0.28, opacity: 0, duration: 0.06, ease: "power2.in" }, 2.23);
+        P.squash("#inbox", 2.29, 0.09);
+        const ring = (sel, t) => {
+          gsap.set(sel, { left: PL - 6, top: PT - 6, width: PW + 12, height: PH + 12, borderRadius: 52 + "px", transformOrigin: "50% 50%" });
+          tl.fromTo(sel, { opacity: 0.95, scaleX: 1, scaleY: 1 }, { opacity: 0, scaleX: 1.05, scaleY: 1.2, duration: 0.5, ease: "power2.out", immediateRender: false }, t);
+          tl.set(sel, { opacity: 0 }, 0);
+        };
+        ring("#ring1", 2.29); ring("#ring2", 2.35);
+        gsap.set("#badge", { left: PL + PW - 34, top: PT - 34, transformOrigin: "50% 50%" });
+        tl.fromTo("#badge", { opacity: 0, scale: 0.2, rotation: -20 }, { opacity: 1, scale: 1.12, rotation: 4, duration: 0.12, ease: "power3.out", immediateRender: false }, 2.33);
+        tl.to("#badge", { scale: 1, rotation: 0, duration: 0.3, ease: "back.out(2.4)" }, 2.45);
+        P.pulse("#word .w", 2.29, 1.025);
+
+        // quick clean exit of the first phrase (4 f) so phrases never overlap in the bottom row
+        tl.to("#rs", { y: -40, opacity: 0, filter: "blur(8px)", duration: 0.12, ease: "power2.in" }, 1.78);
+        // the pill delivers, then leaves quickly (exits faster than entrances) to make room for the big headline
+        tl.to(["#inbox", "#badge"], { opacity: 0, scale: 0.8, filter: "blur(6px)", duration: 0.18, ease: "power2.in" }, 2.85);
+        tl.to("#trail", { opacity: 0, duration: 0.18, ease: "power2.in" }, 2.85);
+        // end hold: the pill + badge bob, the trail marches, the underline boils, `ambitious` breathes, footage keeps talking
+        P.floatY("#pw", 6, 1.2);
+      })();
+    </script>
+  </body>
+</html>

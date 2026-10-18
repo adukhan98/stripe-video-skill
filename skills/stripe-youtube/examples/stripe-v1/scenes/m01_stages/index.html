@@ -1,0 +1,118 @@
+<!doctype html>
+<!-- m01_stages — MAP, chapter 3 card. THE CHAIN is born (chain_common.js, CHAIN_SHARED.md). Frame 0: discs 1–3 + their
+     labels close up (the chain is already on screen). 'breakdown' = they punch in turn. 'There are nine stages' = the
+     connector draws 1→9, discs 4–9 pop as it reaches them, each label lands under its disc, the camera pulls back on an
+     arc to WHOLE; "Nine / stages" lands on his words. 'Each one is a small tool' = a ripple runs down the line.
+     'does one job and writes the file the next one reads' = a white file chip hops disc to disc and drops into Check.
+     End state (= m02 frame 0): WHOLE pose, all slate, all 9 labels, heading on, no chip. -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>m01_stages</title>
+    <link rel="stylesheet" href="board.css" />
+    <link rel="stylesheet" href="v7yt.css" />
+    <link rel="stylesheet" href="brand.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="board.js"></script>
+    <script src="v7yt.js"></script>
+    <script src="chain_common.js"></script>
+    <style>
+      .chip { position: absolute; left: 0; top: 0; width: 84px; height: 104px; margin: -52px 0 0 -42px; border-radius: 16px;
+        background: var(--brand-card); box-shadow: var(--shadow); color: var(--brand-deep);
+        display: flex; align-items: center; justify-content: center; }
+      .chip .v7-gl { flex: none; width: 50px; height: 50px; }
+    </style>
+  </head>
+  <body data-theme="light">
+    <div id="root" class="mint" data-composition-id="main" data-start="0" data-width="1920" data-height="1080" data-duration="8.033">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+      <div id="cam"><div id="punch"></div></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const B = await Board.init();
+        const V = V7Y.init(B);
+        const { tl, F } = B;
+        const LAST = 240 / 30;
+
+        // ---- the chain, fresh: discs 1–3 and their labels on screen at frame 0, connector undrawn ----
+        const C = buildChain(V, B, { state: "fresh", shown: [1, 2, 3], labels: [1, 2, 3] });
+
+        // ---- camera: slow push on discs 1–3 → arc back to WHOLE as the line draws → a breath that lands exactly on WHOLE ----
+        const A0 = [620, 650, 1.02], A = [620, 650, 1.05];
+        C.travel([
+          [0, 2.3, A0, A, {}],
+          [2.42, 1.42, A, "whole", { dip: 0.015, lift: -60 }],
+          [3.9, LAST - 3.9, "whole", "whole", { zout: -0.012 }],
+        ], LAST);
+
+        // ---- 'breakdown': the three discs punch in turn; 'works': the mic glyph wiggles ----
+        [1, 2, 3].forEach((n, i) => {
+          const t = 0.62 + i * 3 * F;
+          tl.to(C.disc(n), { scale: 1.08, duration: 4 * F, ease: "power2.out" }, t);
+          tl.to(C.disc(n), { scale: 1, duration: 8 * F, ease: "power2.inOut" }, t + 4 * F);
+        });
+        const g1 = C.glyph(1);
+        tl.to(g1, { rotation: -12, duration: 4 * F, ease: "power2.out" }, 2.02);
+        tl.to(g1, { rotation: 6, duration: 5 * F, ease: "power2.inOut" }, 2.02 + 4 * F);
+        tl.to(g1, { rotation: 0, duration: 7 * F, ease: "power2.inOut" }, 2.02 + 9 * F);
+
+        // ---- 'There are nine stages': the line draws 1→9, discs 4–9 pop, labels land under them ----
+        const T0 = 2.45, FIRST = 0.1, GAP = 0.13;
+        C.draw(T0, { first: FIRST, gap: GAP });
+        for (let n = 4; n <= 9; n++) C.label(n, T0 + FIRST + (n - 2) * GAP + 4 * F, { type: "up", dist: 24 });
+        C.heading(2.92, 3.36);
+
+        // ---- 'Each one is a small tool': a ripple runs down the line (scale + glyph pop) ----
+        for (let n = 1; n <= 9; n++) {
+          const t = 4.62 + (n - 1) * 0.06, g = C.glyph(n);
+          tl.to(C.disc(n), { scale: 1.07, duration: 5 * F, ease: "sine.out" }, t);
+          tl.to(C.disc(n), { scale: 1, duration: 9 * F, ease: "sine.inOut" }, t + 5 * F);
+          tl.to(g, { scale: 1.16, duration: 4 * F, ease: "power2.out" }, t + F);
+          tl.to(g, { scale: 1, duration: 8 * F, ease: "power2.inOut" }, t + 5 * F);
+        }
+
+        // ---- 'writes the file the next one reads': a white file chip hops disc to disc, drops into Check ----
+        const chip = document.createElement("div");
+        chip.className = "chip";
+        chip.innerHTML = V.icon("file-text");
+        document.querySelector("#punch").appendChild(chip);
+        const REST = -150, LIFT = 80;
+        const T_IN = 5.62, T_HOP = 5.9, HOP = 0.215, T_DROP = T_HOP + 8 * HOP, DROP = 0.2;
+        const E = (n) => gsap.parseEase(n);
+        const eIO = E("power2.inOut"), eOut = E("back.out(2)"), eIn = E("power2.in");
+        const cl = (v) => Math.max(0, Math.min(1, v));
+        function chipAt(t) {
+          if (t < T_IN) return { x: C.pt(1)[0], y: C.pt(1)[1] + REST, scale: 0, opacity: 0, rotation: 0 };
+          if (t < T_HOP) {
+            const u = cl((t - T_IN) / 0.2);
+            return { x: C.pt(1)[0], y: C.pt(1)[1] + REST + 20 * (1 - u), scale: eOut(u), opacity: cl(u * 3), rotation: 0 };
+          }
+          if (t < T_DROP) {
+            const k = Math.min(7, Math.floor((t - T_HOP) / HOP)), u = cl((t - T_HOP - k * HOP) / HOP), p = eIO(u);
+            const [x0, y0] = C.pt(k + 1), [x1, y1] = C.pt(k + 2);
+            const sq = u > 0.85 ? 1 - 0.08 * Math.sin(Math.PI * (u - 0.85) / 0.15) : 1;   // squash on landing
+            return { x: x0 + (x1 - x0) * p, y: y0 + (y1 - y0) * p + REST - LIFT * Math.sin(Math.PI * u), scale: 1,
+              scaleY: sq, opacity: 1, rotation: 10 * Math.sin(Math.PI * 2 * u) * (1 - u) };
+          }
+          const u = cl((t - T_DROP) / DROP), p = eIn(u), [x9, y9] = C.pt(9);
+          return { x: x9, y: y9 + REST * (1 - p), scale: 1 - p, opacity: 1 - cl((u - 0.6) / 0.4), rotation: 0 };
+        }
+        const chipSet = (t) => gsap.set(chip, { scaleY: 1, ...chipAt(t) });
+        chipSet(0);
+        const ck = { t: 0 };
+        tl.fromTo(ck, { t: 0 }, { t: B.D, duration: B.D, ease: "none", onUpdate: () => chipSet(Math.min(ck.t, LAST)) }, 0);
+        // each receiving disc gives under the chip (secondary action), Check swallows it
+        for (let k = 2; k <= 9; k++) {
+          const t = T_HOP + (k - 1) * HOP - 2 * F;
+          tl.to(C.disc(k), { scale: 0.95, duration: 3 * F, ease: "power2.out" }, t);
+          tl.to(C.disc(k), { scale: 1, duration: 6 * F, ease: "power2.inOut" }, t + 3 * F);
+        }
+        tl.to(C.disc(9), { scale: 1.1, duration: 3 * F, ease: "power2.out" }, 7.70);
+        tl.to(C.disc(9), { scale: 1, duration: 6 * F, ease: "power2.inOut" }, 7.80);
+      })();
+    </script>
+  </body>
+</html>

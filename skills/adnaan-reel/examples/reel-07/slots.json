@@ -1,0 +1,197 @@
+[
+ {
+  "id": "v01_hook",
+  "start": 0.0,
+  "duration": 2.567,
+  "layout": "scene",
+  "type": "hook",
+  "bespoke": false,
+  "brief": "FIRST read animations/SHARED.md fully — especially the reel-07 Project specifics (numbers ①②③, THE BOARD, THE GAUGE, READABILITY, Words on screen, Real assets) — and look at the style frames it lists (v6 is the target) plus ~/Desktop/reels/reel-06/edit/verify/style_test_v2_red.png (the approved marker look). FULL-SCREEN OPAQUE scene — HOOK (portrait).\nSpoken: 'In 1939, a student showed up late to class.' (In 0.15, 1939 0.83, student 1.33, showed 1.53, late 1.87, class 2.31)\nTEXT HOOK readable on FRAME 0 and for the whole scene, top of the zone (y 300–~520): 'How to be more' / 'ambitious' / 'with AI' — Inter Tight 900 staggered over 2–3 lines (~110/150/110 authored, fit ≤900 wide), 'ambitious' in RED with a red marker double underline already drawn at frame 0 (boils). PORTRAIT hero card (~760×~800) below it, settled by 0.3, full head + shoulders. HERO: on '1939' (0.83) a giant '1939' Inter Tight 900 ~230 RED lands on a .paper-strip low on his chest / below the card as a SPLIT-FLAP (each digit squash-flips and locks left→right, ticks). MICRO 1: on 'student' (1.33) a little black-marker stick-figure student with a backpack runs in from the left edge along the card bottom (legs cycling on fours). MICRO 2: a black-marker CLOCK doodle (~170 px) beside the card top-right: on 'late' (1.87) its hands spin past the hour and it jiggles; a red underline scribbles under 'late' as 'late' (~120 ink) lands beside 1939. MICRO 3: 'class' (~110 ink) lands on 2.31. Keep the text hook untouched and readable; nothing over his face. Impact on '1939'.\nWord times are scene-local (exact ones in words.txt; contact frame 0.13–0.2 s before the word). Everything inside x 60–960 / y 285–1480 (measure). data-face 0.41 (navy hoodie = dark: words over it on a solid .paper-strip). Write beats.json (kit beats + scribble beats with dur). Hold alive to the cut.",
+  "assets": []
+ },
+ {
+  "id": "v02_board",
+  "start": 2.567,
+  "duration": 4.067,
+  "layout": "scene",
+  "type": "blank",
+  "bespoke": true,
+  "brief": "FIRST read animations/SHARED.md fully — especially the reel-07 Project specifics (numbers ①②③, THE BOARD, THE GAUGE, READABILITY, Words on screen, Real assets) — and look at the style frames it lists (v6 is the target) plus ~/Desktop/reels/reel-06/edit/verify/style_test_v2_red.png (the approved marker look). FULL-SCREEN OPAQUE scene — BESPOKE — THE BOARD (first draw; geometry + seeds FIXED in SHARED.md).\nSpoken: 'He copied two problems off the board thinking they were homework. And he solved both of them.' (copied 0.35, two 0.59, problems 0.99, board 1.55, thinking 1.89, homework 2.67, solved 3.31, both 3.59, them 3.95)\nHERO: the blackboard draws itself in black ink the way a hand would (frame 0.0–0.5, scribble), then on 'two problems' (0.59–0.99) the two squiggle problems write themselves line by line with their '1.' '2.' labels. MICRO 1: on 'copied' a white NOTEBOOK card (UI card, ~420×340, ruled lines, slight tilt) slides in lower-left (y ~880–1240); the two squiggles are COPIED into it — small ink copies ride a dotted arc from the board down into the notebook (0.6–1.6). On 'homework' (2.67) a Caveat note 'homework' (ink, ≥72 px) is written on the notebook's tab + a tape strip. MICRO 2: small speaker card (≥440 wide) lower-right, in from ~0.1, kept clear for the whole scene. HERO BEAT: on 'solved' (3.31) / 'both' (3.59) two RED ✓ check off on the board at the SHARED.md positions (ding each) — the board ends in the exact final state described in SHARED.md. Kinetic words: 'two problems' ~150 ink lands on 'two' (0.59) placed between board and notebook; on 'solved both' (3.31) 'solved both' ~180 with 'both' RED replaces it (exit 'two problems' fast first). Impact on 'both'. Don't let words cross the board drawing.\nWord times are scene-local (exact ones in words.txt; contact frame 0.13–0.2 s before the word). Everything inside x 60–960 / y 285–1480 (measure). data-face 0.41 (navy hoodie = dark: words over it on a solid .paper-strip). Write beats.json (kit beats + scribble beats with dur). Hold alive to the cut.",
+  "assets": []
+ },
+ {
+  "id": "v03_unsolved",
+  "start": 6.633,
+  "duration": 2.9,
+  "layout": "scene",
+  "type": "blank",
+  "bespoke": true,
+  "brief": "FIRST read animations/SHARED.md fully — especially the reel-07 Project specifics (numbers ①②③, THE BOARD, THE GAUGE, READABILITY, Words on screen, Real assets) — and look at the style frames it lists (v6 is the target) plus ~/Desktop/reels/reel-06/edit/verify/style_test_v2_red.png (the approved marker look). FULL-SCREEN OPAQUE scene — BESPOKE — THE BOARD continues (open with v02's final board state already drawn at t=0: copy v02's board code + seeds verbatim once it exists — read ../v02_board/hf/index.html; if it is not finished yet build from SHARED.md geometry and I will seam-check).\nSpoken: 'They were two famous unsolved problems in statistics.' (two 0.41, famous 0.87, unsolved 1.41, problems 1.81, statistics 2.49)\nHERO: on 'unsolved' (1.41) a big RED rubber-stamp style 'unsolved' (Inter Tight 900 ~190, red, inside a rough red marker rectangle, rotated −8°) SLAMS over the board's lower half — anticipation scale 1.4→0.94→1.0, board shakes 6 px, dust burst of red dots. Impact on 'unsolved'. MICRO 1: on 'famous' (0.87) a few Caveat-ink sparkle ticks + a small red marker star doodle pop around problem 1 (fame), 'famous' ~120 ink lands. MICRO 2: on 'statistics' (2.49) the REAL article strip hf/assets/art_unsolved.png (894×183) in a white card at ≥0.9 scale slides up from below and is taped (M.tape both ends) at y ~1180–1400; the highlighter swipes 'They were two unsolved / problems in statistics' (boxes in SHARED.md) from 1.9→2.6. MICRO 3: the two red ✓ from v02 get a quick wobble when the stamp lands. No speaker in this scene (2.9 s, the source is the point).\nWord times are scene-local (exact ones in words.txt; contact frame 0.13–0.2 s before the word). Everything inside x 60–960 / y 285–1480 (measure). data-face 0.41 (navy hoodie = dark: words over it on a solid .paper-strip). Write beats.json (kit beats + scribble beats with dur). Hold alive to the cut.",
+  "assets": [
+   "captures/art_unsolved.png"
+  ]
+ },
+ {
+  "id": "v04_impossible",
+  "start": 9.533,
+  "duration": 4.733,
+  "layout": "scene",
+  "type": "fullscreen",
+  "bespoke": false,
+  "brief": "FIRST read animations/SHARED.md fully — especially the reel-07 Project specifics (numbers ①②③, THE BOARD, THE GAUGE, READABILITY, Words on screen, Real assets) — and look at the style frames it lists (v6 is the target) plus ~/Desktop/reels/reel-06/edit/verify/style_test_v2_red.png (the approved marker look). FULL-SCREEN OPAQUE scene — FULLSCREEN — him edge to edge, slow push 1.0→1.03, nothing else but the words + marker.\nSpoken: 'He solved them because nobody told him it was impossible. That's the problem with how most of us use AI.' (nobody 1.08, told 1.30, him 1.46, impossible 2.26, That's 2.81, problem 3.29, most 3.99, us 4.29, use 4.47, AI 4.75)\nWORDS low on a solid .paper-strip (y ≥ 1180): 'nobody told him' ~120 ink on 'nobody' (1.08); then 'impossible' ~210 ink on 'impossible' (2.26). HERO BEAT: right after it lands (~2.45) a RED marker scribble-strike crosses out the letters 'im' only and 'possible' turns RED with a 1 % punch — impact on 'impossible'. At 'That's' (2.81) the first phrase exits fast (blur-up ~6 f); 'the problem' ~170 with 'problem' RED lands on 'problem' (3.29), red wobbly underline under 'problem'; then 'most of us use AI' ~110 ink on 'most' (3.99) beneath it. Nothing ever over his face (face centre y ≈ 41 %).\nWord times are scene-local (exact ones in words.txt; contact frame 0.13–0.2 s before the word). Everything inside x 60–960 / y 285–1480 (measure). data-face 0.41 (navy hoodie = dark: words over it on a solid .paper-strip). Write beats.json (kit beats + scribble beats with dur). Hold alive to the cut.",
+  "assets": []
+ },
+ {
+  "id": "v05_article",
+  "start": 14.267,
+  "duration": 7.5,
+  "layout": "scene",
+  "type": "chapter_page",
+  "bespoke": true,
+  "brief": "FIRST read animations/SHARED.md fully — especially the reel-07 Project specifics (numbers ①②③, THE BOARD, THE GAUGE, READABILITY, Words on screen, Real assets) — and look at the style frames it lists (v6 is the target) plus ~/Desktop/reels/reel-06/edit/verify/style_test_v2_red.png (the approved marker look). FULL-SCREEN OPAQUE scene — CHAPTER + REAL PAGE (the source).\nSpoken: 'I read this in an article recently called \"How to be more ambitious: a tutorial for humans with models\". It's written by Felix, who is an engineer working on Claude.' (article 0.85, called 1.65, How 1.83, more 2.29, ambitious 2.79, tutorial 3.35, humans 3.99, models 4.67, written 5.18, Felix 5.68, engineer 6.46, working 6.78, Claude 7.26)\nBEAT A (0–4.9): on 'article' (0.85) a BROWSER CARD (URL 'felixrieseberg.com', light chrome) ≥ 830 wide rises in with a tilt and settles at y ~330–1000, showing the REAL title strip hf/assets/art_title.png at ≥0.92 scale; date pill '13 October 2026' and an '8 min' black pill stack in by its corner. As he reads the title the highlighter swipes 'ambitious:' on 'ambitious' (2.79) (box in SHARED.md) and a red marker loop is NOT drawn over the title — instead a red arrow flicks in from the right margin to it. Kinetic: 'an article' ~120 ink below the card on 'article'; on 'ambitious' (2.79) 'ambitious' ~200 RED lands below the card (exit the previous words first). Secondary speaker card (landscape ≥600 wide) tucked bottom-right over the card corner from ~0.2, kept clear. BEAT B (4.9–7.9): on 'written' (5.18) the browser content scrolls (fast, eased) from the title to the strip hf/assets/art_claude.png ('I work on Claude.') which lands centred in the card; highlighter on 'I work on Claude' at 'Felix' (5.68). Kinetic 'an engineer' ~110 ink on 'engineer' (6.46) + 'working on Claude' ~150 with 'Claude' RED on 'working' (6.78)/'Claude' (7.26). HERO BEAT: on 'Claude' (7.26) the Claude logo chip (hf/assets/claude.png <img> ≥64 px + 'Claude' Inter 600 in a white chip) swings in on the end of a red marker arrow like a hung sign, squash-lands, M.tape on it. Impact on 'Claude'. NO photo of Felix. Never show the whole page shrunk.\nWord times are scene-local (exact ones in words.txt; contact frame 0.13–0.2 s before the word). Everything inside x 60–960 / y 285–1480 (measure). data-face 0.41 (navy hoodie = dark: words over it on a solid .paper-strip). Write beats.json (kit beats + scribble beats with dur). Hold alive to the cut.\nREVISION 2 (his request): the REAL page in dark mode (art_page_dark.png, 1260x2483) big behind a BIG speaker card; title fully readable; scroll to 'I work on Claude' for Beat B.",
+  "assets": [
+   "captures/art_title.png",
+   "captures/art_claude.png",
+   "logos/claude.png",
+   "captures/art_page_dark.png"
+  ]
+ },
+ {
+  "id": "v06_three",
+  "start": 21.767,
+  "duration": 2.833,
+  "layout": "scene",
+  "type": "opinion",
+  "bespoke": false,
+  "brief": "FIRST read animations/SHARED.md fully — especially the reel-07 Project specifics (numbers ①②③, THE BOARD, THE GAUGE, READABILITY, Words on screen, Real assets) — and look at the style frames it lists (v6 is the target) plus ~/Desktop/reels/reel-06/edit/verify/style_test_v2_red.png (the approved marker look). FULL-SCREEN OPAQUE scene — OPINION (portrait) — introduces the list continuity: the three marker-circled numbers.\nSpoken: 'You should read the whole thing but here are my three key takeaways.' (read 0.33, whole 0.61, thing 0.87, three 1.79, key 2.07, takeaways 2.29)\nPORTRAIT hero card (~760×~860) settled by 0.3. 'read the whole thing' ~110 ink on a .paper-strip below his chin/over the chest-paper area on 'read' (0.33) with a quick red underline under 'whole thing' (0.7). HERO: on 'three' (1.79) three digits '1' '2' '3' (Inter Tight 900 ~170 ink) pop out from behind the card one after another 3 f apart on arcs, landing in a row low in the zone (y ~1250–1450, x 120–940) — each gets a red marker loop drawn round it 0.2 s apart (scribble beats), pop each. 'three key takeaways' ~140 with 'three' RED lands on 'key' (2.07) above the numbers (exit the earlier phrase fast). Impact on 'three'. Nothing over his face.\nWord times are scene-local (exact ones in words.txt; contact frame 0.13–0.2 s before the word). Everything inside x 60–960 / y 285–1480 (measure). data-face 0.41 (navy hoodie = dark: words over it on a solid .paper-strip). Write beats.json (kit beats + scribble beats with dur). Hold alive to the cut.",
+  "assets": []
+ },
+ {
+  "id": "v07_outcome",
+  "start": 24.6,
+  "duration": 2.3,
+  "layout": "scene",
+  "type": "blank",
+  "bespoke": true,
+  "brief": "FIRST read animations/SHARED.md fully — especially the reel-07 Project specifics (numbers ①②③, THE BOARD, THE GAUGE, READABILITY, Words on screen, Real assets) — and look at the style frames it lists (v6 is the target) plus ~/Desktop/reels/reel-06/edit/verify/style_test_v2_red.png (the approved marker look). FULL-SCREEN OPAQUE scene — CHAPTER ① — 'outcome' vs 'task'.\nSpoken: 'First, ask for the outcome instead of the task.' (First 0.45, ask 0.73, outcome 1.39, instead 1.75, task 2.33)\nOn 'First' (0.45) the ① chapter number lands top-left at SHARED.md position: '1' Inter Tight 900 ~210 ink, red marker loop draws round it (0.3 s), small 'first' Inter Tight 800 ~90 beside it. HERO: 'outcome' Inter Tight 900 ~250 RED lands mid-zone on 'outcome' (1.39) with overshoot; a black-marker TARGET (3 concentric rough rings + a red marker arrow thunking into the bullseye with a wobble) draws behind/beside it (1.2–1.7) — impact on 'outcome'. MICRO: 'ask for the' ~100 ink on 'ask' (0.73) above it. On 'instead of the task' (1.75/2.33) 'task' ~170 ink lands low (y ~1300) and a red scribble-strike crosses it out on 2.45 (it stays readable under the strike). No speaker (2.5 s chapter beat).\nWord times are scene-local (exact ones in words.txt; contact frame 0.13–0.2 s before the word). Everything inside x 60–960 / y 285–1480 (measure). data-face 0.41 (navy hoodie = dark: words over it on a solid .paper-strip). Write beats.json (kit beats + scribble beats with dur). Hold alive to the cut.",
+  "assets": []
+ },
+ {
+  "id": "v08_deck",
+  "start": 26.9,
+  "duration": 4.667,
+  "layout": "scene",
+  "type": "mechanism",
+  "bespoke": true,
+  "brief": "FIRST read animations/SHARED.md fully — especially the reel-07 Project specifics (numbers ①②③, THE BOARD, THE GAUGE, READABILITY, Words on screen, Real assets) — and look at the style frames it lists (v6 is the target) plus ~/Desktop/reels/reel-06/edit/verify/style_test_v2_red.png (the approved marker look). FULL-SCREEN OPAQUE scene — BESPOKE MECHANISM — one slide → the whole deck → convince your boss.\nSpoken: 'For example, don't ask it to fix this one slide. Ask it to make the whole deck to convince your boss.' (don't 0.71, fix 1.39, one 1.73, slide 2.09, Ask 2.47, make 2.85, whole 3.23, deck 3.37, convince 3.85, boss 4.33)\nBEAT A (0–2.4): ONE white 16:9 SLIDE card (~520×300, wireframe bars, a little bar chart) centre-top. A cursor arcs in and clicks a small 'fix' pill on it at 'fix' (1.39) (press dip, tick). 'one slide' ~170 ink with 'one' RED lands on 'one'/'slide' (1.73/2.09) below. On 2.2 a red marker ✗ draws over the slide's corner (not over text). BEAT B (2.4–4.67): on 'make the whole deck' the slide DEALS into a fan of 7–8 slide cards (each a different wireframe: title, chart, table, quote bars), arcing out with stagger 2 f, then they square up into a stacked DECK with a satisfying riffle (ticks) on 'deck' (3.37) — 'whole deck' ~200 with 'deck' RED lands. HERO BEAT: impact on 'deck'. MICRO 3: on 'convince your boss' a black-marker stick-figure BOSS (tie, folded arms, ~260 tall) draws itself to the right; the deck slides to him on 'convince' (3.85) and on 'boss' (4.33) he unfolds his arms, nods (head bob x2) and a red ✓ pops beside him + Caveat 'boss' note optional. 'convince your boss' ~110 ink. Small speaker card (≥440) in a kept-clear corner from ~0.1.\nWord times are scene-local (exact ones in words.txt; contact frame 0.13–0.2 s before the word). Everything inside x 60–960 / y 285–1480 (measure). data-face 0.41 (navy hoodie = dark: words over it on a solid .paper-strip). Write beats.json (kit beats + scribble beats with dur). Hold alive to the cut.",
+  "assets": []
+ },
+ {
+  "id": "v09_bigger",
+  "start": 31.567,
+  "duration": 3.4,
+  "layout": "scene",
+  "type": "opinion",
+  "bespoke": false,
+  "brief": "FIRST read animations/SHARED.md fully — especially the reel-07 Project specifics (numbers ①②③, THE BOARD, THE GAUGE, READABILITY, Words on screen, Real assets) — and look at the style frames it lists (v6 is the target) plus ~/Desktop/reels/reel-06/edit/verify/style_test_v2_red.png (the approved marker look). FULL-SCREEN OPAQUE scene — OPINION (portrait).\nSpoken: 'The model can handle the bigger goal. Most of us just don't ask for it.' (model 0.27, handle 0.83, bigger 1.19, goal 1.47, Most 1.77, just 2.23, don't 2.51, ask 2.91, it 3.33)\nPORTRAIT hero card (~760×~860). HERO: 'bigger goal' — on 'bigger' (1.19) 'bigger' Inter Tight 900 ~240 RED lands on a .paper-strip low on the card/below it and literally GROWS (scale 0.8→1.12→1.0 overshoot) while a black-marker target doodle beside the card (same style as v07's target) grows 3× in one exaggerated beat; 'goal' ~170 ink on 'goal' (1.47). Impact on 'bigger'. Then at 'Most' (1.77) the phrase exits fast and 'most of us just' ~100 ink + 'don't ask' ~200 with 'ask' RED lands on 'don't' (2.51)/'ask' (2.91); red double underline scribbles under 'don't ask' (2.95–3.25). 'the model can handle' ~100 ink earlier on 'model' (0.27). Nothing over his face.\nWord times are scene-local (exact ones in words.txt; contact frame 0.13–0.2 s before the word). Everything inside x 60–960 / y 285–1480 (measure). data-face 0.41 (navy hoodie = dark: words over it on a solid .paper-strip). Write beats.json (kit beats + scribble beats with dur). Hold alive to the cut.",
+  "assets": []
+ },
+ {
+  "id": "v10_unreasonable",
+  "start": 34.967,
+  "duration": 2.8,
+  "layout": "scene",
+  "type": "blank",
+  "bespoke": true,
+  "brief": "FIRST read animations/SHARED.md fully — especially the reel-07 Project specifics (numbers ①②③, THE BOARD, THE GAUGE, READABILITY, Words on screen, Real assets) — and look at the style frames it lists (v6 is the target) plus ~/Desktop/reels/reel-06/edit/verify/style_test_v2_red.png (the approved marker look). FULL-SCREEN OPAQUE scene — CHAPTER ② — unreasonable goals.\nSpoken: 'Second, set goals that sound unreasonable.' (Second 0.29, set 0.61, goals 0.97, sound 1.59, unreasonable 2.47)\nOn 'Second' (0.29) the ② chapter number lands top-left (same position/style as v07's ①: '2' ~210 ink + red loop) with 'second' ~90 beside it. 'set goals' ~150 ink on 'set' (0.61)/'goals' (0.97). HERO: on 'unreasonable' (2.47) 'unreasonable' Inter Tight 900 RED (fit ≤ 900 wide incl. overshoot, ~180) SLAMS in with per-letter shake (letters jitter 2–4 px, settle) and red marker shake/whoosh lines either side — impact on 'unreasonable'. MICRO: on 'sound' (1.59) the REAL strip hf/assets/art_unreasonable.png (white card ≥0.9 scale, taped) slides in at y ~1180–1400 and the highlighter swipes 'Pick unreasonable goals and tell the model that they're very reasonable' (boxes in SHARED.md) 1.6→2.3. No speaker (2.8 s chapter beat).\nWord times are scene-local (exact ones in words.txt; contact frame 0.13–0.2 s before the word). Everything inside x 60–960 / y 285–1480 (measure). data-face 0.41 (navy hoodie = dark: words over it on a solid .paper-strip). Write beats.json (kit beats + scribble beats with dur). Hold alive to the cut.",
+  "assets": [
+   "captures/art_unreasonable.png"
+  ]
+ },
+ {
+  "id": "v11_200ms",
+  "start": 37.767,
+  "duration": 5.767,
+  "layout": "scene",
+  "type": "mechanism",
+  "bespoke": true,
+  "brief": "FIRST read animations/SHARED.md fully — especially the reel-07 Project specifics (numbers ①②③, THE BOARD, THE GAUGE, READABILITY, Words on screen, Real assets) — and look at the style frames it lists (v6 is the target) plus ~/Desktop/reels/reel-06/edit/verify/style_test_v2_red.png (the approved marker look). FULL-SCREEN OPAQUE scene — BESPOKE MECHANISM — 10 s → don't ask for 5 → ask for 200 ms.\nSpoken: 'For example, if your site loads in 10 seconds, don't ask for five. Ask for 200 milliseconds and tell it to keep going.' (site 0.83, loads 1.05, 10 1.41, seconds 1.77, don't 2.15, five 2.87, Ask 3.27, 200 4.07, milliseconds 4.49, keep 5.25, going 5.57)\nHERO OBJECT: a browser card (~800 wide, URL 'your-site.com' muted, wireframe page) at y ~330–760 with a LOADING BAR under its chrome and a black-marker STOPWATCH doodle (~220) at its right edge. BEAT A (0–3.1): on 'loads' (1.05) the loading bar crawls slowly (sluggish, ease-in) and a spinner turns; the stopwatch readout (Inter 600 in a black pill on the card) odometer-rolls up to '10 s' on '10 seconds' (1.41–1.77). Kinetic '10 seconds' ~170 ink lands below. On 'five' (2.87) a '5 s' pill tries to replace it and a red scribble-strike crosses '5 s' out + 'don't ask for five' ~110 ink. BEAT B (3.1–6.1): HERO BEAT on '200' (4.07): the readout SLAMS to '200 ms' in RED (odometer digits lock left→right), the loading bar ZIPS full with a glint, the stopwatch hand snaps — impact. '200 milliseconds' Inter Tight 900 ~200 RED (fit width) lands. MICRO: then the REAL strip hf/assets/art_200ms.png (white card ≥0.9, taped) rises at y ~1180–1440 at 4.6 with the highlighter on 'Ask for 200ms' (boxes in SHARED.md). On 'keep going' (5.25–5.57) a red marker arrow loops on and off past the strip's right edge (a curling 'keep going' arrow) + 'keep going' ~110 ink. Small speaker card (≥440) — keep a clear corner for it the whole scene, or drop it after BEAT A if the layout can't hold it (say so in NOTES).\nWord times are scene-local (exact ones in words.txt; contact frame 0.13–0.2 s before the word). Everything inside x 60–960 / y 285–1480 (measure). data-face 0.41 (navy hoodie = dark: words over it on a solid .paper-strip). Write beats.json (kit beats + scribble beats with dur). Hold alive to the cut.",
+  "assets": [
+   "captures/art_200ms.png"
+  ]
+ },
+ {
+  "id": "v12_surprised",
+  "start": 43.533,
+  "duration": 2.6,
+  "layout": "scene",
+  "type": "fullscreen",
+  "bespoke": false,
+  "brief": "FIRST read animations/SHARED.md fully — especially the reel-07 Project specifics (numbers ①②③, THE BOARD, THE GAUGE, READABILITY, Words on screen, Real assets) — and look at the style frames it lists (v6 is the target) plus ~/Desktop/reels/reel-06/edit/verify/style_test_v2_red.png (the approved marker look). FULL-SCREEN OPAQUE scene — FULLSCREEN — him edge to edge, slow push 1.0→1.03.\nSpoken: 'You'd be surprised how often it gets close.' (surprised 0.75, often 1.55, gets 1.91, close 2.23)\nWORDS low on a solid .paper-strip (y ≥ 1200): 'you'd be' ~100 ink on 0.01; 'surprised' ~230 RED POPS on 'surprised' (0.75) — per-letter cascade with a red marker burst of 5 short rays round it (one exaggerated beat, impact). Then 'how often it gets close' ~110 ink on 'often' (1.55)/'close' (2.23); on 'close' a small red marker bracket ][ draws beside the word and its two halves nudge almost together. Nothing else; nothing over his face.\nWord times are scene-local (exact ones in words.txt; contact frame 0.13–0.2 s before the word). Everything inside x 60–960 / y 285–1480 (measure). data-face 0.41 (navy hoodie = dark: words over it on a solid .paper-strip). Write beats.json (kit beats + scribble beats with dur). Hold alive to the cut.",
+  "assets": []
+ },
+ {
+  "id": "v13_grade",
+  "start": 46.133,
+  "duration": 2.1,
+  "layout": "scene",
+  "type": "blank",
+  "bespoke": true,
+  "brief": "FIRST read animations/SHARED.md fully — especially the reel-07 Project specifics (numbers ①②③, THE BOARD, THE GAUGE, READABILITY, Words on screen, Real assets) — and look at the style frames it lists (v6 is the target) plus ~/Desktop/reels/reel-06/edit/verify/style_test_v2_red.png (the approved marker look). FULL-SCREEN OPAQUE scene — CHAPTER ③ — don't let AI grade its own work.\nSpoken: 'Third, don't let AI grade its own work.' (Third 0.35, don't 0.65, AI 1.23, grade 1.43, own 1.81, work 2.13)\nOn 'Third' (0.35) the ③ chapter number lands top-left (same as v07/v10: '3' ~210 ink + red loop) + 'third' ~90. HERO: a TEST PAPER card (white, ~420×520, ruled answer lines, tilted 4°) centre-right; a small black-marker ROBOT doodle (square head, antenna) holds a red marker and, on 'grade' (1.43), scrawls a smug red 'A+' on its own paper (the A+ writes on) with a little head-bob of pride. On 'own work' (1.81–2.13) a big red marker ✗ draws over the robot+paper pair (not over the A+ text) and the robot droops — impact on 'grade'. Kinetic: 'don't let AI' ~120 ink on 'don't' (0.65), 'grade its own work' ~170 with 'grade' RED on 'grade' (1.43). MICRO: the REAL strip hf/assets/art_judge.png (white card ≥0.9, taped) slides in at y ~1230–1430 at ~1.6 with the highlighter on 'Do not ask the model to judge itself' (boxes in SHARED.md). No speaker (2.6 s chapter beat).\nWord times are scene-local (exact ones in words.txt; contact frame 0.13–0.2 s before the word). Everything inside x 60–960 / y 285–1480 (measure). data-face 0.41 (navy hoodie = dark: words over it on a solid .paper-strip). Write beats.json (kit beats + scribble beats with dur). Hold alive to the cut.",
+  "assets": [
+   "captures/art_judge.png"
+  ]
+ },
+ {
+  "id": "v14_test",
+  "start": 48.233,
+  "duration": 4.667,
+  "layout": "scene",
+  "type": "explainer",
+  "bespoke": true,
+  "brief": "FIRST read animations/SHARED.md fully — especially the reel-07 Project specifics (numbers ①②③, THE BOARD, THE GAUGE, READABILITY, Words on screen, Real assets) — and look at the style frames it lists (v6 is the target) plus ~/Desktop/reels/reel-06/edit/verify/style_test_v2_red.png (the approved marker look). FULL-SCREEN OPAQUE scene — EXPLAINER — the outside checks, then the payoff.\nSpoken: 'Have it run a test or check a real number or a real scenario. That's how you know it actually worked.' (run 0.33, test 0.69, check 1.05, real 1.31, number 1.63, real 2.21, scenario 2.59, That's 3.28, know 3.76, actually 4.46, worked 4.84)\nBEAT A (0–3.2): a checklist card (white UI card ~760 wide) with three rows that arrive like notifications on their words: '▶ run a test' on 'test' (0.69), '# a real number' on 'number' (1.63), '◎ a real scenario' on 'scenario' (2.59) — each row's drawn icon comes alive (play triangle presses, a number odometer-rolls to a value-free '###' bar, a tiny map-pin drops) and a RED ✓ draws into its box on the word (ticks/ding). Labels are spoken words only (Inter 600 ~56). Small speaker card (≥440) top-right, kept clear. BEAT B (3.2–5.0): rows compact upward; on 'actually worked' 'actually' ~120 ink (4.46) + 'worked' Inter Tight 900 ~250 RED lands on 'worked' (4.84) and a big red marker ✓ STAMP draws beside it with 4 sparkle ticks — impact on 'worked'. 'that's how you know' ~100 ink on 3.28.\nWord times are scene-local (exact ones in words.txt; contact frame 0.13–0.2 s before the word). Everything inside x 60–960 / y 285–1480 (measure). data-face 0.41 (navy hoodie = dark: words over it on a solid .paper-strip). Write beats.json (kit beats + scribble beats with dur). Hold alive to the cut.",
+  "assets": []
+ },
+ {
+  "id": "v15_gauge",
+  "start": 52.9,
+  "duration": 5.333,
+  "layout": "scene",
+  "type": "explainer",
+  "bespoke": true,
+  "brief": "FIRST read animations/SHARED.md fully — especially the reel-07 Project specifics (numbers ①②③, THE BOARD, THE GAUGE, READABILITY, Words on screen, Real assets) — and look at the style frames it lists (v6 is the target) plus ~/Desktop/reels/reel-06/edit/verify/style_test_v2_red.png (the approved marker look). FULL-SCREEN OPAQUE scene — BESPOKE — THE GAUGE (first draw; geometry + seeds FIXED in SHARED.md).\nSpoken: 'And the biggest takeaway is that AI can do so much more than what most of us ask it for.' (biggest 0.49, takeaway 0.91, AI 1.77, can 2.07, do 2.25, so 2.61, much 2.87, more 3.19, most 4.03, us 4.35, ask 4.69, for 5.19)\nBEAT A (0–1.6): 'the biggest takeaway' ~150 with 'biggest' RED lands left column on 'biggest' (0.49)/'takeaway' (0.91); small speaker card (≥440) left column (x ~90–540, y ~760–1150) from ~0.1. HERO (1.6–3.6): on 'AI can do' the gauge's tall black outline DRAWS ITSELF bottom→top (0.5 s) with its tick marks ticking on, then on 'so much more' (2.61–3.19) the 'so much more' Caveat note writes at the top-left and a small spark doodle pops above the bar; kinetic 'AI can do' ~120 ink + 'so much more' ~170 with 'more' RED in the left column (previous phrase exits first). Impact on 'more'. BEAT C (3.6–5.33): on 'most of us ask it for' the tiny RED hatch at the bottom fills in (2 quick passes) — almost nothing — + 'ask it for' red-dark note; then the red curly GAP BRACE draws up the right side from the hatch to the top (4.7–5.2) — the gap is the point. Kinetic 'what most of us ask it for' ~100 ink low-left. Final state must equal SHARED.md (v16 continues from it).\nWord times are scene-local (exact ones in words.txt; contact frame 0.13–0.2 s before the word). Everything inside x 60–960 / y 285–1480 (measure). data-face 0.41 (navy hoodie = dark: words over it on a solid .paper-strip). Write beats.json (kit beats + scribble beats with dur). Hold alive to the cut.",
+  "assets": []
+ },
+ {
+  "id": "v16_further",
+  "start": 58.233,
+  "duration": 5.7,
+  "layout": "scene",
+  "type": "explainer",
+  "bespoke": true,
+  "brief": "FIRST read animations/SHARED.md fully — especially the reel-07 Project specifics (numbers ①②③, THE BOARD, THE GAUGE, READABILITY, Words on screen, Real assets) — and look at the style frames it lists (v6 is the target) plus ~/Desktop/reels/reel-06/edit/verify/style_test_v2_red.png (the approved marker look). FULL-SCREEN OPAQUE scene — BESPOKE — THE GAUGE continues (open with v15's final state already drawn at t=0; copy v15's gauge code + seeds verbatim once it exists — read ../v15_gauge/hf/index.html; until then build from SHARED.md and I'll seam-check).\nSpoken: 'Most people are still using AI for emails and quick questions. But you can get so much further than that.' (Most 0.17, people 0.49, still 0.99, using 1.29, AI 1.63, emails 2.37, quick 2.83, questions 3.43, But 3.73, get 4.35, so 4.65, much 4.87, further 5.11, that 5.65)\nBEAT A (0–3.6): small speaker card left column as in v15 (same spot). In the bottom-left area next to the tiny red sliver: on 'emails' (2.37) a black-marker ENVELOPE doodle (~200) draws and its flap opens/closes once; on 'quick questions' (2.83–3.43) a speech-bubble doodle with a '?' pops beside it and wobbles; both slide toward the red sliver as if that's all they fill. Kinetic 'still using AI for' ~100 ink, 'emails' ~150 + 'quick questions' ~120 ink. HERO (3.7–5.7): on 'further' (5.11) — anticipation from 'get so much' (4.35) — a RED marker arrow shoots UP beside the bar from the sliver to the top, and the red hatch FLOODS UPWARD through the whole bar in fast stacked passes (riser before, impact ON 'further'), the gap brace erases (faster than it drew), the 'so much more' note gets a red ✓. Kinetic 'so much' ~120 ink + 'further' Inter Tight 900 ~230 RED rides up a few px with the flood and lands. Exit the A words fast before.\nWord times are scene-local (exact ones in words.txt; contact frame 0.13–0.2 s before the word). Everything inside x 60–960 / y 285–1480 (measure). data-face 0.41 (navy hoodie = dark: words over it on a solid .paper-strip). Write beats.json (kit beats + scribble beats with dur). Hold alive to the cut.",
+  "assets": []
+ },
+ {
+  "id": "v17_ask",
+  "start": 63.933,
+  "duration": 1.3,
+  "layout": "scene",
+  "type": "fullscreen",
+  "bespoke": false,
+  "brief": "FIRST read animations/SHARED.md fully — especially the reel-07 Project specifics (numbers ①②③, THE BOARD, THE GAUGE, READABILITY, Words on screen, Real assets) — and look at the style frames it lists (v6 is the target) plus ~/Desktop/reels/reel-06/edit/verify/style_test_v2_red.png (the approved marker look). FULL-SCREEN OPAQUE scene — FULLSCREEN — him edge to edge, slow push 1.0→1.02 (short 1.3 s punch).\nSpoken: 'You just need to ask.' (You 0.05, just 0.25, need 0.45, to 0.71, ask 0.99)\nWORDS low on a solid .paper-strip (y ≥ 1240): 'you just need to' ~110 ink lands word by word (0.05–0.71); 'ask' Inter Tight 900 ~260 RED STAMPS in on 'ask' (0.99): scale 1.45→0.95→1.0, a red marker loop draws round it in 0.25 s — impact on 'ask'. Nothing else; nothing over his face.\nWord times are scene-local (exact ones in words.txt; contact frame 0.13–0.2 s before the word). Everything inside x 60–960 / y 285–1480 (measure). data-face 0.41 (navy hoodie = dark: words over it on a solid .paper-strip). Write beats.json (kit beats + scribble beats with dur). Hold alive to the cut.",
+  "assets": []
+ },
+ {
+  "id": "v18_cta",
+  "start": 65.233,
+  "duration": 5.033,
+  "layout": "scene",
+  "type": "cta",
+  "bespoke": false,
+  "brief": "FIRST read animations/SHARED.md fully — especially the reel-07 Project specifics (numbers ①②③, THE BOARD, THE GAUGE, READABILITY, Words on screen, Real assets) — and look at the style frames it lists (v6 is the target) plus ~/Desktop/reels/reel-06/edit/verify/style_test_v2_red.png (the approved marker look). FULL-SCREEN OPAQUE scene — CTA (portrait) + END HOLD (spoken part ends ~3.2, then his freeze-frame end hold to 5.03 — stay alive to the last frame).\nSpoken: 'Comment ambitious and I'll send you the article right away so you can read it too.' (Comment 0.17, ambitious 0.63, send 1.27, article 1.75, right 2.03, away 2.29, read 2.89, too 3.13)\n'Comment' ~150 ink + '“ambitious”' Inter Tight 900 ~200 RED in quotes (fit ≤900 incl. overshoot) at the top of the zone on 'Comment'/'ambitious' (0.17/0.63); a red marker loop draws round 'ambitious' (0.65–1.0) — impact on 'ambitious'. A dotted ink path draws from the word down to the PORTRAIT hero card (~740×~780, below). HERO (1.2–3.2): on 'send you the article' a small card of the REAL title strip hf/assets/art_title.png (≥ 520 wide here is fine — it is an object, the title is huge) pops out beside the card, FOLDS into a paper plane (two quick folds) and flies on an arc on 'right away' (2.03–2.29) into a black pill '→ your inbox' that lands lower right (y ~1350–1450) — the pill pings with a ripple. 'right away' ~110 ink on .paper-strip. END HOLD (3.2–5.03): the CTA returns to hero size (1 % breathe on 'ambitious'), the loop boils, the pill bobs, the plane's trail stays — alive to the last frame.\nWord times are scene-local (exact ones in words.txt; contact frame 0.13–0.2 s before the word). Everything inside x 60–960 / y 285–1480 (measure). data-face 0.41 (navy hoodie = dark: words over it on a solid .paper-strip). Write beats.json (kit beats + scribble beats with dur). Hold alive to the cut.",
+  "assets": [
+   "captures/art_title.png"
+  ]
+ }
+]

@@ -1,0 +1,226 @@
+<!doctype html>
+<!-- adnaan-reel scene starter: FULL-SCREEN SPEAKER — HE fills the frame edge to edge (no card, no tilt), kinetic
+     words land low on his chest / the bottom third with the paper glow. The minimal beat: nothing else on screen
+     unless the brief names ONE object. Use for the hook, verdict/opinion lines, the wrap-up, the CTA — 2–4 per reel,
+     alternating with paper-world scenes. (flashcheck knows this window is not paper: type "fullscreen" in slots.json.)
+     Optional: add <div class="paper-strip"></div> before the words if the background behind the words is busy.
+     Optional mid-scene version: start as a portrait card and call P.growFull("#spk", t) on the hero word. -->
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>v13_expert</title>
+    <link rel="stylesheet" href="brand.css" />
+    <link rel="stylesheet" href="paper.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+    <script src="paper.js"></script>
+    <style>
+      #stripA { top: auto; bottom: 0; height: 300px; background: linear-gradient(180deg, rgba(228,222,217,0) 0%, rgba(228,222,217,.72) 55%, rgba(228,222,217,.86) 100%); opacity: 0; }
+      #stripB { top: 1250px; bottom: auto; height: 670px; opacity: 0;
+        background: linear-gradient(180deg, rgba(228,222,217,0) 0%, rgba(228,222,217,.62) 14%, rgba(228,222,217,.84) 30%, rgba(228,222,217,.9) 100%); }
+
+      .obj { position: absolute; opacity: 0; pointer-events: none; }
+      .obj svg { display: block; overflow: visible; }
+      .ring { position: absolute; border-radius: 50%; border: 8px solid var(--brand-primary); opacity: 0; pointer-events: none; }
+      #seal svg { filter: drop-shadow(8px 14px 12px rgba(40, 30, 20, 0.30)); }
+      #lock svg { filter: drop-shadow(10px 16px 14px rgba(40, 30, 20, 0.28)); }
+      #clock { background: var(--brand-card); border-radius: 30px; box-shadow: 0 22px 34px -10px rgba(60, 50, 40, 0.32); }
+    </style>
+  </head>
+  <body data-face="0.47">
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="8.3167">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+
+      <!-- portrait card on paper (beat A) that grows to the full frame on 'lock' (beat B) via P.growFull -->
+      <div id="spk" class="spk portrait" data-x="160" data-y="520" data-w="760" data-h="860" data-face-at="0.38" data-float="0">
+        <div class="spk-card">
+          <div class="spk-vid"><video id="speaker" class="clip" src="assets/speaker.mp4" muted playsinline data-start="0" data-duration="8.3167" data-track-index="1"></video></div>
+          <div id="stripA" class="paper-strip"></div>
+          <div class="spk-sheen"></div>
+        </div>
+      </div>
+
+      <div id="cam">
+        <div id="stripB" class="paper-strip"></div>
+        <div id="punch">
+        <!-- BEAT A: paper world -->
+        <div id="a1" class="line sup" data-x="76" data-base="372" data-size="110" data-fit="880" data-exit="3.0">
+          <span class="w" data-t="0.47">how</span><span class="w gap-s ocean" data-t="0.71">work</span><span class="w gap-s" data-t="0.95">gets</span><span class="w gap-s" data-t="1.11" data-pop>done</span>
+        </div>
+        <div id="a2" class="line sup" data-right="950" data-base="478" data-size="96" data-exit="3.05">
+          <span class="w" data-t="1.29">in</span><span class="w gap-s" data-t="1.43">your</span><span class="w gap-s" data-t="1.71" data-pop>field</span>
+        </div>
+        <div id="a3" class="line hero ink kin" data-x="84" data-base="1262" data-size="200" data-fit="880">
+          <span class="w" data-t="2.47" data-hero data-peak="1.08">domain</span>
+        </div>
+        <div id="a4" class="line hero ocean kin" data-right="915" data-base="1432" data-size="220" data-fit="840">
+          <span class="w" data-t="3.03" data-hero data-peak="1.1" data-underline="3.03">expert</span>
+        </div>
+
+        <!-- BEAT B: full screen, words low on his chest -->
+        <div id="b1" class="line hero ocean kin" data-x="76" data-base="1462" data-size="240" data-fit="880">
+          <span class="w" data-t="3.45" data-hero data-peak="1.1">lock</span><span class="w gap-s" data-t="3.71" data-hero data-peak="1.1">in</span>
+        </div>
+        <div id="b2" class="line hero ink kin" style="letter-spacing:-0.02em" data-x="76" data-base="1462" data-size="170" data-fit="560">
+          <span class="w" data-t="4.11" data-pop>learn</span>
+        </div>
+        <div id="b3" class="line sup kin" data-x="76" data-base="1462" data-size="84" data-fit="640">
+          <span class="w" data-t="4.93">all</span><span class="w gap-s" data-t="5.11">of</span><span class="w gap-s" data-t="5.27">this</span><span class="w gap-s" data-t="5.49" data-pop>stuff</span>
+        </div>
+        <div id="b4" class="line hero ocean kin" data-right="935" data-base="1462" data-size="152" data-fit="330">
+          <span class="w" data-t="5.79" data-pop>now</span>
+        </div>
+        <div id="b4a" class="line sup kin" data-x="76" data-base="1392" data-size="84">
+          <span class="w" data-t="6.11">because</span>
+        </div>
+        <div id="b4b" class="line sup kin" data-x="76" data-base="1462" data-size="84">
+          <span class="w" data-t="6.45">that</span>
+        </div>
+        <div id="b5" class="line sup kin" data-x="76" data-base="1444" data-size="120" data-fit="880">
+          <span class="w" data-t="6.87">where</span><span class="w gap-s" data-t="7.15">this</span>
+        </div>
+        <div id="b6" class="line hero ink kin" data-x="96" data-base="1426" data-size="170" data-fit="700">
+          <span class="w" data-t="7.67" data-hero data-peak="1.08">industry</span>
+        </div>
+        <div id="b7" class="line hero ocean kin" data-right="915" data-base="1456" data-size="240" data-fit="840">
+          <span class="w" id="hd">headed</span>
+        </div>
+
+        <!-- creative pass: seal pins on 'expert', padlock snaps on 'lock', clock ticks on 'now', dotted arrow flies off on 'headed' -->
+        <div id="sealRing" class="ring" style="left:812px;top:540px;width:136px;height:136px"></div>
+        <div id="seal" class="obj" style="left:812px;top:540px;width:136px;height:136px">
+          <svg viewBox="0 0 136 136" width="136" height="136">
+            <defs><linearGradient id="sg" x1="0" y1="0" x2="0.4" y2="1"><stop offset="0" style="stop-color:var(--brand-primary)"/><stop offset="1" style="stop-color:var(--brand-primary-dark)"/></linearGradient></defs>
+            <path d="M68.0,10.0 L78.9,20.2 L93.2,15.7 L98.6,29.7 L113.3,31.8 L112.1,46.7 L124.5,55.1 L117.0,68.0 L124.5,80.9 L112.1,89.3 L113.3,104.2 L98.6,106.3 L93.2,120.3 L78.9,115.8 L68.0,126.0 L57.1,115.8 L42.8,120.3 L37.4,106.3 L22.7,104.2 L23.9,89.3 L11.5,80.9 L19.0,68.0 L11.5,55.1 L23.9,46.7 L22.7,31.8 L37.4,29.7 L42.8,15.7 L57.1,20.2 Z" fill="url(#sg)" stroke="url(#sg)" stroke-width="9" stroke-linejoin="round"/>
+            <circle cx="68" cy="68" r="37" fill="none" stroke="#fff" stroke-opacity="0.38" stroke-width="3"/>
+            <path d="M48 70 L63 85 L90 53" fill="none" stroke="#fff" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+
+        <div id="ringLock" class="ring" style="left:755px;top:1285px;width:196px;height:196px"></div>
+        <div id="lock" class="obj" data-origin="50% 100%" style="left:765px;top:1284px;width:176px;height:194px">
+          <div id="lockf">
+            <svg viewBox="0 0 200 220" width="176" height="194">
+              <defs>
+                <linearGradient id="lg" x1="0" y1="0" x2="0.35" y2="1"><stop offset="0" style="stop-color:var(--brand-primary)"/><stop offset="1" style="stop-color:var(--brand-primary-dark)"/></linearGradient>
+                <clipPath id="lbody"><rect x="24" y="104" width="152" height="108" rx="30"/></clipPath>
+              </defs>
+              <g id="shackle"><path d="M56 118 V76 A44 44 0 0 1 144 76 V118" fill="none" stroke="var(--brand-deep)" stroke-width="22" stroke-linecap="round"/></g>
+              <rect x="24" y="104" width="152" height="108" rx="30" fill="url(#lg)"/>
+              <path d="M40 126 Q40 112 56 112 H110" fill="none" stroke="#fff" stroke-opacity="0.35" stroke-width="6" stroke-linecap="round"/>
+              <circle cx="100" cy="148" r="15" fill="#fff"/>
+              <rect x="93.5" y="150" width="13" height="32" rx="6.5" fill="#fff"/>
+              <g clip-path="url(#lbody)"><rect id="glint" x="-60" y="92" width="34" height="130" fill="#fff" fill-opacity="0.5" transform="rotate(18 0 150)"/></g>
+            </svg>
+          </div>
+        </div>
+
+        <div id="ringNow" class="ring" style="left:705px;top:1304px;width:200px;height:200px"></div>
+        <div id="clock" class="obj" style="left:527px;top:1346px;width:116px;height:116px">
+          <svg viewBox="0 0 116 116" width="116" height="116">
+            <circle cx="58" cy="58" r="35" fill="none" stroke="var(--brand-text)" stroke-width="6"/>
+            <g stroke="var(--brand-muted)" stroke-width="4" stroke-linecap="round"><path d="M58 29 V34"/><path d="M87 58 H82"/><path d="M58 87 V82"/><path d="M29 58 H34"/></g>
+            <path d="M58 58 L69 49" stroke="var(--brand-text)" stroke-width="6" stroke-linecap="round"/>
+            <g id="mhand"><path d="M58 58 V33" stroke="var(--brand-primary)" stroke-width="6" stroke-linecap="round"/></g>
+            <circle cx="58" cy="58" r="6" fill="var(--brand-text)"/>
+          </svg>
+        </div>
+
+        <svg id="trailsvg" style="position:absolute;left:0;top:0;overflow:visible" width="1080" height="1920" viewBox="0 0 1080 1920">
+          <path id="trail" d="M84 1467 H922" fill="none" stroke="var(--brand-text)" stroke-width="3" stroke-dasharray="2 12" stroke-linecap="round"/>
+          <g transform="translate(0 1467)"><g id="arrow" style="opacity:0"><path d="M0 0 L-34 -10 L-26 0 L-34 10 Z" fill="var(--brand-primary)" stroke="var(--brand-primary)" stroke-width="3" stroke-linejoin="round"/></g></g>
+        </svg>
+      </div></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const P = await Paper.init();
+        const { tl, D, F, $, $$ } = P;
+        const spk = $("#spk"), card = $(".spk-card", spk);
+
+        // the runtime's slow tilt would keep re-writing rotation after the card has gone full-frame: end it at the lock
+        for (const tw of tl.getTweensOf(card))
+          if (tw.vars.rotationY !== undefined && Math.abs(tw.startTime() - 0.32) < 1e-6) tw.duration(3.3 - 0.32);
+        // own float for beat A only (4 px, settles flat before the grow)
+        tl.fromTo(spk, { y: 0 }, { y: -6, duration: 1.65, ease: "sine.inOut", yoyo: true, repeat: 1 }, 0);
+
+        // staging: when the hero words land the top phrases recede
+        P.recede("#a1, #a2", 2.4, { opacity: 0.5, blur: 2.5, scale: 0.98, dur: 0.3 });
+
+        // beat A chest strip (inside the card) fades as the card grows; beat B strip rises under the low words
+        tl.fromTo("#stripA", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" }, 2.25);
+        tl.to("#stripA", { opacity: 0, duration: 0.25, ease: "power2.in" }, 3.2);
+        tl.fromTo("#stripB", { opacity: 0 }, { opacity: 1, duration: 0.45, ease: "power2.out" }, 3.5);
+
+        // "industry is" clears in 4 f just before the finale word rises
+        // every outgoing phrase finishes a 4 f blur-up BEFORE the next one's first visible frame (>= 1 f gap),
+        // or sits on the other side of the frame so they never share pixels
+        const qx = (sel, t) => tl.to(sel, { y: -50, opacity: 0, filter: "blur(8px)", duration: 4 * F, ease: "power2.in" }, t);
+        qx("#a3, #a4", 3.083);
+        qx("#b1", 3.783); qx("#b2", 4.633); qx("#b3", 5.62); qx("#b4, #b4a, #b4b", 6.57); qx("#b5", 7.3); qx("#b6", 7.76);
+        // finale: "headed" alone, accent hero with exaggerated landing on 8.09 and a punch
+        tl.set("#hd", { opacity: 0, transformOrigin: "50% 80%" }, 0);
+        tl.fromTo("#hd", { opacity: 0, y: 90, scale: 0.55, rotation: -7, filter: "blur(10px)" },
+          { opacity: 1, y: -8, scale: 1.12, rotation: 2, filter: "blur(0px)", duration: 0.16, ease: "power3.out", immediateRender: false }, 7.93);
+        tl.to("#hd", { y: 0, scale: 1, rotation: 0, duration: 0.3, ease: "back.out(1.6)" }, 8.09);
+        P.punch(8.09, { scale: 1.012, origin: "510px 1400px", dur: 0.2 });
+        // underline leaves with its word
+        tl.to(".ul", { y: -40, opacity: 0, duration: 4 * F, ease: "power2.in" }, 3.083);
+
+        // ---------------- creative pass: objects ----------------
+        gsap.set("#shackle", { svgOrigin: "56 118", rotation: -38, y: -12 });
+        gsap.set("#mhand", { svgOrigin: "58 58", rotation: -60 });
+        gsap.set("#arrow", { transformOrigin: "100% 50%" });
+
+        // 1) expert seal: stamps onto the card corner on 'expert' (3.03), squash on contact, ring ping, pops off as the lock arrives
+        tl.fromTo("#seal", { x: 70, y: 150, scale: 1.9, rotation: 28, transformOrigin: "50% 50%" },
+          { x: 0, y: 0, scale: 1, rotation: -4, duration: 0.2, ease: "power3.in", immediateRender: false }, 2.83);
+        tl.fromTo("#seal", { opacity: 0 }, { opacity: 1, duration: 0.06, ease: "power1.out", immediateRender: false }, 2.83);
+        tl.to("#seal", { scaleX: 1.14, scaleY: 0.86, duration: 2 * F, ease: "power2.out" }, 3.03)
+          .to("#seal", { scaleX: 1, scaleY: 1, rotation: -7, duration: 0.3, ease: "back.out(2.6)" }, 3.03 + 2 * F);
+        tl.fromTo("#sealRing", { opacity: 0.8, scale: 0.7 }, { opacity: 0, scale: 1.9, duration: 0.4, ease: "power2.out", immediateRender: false }, 3.03);
+        tl.to("#seal", { scale: 1.16, duration: 2 * F, ease: "power2.out" }, 3.36)
+          .to("#seal", { scale: 0, opacity: 0, rotation: 14, duration: 4 * F, ease: "power2.in" }, 3.36 + 2 * F);
+
+        // 2) padlock: swings in on an arc (whoosh 3.25), shackle SNAPS shut on 'lock' (3.45), body squash + ring + shake, then shrinks beside the words
+        tl.set("#lock", { opacity: 0 }, 0);
+        tl.fromTo("#lock", { opacity: 0 }, { opacity: 1, duration: 0.08, ease: "power1.out" }, 3.2);
+        P.arc("#lock", 3.2, { fromX: 270, fromY: 150, dur: 0.26, tilt: 22 });
+        tl.to("#shackle", { rotation: 0, y: 0, duration: 0.1, ease: "power4.in" }, 3.35);
+        P.squash("#lock", 3.45, 0.13);
+        tl.fromTo("#ringLock", { opacity: 0.75, scale: 0.55 }, { opacity: 0, scale: 1.5, duration: 0.38, ease: "power2.out", immediateRender: false }, 3.45);
+        P.shake(3.45, 4);
+        tl.to("#lock", { scale: 0.55, x: 22, duration: 0.3, ease: "power2.inOut" }, 3.84);
+        P.floatY("#lockf", 4, 1.1);
+        // glints while it sits there (secondary action)
+        for (const t of [4.11, 5.0]) tl.fromTo("#glint", { x: 0 }, { x: 260, duration: 0.45, ease: "power2.inOut", immediateRender: false }, t);
+        tl.set("#glint", { x: 0 }, 0);
+        // pops out before 'now'
+        tl.to("#lock", { scale: 0.66, duration: 2 * F, ease: "power2.out" }, 5.4)
+          .to("#lock", { scale: 0, opacity: 0, rotation: 16, duration: 4 * F, ease: "power2.in" }, 5.4 + 2 * F);
+
+        // 3) 'now': pulse ring (5.79) + a clock tile that ticks three times
+        tl.fromTo("#ringNow", { opacity: 0.75, scale: 0.5 }, { opacity: 0, scale: 1.45, duration: 0.42, ease: "power2.out", immediateRender: false }, 5.79);
+        tl.fromTo("#clock", { opacity: 0, scale: 0.5, rotation: -8, y: 20, transformOrigin: "50% 60%" },
+          { opacity: 1, scale: 1.08, rotation: 2, y: -4, duration: 0.12, ease: "power3.out", immediateRender: false }, 5.74);
+        tl.to("#clock", { scale: 1, rotation: 0, y: 0, duration: 0.3, ease: "back.out(1.8)" }, 5.86);
+        [5.99, 6.19, 6.39].forEach((t, i) => tl.to("#mhand", { rotation: -30 + i * 30, duration: 0.12, ease: "back.out(3)" }, t));
+        tl.to("#clock", { y: -50, opacity: 0, filter: "blur(8px)", duration: 4 * F, ease: "power2.in" }, 6.57);
+
+        // 4) dotted path + arrow under the last phrase; the arrow flies off right on 'headed' (8.09)
+        P.drawPath("#trail", 6.95, 1.0);
+        P.marchPath("#trail", 6.95, 1.38, 90);
+        tl.fromTo("#arrow", { x: 84 }, { x: 922, duration: 1.0, ease: "power1.inOut" }, 6.95);
+        tl.fromTo("#arrow", { opacity: 0 }, { opacity: 1, duration: 0.1, ease: "power1.out", immediateRender: false }, 6.95);
+        tl.to("#arrow", { x: 900, scaleX: 0.85, duration: 3 * F, ease: "power2.in" }, 8.0);
+        tl.to("#arrow", { x: 1280, scaleX: 1.7, duration: 0.26, ease: "power3.in" }, 8.09);
+
+        // THE hero beat: portrait card -> full frame on 'lock', then a 1 % punch on the word
+        P.growFull("#spk", 3.45, { dur: 0.6 });
+        P.punch(3.5, { scale: 1.01, origin: "510px 1400px", dur: 0.25 });
+      })();
+    </script>
+  </body>
+</html>

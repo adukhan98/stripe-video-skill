@@ -1,0 +1,166 @@
+{
+ "version": 2,
+ "sources": {
+  "A": "~/Downloads/37D01E25-B461-4214-817B-F7572F27C8ED.MP4"
+ },
+ "output": {
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "fit": "crop",
+  "focus_x": 0.5,
+  "focus_y": 0.4
+ },
+ "mirror": true,
+ "grade": "auto",
+ "ranges": [
+  {
+   "source": "A",
+   "start": 0,
+   "end": 3.84,
+   "sfx": "subdrop"
+  },
+  {
+   "source": "A",
+   "start": 3.92,
+   "end": 6.38
+  },
+  {
+   "source": "A",
+   "start": 6.65,
+   "end": 8.6
+  },
+  {
+   "source": "A",
+   "start": 8.81,
+   "end": 10.91
+  },
+  {
+   "source": "A",
+   "start": 14.19,
+   "end": 20.75
+  },
+  {
+   "source": "A",
+   "start": 21.11,
+   "end": 27.9
+  },
+  {
+   "source": "A",
+   "start": 28.15,
+   "end": 33.39
+  },
+  {
+   "source": "A",
+   "start": 33.66,
+   "end": 36.85
+  },
+  {
+   "source": "A",
+   "start": 36.97,
+   "end": 42.66
+  },
+  {
+   "source": "A",
+   "start": 43.36,
+   "end": 49.39
+  },
+  {
+   "source": "A",
+   "start": 49.64,
+   "end": 51.63
+  },
+  {
+   "source": "A",
+   "start": 52.01,
+   "end": 57.53
+  },
+  {
+   "source": "A",
+   "start": 58.26,
+   "end": 62.82
+  },
+  {
+   "source": "A",
+   "start": 63.1,
+   "end": 68.68
+  },
+  {
+   "source": "A",
+   "start": 70.67,
+   "end": 73.1
+  }
+ ],
+ "end_hold": 1.6,
+ "sfx_gain_db": -13,
+ "overlays": [
+  {
+   "file": "animations/v01_hook/render.mov",
+   "start_in_output": 0.0,
+   "duration": 3.86667,
+   "hold": 0.1
+  },
+  {
+   "file": "animations/v02_skills/render.mov",
+   "start_in_output": 3.85467,
+   "duration": 6.54533,
+   "sfx": "whoosh",
+   "hold": 0.1
+  },
+  {
+   "file": "animations/v03_genius/render.mov",
+   "start_in_output": 10.388,
+   "duration": 6.57867,
+   "hold": 0.1
+  },
+  {
+   "file": "animations/v04_taste/render.mov",
+   "start_in_output": 16.95467,
+   "duration": 6.812,
+   "sfx": "chime",
+   "hold": 0.1
+  },
+  {
+   "file": "animations/v05_refine/render.mov",
+   "start_in_output": 23.75467,
+   "duration": 8.47867,
+   "sfx": "chime",
+   "hold": 0.1
+  },
+  {
+   "file": "animations/v06_layers/render.mov",
+   "start_in_output": 32.22133,
+   "duration": 5.712,
+   "sfx": "chime",
+   "hold": 0.1
+  },
+  {
+   "file": "animations/v07_mengto/render.mov",
+   "start_in_output": 37.92133,
+   "duration": 8.04533,
+   "sfx": "chime",
+   "hold": 0.1
+  },
+  {
+   "file": "animations/v08_hallmark/render.mov",
+   "start_in_output": 45.95467,
+   "duration": 5.54533,
+   "sfx": "chime",
+   "hold": 0.1
+  },
+  {
+   "file": "animations/v09_taste/render.mov",
+   "start_in_output": 51.488,
+   "duration": 10.17867,
+   "sfx": "whoosh",
+   "hold": 0.1
+  },
+  {
+   "file": "animations/v10_cta/render.mov",
+   "start_in_output": 61.65467,
+   "duration": 4.19533,
+   "sfx": "ping",
+   "hold": true
+  }
+ ]
+}

@@ -1,0 +1,107 @@
+[
+ {
+  "t": 0.05,
+  "sfx": "scribble",
+  "dur": 0.3,
+  "what": "padlock body outline"
+ },
+ {
+  "t": 0.2,
+  "sfx": "scribble",
+  "dur": 0.22,
+  "what": "shackle arch"
+ },
+ {
+  "t": 0.3,
+  "sfx": "tick",
+  "what": "padlock body drawn",
+  "gain_db": -4
+ },
+ {
+  "t": 0.36,
+  "sfx": "scribble",
+  "dur": 0.14,
+  "what": "keyhole circle"
+ },
+ {
+  "t": 0.42,
+  "sfx": "tick",
+  "what": "shackle drawn, open",
+  "gain_db": -6
+ },
+ {
+  "t": 0.46,
+  "sfx": "scribble",
+  "dur": 0.08,
+  "what": "keyhole slot"
+ },
+ {
+  "t": 0.52,
+  "sfx": "whoosh",
+  "what": "shackle winds up (anticipation)",
+  "gain_db": -8
+ },
+ {
+  "t": 0.64,
+  "sfx": "riser",
+  "what": "riser hits on 'lock'",
+  "gain_db": -6
+ },
+ {
+  "t": 0.64,
+  "sfx": "impact",
+  "what": "padlock SNAPS shut + 'lock' lands"
+ },
+ {
+  "t": 0.66,
+  "sfx": "scribble",
+  "dur": 0.16,
+  "what": "three click ticks off the shackle"
+ },
+ {
+  "t": 0.69,
+  "sfx": "tick",
+  "what": "click burst ticks",
+  "gain_db": -6
+ },
+ {
+  "t": 1.12,
+  "sfx": "pop",
+  "what": "'in' lands"
+ },
+ {
+  "t": 1.2,
+  "sfx": "scribble",
+  "dur": 0.26,
+  "what": "underline pass 1 under lock in"
+ },
+ {
+  "t": 1.22,
+  "sfx": "tick",
+  "what": "double underline scribble starts",
+  "gain_db": -6
+ },
+ {
+  "t": 1.34,
+  "sfx": "pop",
+  "what": "'my'",
+  "gain_db": -3
+ },
+ {
+  "t": 1.44,
+  "sfx": "scribble",
+  "dur": 0.22,
+  "what": "underline pass 2"
+ },
+ {
+  "t": 1.66,
+  "sfx": "pop",
+  "what": "'friend'"
+ },
+ {
+  "t": 1.92,
+  "sfx": "ding",
+  "what": "end hold settles, lock sways",
+  "gain_db": -9
+ }
+]

@@ -1,0 +1,449 @@
+<!doctype html>
+<!-- adnaan-reel scene v02_fde — EXPLAINER (bespoke): an ID badge swings in on its lanyard; "forward deployed engineer"
+     collapses into one giant accent "FDE" that stamps onto the badge; then an unlabelled chart line rises: "up" "up".
+     Runtime (paper.css / paper.js) untouched; this file holds copy, positions and the bespoke objects only. -->
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>v02_fde</title>
+    <link rel="stylesheet" href="brand.css" />
+    <link rel="stylesheet" href="paper.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+    <script src="paper.js"></script>
+    <style>
+      @font-face { font-family: "Inter Tight"; src: url("fonts/InterTight-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Inter"; src: url("fonts/Inter-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+
+      /* ---------- bespoke: lanyard ID badge ---------- */
+      #badge { position: absolute; left: 95px; top: 300px; width: 350px; height: 640px; opacity: 0; }
+      #badge .pin {
+        position: absolute; left: 161px; top: -6px; width: 28px; height: 28px; border-radius: 50%; z-index: 3;
+        background: radial-gradient(circle at 35% 30%, var(--brand-muted), var(--brand-text) 70%);
+        box-shadow: 0 6px 8px rgba(40, 30, 20, 0.35);
+      }
+      #badge .strap {
+        position: absolute; left: 157px; top: 6px; width: 36px; height: 56px; border-radius: 6px 6px 3px 3px;
+        background: linear-gradient(90deg, var(--brand-text), var(--brand-deep) 55%, var(--brand-text));
+        box-shadow: 0 8px 12px -6px rgba(40, 30, 20, 0.4);
+      }
+      #badge .bclip {
+        position: absolute; left: 141px; top: 46px; width: 68px; height: 44px; border-radius: 12px; z-index: 2;
+        background: linear-gradient(180deg, var(--brand-muted), var(--brand-text));
+        box-shadow: 0 8px 12px -4px rgba(40, 30, 20, 0.38);
+      }
+      #badge .bclip::after {
+        content: ""; position: absolute; left: 16px; top: 17px; width: 36px; height: 10px; border-radius: 5px;
+        background: var(--brand-text);
+      }
+      #badge .bwrap { position: absolute; left: 0; top: 64px; width: 350px; height: 560px; }
+      #badge .bbody {
+        position: absolute; inset: 0; border-radius: 34px; background: var(--brand-card);
+        box-shadow: var(--shadow-card), 0 8px 16px -8px rgba(60, 50, 40, 0.18);
+      }
+      #badge .av {
+        position: absolute; left: 95px; top: 56px; width: 160px; height: 160px; border-radius: 50%; overflow: hidden;
+        background: var(--wire);
+      }
+      #badge .av i { position: absolute; display: block; background: var(--brand-muted); opacity: 0.32; }
+      #badge .av .h { left: 52px; top: 32px; width: 56px; height: 56px; border-radius: 50%; }
+      #badge .av .s { left: 24px; top: 100px; width: 112px; height: 90px; border-radius: 56px 56px 0 0; }
+      #badge .slot {
+        position: absolute; left: 24px; right: 24px; top: 336px; height: 156px; border-radius: 22px;
+        background: var(--brand-background);
+      }
+      #blabel {
+        position: absolute; left: 0; right: 0; top: 336px; height: 156px; display: flex; align-items: center; justify-content: center;
+        font-family: var(--font-heading); font-weight: 900; font-size: 140px; letter-spacing: -0.045em; line-height: 1;
+        color: var(--brand-primary); opacity: 0;
+      }
+
+      /* creative pass: badge plastic glint, avatar eyes, stamp flash */
+      #badge .glintw { position: absolute; inset: 0; border-radius: 34px; overflow: hidden; pointer-events: none; z-index: 4; }
+      #badge .glint { position: absolute; top: -30%; left: 0; width: 120px; height: 160%;
+        background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(20,20,20,0.04) 22%, rgba(255,255,255,0.95) 50%, rgba(20,20,20,0.04) 78%, rgba(255,255,255,0) 100%); }
+      #badge .av .eye { position: absolute; top: 54px; width: 10px; height: 10px; border-radius: 50%; background: var(--brand-text); opacity: 0; }
+      #badge .av .eye.l { left: 65px; } #badge .av .eye.r { left: 85px; }
+      #badge .slotflash { position: absolute; inset: 0; border-radius: 22px; background: var(--brand-primary); opacity: 0; }
+      .shock { position: absolute; left: 160px; top: 1094px; width: 700px; height: 300px; border-radius: 50%;
+        border: 5px solid var(--brand-primary); opacity: 0; pointer-events: none; }
+      .ghost { position: absolute; display: block; white-space: nowrap; font-family: var(--font-heading); font-weight: 900;
+        line-height: 0.88; color: var(--brand-text); opacity: 0; pointer-events: none; }
+      #chart .spd { fill: none; stroke: var(--brand-primary); stroke-width: 7; stroke-linecap: round; }
+      #chart .pt { fill: var(--brand-primary); }
+      #bursts line { stroke: var(--brand-primary); stroke-width: 8; stroke-linecap: round; }
+
+      /* ---------- kinetic-word internals for the FDE collapse ---------- */
+      .w .f, .w .rw, .w .rt, .w .L { display: inline-block; }
+      .w .rw { overflow: hidden; padding: 0.28em 0.03em; margin: -0.28em -0.03em; vertical-align: baseline; }
+
+      /* ---------- bespoke: unlabelled chart card ---------- */
+      #chartF { position: absolute; left: 80px; top: 890px; width: 860px; height: 540px; }
+      #chart { left: 0; top: 0; width: 860px; height: 540px; }
+      #chart svg { position: absolute; left: 0; top: 0; width: 860px; height: 540px; overflow: visible; }
+      #chart .gl { stroke: var(--wire); stroke-width: 3; stroke-linecap: round; }
+      #chart .ln { fill: none; stroke: var(--brand-primary); stroke-width: 13; stroke-linecap: round; stroke-linejoin: round; }
+      #chart .ar { fill: none; stroke: var(--brand-primary); stroke-width: 13; stroke-linecap: round; stroke-linejoin: round; }
+      #chart .tipc { fill: var(--brand-primary); stroke: var(--brand-card); stroke-width: 7; }
+      #chart .tiph { fill: var(--brand-primary); opacity: 0.18; }
+    </style>
+  </head>
+  <body data-face="0.47">
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="5.7833">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+      <div id="cam"><div id="punch">
+
+        <div class="spk small" data-x="506" data-y="302" data-w="440" data-h="340" data-face-at="0.52">
+          <div class="spk-card">
+            <div class="spk-vid"><video id="speaker" class="clip" src="assets/speaker.mp4" muted playsinline data-start="0" data-duration="5.7833" data-track-index="1"></video></div>
+            <div class="spk-sheen"></div>
+          </div>
+        </div>
+
+        <!-- HERO OBJECT 1: lanyard ID badge (pivots on its pin) -->
+        <div id="badge">
+          <div class="strap"></div>
+          <div class="pin"></div>
+          <div class="bclip"></div>
+          <div class="bwrap">
+            <div class="bbody">
+              <i class="g" style="left: 139px; top: 22px; width: 72px; height: 14px"></i>
+              <div class="av"><i class="h"></i><i class="s"></i><b class="eye l"></b><b class="eye r"></b></div>
+              <i class="g" style="left: 60px; top: 242px; width: 230px; height: 26px"></i>
+              <i class="g" style="left: 95px; top: 288px; width: 160px; height: 18px"></i>
+              <i class="g" style="left: 120px; top: 516px; width: 110px; height: 12px"></i>
+              <div class="slot"><div class="slotflash"></div></div>
+              <div id="blabel">FDE</div>
+              <div class="glintw"><div class="glint"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- HERO OBJECT 2: unlabelled chart card (float wrapper + card) -->
+        <div id="chartF" data-float="3" data-float-period="1.4">
+          <div id="chart" class="uicard">
+            <svg viewBox="0 0 860 540">
+              <defs>
+                <linearGradient id="fillg" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" style="stop-color: var(--brand-primary); stop-opacity: 0.22" />
+                  <stop offset="1" style="stop-color: var(--brand-primary); stop-opacity: 0" />
+                </linearGradient>
+                <clipPath id="reveal"><rect id="revealR" x="0" y="0" width="0" height="540" /></clipPath>
+              </defs>
+              <line class="gl" x1="40" y1="130" x2="820" y2="130" />
+              <line class="gl" x1="40" y1="250" x2="820" y2="250" />
+              <line class="gl" x1="40" y1="370" x2="820" y2="370" />
+              <line class="gl" x1="40" y1="490" x2="820" y2="490" />
+              <path id="area" clip-path="url(#reveal)" fill="url(#fillg)"
+                d="M 40 492 C 150 486, 240 476, 300 462 C 390 440, 470 350, 520 262 C 560 192, 680 120, 800 52 L 800 540 L 40 540 Z" />
+              <path id="p1" class="ln" d="M 40 492 C 150 486, 240 476, 300 462 C 390 440, 470 350, 520 262" />
+              <path id="p2" class="ln" d="M 520 262 C 560 192, 680 120, 800 52" />
+              <g id="arrow" transform="translate(800 52) rotate(-30)"><g id="spd"><path class="spd" d="M -44 -30 L -150 -30" /><path class="spd" d="M -60 30 L -140 30" /><path class="spd" d="M -70 -60 L -130 -60" /></g><g id="arrowIn"><path class="ar" d="M -30 -26 L 4 0 L -30 26" /></g></g>
+              <g id="tip"><circle class="tiph" r="34" /><circle class="tipc" r="15" /></g>
+            </svg>
+          </div>
+        </div>
+
+        <!-- beat A: kinetic stack -->
+        <div class="line sup" data-right="944" data-base="735" data-size="84" data-exit="2.46">
+          <span class="w" data-t="0.64">talking</span>
+        </div>
+        <div class="line sup" data-right="944" data-base="830" data-size="84" data-exit="2.46" data-exit-lag="2">
+          <span class="w" data-t="0.94">about</span>
+        </div>
+        <div class="line hero" id="lf" data-x="80" data-base="1092" data-size="180">
+          <span class="w hero ink" data-t="1.38" data-hero><span class="f">f</span><span class="rw"><span class="rt">orward</span></span></span>
+        </div>
+        <div class="line hero" id="ld" data-right="930" data-base="1260" data-size="180">
+          <span class="w hero ink" data-t="1.72" data-hero><span class="f">d</span><span class="rw"><span class="rt">eployed</span></span></span>
+        </div>
+        <div class="line hero" id="le" data-x="84" data-base="1428" data-size="180">
+          <span class="w hero ink" data-t="2.18" data-hero><span class="f">e</span><span class="rw"><span class="rt">ngineer</span></span></span>
+        </div>
+
+        <!-- beat B: words -->
+        <div class="line sup" id="lh" data-x="80" data-base="802" data-size="96">
+          <span class="w hero" style="font-size: 1.29em" data-t="3.70" data-pop>hiring</span><span class="w gap-s" data-t="3.92">for</span><span class="w gap-s" data-t="4.06">this</span><span class="w gap-s" data-t="4.28">role</span>
+        </div>
+        <div class="line hero" id="lu1" data-x="140" data-base="1190" data-size="200">
+          <span class="w hero ocean" data-t="5.46" data-hero data-peak="1.1">up</span>
+        </div>
+        <div class="line hero" id="lu2" data-x="380" data-base="1000" data-size="240">
+          <span class="w hero ocean" data-t="5.593" data-hero data-peak="1.12">up</span>
+        </div>
+
+        <!-- creative pass: FDE shockwave rings + burst layer (behind the giant FDE) -->
+        <div class="shock" id="shock1"></div><div class="shock" id="shock2"></div>
+        <svg class="paths" id="bursts" viewBox="0 0 1080 1920"></svg>
+
+        <!-- the giant FDE (the exaggerated beat) — last, so it flies over the badge -->
+        <div class="line hero" id="lfde" data-cx="510" data-base="1340" data-size="280">
+          <span class="w hero ocean" data-t="2.80" data-hero data-rise="16" data-peak="1.12"><span class="L">F</span><span class="L">D</span><span class="L">E</span></span>
+        </div>
+      </div></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const P = await Paper.init();
+        const { tl, D, F, $, $$ } = P;
+        const ACC = getComputedStyle(document.documentElement).getPropertyValue("--brand-primary").trim();
+
+        // ---------------- BEAT A: the badge swings in on its lanyard (arc + pendulum overshoot) ----------------
+        const badge = $("#badge");
+        gsap.set(badge, { transformOrigin: "175px 8px" });
+        tl.fromTo(badge, { opacity: 0 }, { opacity: 1, duration: 5 * F, ease: "power1.out" }, 0.08);
+        tl.fromTo(badge, { filter: "blur(6px)" }, { filter: "blur(0px)", duration: 0.3, ease: "power2.out" }, 0.08);
+        tl.fromTo(badge, { x: 30 }, { x: 0, duration: 0.5, ease: "power3.out" }, 0.08);          // arc: x and y eased differently
+        tl.fromTo(badge, { y: 10 }, { y: 0, duration: 0.5, ease: "power1.out" }, 0.08);
+        tl.fromTo(badge, { scale: 0.9 }, { scale: 1, duration: 0.55, ease: "back.out(1.6)" }, 0.08);
+        // pendulum: rotation decays through overshoots, then a slow sway (secondary action)
+        tl.fromTo(badge, { rotation: -8 }, { rotation: 3, duration: 0.42, ease: "sine.inOut" }, 0.08)
+          .to(badge, { rotation: -1.6, duration: 0.3, ease: "sine.inOut" }, 0.5)
+          .to(badge, { rotation: 0.7, duration: 0.26, ease: "sine.inOut" }, 0.8)
+          .to(badge, { rotation: -0.3, duration: 0.24, ease: "sine.inOut" }, 1.06)
+          .to(badge, { rotation: -0.7, duration: 0.8, ease: "sine.inOut" }, 1.3)
+          .to(badge, { rotation: 0.6, duration: 0.8, ease: "sine.inOut" }, 2.1)
+          .to(badge, { rotation: 0, duration: 0.4, ease: "power1.out" }, 2.9);
+        // lanyard physics: the strap bends against the swing (lags the pendulum), the clip trails it
+        const strapEl = $(".strap"), clipEl = $(".bclip");
+        gsap.set([strapEl, clipEl], { transformOrigin: "50% 0%" });
+        tl.fromTo(strapEl, { skewX: 0 }, { skewX: 8, duration: 0.24, ease: "sine.out" }, 0.08)
+          .to(strapEl, { skewX: -6, duration: 0.32, ease: "sine.inOut" }, 0.32)
+          .to(strapEl, { skewX: 3, duration: 0.28, ease: "sine.inOut" }, 0.64)
+          .to(strapEl, { skewX: -1, duration: 0.24, ease: "sine.inOut" }, 0.92)
+          .to(strapEl, { skewX: 0, duration: 0.3, ease: "sine.out" }, 1.16)
+          .to(strapEl, { skewX: -7, duration: 0.24, ease: "sine.out" }, 3.36)
+          .to(strapEl, { skewX: 4, duration: 0.28, ease: "sine.inOut" }, 3.6)
+          .to(strapEl, { skewX: -1.5, duration: 0.26, ease: "sine.inOut" }, 3.88)
+          .to(strapEl, { skewX: 0, duration: 0.3, ease: "sine.out" }, 4.14);
+        tl.fromTo(clipEl, { rotation: 0 }, { rotation: -6, duration: 0.26, ease: "sine.out" }, 0.1)
+          .to(clipEl, { rotation: 4, duration: 0.32, ease: "sine.inOut" }, 0.36)
+          .to(clipEl, { rotation: -1.5, duration: 0.28, ease: "sine.inOut" }, 0.68)
+          .to(clipEl, { rotation: 0, duration: 0.3, ease: "sine.out" }, 0.96);
+        // light glint sweeps the badge plastic as it settles, and again right after the stamp
+        const glint = $(".glint");
+        gsap.set(glint, { rotation: 14 });
+        tl.fromTo(glint, { x: -220 }, { x: 470, duration: 0.6, ease: "power2.inOut" }, 0.95);
+        tl.fromTo(glint, { x: -220 }, { x: 470, duration: 0.42, ease: "power2.inOut", immediateRender: false }, 3.36);
+
+        // ---------------- the collapse: forward / deployed / engineer → f d e → FDE ----------------
+        const fde = $("#lfde"), fdeW = $(".w", fde), Ls = $$(".L", fde);
+        const srcLines = ["#lf", "#ld", "#le"].map((s) => $(s));
+        const sizeA = parseFloat(srcLines[0].style.fontSize), sizeB = parseFloat(fde.style.fontSize), k = sizeB / sizeA;   // honours --type-scale
+        srcLines.forEach((line, i) => {
+          const rt = $(".rt", line), f = $(".f", line), L = Ls[i];
+          const t0 = 2.4 + i * 2 * F;                                     // parts lag the whole: 2 f apart
+          // the rest of the word is swallowed into its first letter (slides under the clip, no distortion)
+          tl.to(rt, { x: -rt.offsetWidth - 6, opacity: 0.2, duration: 5 * F, ease: "power3.in" }, t0);
+          tl.set(rt, { autoAlpha: 0 }, t0 + 5 * F);
+          // first letter flies on an arc to its FDE slot, growing and turning accent
+          const dx = fde.offsetLeft + L.offsetLeft - (line.offsetLeft + f.offsetLeft);
+          const dy = parseFloat(fde.dataset.base) - parseFloat(line.dataset.base);
+          gsap.set(f, { transformOrigin: "0% 78%" });
+          const s = t0 + 2 * F;
+          tl.to(f, { x: dx, duration: 8 * F, ease: "power2.inOut" }, s);
+          tl.to(f, { y: dy, duration: 8 * F, ease: i === 1 ? "power2.inOut" : "power3.out" }, s);
+          tl.to(f, { scale: k, color: ACC, duration: 8 * F, ease: "power2.in" }, s);
+          tl.to(f, { opacity: 0, duration: 3 * F, ease: "power1.in" }, 2.62);
+          // motion-blur ghost trail: two lagging copies of the flying letter (1.5 f / 3 f behind), soft and fading
+          [1, 2].forEach((g) => {
+            const gh = document.createElement("span");
+            gh.className = "ghost"; gh.textContent = f.textContent;
+            const cs = getComputedStyle(line);
+            Object.assign(gh.style, { left: line.offsetLeft + f.offsetLeft + "px", top: line.offsetTop + f.offsetTop + "px",
+              fontSize: cs.fontSize, letterSpacing: getComputedStyle(f).letterSpacing });
+            fde.parentElement.insertBefore(gh, fde);
+            gsap.set(gh, { transformOrigin: "0% 78%" });
+            const sg = s + g * 1.5 * F;
+            tl.fromTo(gh, { opacity: 0, filter: "blur(0px)" }, { opacity: g === 1 ? 0.34 : 0.18, filter: `blur(${2 * g}px)`, duration: 2 * F, ease: "power1.out" }, sg);
+            tl.to(gh, { x: dx, duration: 8 * F, ease: "power2.inOut" }, sg);
+            tl.to(gh, { y: dy, duration: 8 * F, ease: i === 1 ? "power2.inOut" : "power3.out" }, sg);
+            tl.to(gh, { scale: k, color: ACC, duration: 8 * F, ease: "power2.in" }, sg);
+            tl.to(gh, { opacity: 0, duration: 3 * F, ease: "power1.in" }, Math.max(2.6 + g * F, sg + 2 * F));
+            tl.set(gh, { autoAlpha: 0 }, Math.max(2.6 + g * F, sg + 2 * F) + 3 * F);
+          });
+          tl.set($(".w", line), { visibility: "hidden" }, 2.72);              // the emptied word is gone for good
+        });
+        // FDE letters land with 1 f lag each (overlap) on top of the runtime hero entrance; one 1 % punch
+        Ls.forEach((L, i) => tl.fromTo(L, { y: 10 }, { y: 0, duration: 6 * F, ease: "back.out(2)" }, 2.72 + i * F));
+        P.punch(2.8, { scale: 1.01, origin: "510px 700px", dur: 0.3 });
+        // shockwave: two thin accent rings ripple out behind the landing FDE (3 f apart), plus a ring of dust
+        ["#shock1", "#shock2"].forEach((r, i) => {
+          gsap.set(r, { transformOrigin: "50% 50%" });
+          tl.fromTo(r, { opacity: 0, scale: 0.35 }, { opacity: i ? 0.5 : 0.85, scale: 0.5, duration: 2 * F, ease: "power1.out" }, 2.78 + i * 3 * F);
+          tl.to(r, { scale: 1.25, opacity: 0, borderWidth: 1, duration: 0.5, ease: "power2.out" }, 2.78 + i * 3 * F + 2 * F);
+        });
+        const NS = "http://www.w3.org/2000/svg", bursts = $("#bursts");
+        const fdeCy = parseFloat(fde.dataset.base) - 0.365 * sizeB;
+        for (let j = 0; j < 10; j++) {
+          const a = (j / 10) * Math.PI * 2 + 0.3, c = document.createElementNS(NS, "circle");
+          c.setAttribute("r", j % 2 ? 6 : 9); c.setAttribute("fill", "var(--brand-primary)");
+          bursts.appendChild(c);
+          tl.set(c, { attr: { cx: 510 + Math.cos(a) * 250, cy: fdeCy + Math.sin(a) * 110 }, opacity: 0 }, 0);
+          tl.to(c, { opacity: 0.9, duration: 2 * F }, 2.8);
+          tl.to(c, { attr: { cx: 510 + Math.cos(a) * 390, cy: fdeCy + Math.sin(a) * 165 }, duration: 0.45, ease: "power3.out" }, 2.8);
+          tl.to(c, { opacity: 0, duration: 0.25, ease: "power1.in" }, 3.0);
+        }
+
+        // ---------------- FDE flies onto the badge and stamps its label ----------------
+        const capC = parseFloat(fde.dataset.base) - 0.365 * sizeB;          // visual centre of the caps
+        gsap.set(fde, { transformOrigin: `${fde.offsetWidth / 2}px ${capC - fde.offsetTop}px` });
+        const fromCx = fde.offsetLeft + fde.offsetWidth / 2;
+        const toCx = 95 + 175, toCy = 300 + 64 + 336 + 78;                  // badge label slot centre (at rest)
+        const tS = 3.1, tC = 3.32;                                           // start / contact
+        tl.to(fde, { scale: 1.04, duration: 3 * F, ease: "power2.out" }, tS - 3 * F);   // anticipation: swell
+        tl.to(fde, { x: toCx - fromCx, duration: tC - tS, ease: "power2.in" }, tS);    // arc: x and y eased differently
+        tl.to(fde, { y: toCy - capC, duration: tC - tS, ease: "power3.in" }, tS);
+        tl.to(fde, { scale: 140 / sizeB, duration: tC - tS, ease: "power2.in" }, tS);
+        tl.set(fde, { opacity: 0 }, tC);
+        // whoosh trail: two lagging, blurred copies of the flying FDE
+        [1, 2].forEach((g) => {
+          const gc = fde.cloneNode(true);
+          gc.removeAttribute("id");
+          const gw = gc.querySelector(".w");
+          gw.removeAttribute("style"); gw.querySelectorAll(".L").forEach((e) => e.removeAttribute("style"));
+          fde.parentElement.insertBefore(gc, fde);
+          gsap.set(gc, { transformOrigin: fde.style.transformOrigin || `${fde.offsetWidth / 2}px ${capC - fde.offsetTop}px`, opacity: 0, filter: `blur(${3 * g}px)` });
+          const sg = tS + g * F, dur = tC - tS;
+          tl.set(gc, { opacity: g === 1 ? 0.24 : 0.11, scale: 1.04 }, sg);
+          tl.to(gc, { x: toCx - fromCx, duration: dur, ease: "power2.in" }, sg);
+          tl.to(gc, { y: toCy - capC, duration: dur, ease: "power3.in" }, sg);
+          tl.to(gc, { scale: 140 / sizeB, duration: dur, ease: "power2.in" }, sg);
+          tl.set(gc, { autoAlpha: 0 }, tC + g * F);
+        });
+        const lab = $("#blabel");
+        gsap.set(lab, { transformOrigin: "50% 55%" });
+        tl.fromTo(lab, { opacity: 0, scale: 1.3, rotation: -4 }, { opacity: 1, scale: 0.94, rotation: -2, duration: 2 * F, ease: "power3.out" }, tC);
+        tl.to(lab, { scale: 1, rotation: -2, duration: 9 * F, ease: "back.out(2)" }, tC + 2 * F);
+        // the hit: badge body dips (uniform), the whole badge swings from the impact (follow-through)
+        const bw = $(".bwrap");
+        tl.to(bw, { y: 12, duration: 2 * F, ease: "power2.out" }, tC).to(bw, { y: 0, duration: 10 * F, ease: "back.out(2)" }, tC + 2 * F);
+        tl.to(badge, { rotation: 2.4, duration: 2 * F, ease: "power2.out" }, tC);
+        // stamp juice: the slot flashes accent, the clip jiggles, the strap stretches and recoils
+        tl.fromTo(".slotflash", { opacity: 0 }, { opacity: 0.32, duration: 2 * F, ease: "power2.out" }, tC);
+        tl.to(".slotflash", { opacity: 0, duration: 10 * F, ease: "power2.in" }, tC + 2 * F);
+        const clip = $(".bclip"), strap = $(".strap");
+        gsap.set(clip, { transformOrigin: "50% 0%" }); gsap.set(strap, { transformOrigin: "50% 0%" });
+        tl.to(clip, { rotation: -11, y: 4, duration: 2 * F, ease: "power2.out" }, tC)
+          .to(clip, { rotation: 8, y: -2, duration: 4 * F, ease: "sine.inOut" }, tC + 2 * F)
+          .to(clip, { rotation: -4, y: 0, duration: 4 * F, ease: "sine.inOut" }, tC + 6 * F)
+          .to(clip, { rotation: 0, duration: 6 * F, ease: "back.out(2)" }, tC + 10 * F);
+        tl.to(strap, { scaleY: 1.16, duration: 2 * F, ease: "power2.out" }, tC)
+          .to(strap, { scaleY: 0.95, duration: 5 * F, ease: "sine.inOut" }, tC + 2 * F)
+          .to(strap, { scaleY: 1, duration: 8 * F, ease: "back.out(2)" }, tC + 7 * F);
+        // the avatar wakes up: eyes pop open, head turns to camera, a ring pulse, then a blink
+        const eyes = $$(".av .eye"), head = $(".av .h");
+        gsap.set(eyes, { transformOrigin: "50% 50%" });
+        tl.fromTo(eyes, { opacity: 0, scale: 0 }, { opacity: 1, scale: 1.3, duration: 3 * F, ease: "power3.out", stagger: F }, tC + F);
+        tl.to(eyes, { scale: 1, duration: 6 * F, ease: "back.out(2)" }, tC + 4 * F);
+        tl.fromTo([head, ...eyes], { x: -7 }, { x: 0, duration: 8 * F, ease: "back.out(2)", immediateRender: false }, tC + F);
+        tl.fromTo(".av", { boxShadow: "0 0 0 0 rgba(46,156,203,0.6)" }, { boxShadow: "0 0 0 20px rgba(46,156,203,0)", duration: 0.45, ease: "power2.out" }, tC + F);
+        tl.to(eyes, { scaleY: 0.1, duration: 2 * F, yoyo: true, repeat: 1, ease: "power1.inOut" }, 4.3);
+        tl.to(eyes, { scaleY: 0.1, duration: 2 * F, yoyo: true, repeat: 1, ease: "power1.inOut" }, 5.25);
+
+        // ---------------- BEAT B: badge + FDE compact upward toward the pin ----------------
+        const tM = 3.36;
+        tl.to(badge, { scale: 0.45, duration: 0.42, ease: "power3.inOut" }, tM);
+        tl.to(badge, { x: -96, duration: 0.42, ease: "power2.inOut" }, tM);
+        tl.to(badge, { rotation: -2.6, duration: 0.3, ease: "sine.inOut" }, tC + 2 * F)
+          .to(badge, { rotation: 1.4, duration: 0.28, ease: "sine.inOut" }, tC + 2 * F + 0.3)
+          .to(badge, { rotation: -0.6, duration: 0.3, ease: "sine.inOut" }, tC + 2 * F + 0.58)
+          .to(badge, { rotation: 0.5, duration: 0.8, ease: "sine.inOut" }, tC + 2 * F + 0.88)
+          .to(badge, { rotation: -0.3, duration: D - (tC + 2 * F + 1.68), ease: "sine.inOut" }, tC + 2 * F + 1.68);
+        P.recede(".bwrap", 4.5, { opacity: 0.72, blur: 2, scale: 1 });
+
+        // ---------------- the chart: card slides up, accent line rises steeply ----------------
+        P.cardIn("#chart", 3.62, { fromY: 120, rot: 2 });
+        // gridlines draw on left → right, 3 f apart, as the card settles
+        $$("#chart .gl").forEach((g, i) => {
+          g.style.strokeDasharray = "780 780";
+          tl.set(g, { strokeDashoffset: 780 }, 0);
+          tl.to(g, { strokeDashoffset: 0, duration: 0.36, ease: "power2.out" }, 3.82 + i * 3 * F);
+        });
+        // the card tilts toward camera as the line climbs (shared perspective from cardIn), easing back at the top
+        tl.to("#chart", { rotationX: 7, rotationY: -5, duration: 1.1, ease: "sine.inOut" }, 4.36);
+        tl.to("#chart", { rotationX: 3, rotationY: -2, duration: 0.3, ease: "power2.out" }, 5.47);
+        const p1 = $("#p1"), p2 = $("#p2");
+        const L1 = p1.getTotalLength(), L2 = p2.getTotalLength();
+        [[p1, L1], [p2, L2]].forEach(([p, L]) => { p.style.strokeDasharray = `${L} ${L}`; });
+        const tD = 4.36, tT1 = 5.46, tT2 = 5.6;
+        tl.set([p1, p2, "#tip"], { opacity: 0 }, 0);
+        tl.set(p1, { opacity: 1 }, tD);
+        tl.fromTo(p1, { strokeDashoffset: L1 }, { strokeDashoffset: 0, duration: tT1 - tD, ease: "power2.in" }, tD);
+        tl.set(p2, { opacity: 1 }, tT1);
+        tl.fromTo(p2, { strokeDashoffset: L2 }, { strokeDashoffset: 0, duration: tT2 - tT1, ease: "power2.out" }, tT1);
+        // the tip dot rides the line (same eases → stays on the drawn end)
+        gsap.registerPlugin(MotionPathPlugin);
+        tl.fromTo("#tip", { opacity: 0, scale: 0.4, transformOrigin: "50% 50%" }, { opacity: 1, scale: 1, duration: 5 * F, ease: "back.out(2)" }, tD);
+        tl.fromTo("#tip", { motionPath: { path: "#p1", start: 0, end: 0 } }, { motionPath: { path: "#p1", start: 0, end: 1 }, duration: tT1 - tD, ease: "power2.in", immediateRender: false }, tD);
+        tl.to("#tip", { motionPath: { path: "#p2", start: 0, end: 1 }, duration: tT2 - tT1, ease: "power2.out" }, tT1);
+        tl.to("#tip", { opacity: 0, duration: 3 * F, ease: "power1.in" }, tT2);
+        // area under the line fills in behind the tip
+        tl.fromTo("#revealR", { attr: { width: 40 } }, { attr: { width: 520 }, duration: tT1 - tD, ease: "power3.in" }, tD);
+        tl.to("#revealR", { attr: { width: 820 }, duration: tT2 - tT1, ease: "power2.out" }, tT1);
+        // arrowhead pops on the second "up" (anticipation → overshoot → settle)
+        tl.set("#arrowIn", { opacity: 0 }, 0);
+        tl.fromTo("#arrowIn", { opacity: 0, scale: 0.3, svgOrigin: "0 0" }, { opacity: 1, scale: 1.25, duration: 4 * F, ease: "power3.out" }, tT2 - 2 * F);
+        tl.to("#arrowIn", { scale: 1, duration: 8 * F, ease: "back.out(2)" }, tT2 + 2 * F);
+        // particle trail: tiny accent dots shed where the tip passes (timed by inverting the draw ease), drifting off
+        const svgC = $("#chart svg"), tipEl = $("#tip");
+        const shed = (path, L, n, f0, f1, tStart, dur, inv) => {
+          for (let j = 0; j < n; j++) {
+            const fr = f0 + (f1 - f0) * (j / (n - 1));
+            const pt = path.getPointAtLength(fr * L), pt2 = path.getPointAtLength(Math.min(L, fr * L + 2));
+            const nx = -(pt2.y - pt.y), ny = pt2.x - pt.x, nl = Math.hypot(nx, ny) || 1;
+            const side = j % 2 ? 1 : -1, off = 14 + (j * 7) % 12;
+            const c = document.createElementNS(NS, "circle");
+            c.setAttribute("class", "pt"); c.setAttribute("r", 4 + (j % 3) * 1.5);
+            c.setAttribute("cx", pt.x + (side * off * nx) / nl); c.setAttribute("cy", pt.y + (side * off * ny) / nl);
+            svgC.insertBefore(c, tipEl);
+            const tt = tStart + inv(fr) * dur;
+            gsap.set(c, { transformOrigin: "50% 50%" });
+            tl.set(c, { opacity: 0 }, 0);
+            tl.fromTo(c, { opacity: 0, scale: 0.3 }, { opacity: 0.9, scale: 1.2, duration: 3 * F, ease: "power2.out", immediateRender: false }, tt);
+            tl.to(c, { y: 22 + (j % 4) * 6, x: side * 8, scale: 0.4, opacity: 0, duration: 0.5, ease: "power1.out" }, tt + 3 * F);
+          }
+        };
+        shed(p1, L1, 12, 0.12, 0.97, tD, tT1 - tD, (fr) => Math.sqrt(fr));            // power2.in → u = sqrt(p)
+        shed(p2, L2, 4, 0.15, 0.9, tT1, tT2 - tT1, (fr) => 1 - Math.sqrt(1 - fr));     // power2.out
+        // the arrowhead rockets on: it kicks forward along the line, speed lines streak behind it
+        tl.fromTo("#arrowIn", { x: 0 }, { x: 22, duration: 4 * F, ease: "power3.out", immediateRender: false }, tT2 - 2 * F);
+        tl.to("#arrowIn", { x: 0, duration: 10 * F, ease: "back.out(2)" }, tT2 + 2 * F);
+        $$("#spd .spd").forEach((sp, i) => {
+          const L = sp.getTotalLength();
+          sp.style.strokeDasharray = `${L} ${L}`;
+          tl.set(sp, { strokeDashoffset: L, opacity: 0 }, 0);
+          tl.set(sp, { opacity: 0.85 }, tT2 - F + i * F);
+          tl.to(sp, { strokeDashoffset: -L, duration: 0.3, ease: "power2.out" }, tT2 - F + i * F);
+          tl.to(sp, { opacity: 0, duration: 0.16, ease: "power1.in" }, tT2 + 0.12 + i * F);
+        });
+        // each "up" pops with an accent burst of rays (the second one skips the rays that would touch the receded line above)
+        const burst = (lineSel, t, angles) => {
+          const ln = $(lineSel), w = $(".w", ln), fs = parseFloat(ln.style.fontSize);
+          const cx = ln.offsetLeft + w.offsetLeft + w.offsetWidth / 2, cy = parseFloat(ln.dataset.base) - 0.27 * fs;
+          const rx = w.offsetWidth / 2 + 22, ry = 0.42 * fs;
+          const g = document.createElementNS(NS, "g");
+          angles.forEach((deg) => {
+            const a = (deg * Math.PI) / 180, l = document.createElementNS(NS, "line");
+            l.setAttribute("x1", cx + Math.cos(a) * rx); l.setAttribute("y1", cy + Math.sin(a) * ry);
+            l.setAttribute("x2", cx + Math.cos(a) * (rx + 34)); l.setAttribute("y2", cy + Math.sin(a) * (ry + 30));
+            g.appendChild(l);
+          });
+          bursts.appendChild(g);
+          tl.set(g, { opacity: 0 }, 0);
+          tl.fromTo(g, { opacity: 0, scale: 0.7, svgOrigin: `${cx} ${cy}` }, { opacity: 1, scale: 1.02, duration: 3 * F, ease: "power3.out", immediateRender: false }, t - F);
+          tl.to(g, { scale: 1.18, opacity: 0, duration: 0.3, ease: "power2.out" }, t + 2 * F);
+        };
+        burst("#lu1", tT1, [-160, -125, -90, -55, -20, 20, 160, 200]);
+        burst("#lu2", 5.593, [-160, -132, -48, -20, 15, 165]);
+
+        // staging: "hiring for this role" steps back when the ups land
+        P.recede("#lh", 5.2, { opacity: 0.6, blur: 1.5, scale: 0.98, dur: 0.25 });
+        // contact: the card nods as the line tip hits its first level
+        P.pulse("#chart", tT1, 1.012);
+      })();
+    </script>
+  </body>
+</html>

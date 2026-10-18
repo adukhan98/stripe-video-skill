@@ -1,0 +1,126 @@
+<!doctype html>
+<!-- t2_ceos — v7 MINT style test, TALK mode: HE fills the frame (slow push 1.0→1.02), our kinetic captions in charcoal
+     with a soft light glow, hero words mint, ONE charcoal icon disc (buildings) on "businesses". No marker layer (v7).
+     Phrases build like a feed on his chest (y ≈ 1140–1470): when a hero needs room, the oldest row blurs up and the
+     remaining row glides up into its place. -->
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>t2_ceos</title>
+    <link rel="stylesheet" href="brand.css" />
+    <link rel="stylesheet" href="paper.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+    <script src="paper.js"></script>
+    <style>
+      @font-face { font-family: "Inter Tight"; src: url("fonts/InterTight-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Inter"; src: url("fonts/Inter-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Geist Mono"; src: url("fonts/GeistMono-Medium.ttf") format("truetype"); font-weight: 500; font-style: normal; font-display: block; }
+
+      /* v7 TALK captions: charcoal ink with a soft light glow; hero words mint with the same glow */
+      :root {
+        --talk-glow: 0 0 22px rgba(240, 236, 230, 0.95), 0 0 8px rgba(240, 236, 230, 0.9);
+      }
+      .line.talk { text-shadow: var(--talk-glow); color: var(--brand-text); }
+      /* readability (qa/vt/compare.jpg): mint on his light-grey sweatshirt merges with the light glow, so the mint hero
+         words take a soft charcoal drop shadow instead (same light direction as the disc shadow) */
+      .line.talk.ocean { color: var(--brand-primary); text-shadow: 0 6px 18px rgba(30, 30, 30, 0.45), 0 1px 3px rgba(30, 30, 30, 0.35); }
+
+      /* the ONE icon disc: charcoal circle, white Phosphor fill glyph at ~46 %, soft disc shadow */
+      .disc {
+        position: absolute; width: 168px; height: 168px; margin-left: -84px; margin-top: -84px;
+        opacity: 0;
+      }
+      .disc .face {
+        position: absolute; inset: 0; border-radius: 50%; background: var(--brand-deep);
+        box-shadow: var(--disc-shadow);
+        display: flex; align-items: center; justify-content: center; color: white;
+      }
+      .disc .glyph { width: 46%; height: 46%; display: block; }
+      .disc .glyph svg { width: 100%; height: 100%; display: block; overflow: visible; }
+      .disc .ring {
+        position: absolute; inset: 0; border-radius: 50%; border: 6px solid var(--brand-primary); opacity: 0;
+      }
+    </style>
+  </head>
+  <body data-face="0.40">
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="5.1833">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+
+      <!-- full-screen speaker: the whole frame, slow push 1.0 → 1.02 only -->
+      <div id="spk" class="spk full" data-push="1.02">
+        <div class="spk-card">
+          <div class="spk-vid"><video id="speaker" class="clip" src="assets/speaker.mp4" muted playsinline data-start="0" data-duration="5.1833" data-track-index="1"></video></div>
+        </div>
+      </div>
+
+      <div id="cam" data-push="1.004"><div id="punch">
+        <!-- beat 1: I talk to a lot of / CEOs, / founders -->
+        <div id="l1" class="line sup kin talk" data-x="100" data-base="1215" data-size="100" data-exit="1.08" data-exit-dy="-100">
+          <span class="w" data-t="0.05">I</span><span class="w gap-s" data-t="0.13">talk</span><span class="w gap-s" data-t="0.33">to</span><span class="w gap-s" data-t="0.47" style="font-size:.9em">a</span><span class="w gap-s" data-t="0.59" style="font-size:.9em">lot</span><span class="w gap-s" data-t="0.67" style="font-size:.9em">of</span>
+        </div>
+        <div id="l2" class="line hero kin talk" data-x="170" data-base="1375" data-size="210" data-fit="860">
+          <span class="w" data-t="0.83" data-hero>CEOs,</span>
+        </div>
+        <div id="l3" class="line hero ocean kin talk" data-right="850" data-base="1445" data-size="180" data-fit="800" data-exit="1.92">
+          <span class="w" data-t="1.45" data-hero data-rise="36">founders</span>
+        </div>
+
+        <!-- beat 2: day · lives / businesses / on AI. -->
+        <div id="l4" class="line hero kin talk" data-x="100" data-base="1278" data-size="150" data-exit="4.26" data-exit-dy="-100">
+          <span class="w" data-t="3.23" data-pop>day</span><span class="w gap-s" data-t="3.69" data-pop>lives</span>
+        </div>
+        <div id="l5" class="line hero ocean kin talk" data-right="845" data-base="1415" data-size="190" data-fit="790">
+          <span class="w" data-t="4.17" data-hero data-peak="1.07">businesses</span>
+        </div>
+        <div id="l6" class="line sup kin talk" data-x="100" data-base="1420" data-size="124">
+          <span class="w" data-t="4.58">on</span><span class="w gap-s" data-t="4.75" data-pop>AI.</span>
+        </div>
+
+        <!-- the ONE icon disc: buildings (hf/assets/buildings.svg, Phosphor fill), on his left shoulder beside the phrase -->
+        <div id="disc" class="disc" style="left:166px; top:1040px">
+          <div class="ring"></div>
+          <div class="face"><div class="glyph"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="currentColor"><path d="M239.73,208H224V96a16,16,0,0,0-16-16H164a4,4,0,0,0-4,4V208H144V32.41a16.43,16.43,0,0,0-6.16-13,16,16,0,0,0-18.72-.69L39.12,72A16,16,0,0,0,32,85.34V208H16.27A8.18,8.18,0,0,0,8,215.47,8,8,0,0,0,16,224H240a8,8,0,0,0,8-8.53A8.18,8.18,0,0,0,239.73,208ZM76,184a8,8,0,0,1-8.53,8A8.18,8.18,0,0,1,60,183.72V168.27A8.19,8.19,0,0,1,67.47,160,8,8,0,0,1,76,168Zm0-56a8,8,0,0,1-8.53,8A8.19,8.19,0,0,1,60,127.72V112.27A8.19,8.19,0,0,1,67.47,104,8,8,0,0,1,76,112Zm40,56a8,8,0,0,1-8.53,8,8.18,8.18,0,0,1-7.47-8.26V168.27a8.19,8.19,0,0,1,7.47-8.26,8,8,0,0,1,8.53,8Zm0-56a8,8,0,0,1-8.53,8,8.19,8.19,0,0,1-7.47-8.26V112.27a8.19,8.19,0,0,1,7.47-8.26,8,8,0,0,1,8.53,8Z"/></svg></div></div>
+        </div>
+      </div></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const P = await Paper.init();
+        const { tl, F, $ } = P;
+        // v7: no marker layer (no Marker.init) — clean vector only.
+
+        // ---- beat 1 feed: row 1 blurs up (data-exit 1.08), CEOs, glides up into its place before "founders" lands
+        const l2 = $("#l2");
+        tl.to(l2, { y: -86, duration: 0.3, ease: "power3.inOut" }, 1.16);
+        // exit fast on "people" (bottom-up: founders first via data-exit, CEOs 2 f later) — absolute y from the glide
+        tl.to(l2, { y: -146, opacity: 0, filter: "blur(8px)", duration: 6 * F, ease: "power2.in" }, 1.92 + 2 * F);
+
+        // ---- beat 2: businesses is the hero — 1 % punch on its contact frame
+        P.punch(4.17, { scale: 1.01, origin: "480px 1300px", dur: 0.36 });
+
+        // the disc pops beside the phrase on "businesses": anticipation dip → overshoot 1.12 → settle; glyph lags 2 f
+        const disc = $("#disc"), face = $("#disc .face"), glyph = $("#disc .glyph"), ring = $("#disc .ring");
+        const dt = 4.30;
+        gsap.set(disc, { transformOrigin: "50% 50%" });
+        gsap.set(glyph, { transformOrigin: "50% 100%" });
+        tl.set(disc, { opacity: 1 }, dt - 7 * F);
+        tl.fromTo(face, { scale: 0.3 }, { scale: 0.22, duration: 2 * F, ease: "power2.in" }, dt - 7 * F);          // anticipation
+        tl.to(face, { scale: 1.12, duration: 5 * F, ease: "power3.out" }, dt - 5 * F);                            // overshoot
+        tl.to(face, { scale: 1, duration: 9 * F, ease: "back.out(1.8)" }, dt);                                    // settle
+        tl.fromTo(glyph, { scaleY: 0.1, scaleX: 0.6, y: 10, opacity: 0 },                                         // buildings rise
+          { scaleY: 1.15, scaleX: 1, y: 0, opacity: 1, duration: 5 * F, ease: "power3.out" }, dt - 3 * F);
+        tl.to(glyph, { scaleY: 1, duration: 8 * F, ease: "back.out(2.2)" }, dt + 2 * F);
+        tl.fromTo(ring, { opacity: 0.9, scale: 1 }, { opacity: 0, scale: 1.18, duration: 0.45, ease: "power2.out" }, dt);
+        // secondary action: slow float, and a pulse on "AI." (the businesses run on it)
+        tl.fromTo(disc, { y: 0 }, { y: -4, duration: 0.45, ease: "sine.inOut", yoyo: true, repeat: 1 }, dt + 0.3);
+        P.pulse(face, 4.75, 1.06);
+
+        // ---- beat 2 feed: day · lives blur up (data-exit 4.26), businesses glides up into row 1, "on AI." rises under it
+        tl.to("#l5", { y: -123, duration: 0.3, ease: "power3.inOut" }, 4.30);
+      })();
+    </script>
+  </body>
+</html>

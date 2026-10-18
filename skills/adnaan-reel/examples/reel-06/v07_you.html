@@ -1,0 +1,192 @@
+<!doctype html>
+<!-- v07_you — FUNNEL, tier 3 = YOU. Blank starter on the shared runtime (paper.js) + reel-06 marker layer (marker.js).
+     Frame 0 = the shared funnel already drawn (tiers 0–1 pencil, stick people). Beat A: the real post strip drops in,
+     highlighter behind "20M people (0.2%)", "20 million" + "0.2%" land, tier 2 hatches red. Beat B: a hand-drawn map
+     pin lifts and drops on an arc into tier 2 on "you" (squash, wobble, shockwave), "you" lands with a double underline,
+     a red arrow ties the word to the pin. No speaker card (it would cover the funnel). -->
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>v07_you</title>
+    <link rel="stylesheet" href="brand.css" />
+    <link rel="stylesheet" href="paper.css" />
+    <link rel="stylesheet" href="marker.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+    <script src="paper.js"></script>
+    <script src="marker.js"></script>
+    <style>
+      @font-face { font-family: "Inter Tight"; src: url("fonts/InterTight-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Inter"; src: url("fonts/Inter-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Caveat"; src: url("fonts/Caveat-Variable.ttf") format("truetype"); font-weight: 400 700; font-style: normal; font-display: block; }
+
+      /* the real post strip in a white card (≥ 0.85 scale: 958 px strip → 828 px) */
+      #postwrap { position: absolute; left: 78px; top: 334px; width: 860px; height: 400px; }
+      #post { position: absolute; inset: 0; opacity: 0; }
+      #post .pc {
+        position: absolute; inset: 0; border-radius: 26px; background: var(--brand-card);
+        box-shadow: 0 26px 40px -16px rgba(60, 50, 40, 0.32), 0 6px 12px -6px rgba(60, 50, 40, 0.18);
+        transform: rotate(-1.5deg);
+      }
+      #post .strip { position: absolute; left: 16px; top: 20px; width: 958px; height: 416px; transform: scale(0.8643); transform-origin: 0 0; }
+      #post .strip img { display: block; width: 958px; height: 416px; border-radius: 4px; }
+      #post .xwrap { position: absolute; right: -4px; top: -14px; width: 74px; height: 74px; transform: rotate(6deg); }
+      #post .xwrap img { display: block; width: 74px; height: 74px; border-radius: 18px; opacity: 0;
+        box-shadow: 0 12px 20px -8px rgba(20, 20, 20, 0.45); }
+
+      /* pin + contact shadows live in the marker layer (svg) */
+      svg.mk-layer path.pin-fill { fill: var(--marker); opacity: 0; }
+      .pin-hole { fill: var(--brand-card); opacity: 0; }
+      .shadow-ell { fill: var(--marker-ink); opacity: 0; }
+    </style>
+  </head>
+  <body data-face="0.42">
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="5.2167">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+      <div id="cam"><div id="punch">
+
+        <!-- BEAT A: the real post strip (Karpathy on X) -->
+        <div id="postwrap" data-float="3">
+          <div id="post">
+            <div class="pc">
+              <div class="strip"><img id="strip" src="assets/post_b3.png" alt="" /></div>
+              <div class="xwrap"><img id="xchip" src="assets/x.png" alt="" /></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- kinetic words (words.html) — on paper, never over the funnel -->
+        <div class="line sup" id="l20" data-right="952" data-base="1226" data-size="100" data-exit="4.16">
+          <span class="w" data-t="1.43" data-pop>20</span><span class="w gap-s" data-t="1.73">million</span>
+        </div>
+        <div class="line hero ocean" id="l02" data-x="70" data-base="1432" data-size="236" data-fit="560">
+          <span class="w" id="w02" data-t="2.37" data-hero>0.2%</span>
+        </div>
+        <div class="line hero" id="lyou" data-right="936" data-base="1408" data-size="190">
+          <span class="w" id="wyou" data-t="4.67" data-hero>you</span>
+        </div>
+
+      </div></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const P = await Paper.init({ extraFonts: ['700 60px "Caveat"'] });
+        const { tl, D, F, $, $$ } = P;
+        const M = Marker.init(P);
+        const NS = "http://www.w3.org/2000/svg";
+        const svgEl = (tag, attrs, parent = M.layer) => {
+          const e = document.createElementNS(NS, tag);
+          for (const k in attrs) e.setAttribute(k, attrs[k]);
+          parent.appendChild(e);
+          return e;
+        };
+        const group = (cls) => svgEl("g", { class: cls });
+
+        // ---------------------------------------------------------------- THE FUNNEL (shared geometry, frame 0)
+        const FUN = M.funnel({ x: 150, y: 820, w: 560, h: 330, neck: 0.16, tiers: 4, split: [0, 0.38, 0.66, 0.86, 1], spout: 56, color: "ink" });
+        FUN.fill(0, 0, { color: "pencil", opacity: 0.45 });
+        FUN.fill(1, 0, { color: "pencil", opacity: 0.45 });
+        // tier 2 = 20M / 0.2 % — RED hatch stamps in on "0.2%" (2.37)
+        FUN.fill(2, 2.27, { dur: 0.42 });
+        FUN.draw(0);
+        FUN.divider(0, 0); FUN.divider(1, 0); FUN.divider(2, 0);
+
+        // stick people standing in tier 0 (the 6B), ink, ~40 px, boiling
+        const people = [];
+        const PX = [262, 304, 345, 388, 430, 474, 517, 560, 602];
+        PX.forEach((x, i) => {
+          const g = group("sp");
+          const fy = 944 - Math.round(Math.abs(x - 430) * 0.055) + (i % 2 ? -3 : 2);  // feet follow the band's front curve
+          const o = { color: "ink", width: 4.5, amp: 0.9, parent: g };
+          M.circle(x, fy - 33, 6, 6.5, 0, { ...o, turns: 1.05, seed: 900 + i * 31 });
+          M.line([[x, fy - 26], [x, fy - 12]], 0, { ...o, seed: 1300 + i * 17 });
+          M.line([[x - 7, fy], [x, fy - 12], [x + 7, fy]], 0, { ...o, seed: 1700 + i * 13 });
+          const up = i === 2 || i === 6; // two of them wave
+          M.line(up ? [[x - 10, fy - 32], [x, fy - 22], [x + 9, fy - 17]] : [[x - 9, fy - 15], [x, fy - 22], [x + 9, fy - 15]], 0, { ...o, seed: 2100 + i * 11 });
+          gsap.set(g, { transformOrigin: "50% 100%" });
+          people.push(g);
+        });
+
+        // ---------------------------------------------------------------- BEAT A
+        // the post card drops in on "After that" (contact ≈ 0.36), X chip lags 4 f
+        P.cardIn("#post", 0.05, { fromY: -16, rot: -1.5 });
+        P.pop("#xchip", 0.42);
+        // "after that" → a red arrow steps down from tier 1 to tier 2 (outside the left wall)
+        M.arrow(176, 932, 270, 1064, 0.52, { bend: 0.32, width: 10, dur: 0.4 });
+        // highlighter swipe behind "20M people (0.2%)" on "20" (1.43)
+        M.highlight($("#strip").parentElement, [446, 151, 390, 54], 1.28, { dur: 0.32 });
+        // "0.2%" stamps: tiny stamp shake (secondary to the hero beat)
+        P.shake(2.37, 2);
+
+        // ---------------------------------------------------------------- BEAT B: the map pin
+        P.recede("#post", 3.3, { opacity: 0.55, blur: 2.5, scale: 0.975, dur: 0.4 });
+
+        const HX = 832, HY = 1000;           // hover spot (tip) at the right of the funnel
+        const LX = 430, LY = 1080;           // landing spot (tip) inside tier 2
+        // contact shadows
+        const sh1 = svgEl("ellipse", { class: "shadow-ell", cx: HX, cy: HY + 26, rx: 28, ry: 7 });
+        const sh2 = svgEl("ellipse", { class: "shadow-ell", cx: LX, cy: LY + 3, rx: 30, ry: 8 });
+        gsap.set([sh1, sh2], { transformOrigin: "50% 50%" });
+
+        const pin = group("pin");            // local coords: tip at (0,0)
+        const R = 40, CY = -88;
+        const acos = Math.acos(R / -CY);
+        const pts = [[0, 0]];
+        const a0 = Math.PI / 2 + acos, a1 = Math.PI / 2 - acos + Math.PI * 2;
+        for (let k = 0; k <= 16; k++) { const a = a0 + (a1 - a0) * (k / 16); pts.push([Math.cos(a) * R, CY + Math.sin(a) * R]); }
+        pts.push([0, 0]);
+        const fill = svgEl("path", { class: "pin-fill", d: M.smooth(pts) + " Z" }, pin);
+        const outline = M.line(pts, 3.42, { color: "var(--brand-primary-dark)", width: 9, amp: 1.2, dur: 0.32, parent: pin, seed: 5151 });
+        const hole = svgEl("circle", { class: "pin-hole", cx: 0, cy: CY, r: 14 }, pin);
+        const holeRing = M.circle(0, CY, 14, 14, 3.84, { color: "var(--brand-primary-dark)", width: 6, dur: 0.18, turns: 1.08, parent: pin, seed: 6161 });
+        gsap.set(pin, { x: HX, y: HY, transformOrigin: "50% 100%" });
+
+        // draw-on: outline (3.42–3.74) → colour it in → the hole (3.84) — on "people" (3.53)
+        tl.to(fill, { opacity: 0.92, duration: 0.14, ease: "power2.out" }, 3.66);
+        tl.to(hole, { opacity: 1, duration: 0.08, ease: "power1.out" }, 3.84);
+        tl.fromTo(sh1, { opacity: 0, scale: 0.6 }, { opacity: 0.22, scale: 1, duration: 0.3, ease: "power2.out" }, 3.6);
+        tl.fromTo(pin, { scale: 0.92 }, { scale: 1, duration: 0.3, ease: "back.out(2)" }, 3.6);
+        // hover bob while he says "which is where I think" (secondary action)
+        tl.to(pin, { y: HY - 8, duration: 0.2, ease: "sine.inOut", yoyo: true, repeat: 1 }, 3.86);
+        tl.to(sh1, { scale: 0.85, opacity: 0.16, duration: 0.2, ease: "sine.inOut", yoyo: true, repeat: 1 }, 3.86);
+        // anticipation: crouch, then lift (stretch) — the shadow shrinks as it rises
+        tl.to(pin, { scaleY: 0.86, scaleX: 1.1, duration: 4 * F, ease: "power2.in" }, 4.27);
+        tl.to(pin, { y: HY - 46, scaleY: 1.1, scaleX: 0.93, rotation: 8, duration: 0.12, ease: "power2.out" }, 4.27 + 4 * F);
+        tl.to(sh1, { scale: 0.5, opacity: 0.08, duration: 0.14, ease: "power2.out" }, 4.3);
+        tl.to(sh1, { opacity: 0, duration: 0.12, ease: "power1.in" }, 4.46);
+        // the drop: x and y on different eases = an arc; it leans into the travel, stretches as it falls
+        const T0 = 4.45, TC = 4.67;
+        tl.to(pin, { x: LX, duration: TC - T0, ease: "power1.inOut" }, T0);
+        tl.to(pin, { y: HY - 95, duration: 0.08, ease: "power1.out" }, T0);
+        tl.to(pin, { y: LY, duration: TC - T0 - 0.08, ease: "power2.in" }, T0 + 0.08);
+        tl.to(pin, { rotation: -14, scaleY: 1.14, scaleX: 0.9, duration: TC - T0, ease: "power1.in" }, T0);
+        // contact (4.67): squash, rebound stretch, wobble settle
+        tl.to(pin, { scaleY: 0.74, scaleX: 1.22, rotation: 0, duration: 2 * F, ease: "power2.out" }, TC);
+        tl.to(pin, { scaleY: 1.06, scaleX: 0.96, duration: 4 * F, ease: "power2.out" }, TC + 2 * F);
+        tl.to(pin, { scaleY: 1, scaleX: 1, duration: 0.3, ease: "back.out(2.5)" }, TC + 6 * F);
+        tl.to(pin, { keyframes: [{ rotation: 9, duration: 0.08 }, { rotation: -6, duration: 0.1 }, { rotation: 3, duration: 0.1 }, { rotation: 0, duration: 0.12 }], ease: "sine.inOut" }, TC + 2 * F);
+        tl.fromTo(sh2, { opacity: 0, scale: 1.6 }, { opacity: 0.32, scale: 1, duration: 0.14, ease: "power2.out" }, TC - 2 * F);
+        // marker shockwave ring around the landing, then it expands and fades
+        const ring = M.circle(LX, LY + 2, 78, 20, 4.6, { color: "ink", width: 6, dur: 0.16, turns: 1.04, tilt: -2, seed: 7171 });
+        gsap.set(ring.g, { svgOrigin: `${LX} ${LY + 2}` });
+        tl.to(ring.g, { scale: 1.45, opacity: 0, duration: 0.42, ease: "power2.out" }, 4.78);
+
+        // ---------------------------------------------------------------- "you": impact, double underline, arrow
+        P.shake(TC, 4);
+        P.punch(TC, { origin: "430px 1080px", scale: 1.006 });
+        const yb = M.rectOf($("#lyou"));
+        const ub = parseFloat($("#lyou").dataset.base);
+        M.underline(yb[0] + 10, yb[0] + yb[2] - 6, ub + 18, 4.72, { double: true, width: 11 });
+        M.arrow(706, 1286, 572, 1060, 4.84, { bend: 0.22, width: 10, dur: 0.22, gap: F });
+        // the 6B in tier 0 hop when the pin lands (characters react; 2 f stagger)
+        people.forEach((g, i) => {
+          const s = TC + 3 * F + i * 2 * F;
+          tl.to(g, { y: -9, duration: 0.1, ease: "power2.out" }, s);
+          tl.to(g, { y: 0, duration: 0.14, ease: "power2.in" }, s + 0.1);
+        });
+      })();
+    </script>
+  </body>
+</html>

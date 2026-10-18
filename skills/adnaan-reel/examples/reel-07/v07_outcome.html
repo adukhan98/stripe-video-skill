@@ -1,0 +1,142 @@
+<!doctype html>
+<!-- adnaan-reel scene v07_outcome — CHAPTER ① (blank starter on the shared runtime + marker layer). No speaker.
+     ① chapter number top-left (ink "1" + red marker loop, shared with v10 ② / v13 ③) + "first";
+     "ask for the" → a hand-drawn black-marker TARGET draws, a red marker arrow thunks into the bullseye on "outcome"
+     (giant red hero) and wobbles; "instead of the task" lands low and "task" gets a red scribble-strike. Keep data-duration. -->
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>v07_outcome</title>
+    <link rel="stylesheet" href="brand.css" />
+    <link rel="stylesheet" href="paper.css" />
+    <link rel="stylesheet" href="marker.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+    <script src="paper.js"></script>
+    <script src="marker.js"></script>
+    <style>
+      @font-face { font-family: "Inter Tight"; src: url("fonts/InterTight-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Inter"; src: url("fonts/Inter-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Caveat"; src: url("fonts/Caveat-Variable.ttf") format("truetype"); font-weight: 400 700; font-style: normal; font-display: block; }
+      /* strike svg that rides the "task" word (local px of the word box) */
+      .w { position: relative; }
+      svg.ride { position: absolute; left: 0; top: 0; overflow: visible; pointer-events: none; }
+      svg.ride path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+  </head>
+  <body data-face="0.41">
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="2.2833">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+      <div id="cam"><div id="punch">
+
+        <!-- ① chapter number (shared geometry with v10 ② / v13 ③): digit centre ≈ (198, 428) -->
+        <div id="lNum" class="line hero ink" data-cx="198" data-base="500" data-size="210">
+          <span id="wNum" class="w" data-t="0.167" data-pop>1</span>
+        </div>
+        <div id="lFirst" class="line sup" data-x="350" data-base="466" data-size="90">
+          <span class="w" data-t="0.217" data-accent>first</span>
+        </div>
+
+        <div id="lAsk" class="line sup" data-x="90" data-base="664" data-size="100">
+          <span class="w" data-t="0.497" data-pop>ask</span><span class="w gap-s" data-t="0.677">for</span><span class="w gap-s" data-t="0.797">the</span>
+        </div>
+
+        <div id="lOutcome" class="line hero" data-cx="515" data-base="1250" data-size="250" data-fit="850">
+          <span class="w ocean" data-t="1.157" data-hero data-peak="1.08">outcome</span>
+        </div>
+
+        <div id="lInstead" class="line sup" data-x="90" data-base="1334" data-size="84">
+          <span class="w" data-t="1.517">instead</span><span class="w gap-s" data-t="1.677">of</span><span class="w gap-s" data-t="1.777">the</span>
+        </div>
+        <div id="lTask" class="line hero ink" data-right="936" data-base="1458" data-size="170">
+          <span id="wTask" class="w" data-t="2.097" data-pop data-rise="26">task</span>
+        </div>
+
+      </div></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const P = await Paper.init({ extraFonts: ['700 60px "Caveat"'] });
+        const M = Marker.init(P);
+        const { tl, D, F, $, $$ } = P;
+        const NS = "http://www.w3.org/2000/svg";
+        const grp = (id, parent = M.layer) => { const g = document.createElementNS(NS, "g"); g.setAttribute("id", id); parent.appendChild(g); return g; };
+        // SVG groups move with GSAP's native SVG transforms about a fixed svgOrigin (seek-safe, no callbacks)
+        const origin = (g, x, y) => gsap.set(g, { svgOrigin: `${x} ${y}` });
+
+        // ================= ① chapter number: red marker loop round the "1" (shared with v10 / v13) =================
+        M.circle(198, 428, 108, 112, 0.087, { width: 11, dur: 0.32, tilt: -6, seed: 7101 });
+
+        // ================= HERO: the hand-drawn target + the arrow =================
+        const TX = 560, TY = 880;                       // bullseye
+        const targetG = grp("targetG");
+        origin(targetG, TX, TY);
+        const ringG = grp("ringG", targetG);
+        const ink = { color: "ink", parent: ringG };
+        M.circle(TX, TY, 165, 160, 0.747, { ...ink, width: 12, dur: 0.15, turns: 1.06, tilt: -3, seed: 7201 });
+        M.circle(TX, TY, 108, 105, 0.887, { ...ink, width: 11, dur: 0.11, turns: 1.06, tilt: 4, seed: 7202 });
+        M.circle(TX, TY, 52, 50, 0.987, { ...ink, width: 11, dur: 0.08, turns: 1.08, tilt: -2, seed: 7203 });
+        // the target lands with weight while it draws: small anticipation shrink → overshoot → settle
+        tl.fromTo(targetG, { scale: 0.94 }, { scale: 1.02, duration: 0.26, ease: "power3.out" }, 0.747);
+        tl.to(targetG, { scale: 1, duration: 0.2, ease: "back.out(2)" }, 1.007);
+
+        // arrow geometry: tip in the bullseye, shaft up-right at 35°, fletching at the tail
+        const ux = Math.cos((35 * Math.PI) / 180), uy = -Math.sin((35 * Math.PI) / 180), L = 300;
+        const at = (d, n = 0) => [TX + ux * d - uy * n, TY + uy * d + ux * n];  // d along the shaft, n perpendicular
+        const arrowG = grp("arrowG", targetG);
+        origin(arrowG, TX, TY);
+        const red = { color: "marker", parent: arrowG };
+        M.line([at(6), at(L)], 0.927, { ...red, width: 13, dur: 0.07, amp: 1.6, seed: 7301 });
+        [[L - 8, 1], [L - 8, -1], [L - 40, 1], [L - 40, -1]].forEach(([d, s], i) => {
+          M.line([at(d), at(d + 34, s * 34)], 1.007 + i * F * 0.5, { ...red, width: 11, dur: 0.03, amp: 0.8, seed: 7311 + i });
+        });
+        // nocked away from the target (anticipation pull-back), then snaps in on "outcome" and sinks 10 px deeper
+        const off = (d) => ({ x: ux * d, y: uy * d });
+        tl.set(arrowG, { ...off(80) }, 0);
+        tl.to(arrowG, { ...off(104), duration: 0.12, ease: "power2.out" }, 1.007);
+        tl.to(arrowG, { ...off(-10), duration: 3 * F, ease: "power4.in" }, 1.157 - 3 * F);
+        tl.to(arrowG, { ...off(0), duration: 0.12, ease: "power2.out" }, 1.157);
+        // speed lines behind the flight (wiped fast)
+        [[-22, 7321], [22, 7322]].forEach(([n, seed], i) => {
+          const s = M.line([at(L + 30, n), at(L + 110, n)], 1.077 + i * F, { color: "marker", width: 8, dur: 0.05, amp: 0.6, seed });
+          M.erase(s, 1.187, 0.1);
+        });
+        // the wobble: damped shiver about the tip
+        [[6, 1.157], [-4.5, 1.157 + 3 * F], [3, 1.157 + 6 * F], [-1.8, 1.157 + 9 * F], [0.8, 1.157 + 12 * F], [0, 1.157 + 15 * F]].forEach(([r, t]) => {
+          tl.to(arrowG, { rotation: r, duration: 3 * F, ease: "sine.inOut" }, t);
+        });
+        // impact: bullseye floods red, target jolts (squash along the hit), thunk ticks flick out on the far side
+        M.hatch(Array.from({ length: 16 }, (_, k) => [TX + Math.cos((k / 16) * 2 * Math.PI) * 44, TY + Math.sin((k / 16) * 2 * Math.PI) * 42]),
+          1.167, { color: "marker", spacing: 12, width: 9, dur: 0.14, opacity: 0.9, parent: ringG, seed: 7401 });
+        tl.to(targetG, { scaleX: 0.965, scaleY: 1.025, duration: 2 * F, ease: "power2.out" }, 1.157);
+        tl.to(targetG, { scaleX: 1, scaleY: 1, duration: 0.3, ease: "back.out(2.4)" }, 1.157 + 2 * F);
+        [135, 180, 225].forEach((a, i) => {
+          const r = (a * Math.PI) / 180;
+          const s = M.line([[TX + Math.cos(r) * 198, TY + Math.sin(r) * 194], [TX + Math.cos(r) * 252, TY + Math.sin(r) * 248]],
+            1.167 + i * F, { color: "marker", width: 12, dur: 0.05, amp: 0.5, seed: 7411 + i });
+          M.erase(s, 1.747, 0.1);
+        });
+        P.shake(1.157, 3);
+        P.punch(1.157, { scale: 1.01, origin: "540px 1000px", dur: 0.2 });
+
+        // staging: when the bottom phrase takes focus, the target recedes a touch (an object, never words)
+        tl.to(targetG, { opacity: 0.84, duration: 0.3, ease: "power2.inOut" }, 1.887);
+
+        // ================= "task": red scribble-strike that rides the word =================
+        const wT = $("#wTask"), lT = $("#lTask");
+        const fs = parseFloat(getComputedStyle(lT).fontSize), base = parseFloat(lT.dataset.base);
+        const ww = wT.offsetWidth, wh = wT.offsetHeight;
+        const top = lT.offsetTop + wT.offsetTop;
+        const sy = base - 0.29 * fs - top;              // mid x-height, local px
+        const svg = document.createElementNS(NS, "svg");
+        svg.setAttribute("class", "ride");
+        svg.setAttribute("width", ww); svg.setAttribute("height", wh); svg.setAttribute("viewBox", `0 0 ${ww} ${wh}`);
+        wT.appendChild(svg);
+        M.line([[-10, sy + 12], [ww * 0.5, sy - 4], [ww + 8, sy - 10]], 2.107, { width: 13, dur: 0.09, amp: 2, parent: svg, seed: 7501 });
+        M.line([[ww + 4, sy - 2], [ww * 0.55, sy + 10], [-4, sy + 20]], 2.20, { width: 11, dur: 0.05, amp: 2, parent: svg, seed: 7502 });
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,62 @@
+[
+ {
+  "t": 0.33,
+  "sfx": "pop",
+  "gain_db": -16
+ },
+ {
+  "t": 0.52,
+  "sfx": "tick",
+  "gain_db": -26
+ },
+ {
+  "t": 0.6,
+  "sfx": "tick",
+  "gain_db": -26
+ },
+ {
+  "t": 0.68,
+  "sfx": "tick",
+  "gain_db": -26
+ },
+ {
+  "t": 0.84,
+  "sfx": "pop",
+  "gain_db": -21
+ },
+ {
+  "t": 1.04,
+  "sfx": "pop",
+  "gain_db": -18
+ },
+ {
+  "t": 1.05,
+  "sfx": "whoosh",
+  "gain_db": -23
+ },
+ {
+  "t": 1.53,
+  "sfx": "ping",
+  "gain_db": -16
+ },
+ {
+  "t": 2.1,
+  "sfx": "tick",
+  "gain_db": -25
+ },
+ {
+  "t": 2.55,
+  "sfx": "tick",
+  "gain_db": -25
+ },
+ {
+  "t": 2.95,
+  "sfx": "tick",
+  "gain_db": -25
+ },
+ {
+  "t": 3.35,
+  "sfx": "ding",
+  "gain_db": -21
+ }
+]

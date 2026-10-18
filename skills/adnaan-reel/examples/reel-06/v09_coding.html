@@ -1,0 +1,146 @@
+<!doctype html>
+<!-- v09_coding: opinion scene, portrait card + marker doodles (</> code, doc, sparkles) + kinetic words below -->
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>v09_coding</title>
+    <link rel="stylesheet" href="brand.css" />
+    <link rel="stylesheet" href="paper.css" />
+    <link rel="stylesheet" href="marker.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+    <script src="paper.js"></script>
+    <script src="marker.js"></script>
+    <style>
+      @font-face { font-family: "Inter Tight"; src: url("fonts/InterTight-Variable.ttf") format("truetype"); font-weight: 100 900; font-display: block; }
+      @font-face { font-family: "Inter"; src: url("fonts/Inter-Variable.ttf") format("truetype"); font-weight: 100 900; font-display: block; }
+      @font-face { font-family: "Caveat"; src: url("fonts/Caveat-Variable.ttf") format("truetype"); font-weight: 400 700; font-display: block; }
+    </style>
+  </head>
+  <body data-face="0.42">
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="3.2500">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+      <div id="cam"><div id="punch">
+
+        <div class="spk portrait" data-x="270" data-y="450" data-w="540" data-h="660">
+          <div class="spk-card">
+            <div class="spk-vid"><video id="speaker" class="clip" src="assets/speaker.mp4" muted playsinline data-start="0" data-duration="3.2500" data-track-index="1"></video></div>
+            <div class="spk-sheen"></div>
+          </div>
+        </div>
+
+        <!-- 0.0 - 1.0  lead-in: ONE line, low in the zone (cleared before "coding" rises) -->
+        <div id="lnLead" class="line sup" data-x="76" data-base="1440" data-size="80" data-fit="880">
+          <span class="w" data-rise="22" data-t="0.00">You're</span><span class="w gap-s" data-rise="22" data-t="0.30">probably</span><span class="w gap-s" data-rise="22" data-t="0.58">using</span><span class="w gap-s" data-rise="22" data-t="0.76">it</span><span class="w gap-s" data-pop data-rise="22" data-t="0.92">for</span>
+        </div>
+
+        <!-- coding / knowledge work -->
+        <div id="lnCoding" class="line" data-x="76" data-base="1318" data-size="190" data-fit="600">
+          <span class="w hero ocean" data-rise="40" data-t="1.26" data-hero>coding</span>
+        </div>
+        <div id="lnAnd" class="line sup" data-x="690" data-base="1318" data-size="90">
+          <span class="w" data-pop data-rise="30" data-t="1.48">and</span>
+        </div>
+        <div id="lnKnow" class="line hero ink" data-right="938" data-base="1452" data-size="120" data-fit="860">
+          <span class="w" data-pop data-rise="24" data-t="1.74">knowledge</span><span class="w gap-s" data-pop data-rise="24" data-t="2.02">work</span>
+        </div>
+
+        <!-- and all these -->
+        <div id="lnAll" class="line sup" data-right="940" data-base="1225" data-size="90">
+          <span class="w" data-pop data-rise="30" data-t="2.20">and</span><span class="w gap-s" data-pop data-rise="30" data-t="2.40">all</span><span class="w gap-s" data-pop data-rise="30" data-t="2.56">these</span>
+        </div>
+
+        <!-- fancy stuff -->
+        <div id="lnFancy" class="line hero ocean" data-x="100" data-base="1325" data-size="215" data-fit="490">
+          <span class="w" data-rise="60" data-t="2.84" data-hero data-peak="1.1">fancy</span>
+        </div>
+        <div id="lnStuff" class="line hero ink" data-right="940" data-base="1458" data-size="150" data-fit="360">
+          <span class="w" data-pop data-rise="14" data-t="3.14">stuff.</span>
+        </div>
+
+      </div></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const P = await Paper.init({ extraFonts: ['700 60px "Caveat"'] });
+        const M = Marker.init(P);
+        const { tl, F, D } = P;
+        const NS = "http://www.w3.org/2000/svg";
+
+        // quick crisp exits (4 f): nothing semi-transparent lingers under the next phrase
+        const quick = (id, t) => tl.to("#" + id, { opacity: 0, y: -26, duration: 4 * F, ease: "power2.in" }, t);
+        quick("lnLead", 0.97);
+        quick("lnCoding", 1.88); quick("lnAnd", 1.84);
+        quick("lnKnow", 2.5);
+        quick("lnAll", 2.64);
+
+        // wrapper <g> so a whole doodle (several strokes) can bounce / sway / pop as one object
+        const wrap = (cx, cy) => {
+          const g = document.createElementNS(NS, "g");
+          M.layer.appendChild(g);
+          gsap.set(g, { svgOrigin: `${cx} ${cy}` });
+          return g;
+        };
+
+        // ---------------------------------------------------------------- </> on "coding" (1.26) - red marker, upper-left, overlaps the card's left edge
+        const code = wrap(180, 540);
+        M.line([[138, 465], [80, 540], [138, 615]], 1.04, { parent: code, width: 14, dur: 0.16, seed: 11 });
+        M.line([[180, 625], [208, 455]], 1.14, { parent: code, width: 14, dur: 0.12, seed: 12 });
+        M.line([[238, 465], [288, 540], [238, 615]], 1.22, { parent: code, width: 14, dur: 0.16, seed: 13 });
+        // anticipation squat, hop with overshoot, settle (shapes may squash), then an idle tilt until it is cleared
+        tl.to(code, { y: 10, scaleY: 0.94, duration: 3 * F, ease: "power2.in" }, 1.22);
+        tl.to(code, { y: -20, scaleY: 1.06, rotation: -4, duration: 0.14, ease: "power3.out" }, 1.32);
+        tl.to(code, { y: 0, scaleY: 1, rotation: 0, duration: 0.3, ease: "bounce.out" }, 1.46);
+        tl.to(code, { rotation: 3, duration: 0.45, ease: "sine.inOut", yoyo: true, repeat: 2 }, 1.85);
+        M.erase({ g: code }, 2.62, 0.12);
+
+        // ---------------------------------------------------------------- ink doc on "knowledge work" (1.74-2.02) - right, overlaps the card's right edge (lower half)
+        const doc = wrap(859, 925);
+        M.line([[774, 820], [894, 820], [944, 872], [944, 1030], [774, 1030], [774, 820]], 1.52, { parent: doc, color: "ink", width: 11, dur: 0.26, seed: 21 });
+        M.line([[894, 821], [894, 871], [943, 871]], 1.8, { parent: doc, color: "ink", width: 11, dur: 0.1, seed: 22 });
+        const scrib = (y, k) => [[798, y], [814, y - 9], [830, y + 7], [846, y - 8], [862, y + 7], [878, y - 8], [894, y + 6], [912 - k, y - 4]];
+        M.line(scrib(900, 0), 1.9, { parent: doc, color: "ink", width: 10, dur: 0.14, seed: 23 });
+        M.line(scrib(950, 14), 2.04, { parent: doc, color: "ink", width: 10, dur: 0.14, seed: 24 });
+        M.line(scrib(1000, 30), 2.18, { parent: doc, color: "ink", width: 10, dur: 0.14, seed: 25 });
+        // page flops in with the strokes, then sways like paper being written on
+        tl.fromTo(doc, { rotation: -10, x: 4 }, { rotation: 3, x: -6, duration: 0.3, ease: "back.out(1.4)", immediateRender: false }, 1.52);
+        tl.to(doc, { rotation: -3, duration: 0.5, ease: "sine.inOut", yoyo: true, repeat: 2 }, 1.88);
+        M.erase({ g: doc }, 2.62, 0.12);
+
+        // ---------------------------------------------------------------- sparkles on "fancy" (2.84) - hero beat
+        const star = (cx, cy, R) => {
+          const tips = [0, 1, 2, 3].map((k) => { const a = (-90 + 90 * k) * Math.PI / 180; return [cx + Math.cos(a) * R, cy + Math.sin(a) * R]; });
+          const pts = [];
+          for (let k = 0; k < 4; k++) {
+            const T0 = tips[k], T1 = tips[(k + 1) % 4];
+            const am = (-45 + 90 * k) * Math.PI / 180, C = [cx + Math.cos(am) * R * 0.2, cy + Math.sin(am) * R * 0.2];
+            for (let i = 0; i < 6; i++) { const t = i / 6; pts.push([(1 - t) ** 2 * T0[0] + 2 * (1 - t) * t * C[0] + t * t * T1[0], (1 - t) ** 2 * T0[1] + 2 * (1 - t) * t * C[1] + t * t * T1[1]]); }
+          }
+          pts.push(tips[0]);
+          return pts;
+        };
+        // [cx, cy, R, at]: diameters 60-100 px, mixed sizes around the card
+        const STARS = [[882, 550, 48, 2.84], [150, 695, 40, 2.87], [128, 955, 32, 2.9], [885, 770, 36, 2.93], [135, 1085, 44, 2.96], [880, 1095, 42, 3.0], [330, 385, 34, 3.04], [720, 375, 38, 3.08]];
+        STARS.forEach(([cx, cy, R, at], i) => {
+          const g = wrap(cx, cy);
+          M.line(star(cx, cy, R), at, { parent: g, width: 11, dur: 0.18, amp: 1.0, seed: 300 + i * 17 });
+          tl.fromTo(g, { scale: 0.2, rotation: -35 }, { scale: 1.28, rotation: 6, duration: 0.14, ease: "power3.out", immediateRender: false }, at - 0.02);
+          tl.to(g, { scale: 1, rotation: 0, duration: 0.24, ease: "back.out(2.2)" }, at + 0.12);
+          for (let t = at + 0.42 + (i % 3) * 0.05; t < D - 0.1; t += 0.46) {
+            tl.to(g, { scale: 1.2, rotation: i % 2 ? 9 : -9, duration: 0.23, ease: "sine.inOut", yoyo: true, repeat: 1 }, t);
+          }
+        });
+
+        // hero beat: camera punch + 4 f shake on the word's peak, ink swash under it
+        P.punch(2.84, { scale: 1.012, origin: "510px 1380px" });
+        P.shake(2.86, 4);
+        const lnF = document.getElementById("lnFancy"), wF = lnF.querySelector(".w");
+        const ux0 = lnF.offsetLeft + wF.offsetLeft + 8, ux1 = lnF.offsetLeft + wF.offsetLeft + wF.offsetWidth - 10;
+        const fs = parseFloat(getComputedStyle(lnF).fontSize);
+        M.underline(ux0, ux1, 1325 + fs * 0.34, 3.02, { color: "ink", width: 10, dur: 0.22 });
+      })();
+    </script>
+  </body>
+</html>

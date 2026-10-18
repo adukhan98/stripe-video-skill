@@ -1,0 +1,13 @@
+[
+  {"t": 0.49, "sfx": "pop", "what": "biggest lands (red hero, Mode A bottom band)"},
+  {"t": 0.91, "sfx": "pop", "what": "takeaway lands", "gain_db": -3},
+  {"t": 1.4, "sfx": "whoosh", "what": "footage band shoots up: Mode A -> Mode B (splitOut)"},
+  {"t": 1.84, "sfx": "tick", "what": "tick mark 1240 (outline drawing up)", "gain_db": -5},
+  {"t": 1.95, "sfx": "tick", "what": "tick mark 880", "gain_db": -5},
+  {"t": 2.06, "sfx": "tick", "what": "tick mark 520", "gain_db": -5},
+  {"t": 2.18, "sfx": "ping", "what": "gauge outline closes at the top (on 'do')", "gain_db": -3},
+  {"t": 3.19, "sfx": "impact", "what": "more lands (hero) + spark pop + punch/shake"},
+  {"t": 4.42, "sfx": "tick", "what": "tiny red hatch squashes: almost nothing", "gain_db": -3},
+  {"t": 4.69, "sfx": "pop", "what": "ask lands", "gain_db": -4},
+  {"t": 5.21, "sfx": "ding", "what": "gap brace closes at the top: the gap is measured", "gain_db": -2}
+]

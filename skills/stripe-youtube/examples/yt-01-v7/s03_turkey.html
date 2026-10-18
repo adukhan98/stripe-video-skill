@@ -1,0 +1,171 @@
+<!doctype html>
+<!-- s03_turkey — v7 MINT proof. The Turkey study (Bastani et al., PNAS 2025): the REAL abstract strip (turkey_1.png) is the
+     hero, on the board at frame 0 with a 'PNAS · 2025' chip. A mint map-pin disc drops on 'Turkey'. The camera pulls back as
+     the mint highlighter follows his words across the real phrase (nearly a / thousand / high school / students / math),
+     '~1,000' rolls (strawberry = data) and a crowd of flat student figures fills in a wave under the strip.
+     'One group': the right half of the crowd turns mint inside a mint ring, hops right ('got') as the camera travels to a
+     flat white tutor card — 'a normal' · official ChatGPT logo · 'ChatGPT-style' · mint 'tutor.' + solid bar · typing dots.
+     Runtime (board.css/js, v7yt.css/js) untouched. Card zone (x 1574–1886, y 614–1012) clear at every pose. -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>s03_turkey</title>
+    <link rel="stylesheet" href="board.css" />
+    <link rel="stylesheet" href="v7yt.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="board.js"></script>
+    <script src="v7yt.js"></script>
+    <style>
+      .world { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+      #strip { left: 120px; top: 290px; width: 975px; height: 332px; background: #fff; transform-origin: 50% 60%; }
+      #strip img { position: absolute; left: 13px; top: 18px; width: 949px; }
+      #src { left: 132px; top: 176px; font-size: 38px; height: 82px; padding: 0 32px; }
+      #src b { font-weight: 700; }
+      .kick { position: absolute; font-family: "Inter", sans-serif; font-weight: 700; font-size: 62px; line-height: 1;
+        letter-spacing: .12em; text-transform: uppercase; color: var(--brand-primary-dark); white-space: nowrap; }
+      .num { color: var(--strawberry); text-shadow: 0 3px 14px rgba(30, 30, 30, .14); }
+      /* a flat student figure: head + shoulders, colour = currentColor (charcoal → mint for the group) */
+      .st { position: absolute; width: 32px; height: 40px; color: var(--brand-deep); transform-origin: 50% 100%; }
+      .st::before { content: ""; position: absolute; left: 8px; top: 0; width: 16px; height: 16px; border-radius: 50%; background: currentColor; }
+      .st::after { content: ""; position: absolute; left: 0; top: 19px; width: 32px; height: 21px; border-radius: 16px 16px 6px 6px; background: currentColor; }
+      #tutor { left: 1280px; top: 690px; width: 670px; height: 330px; transform-origin: 0% 50%; }
+      #tutor .logo { position: absolute; left: 36px; top: 36px; width: 124px; height: 124px; border-radius: 30px; display: block;
+        box-shadow: 0 16px 26px -12px rgba(40, 36, 32, .42); }
+      #typ { position: absolute; left: 446px; top: 208px; width: 156px; height: 80px; border-radius: 40px 40px 40px 12px;
+        background: var(--bg); }
+      #typ i { position: absolute; top: 31px; width: 18px; height: 18px; border-radius: 50%; background: var(--brand-deep); }
+    </style>
+  </head>
+  <body data-theme="light">
+    <div id="root" data-composition-id="main" data-start="0" data-width="1920" data-height="1080" data-duration="7.200">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+      <div id="cam"><div id="punch">
+
+        <!-- the crowd (behind everything else); the right half is the group that gets the tutor -->
+        <div id="rest" class="world"></div>
+        <div id="grp" class="world">
+          <div class="k" style="left:640px;top:990px;font-size:64px"><span class="w" data-t="4.40">One</span><span class="w gap" data-t="4.60">group</span></div>
+        </div>
+
+        <!-- hero: the real abstract strip, on the board at frame 0 -->
+        <div id="src" class="chip"><span><b>PNAS</b> · 2025</span></div>
+        <div id="strip" class="page"><img src="assets/turkey_1.png" alt="" /></div>
+
+        <!-- kinetic column, right of the strip -->
+        <div class="kick" style="left:1286px;top:270px"><span class="w" data-t="1.24">Turkey</span></div>
+        <div class="k k900 num" style="left:1150px;top:340px;font-size:200px"><span id="num" class="w" data-t="2.40" data-hero>~0</span></div>
+        <div class="k" style="left:1160px;top:548px;font-size:100px"><span class="w" data-t="3.46">students</span></div>
+
+        <!-- the tutor one group got -->
+        <div id="tutor" class="v7-card">
+          <img id="logo" class="logo" src="assets/chatgpt.png" alt="ChatGPT" />
+          <div class="k k700" style="left:196px;top:44px;font-size:48px;color:var(--muted)"><span class="w" data-t="5.12">a</span><span class="w gap" data-t="5.30">normal</span></div>
+          <div class="k" style="left:194px;top:100px;font-size:68px"><span class="w" data-t="5.60">ChatGPT</span><span class="w" data-t="6.36">-style</span></div>
+          <div class="k k900 mint" id="tw" style="left:34px;top:180px;font-size:132px"><span class="w" id="tutorW" data-t="6.62" data-hero>tutor.</span></div>
+          <div id="typ"><i style="left:30px"></i><i style="left:69px"></i><i style="left:108px"></i></div>
+        </div>
+
+      </div></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const B = await Board.init();
+        const V = V7Y.init(B);
+        const { tl, D, F } = B;
+        const $ = (s) => document.querySelector(s);
+
+        // ---------------------------------------------------------------- camera: strip → pull back (crowd + count) → the tutor
+        B.camSet(680, 446, 1.3);
+        tl.to("#cam", { x: 960 - 690 * 1.33, y: 540 - 444 * 1.33, scale: 1.33, duration: 0.62, ease: "sine.inOut" }, 0);   // close on the strip, slow push
+        V.cam(0.62, 900, 462, 1.12, { dur: 0.8 });           // 'in Turkey' — arc right, the pin drops in as we arrive
+        V.cam(1.92, 960, 600, 1.0, { dur: 0.95 });          // 'with about a thousand' — pull back, the crowd comes in under the strip
+        tl.to("#cam", { x: 960 - 968 * 1.02, y: 540 - 606 * 1.02, scale: 1.02, duration: 4.34 - 2.87, ease: "sine.inOut" }, 2.87);
+        V.cam(4.34, 1440, 680, 1.08, { dur: 0.95 });        // 'One group got' — travel right to the tutor
+        tl.to("#cam", { x: 960 - 1448 * 1.1, y: 540 - 684 * 1.1, scale: 1.1, duration: D - 5.29, ease: "sine.inOut" }, 5.29);
+
+        // ---------------------------------------------------------------- the strip: rests at a slight tilt; source chip; 'study' nod
+        gsap.set("#strip", { rotation: -1.2 });
+        tl.fromTo("#src", { opacity: 0, scale: 0.6, y: 18 }, { opacity: 1, scale: 1.08, y: -3, duration: 5 * F, ease: "power3.out" }, 0.30);
+        tl.to("#src", { scale: 1, y: 0, duration: 7 * F, ease: "power2.inOut" }, 0.30 + 5 * F);
+        tl.to("#strip", { scale: 1.022, y: -6, rotation: -0.6, duration: 5 * F, ease: "power2.out" }, 0.58);       // 'study'
+        tl.to("#strip", { scale: 1, y: 0, rotation: -1.2, duration: 10 * F, ease: "back.out(1.8)" }, 0.58 + 5 * F);
+
+        // ---------------------------------------------------------------- 'Turkey': a mint map-pin disc drops in on an arc and lands (squash)
+        const pin = V.disc(P(), { x: 1226, y: 300, d: 96, icon: "map-pin", mint: true, id: "pin" });
+        function P() { return document.querySelector("#punch"); }
+        gsap.set(pin, { transformOrigin: "50% 100%" });
+        tl.fromTo(pin, { opacity: 0, x: -40, scale: 0.7 }, { opacity: 1, x: 0, scale: 1, duration: 9 * F, ease: "power2.out" }, 1.08);
+        tl.fromTo(pin, { y: -150 }, { y: 0, duration: 9 * F, ease: "power2.in" }, 1.08);
+        tl.to(pin, { scaleX: 1.16, scaleY: 0.84, duration: 3 * F, ease: "power1.out" }, 1.08 + 9 * F);
+        tl.to(pin, { scaleX: 1, scaleY: 1, duration: 8 * F, ease: "back.out(2.5)" }, 1.08 + 12 * F);
+        const pg = pin.querySelector(".v7-gl");
+        tl.fromTo(pg, { y: -8 }, { y: 0, duration: 8 * F, ease: "back.out(3)" }, 1.08 + 10 * F);
+        // the pin keeps a slow bob (a hold is never dead)
+        tl.to(pin, { y: -7, duration: 0.6, ease: "sine.inOut", yoyo: true, repeat: 3 }, 1.9);
+
+        // ---------------------------------------------------------------- mint highlighter on the real phrase, ON his words
+        // (captures/turkey.strips.json boxes × 0.9 + image offset 13,18; split at the word gaps of the capture)
+        V.hl("#strip", [98, 106, 156, 54], 2.08, { dur: 0.26 });   // about a      → 'nearly a'
+        V.hl("#strip", [254, 106, 193, 54], 2.44, { dur: 0.26 });  // thousand     → 'thousand'
+        V.hl("#strip", [447, 106, 226, 54], 2.96, { dur: 0.40 });  // high school  → 'high school'
+        V.hl("#strip", [98, 171, 172, 54], 3.50, { dur: 0.24 });   // students     → 'students'
+        V.hl("#strip", [673, 106, 107, 54], 4.16, { dur: 0.20 });  // math         → 'math'
+
+        // ---------------------------------------------------------------- '~1,000' rolls (data → strawberry), lands on 'school'
+        B.countTo("#num", 2.42, 0, 1000, 0.82, (v) => "~" + (Math.round(v / 10) * 10).toLocaleString("en-US"));
+        B.punch("#num", 3.26, 1.06);
+
+        // ---------------------------------------------------------------- the crowd: 5 × 22 flat students, a left→right wave
+        const ROWS = 5, COLS = 22, X0 = 140, Y0 = 712, PX = 44, PY = 52, SPLIT = 11;
+        const all = [], grp = [], rest = [];
+        for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) {
+          const el = document.createElement("div"); el.className = "st";
+          Object.assign(el.style, { left: X0 + c * PX + "px", top: Y0 + r * PY + "px" });
+          (c >= SPLIT ? $("#grp") : $("#rest")).appendChild(el);
+          (c >= SPLIT ? grp : rest).push(el);
+        }
+        for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) all.push(c >= SPLIT ? grp[r * (COLS - SPLIT) + c - SPLIT] : rest[r * SPLIT + c]);
+        tl.fromTo(all, { opacity: 0, scale: 0.2, y: 14 }, { opacity: 1, scale: 1, y: 0, duration: 7 * F, ease: "back.out(2.6)",
+          stagger: { grid: [ROWS, COLS], from: 0, axis: "x", amount: 1.0 } }, 2.46);
+        // 'studying math': a ripple runs through the crowd (heads bob), then the page's 'math' lights
+        tl.to(all, { y: -11, duration: 5 * F, ease: "sine.out", yoyo: true, repeat: 1,
+          stagger: { grid: [ROWS, COLS], from: 0, axis: "x", amount: 0.45 } }, 3.84);
+
+        // ---------------------------------------------------------------- 'One group': the right half turns mint inside a mint ring
+        tl.to(grp, { color: "#7CC49E", duration: 6 * F, ease: "power2.out",
+          stagger: { grid: [ROWS, COLS - SPLIT], from: "center", amount: 0.22 } }, 4.44);
+        tl.to(grp, { scale: 1.16, duration: 4 * F, ease: "power2.out", stagger: { grid: [ROWS, COLS - SPLIT], from: "center", amount: 0.22 } }, 4.44);
+        tl.to(grp, { scale: 1, duration: 7 * F, ease: "power2.inOut", stagger: { grid: [ROWS, COLS - SPLIT], from: "center", amount: 0.22 } }, 4.44 + 4 * F);
+        const gx = X0 + SPLIT * PX - 22, gy = Y0 - 22, gw = (COLS - SPLIT - 1) * PX + 32 + 44, gh = (ROWS - 1) * PY + 40 + 44;
+        V.ringRect("#grp", gx, gy, gw, gh, 4.56, { r: 30, width: 6, dur: 0.4 });
+        // the rest of the class steps back (focus), never text
+        tl.to(rest, { opacity: 0.42, duration: 10 * F, ease: "power2.out" }, 4.86);
+
+        // ---------------------------------------------------------------- 'got': the group hops right toward the tutor (arc + squash on landing)
+        tl.to(grp, { scaleY: 0.86, scaleX: 1.08, duration: 3 * F, ease: "power2.in" }, 4.80);                 // anticipation
+        tl.to(grp, { scaleY: 1.06, scaleX: 0.96, duration: 4 * F, ease: "power2.out" }, 4.80 + 3 * F);
+        tl.to("#grp", { x: 120, duration: 0.42, ease: "power2.inOut" }, 4.88);
+        tl.to("#grp", { y: -54, duration: 0.21, ease: "sine.out" }, 4.88);
+        tl.to("#grp", { y: 0, duration: 0.21, ease: "sine.in" }, 5.09);
+        tl.to(grp, { scaleY: 0.84, scaleX: 1.12, duration: 3 * F, ease: "power1.out" }, 5.30);               // contact
+        tl.to(grp, { scaleY: 1, scaleX: 1, duration: 9 * F, ease: "back.out(2.2)" }, 5.30 + 3 * F);
+
+        // ---------------------------------------------------------------- the tutor card: pops on 'got a', logo on 'ChatGPT', mint 'tutor.'
+        B.in("#tutor", 5.0, { type: "pop", dur: 14 * F });
+        tl.fromTo("#logo", { opacity: 0, scale: 0.4, y: 26 }, { opacity: 1, scale: 1.12, y: -6, duration: 5 * F, ease: "power3.out" }, 5.56);
+        tl.to("#logo", { scale: 1, y: 0, duration: 7 * F, ease: "power2.inOut" }, 5.56 + 5 * F);
+        tl.to("#logo", { rotation: -5, duration: 0.3, ease: "sine.inOut", yoyo: true, repeat: 1 }, 6.05);    // a little nod while 'ChatGPT' holds
+        // solid mint bar under 'tutor.'
+        const tw = $("#tutorW"), twl = $("#tw");
+        V.bar("#tutor", twl.offsetLeft + tw.offsetLeft + 8, twl.offsetTop + tw.offsetTop + tw.offsetHeight - 2, tw.offsetWidth * 0.8, 6.84, { h: 14 });
+        // the tutor starts typing (secondary action to the last frame)
+        tl.fromTo("#typ", { opacity: 0, scale: 0.4, transformOrigin: "0% 100%" }, { opacity: 1, scale: 1.08, duration: 5 * F, ease: "power3.out" }, 6.86);
+        tl.to("#typ", { scale: 1, duration: 6 * F, ease: "power2.inOut" }, 6.86 + 5 * F);
+        document.querySelectorAll("#typ i").forEach((d, i) =>
+          tl.to(d, { y: -10, duration: 5 * F, ease: "sine.inOut", yoyo: true, repeat: 1 }, 6.98 + i * 3 * F));
+      })();
+    </script>
+  </body>
+</html>

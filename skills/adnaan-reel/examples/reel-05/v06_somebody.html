@@ -1,0 +1,434 @@
+<!doctype html>
+<!-- v06_somebody — OPINION on the shared runtime (creative pass).
+     Beat A: spotlight tightens on the portrait card as "somebody" lands, wobbly dotted ellipse + arrow flick at him, a three-tile kit
+     snaps together on "set that whole thing". Beat B: card shifts left, workflow card + a magnifier that really magnifies the step
+     under it (dotted trail, accent ticks), then on "departments" the flow branches into three lanes like an org chart. -->
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>v06_somebody</title>
+    <link rel="stylesheet" href="brand.css" />
+    <link rel="stylesheet" href="paper.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+    <script src="paper.js"></script>
+    <style>
+      /* ---- spotlight on the speaker card ---- */
+      #spot {
+        position: absolute; inset: 0; opacity: 0; pointer-events: none;
+        background: radial-gradient(ellipse 640px 740px at 558px 950px, rgba(228, 222, 217, 0) 0%, rgba(228, 222, 217, 0) 46%, rgba(60, 50, 42, 0.2) 100%);
+      }
+      /* ---- kit tiles (assemble on "set that whole thing") ---- */
+      .tile {
+        position: absolute; width: 92px; height: 92px; border-radius: 26px; background: var(--brand-card); opacity: 0;
+        box-shadow: 8px 18px 26px -10px rgba(60, 50, 40, 0.34), inset 0 -3px 6px rgba(60, 50, 40, 0.05);
+      }
+      .tile svg { position: absolute; inset: 0; width: 92px; height: 92px; overflow: visible; }
+      .tile .burst2 { position: absolute; inset: -4px; border-radius: 30px; opacity: 0; border: 4px solid var(--brand-primary); }
+      /* ---- bespoke: soft workflow card, 5 wireframe steps joined by dotted arrows, magnifier ---- */
+      #wf { left: 588px; top: 320px; width: 360px; height: 700px; overflow: visible; }
+      .node { position: absolute; width: 170px; height: 132px; }
+      .node.mini { height: 72px; }
+      .node .box {
+        position: absolute; left: 0; top: 0; width: 170px; height: 72px; border-radius: 22px; background: #f3f0ec;
+        box-shadow: 8px 16px 24px -10px rgba(60, 50, 40, 0.3), inset 0 -3px 6px rgba(60, 50, 40, 0.05);
+      }
+      .node .ring {
+        position: absolute; left: 0; top: 0; width: 170px; height: 72px; border-radius: 22px; opacity: 0;
+        box-shadow: inset 0 0 0 4px var(--brand-primary), 0 0 30px rgba(46, 156, 203, 0.38); background: rgba(255, 255, 255, 0.55);
+      }
+      .node .burst { position: absolute; left: 0; top: 0; width: 170px; height: 72px; border-radius: 22px; opacity: 0; border: 4px solid var(--brand-primary); }
+      .node .ic { position: absolute; left: 18px; top: 16px; width: 40px; height: 40px; border-radius: 50%; background: var(--wire); }
+      .node .ic i { position: absolute; inset: 0; border-radius: 50%; opacity: 0; background: radial-gradient(circle at 35% 30%, var(--brand-primary), var(--brand-primary-dark) 80%); }
+      .node .b1 { position: absolute; left: 72px; top: 20px; width: 62px; height: 12px; border-radius: 6px; background: var(--wire); }
+      .node .b2 { position: absolute; left: 72px; top: 42px; width: 42px; height: 10px; border-radius: 5px; background: var(--wire); }
+      .node svg.tk { position: absolute; right: 12px; top: 24px; width: 24px; height: 24px; opacity: 0; overflow: visible; }
+      .node svg.tk path { fill: none; stroke: var(--brand-primary); stroke-width: 3.6; stroke-linecap: round; stroke-linejoin: round; }
+      .node svg.arr { position: absolute; left: 0; top: 0; width: 170px; height: 140px; overflow: visible; }
+      .node svg .head { fill: none; stroke: var(--brand-text); stroke-width: 3.4; stroke-linecap: round; stroke-linejoin: round; opacity: 0; }
+      .node svg .headA { fill: none; stroke: var(--brand-primary); stroke-width: 3.8; stroke-linecap: round; stroke-linejoin: round; opacity: 0; }
+      .dotted.accent { stroke-width: 4.5; }
+      .trail { fill: none; stroke: var(--brand-text); stroke-opacity: 0.34; stroke-width: 3; stroke-linecap: round; stroke-dasharray: 2 12; }
+      /* magnifier: the glass shows a 1.8x copy of the steps under it */
+      #lens { position: absolute; left: -60px; top: -60px; width: 160px; height: 160px; opacity: 0; }
+      #lens-f, #lens-s { position: absolute; inset: 0; }
+      #mag { position: absolute; left: 19px; top: 19px; width: 82px; height: 82px; border-radius: 50%; overflow: hidden; background: var(--brand-card); }
+      #mag-in { position: absolute; left: 0; top: 0; width: 360px; height: 700px; transform-origin: 0 0; }
+      #mag-in .node .head { opacity: 1; }
+      #mag-in .node .b1, #mag-in .node .b2 { background: var(--brand-muted); opacity: 0.55; }
+      #mag-in .node .dotted.accent, #mag-in .node .headA, #mag-in .node .burst { display: none; }
+      #lens svg { position: absolute; inset: 0; width: 160px; height: 160px; overflow: visible; filter: drop-shadow(12px 22px 14px rgba(40, 30, 20, 0.3)); }
+      #org { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; overflow: visible; }
+    </style>
+  </head>
+  <body data-face="0.47">
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="7.1167">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+      <div id="cam"><div id="punch">
+
+        <div id="spot"></div>
+
+        <!-- workflow card (behind the speaker card) -->
+        <div id="wff" class="layer" data-float="5" data-float-period="1.5">
+          <div id="wf" class="uicard">
+            <div class="g" style="left: 96px; top: 26px; width: 120px; height: 14px"></div>
+            <div class="g round" style="left: 300px; top: 24px; width: 18px; height: 18px"></div>
+            <svg id="org" viewBox="0 0 1080 1920"></svg>
+            <div id="nodes"></div>
+            <svg id="trailsvg" class="paths" viewBox="0 0 1080 1920"></svg>
+            <div id="lens" data-origin="60px 60px">
+              <div id="lens-f"><div id="lens-s" data-origin="60px 60px">
+                <div id="mag"><div id="mag-in"></div></div>
+                <svg viewBox="0 0 170 170">
+                  <defs>
+                    <linearGradient id="rim" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3a3a3a"/><stop offset="1" style="stop-color:var(--brand-text)"/></linearGradient>
+                    <radialGradient id="glass" cx="0.38" cy="0.3" r="0.8"><stop offset="0" stop-color="#ffffff" stop-opacity="0.22"/><stop offset="0.6" stop-color="#ffffff" stop-opacity="0"/><stop offset="1" stop-color="#cfe8f3" stop-opacity="0.06"/></radialGradient>
+                  </defs>
+                  <path d="M104 104 L152 152" stroke="url(#rim)" stroke-width="20" stroke-linecap="round"/>
+                  <circle cx="64" cy="64" r="50" fill="url(#glass)"/>
+                  <circle cx="64" cy="64" r="50" fill="none" stroke="url(#rim)" stroke-width="13"/>
+                  <circle id="lens-tint" cx="64" cy="64" r="44" fill="var(--brand-primary)" opacity="0"/>
+                  <path d="M34 54 A32 32 0 0 1 56 34" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" opacity="0.85"/>
+                </svg>
+              </div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- speaker: portrait hero in beat A, shrinks to a secondary card in beat B (wrapper moves, runtime floats the card) -->
+        <div id="cw" class="layer">
+          <div class="spk portrait" data-x="178" data-y="520" data-w="760" data-h="860">
+            <div class="spk-card">
+              <div class="spk-vid"><video id="speaker" class="clip" src="assets/speaker.mp4" muted playsinline data-start="0" data-duration="7.1167" data-track-index="1"></video></div>
+              <div class="spk-sheen"></div>
+              <div id="strip" class="paper-strip" style="height: 300px; background: linear-gradient(180deg, rgba(228,222,217,0) 0%, rgba(228,222,217,0.8) 28%, rgba(228,222,217,0.95) 100%); opacity: 0"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- kit: three soft tiles snap together on "that whole thing" -->
+        <div id="kit" class="layer">
+          <div id="t1" class="tile" style="left: 604px; top: 1226px"><svg viewBox="0 0 92 92"><g transform="translate(46 46)"><circle r="15" fill="none" stroke="var(--brand-text)" stroke-width="7"/><g fill="var(--brand-text)"><rect x="-4" y="-28" width="8" height="11" rx="2"/><rect x="-4" y="-28" width="8" height="11" rx="2" transform="rotate(45)"/><rect x="-4" y="-28" width="8" height="11" rx="2" transform="rotate(90)"/><rect x="-4" y="-28" width="8" height="11" rx="2" transform="rotate(135)"/><rect x="-4" y="-28" width="8" height="11" rx="2" transform="rotate(180)"/><rect x="-4" y="-28" width="8" height="11" rx="2" transform="rotate(225)"/><rect x="-4" y="-28" width="8" height="11" rx="2" transform="rotate(270)"/><rect x="-4" y="-28" width="8" height="11" rx="2" transform="rotate(315)"/></g><circle r="5" fill="var(--brand-primary)"/></g></svg><div class="burst2"></div></div>
+          <div id="t2" class="tile" style="left: 712px; top: 1226px"><svg viewBox="0 0 92 92"><rect x="30" y="44" width="32" height="22" rx="8" fill="var(--brand-text)"/><rect x="36" y="24" width="7" height="22" rx="3" fill="var(--brand-text)"/><rect x="49" y="24" width="7" height="22" rx="3" fill="var(--brand-text)"/><path d="M46 66 V80" stroke="var(--brand-text)" stroke-width="6" stroke-linecap="round"/><circle cx="46" cy="55" r="4" fill="var(--brand-primary)"/></svg><div class="burst2"></div></div>
+          <div id="t3" class="tile" style="left: 820px; top: 1226px"><svg viewBox="0 0 92 92"><rect x="22" y="28" width="48" height="36" rx="9" fill="none" stroke="var(--brand-text)" stroke-width="5"/><rect x="30" y="38" width="24" height="5" rx="2.5" fill="var(--brand-text)"/><rect x="30" y="49" width="15" height="5" rx="2.5" fill="var(--brand-text)"/><circle cx="60" cy="52" r="5" fill="var(--brand-primary)"/></svg><div class="burst2"></div></div>
+        </div>
+
+        <!-- BEAT A: "but somebody still has to set that whole thing" -->
+        <div class="line sup" id="L-but" data-x="96" data-base="354" data-size="84" data-exit="2.26" data-exit-lag="2" data-exit-dy="-24">
+          <span class="w" data-t="0.03">but</span>
+        </div>
+        <div class="line hero ocean kin" id="L-some" data-x="128" data-base="532" data-size="230" data-fit="780" data-exit="2.26" data-exit-dy="-24">
+          <span class="w" id="w-some" data-t="0.49" data-hero data-peak="1.07" data-punch="0.49">somebody</span>
+        </div>
+        <div class="line sup kin" id="L-still" data-right="940" data-base="1194" data-size="90" data-exit="2.24">
+          <span class="w" data-t="0.91">still</span><span class="w gap-s" data-t="1.17">has</span><span class="w gap-s" data-t="1.35">to</span>
+        </div>
+        <div class="line sup kin" id="L-set" data-x="76" data-base="1322" data-size="110" data-exit="2.26" data-exit-lag="1">
+          <span class="w hero ink" style="font-size: 170px" data-t="1.53" data-hero data-peak="1.05">set</span><span class="w gap-s" data-t="1.71" data-pop>that</span>
+        </div>
+        <div class="line sup kin" id="L-whole" data-right="940" data-base="1436" data-size="110" data-exit="2.28" data-exit-lag="1">
+          <span class="w" data-t="1.89" data-pop data-rise="30">whole</span><span class="w hero ink gap-s" style="font-size: 140px" data-t="2.07" data-hero data-peak="1.05" data-rise="44">thing</span>
+        </div>
+
+        <!-- BEAT B1: "That person has to understand" -->
+        <div class="line sup" id="L-that" data-x="76" data-base="1128" data-size="96" data-exit="4.12">
+          <span class="w" data-t="2.47">That</span><span class="w gap-s" data-t="2.85">person</span><span class="w gap-s" data-t="3.19">has</span><span class="w gap-s" data-t="3.39">to</span>
+        </div>
+        <div class="line hero ink" id="L-under" data-right="928" data-base="1262" data-size="140" data-fit="860" data-exit="4.14">
+          <span class="w" data-t="3.85" data-pop>understand</span>
+        </div>
+
+        <!-- BEAT B2: "how the work actually goes on" -->
+        <div class="line sup" id="L-how" data-x="76" data-base="1330" data-size="110" data-exit="5.22" data-exit-lag="1">
+          <span class="w" data-t="4.13">how</span><span class="w gap-s" data-t="4.31">the</span><span class="w hero ocean gap-s" style="font-size: 178px" data-t="4.53" data-hero data-peak="1.06" data-origin="20% 85%">work</span>
+        </div>
+        <div class="line sup" id="L-act" data-right="940" data-base="1446" data-size="110" data-exit="5.62" data-exit-lag="2">
+          <span class="w" data-t="4.97" data-rise="26">actually</span><span class="w gap-s" data-t="5.19" data-rise="26">goes</span><span class="w gap-s" data-t="5.41" data-rise="26">on</span>
+        </div>
+
+        <!-- BEAT B3: "in those departments in that company" -->
+        <div class="line sup" id="L-in" data-x="76" data-base="1194" data-size="90">
+          <span class="w" data-t="5.57">in</span><span class="w gap-s" data-t="5.75">those</span>
+        </div>
+        <div class="line hero ink" id="L-dep" data-x="76" data-base="1318" data-size="170" data-fit="860">
+          <span class="w" data-t="6.21" data-pop data-rise="34" data-origin="20% 85%">departments</span>
+        </div>
+        <div class="line sup" id="L-comp" data-right="940" data-base="1440" data-size="96">
+          <span class="w" data-t="6.43" data-rise="26">in</span><span class="w gap-s" data-t="6.57" data-rise="26">that</span><span class="w hero ocean gap-s" style="font-size: 116px" data-t="7.01" data-pop data-rise="22">company</span>
+        </div>
+
+        <svg id="ellsvg" class="paths" viewBox="0 0 1080 1920"><path id="ell" class="dotted" d="M0 0"/><path id="flick" class="dotted" d="M0 0"/><path id="flickhead" d="M0 0" fill="none" stroke="var(--brand-text)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const P = await Paper.init();
+        const { tl, D, F, $, $$ } = P;
+        const NS = "http://www.w3.org/2000/svg";
+
+        // ================= BEAT A =================
+        // spotlight tightens on the speaker card as "somebody" lands, relaxes when the words go
+        gsap.set("#spot", { transformOrigin: "558px 950px" });
+        tl.fromTo("#spot", { opacity: 0, scale: 1.7 }, { opacity: 1, scale: 1, duration: 0.55, ease: "power3.out", immediateRender: true }, 0.3);
+        tl.to("#spot", { scale: 1.12, duration: 1.6, ease: "sine.inOut" }, 0.85);
+        tl.to("#spot", { opacity: 0, duration: 0.35, ease: "power2.in" }, 2.2);
+
+        // dotted ellipse hand-drawn around "somebody" (wobbly, drawn open so the ends overlap) + an arrow flick at him
+        {
+          const line = $("#L-some"), w = $("#w-some");
+          const fs = parseFloat(getComputedStyle(line).fontSize);
+          const cx = line.offsetLeft + w.offsetLeft + w.offsetWidth / 2 - 4;
+          const base = parseFloat(line.dataset.base);
+          const cy = base - fs * 0.25;
+          const rx = w.offsetWidth / 2 + 40, ry = fs * 0.6;
+          const tilt = (-3 * Math.PI) / 180;
+          let d = "";
+          for (let a = 205, k = 0; a <= 205 + 410; a += 4, k++) {
+            const th = (a * Math.PI) / 180;
+            const g = 1 + 0.035 * ((a - 205) / 410) + 0.02 * Math.sin(3 * th + 0.6) + 0.012 * Math.sin(7 * th + 1.3);
+            const ex = rx * g * Math.cos(th), ey = ry * g * Math.sin(th);
+            const x = cx + ex * Math.cos(tilt) - ey * Math.sin(tilt), y = cy + ex * Math.sin(tilt) + ey * Math.cos(tilt);
+            d += (k ? " L " : "M ") + x.toFixed(1) + " " + y.toFixed(1);
+          }
+          $("#ell").setAttribute("d", d);
+          P.drawPath("#ell", 0.7, 0.55);
+          P.marchPath("#ell", 0.7, D - 0.7, 60);
+          // flick: leaves the loop at its lower right and curls toward his face (over the shelf, never the face)
+          const sx = cx + rx * 0.82, sy = cy + ry * 0.62;
+          const ex2 = 742, ey2 = 806;
+          const c1x = sx + 34, c1y = sy + 96, c2x = ex2 + 92, c2y = ey2 - 56;
+          $("#flick").setAttribute("d", `M ${sx.toFixed(1)} ${sy.toFixed(1)} C ${c1x.toFixed(1)} ${c1y.toFixed(1)}, ${c2x} ${c2y}, ${ex2} ${ey2}`);
+          const dx = ex2 - c2x, dy = ey2 - c2y, L = Math.hypot(dx, dy), ux = dx / L, uy = dy / L;
+          const rot = (ang) => [ux * Math.cos(ang) - uy * Math.sin(ang), ux * Math.sin(ang) + uy * Math.cos(ang)];
+          const [ax, ay] = rot(0.5), [bx, by] = rot(-0.5);
+          $("#flickhead").setAttribute("d", `M ${ex2 - ax * 26} ${ey2 - ay * 26} L ${ex2} ${ey2} L ${ex2 - bx * 26} ${ey2 - by * 26}`);
+          P.drawPath("#flick", 1.12, 0.32);
+          P.marchPath("#flick", 1.12, 1.2, 60);
+          const hp = $("#flickhead"), hl = hp.getTotalLength();
+          hp.style.strokeDasharray = `${hl} ${hl}`;
+          tl.set(hp, { opacity: 0 }, 0);
+          tl.set(hp, { opacity: 1 }, 1.4);
+          tl.fromTo(hp, { strokeDashoffset: hl }, { strokeDashoffset: 0, duration: 0.12, ease: "power2.out" }, 1.4);
+          tl.to("#ellsvg", { y: -60, opacity: 0, filter: "blur(8px)", duration: 6 * F, ease: "power2.in" }, 2.26);
+        }
+        // paper strip rises over the navy chest under the lower words, clears when they go
+        tl.to("#strip", { opacity: 1, duration: 0.5, ease: "power2.out" }, 0.7);
+        tl.to("#strip", { opacity: 0, duration: 0.22, ease: "power2.in" }, 2.3);
+
+        // kit: gear / plug / card drop in on "that / whole / thing", then click together on the last word
+        {
+          const FX = [610, 712, 814];
+          const spread = [-40, 0, 40];
+          const lands = [1.71, 1.89, 2.07];
+          ["#t1", "#t2", "#t3"].forEach((sel, i) => {
+            const t = lands[i];
+            gsap.set(sel, { transformOrigin: "50% 100%", left: FX[i], x: spread[i] });
+            tl.fromTo(sel, { opacity: 0, y: -120, rotation: i === 1 ? 10 : -14 + i * 14, scale: 0.8 },
+              { opacity: 1, y: 4, rotation: 2, scale: 1.02, duration: 0.2, ease: "power2.in", immediateRender: true }, t - 0.2);
+            tl.to(sel, { y: 0, rotation: 0, scale: 1, duration: 0.22, ease: "back.out(2)" }, t);
+            P.squash(sel, t, 0.1);
+          });
+          // snap: outer tiles slide in, middle one takes the hit, accent ring flashes on all three
+          tl.to("#t1", { x: 0, duration: 0.1, ease: "power3.in" }, 2.1);
+          tl.to("#t3", { x: 0, duration: 0.1, ease: "power3.in" }, 2.1);
+          tl.fromTo("#t2", { scale: 1 }, { scale: 1.1, duration: 0.07, ease: "power2.out" }, 2.19);
+          tl.to("#t2", { scale: 1, duration: 0.25, ease: "back.out(2.4)" }, 2.26);
+          ["#t1", "#t2", "#t3"].forEach((sel, i) => {
+            const b = sel + " .burst2";
+            gsap.set(b, { transformOrigin: "50% 50%" });
+            tl.fromTo(b, { opacity: 0.9, scale: 1 }, { opacity: 0, scale: 1.45, duration: 0.4, ease: "power2.out", immediateRender: false }, 2.19 + i * 0.03);
+          });
+          tl.to("#kit", { y: -50, opacity: 0, filter: "blur(8px)", duration: 6 * F, ease: "power2.in" }, 2.32);
+        }
+
+        // ================= A -> B: the card shifts left and shrinks (anticipation, arc, overshoot, settle) =================
+        gsap.set("#cw", { transformOrigin: "178px 520px" });
+        tl.to("#cw", { x: 4, y: 14, scale: 1, duration: 0.1, ease: "power2.out" }, 2.24);
+        tl.to("#cw", { x: -118, duration: 0.66, ease: "power3.inOut" }, 2.34);
+        tl.to("#cw", { y: -220, duration: 0.66, ease: "back.out(1.25)" }, 2.34);
+        tl.to("#cw", { scale: 0.8, duration: 0.66, ease: "back.out(1.4)" }, 2.34);
+
+        // ================= BEAT B: workflow card + magnifier =================
+        const BX = [108, 150, 108, 150, 108], BY = (i) => 66 + 132 * i;
+        const nodes = $("#nodes");
+        const NODE_HTML = `<div class="box" data-origin="50% 50%"><div class="ic"><i></i></div><div class="b1"></div><div class="b2"></div></div><div class="ring"></div><div class="burst"></div><svg class="tk" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7"/></svg>`;
+        for (let i = 0; i < 5; i++) {
+          const n = document.createElement("div");
+          n.className = "node"; n.id = "n" + i; n.dataset.origin = "85px 36px";
+          n.style.left = BX[i] + "px"; n.style.top = BY(i) + "px";
+          let arrow = "";
+          if (i < 4) {
+            const dx = BX[i + 1] - BX[i];
+            const dp = `M85 78 C85 106, ${85 + dx} 98, ${85 + dx} 126`;
+            const hd = `M${76 + dx} 116 L${85 + dx} 128 L${94 + dx} 116`;
+            arrow = `<svg class="arr" viewBox="0 0 170 140"><path id="k${i}" class="dotted" d="${dp}"/><path id="a${i}" class="dotted accent" d="${dp}"/><path id="h${i}" class="head" d="${hd}"/><path id="ha${i}" class="headA" d="${hd}"/></svg>`;
+          }
+          n.innerHTML = arrow + NODE_HTML;
+          nodes.appendChild(n);
+        }
+        const nc = (i) => ({ x: BX[i] + 85, y: BY(i) + 36 });   // node centre, card-local
+
+        // the magnifier's world: a copy of the steps (boxes + arrows), scaled 1.8x inside the glass
+        const SM = 1.8, MC = 41;
+        const magIn = $("#mag-in");
+        for (let i = 0; i < 5; i++) {
+          const c = $("#n" + i).cloneNode(true);
+          c.id = "mn" + i;
+          $$("[id]", c).forEach((e) => e.removeAttribute("id"));
+          $$("[mask]", c).forEach((e) => e.removeAttribute("mask"));
+          magIn.appendChild(c);
+        }
+        gsap.set(magIn, { scale: SM });
+        const mq = (i, q) => $(q, $("#mn" + i));
+
+        P.cardIn("#wf", 2.78, { fromY: 120, rot: 3, ry: -4 });
+        P.enter("#nodes > .node", 3.0, { rise: 46, scaleFrom: 0.86, stagger: 4 * F });
+        for (let i = 0; i < 4; i++) {
+          const t0 = 3.0 + i * 4 * F + 0.3;
+          P.drawPath("#k" + i, t0, 0.34);
+          P.marchPath("#k" + i, t0, D - t0, 70);
+          tl.fromTo("#h" + i, { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.14, ease: "back.out(2)", transformOrigin: "50% 50%" }, t0 + 0.3);
+        }
+        // staging: while the lens works the speaker is soft, one focal point
+        P.recede(".spk", 3.45, { opacity: 0.82, blur: 2.5, scale: 1 });
+        P.restore(".spk", 5.5);
+
+        // lens move helper: the glass magnifies whatever is under it, so the copy inside mirrors every lens move (and un-rotates)
+        const gl = (v, dur, ease, t) => {
+          tl.to("#lens", { ...v, duration: dur, ease }, t);
+          const m = {};
+          if (v.x !== undefined) m.x = MC - SM * v.x;
+          if (v.y !== undefined) m.y = MC - SM * v.y;
+          if (Object.keys(m).length) tl.to(magIn, { ...m, duration: dur, ease }, t);
+          if (v.rotation !== undefined) tl.to("#mag", { rotation: -v.rotation, duration: dur, ease }, t);
+        };
+        gsap.set("#lens", { transformOrigin: "60px 60px" });
+        const LT = [3.85, 4.2, 4.53, 4.97, 5.2];
+        const lc = (i) => ({ x: nc(i).x - 22, y: nc(i).y });
+        const p0 = lc(0), s0 = { x: 300, y: 34, r: -28 };
+        tl.set("#lens", { x: s0.x, y: s0.y, rotation: s0.r }, 0);
+        tl.set(magIn, { x: MC - SM * s0.x, y: MC - SM * s0.y }, 0);
+        tl.set("#mag", { rotation: -s0.r }, 0);
+        tl.to("#lens", { opacity: 1, duration: 0.1, ease: "power1.out" }, 3.5);
+        gl({ x: p0.x }, 0.4, "power3.out", 3.45);
+        gl({ y: p0.y }, 0.4, "power2.inOut", 3.45);
+        gl({ rotation: 0 }, 0.4, "power3.out", 3.45);
+        tl.fromTo("#lens-s", { scale: 0.5 }, { scale: 1.1, duration: 0.3, ease: "power3.out" }, 3.5);
+        tl.to("#lens-s", { scale: 1, duration: 0.26, ease: "back.out(1.6)" }, 3.8);
+
+        // faint dotted trail behind the lens (one arc per hop, drawn as the lens travels)
+        const trailSvg = $("#trailsvg");
+        for (let i = 0; i < 4; i++) {
+          const a = nc(i), b = nc(i + 1), xm = (a.x + b.x) / 2, cxm = xm - 66;
+          const p = document.createElementNS(NS, "path");
+          p.setAttribute("id", "tr" + i); p.setAttribute("class", "trail");
+          p.setAttribute("d", `M${a.x} ${a.y} C${cxm} ${a.y + 28}, ${cxm} ${b.y - 28}, ${b.x} ${b.y}`);
+          trailSvg.appendChild(p);
+        }
+
+        for (let i = 0; i < 5; i++) {
+          const t = LT[i];
+          // each step the glass reaches: accent edge + icon light up, an expanding ping ring, a tiny accent tick pops
+          const both = (q, ...a) => { tl.fromTo(`#n${i} ${q}`, ...a); tl.fromTo(mq(i, q), ...a); };
+          both(".ring", { opacity: 0 }, { opacity: 1, duration: 0.14, ease: "power2.out" }, t - 0.04);
+          both(".ic i", { opacity: 0 }, { opacity: 1, duration: 0.14, ease: "power2.out" }, t - 0.02);
+          gsap.set(`#n${i} .burst`, { transformOrigin: "50% 50%" });
+          tl.fromTo(`#n${i} .burst`, { opacity: 0.85, scale: 1 }, { opacity: 0, scale: 1.35, duration: 0.38, ease: "power2.out", immediateRender: false }, t);
+          gsap.set(`#n${i} .tk, ` + `#mn${i} .tk`, { transformOrigin: "50% 50%" });
+          both(".tk", { opacity: 0, scale: 0.2, rotation: -25 }, { opacity: 1, scale: 1, rotation: 0, duration: 0.26, ease: "back.out(2.6)" }, t + 0.1);
+          P.squash(`#n${i} .box`, t, 0.07);
+          P.squash(`#n${i} .ring`, t, 0.07);
+          if (i > 0) P.squash("#lens-s", t, 0.07);
+          if (i < 4) {
+            const a = t + 0.06, b = LT[i + 1], dd = b - a, from = lc(i), to = lc(i + 1);
+            P.drawPath("#a" + i, a, dd);
+            P.marchPath("#a" + i, a, D - a, 70);
+            P.drawPath("#tr" + i, a, dd);
+            tl.fromTo("#ha" + i, { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.14, ease: "back.out(2)", transformOrigin: "50% 50%" }, b - 0.06);
+            gl({ y: to.y }, dd, "power2.inOut", a);
+            gl({ x: (from.x + to.x) / 2 - 50 }, dd * 0.5, "power2.out", a);
+            gl({ x: to.x }, dd * 0.5, "power2.inOut", a + dd * 0.5);
+            gl({ rotation: -9 }, dd * 0.5, "power1.out", a);
+            gl({ rotation: 0 }, dd * 0.55, "back.out(1.6)", a + dd * 0.5);
+          }
+        }
+        // glass tints accent while it inspects; secondary action: the lens bobs and sways at the end of the flow
+        
+        P.floatY("#lens-f", 5, 0.9);
+        gl({ rotation: 5 }, 0.25, "sine.inOut", 5.35);
+        gl({ rotation: 0 }, 0.25, "sine.inOut", 5.6);
+
+        // ================= "departments … company": the flow branches into three lanes like an org chart =================
+        const FT = 6.21;
+        const org = $("#org");
+        const T = { 0: { x: 215, y: 140, s: 0.9 }, 1: { x: 125, y: 330, s: 0.5 }, 2: { x: 215, y: 330, s: 0.5 }, 3: { x: 305, y: 330, s: 0.5 }, 4: { x: 305, y: 410, s: 0.5 } };
+        // sprout boxes complete the lanes (mini copies of the same step)
+        const SPR = [{ x: 125, y: 410 }, { x: 215, y: 410 }, { x: 125, y: 490 }, { x: 215, y: 490 }, { x: 305, y: 490 }];
+        SPR.forEach((p, j) => {
+          const n = document.createElement("div");
+          n.className = "node mini"; n.id = "sp" + j; n.dataset.origin = "85px 36px";
+          n.style.left = p.x - 85 + "px"; n.style.top = p.y - 36 + "px";
+          n.innerHTML = NODE_HTML;
+          nodes.appendChild(n);
+          gsap.set(n, { opacity: 0, scale: 0.2, transformOrigin: "85px 36px", y: -70 });
+        });
+        const mkPath = (id, d, cls) => {
+          const p = document.createElementNS(NS, "path");
+          p.setAttribute("id", id); p.setAttribute("class", cls); p.setAttribute("d", d);
+          org.appendChild(p);
+        };
+        mkPath("ob0", "M215 178 C215 244, 125 240, 125 306", "dotted accent");
+        mkPath("ob1", "M215 178 L215 306", "dotted accent");
+        mkPath("ob2", "M215 178 C215 244, 305 240, 305 306", "dotted accent");
+        [125, 215, 305].forEach((x, k) => {
+          mkPath(`oc${k}a`, `M${x} 352 L${x} 388`, "dotted");
+          mkPath(`oc${k}b`, `M${x} 432 L${x} 468`, "dotted");
+        });
+        // riser: the card draws a breath, the old arrows and the lens' world fade
+        tl.to("#wff", { scale: 0.985, transformOrigin: "50% 50%", duration: 0.2, ease: "power2.in" }, FT - 0.3);
+        tl.to("#wff", { scale: 1, duration: 0.4, ease: "back.out(2)" }, FT - 0.1);
+        $$(".node .arr").forEach((e) => tl.to(e, { opacity: 0, duration: 0.14, ease: "power1.in" }, FT - 0.1));
+        tl.to("#trailsvg", { opacity: 0, duration: 0.2, ease: "power1.in" }, FT - 0.1);
+        tl.to(magIn, { opacity: 0, duration: 0.12, ease: "power1.in" }, FT - 0.12);
+        // steps travel to their lane slots on arcs (x and y eased apart), lagging 3 f each
+        [0, 1, 2, 3, 4].forEach((i, k) => {
+          const c = nc(i), t = T[i], s = FT - 0.04 + k * 3 * F;
+          tl.to(`#n${i}`, { scale: 0.95, duration: 0.08, ease: "power2.in" }, s - 0.08);
+          tl.to(`#n${i}`, { x: t.x - c.x, duration: 0.5, ease: "power2.inOut" }, s);
+          tl.to(`#n${i}`, { y: t.y - c.y, scale: t.s, duration: 0.56, ease: "back.out(1.3)" }, s);
+        });
+        // lens rides step 5 into the last lane, then leaves quickly
+        gl({ x: 282 }, 0.5, "power2.inOut", FT - 0.04 + 12 * F);
+        gl({ y: 414 }, 0.56, "back.out(1.2)", FT - 0.04 + 12 * F);
+        tl.to("#lens-s", { scale: 0.7, opacity: 0, duration: 0.22, ease: "power2.in" }, 6.78);
+        // branches draw down from the root, lanes sprout, each new box lights with a tick
+        ["ob0", "ob1", "ob2"].forEach((id, k) => {
+          P.drawPath("#" + id, FT + 0.2 + k * 3 * F, 0.36);
+          P.marchPath("#" + id, FT + 0.2 + k * 3 * F, D - FT, 80);
+        });
+        SPR.forEach((p, j) => {
+          const t = FT + 0.3 + j * 3 * F;
+          tl.to(`#sp${j}`, { opacity: 1, y: 0, scale: 0.5, duration: 0.32, ease: "back.out(1.8)" }, t);
+          tl.fromTo(`#sp${j} .ring`, { opacity: 0 }, { opacity: 1, duration: 0.14 }, t + 0.1);
+          tl.fromTo(`#sp${j} .ic i`, { opacity: 0 }, { opacity: 1, duration: 0.14 }, t + 0.1);
+          gsap.set(`#sp${j} .tk`, { transformOrigin: "50% 50%" });
+          tl.fromTo(`#sp${j} .tk`, { opacity: 0, scale: 0.2 }, { opacity: 1, scale: 1, duration: 0.24, ease: "back.out(2.6)" }, t + 0.18);
+        });
+        [0, 1, 2].forEach((k) => {
+          P.drawPath(`#oc${k}a`, FT + 0.5 + k * 3 * F, 0.2);
+          P.marchPath(`#oc${k}a`, FT + 0.5 + k * 3 * F, D - FT, 70);
+          P.drawPath(`#oc${k}b`, FT + 0.64 + k * 3 * F, 0.2);
+          P.marchPath(`#oc${k}b`, FT + 0.64 + k * 3 * F, D - FT, 70);
+        });
+        // "company": the root takes the hit, ping ring + a lane-wide ripple of ticks
+        tl.to("#n0", { scale: 1.02, duration: 0.12, ease: "power2.out" }, 6.97);
+        tl.to("#n0", { scale: 0.9, duration: 0.3, ease: "back.out(2.2)" }, 7.09);
+        tl.fromTo("#n0 .burst", { opacity: 0.9, scale: 1 }, { opacity: 0, scale: 1.5, duration: 0.4, ease: "power2.out", immediateRender: false }, 7.0);
+        // hold alive to the cut: the workflow card breathes, the arrows march
+        P.breathe("#wf", 1.012, 1.8);
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,70 @@
+[
+ {
+  "id": "t1_hook",
+  "start": 0.0,
+  "duration": 3.2,
+  "layout": "scene",
+  "type": "fullscreen",
+  "bespoke": true,
+  "cutout": true,
+  "assets": [
+   "../photos/satya_crop.jpg",
+   "../photos/jensen_crop.jpg",
+   "../photos/sam_crop.jpg",
+   "../photos/elon_crop.jpg"
+  ],
+  "brief": "FIRST read animations/SHARED.md — the v7 \"MINT\" section at the TOP overrides everything below it — and LOOK at the reference frames it lists (refs/). This is a STYLE TEST for a new house look, so taste matters more than speed. FULL-SCREEN OPAQUE scene.\nTALK mode — the HOOK, rendered in TWO VARIANTS (render.mov = A, render_b.mov = B; same timing, same everything except depth).\nSpoken: 'The top 0.1% aren't using AI the way you are.' (The 0.00, top 0.41, 0.1% 0.59, aren't 1.53, using 1.93, AI 2.17, the 2.45, way 2.61, you 2.73, are 2.91)\nFRAME 0 = THUMBNAIL, finished: TEXT HOOK 'How to use AI' / 'like the top' / '0.1%' at the top (Inter Tight 900 charcoal, '0.1%' in mint, a clean solid mint underline BAR under 0.1% — no marker), him full-screen behind it.\nThe four CEO photos (hf/assets/satya_crop.jpg, jensen_crop.jpg, sam_crop.jpg, elon_crop.jpg — he asked for them 'behind me'): clean rounded photo cards (radius 22, white 8 px border, soft shadow, tiny tilts), names in Inter 600 ~40 px charcoal on a small white label under each ('Satya Nadella', 'Jensen Huang', 'Sam Altman', 'Elon Musk'). Faces always fully visible.\nVARIANT A (depth, Ref 1): the photo cards AND a giant '0.1%' (~300 authored, mint, soft glow) sit BEHIND HIS HEAD/SHOULDERS: layer order = full footage (hf/assets/speaker.mp4) → photos + giant 0.1% → his matte (hf/assets/speaker_cut.webm, same timing, exactly aligned over the footage — matte errors are invisible because it sits on identical pixels) → kinetic words. Photos fan behind him at shoulder/head height (2 left, 2 right). His face is never covered.\nVARIANT B (flat): same photos as smaller cards in FRONT, two top-left and two top-right under the hook text, not covering his face; no giant 0.1%; everything in front.\nBoth: on 'top'→'0.1%' the hook's 0.1% punches 1 % with overshoot; on 'the way you are' kinetic 'the way' (~100) + 'you are.' (~180, 'you' mint) land low on his chest (y ~1250–1460, x ≤ 900) in charcoal with the soft light glow. Photos breathe 2–3 px. Variant A's giant 0.1% may rise from behind his shoulders on '0.1%' (0.45–0.75) but frame 0 must already show the full hook text.\nBuild A in hf/ (render ../render.mov) and B as a copy hf_b/ (render ../render_b.mov). Both EXACTLY the TASK.md frame count.\nSOUND: 'hook' stamp on '0.1%' (0.59).\nEverything inside x 60–960 / y 285–1480, nothing right of x 900 below y 1200 (measure). data-face 0.40. No red, no marker boil, no Caveat. Write beats.json (tag only the beats named under SOUND with a role). Hold alive to the cut."
+ },
+ {
+  "id": "t2_ceos",
+  "start": 3.2,
+  "duration": 5.2,
+  "layout": "scene",
+  "type": "fullscreen",
+  "bespoke": false,
+  "assets": [
+   "icons/briefcase.svg",
+   "icons/sun.svg",
+   "icons/heart.svg",
+   "icons/buildings.svg"
+  ],
+  "brief": "FIRST read animations/SHARED.md — the v7 \"MINT\" section at the TOP overrides everything below it — and LOOK at the reference frames it lists (refs/). This is a STYLE TEST for a new house look, so taste matters more than speed. FULL-SCREEN OPAQUE scene.\nTALK mode — captions only, plus at most ONE icon disc.\nSpoken: 'I talk to a lot of CEOs, founders, and people who are actually running their day and lives and businesses on AI.' (I 0.05, talk 0.13, a 0.47, lot 0.59, CEOs 0.83, founders 1.45, people 2.01, actually 2.57, running 2.81, day 3.23, lives 3.69, businesses 4.17, on 4.51, AI 4.75)\nHim full-screen the whole scene (slow push 1.0→1.02). Kinetic phrases in our collage style, charcoal + soft light glow, hero words mint: 'I talk to' (~100) / 'a lot of' (~90) / 'CEOs,' (~210) / 'founders' (~180 mint) — then exit fast on 'people' — then 'day' (~150) · 'lives' (~150) · 'businesses' (~190 mint, the hero, 1 % punch) — then 'on AI.' (~120). Place phrases low (chest, y ~1150–1470) or upper-left beside his head (never over his face); pick per phrase for rhythm.\nThe ONE disc: a charcoal disc (diameter ~170) with the white buildings glyph pops beside 'businesses' (anticipation + overshoot) and sits there to the cut — or skip it if it crowds; captions-only is the default.\nSOUND: none tagged.\nEverything inside x 60–960 / y 285–1480, nothing right of x 900 below y 1200 (measure). data-face 0.40. No red, no marker boil, no Caveat. Write beats.json (tag only the beats named under SOUND with a role). Hold alive to the cut."
+ },
+ {
+  "id": "t3_six",
+  "start": 8.4,
+  "duration": 2.267,
+  "layout": "scene",
+  "type": "fullscreen",
+  "bespoke": true,
+  "assets": [
+   "icons/microphone.svg",
+   "icons/eye.svg",
+   "icons/chat-circle-dots.svg",
+   "icons/magnifying-glass.svg",
+   "icons/folder-open.svg",
+   "icons/watch.svg"
+  ],
+  "brief": "FIRST read animations/SHARED.md — the v7 \"MINT\" section at the TOP overrides everything below it — and LOOK at the reference frames it lists (refs/). This is a STYLE TEST for a new house look, so taste matters more than speed. FULL-SCREEN OPAQUE scene.\nTALK → the SIGNATURE SHRINK into THE HABIT CHAIN (geometry in SHARED v7 section — exact).\nSpoken: 'Here are six habits I'd steal from them.' (Here 0.05, are 0.35, six 0.49, habits 0.75, I'd 1.17, steal 1.43, from 1.63, them 1.81)\n0–0.55: him full-screen; kinetic 'Here are' (~100 charcoal, glow) lands low.\n0.45–1.05 (on 'six'→'habits'): THE SHRINK — anticipation dip (scale 1.0→1.015 for 3 f), then the footage's clip-path animates from the full frame to a circle while it scales/translates down into disc 1's slot at (300, 560), diameter 180, with an 8 px mint ring; the paper board (+grid +strong vignette) is revealed around it as the camera pulls out; overshoot 1.06 on landing. As it lands, discs 2–6 pop in one by one along the chain (2 f stagger, charcoal, white glyphs) and the 4 px charcoal connector draws through them. 'six' (~230, mint) + 'habits' (~190 charcoal) land in the free space (right side, y ~330–520, or left-low) — choose a spot that never touches the chain or the IG corner.\n1.17–1.8: 'six habits' exits fast; 'I'd' (~110) + 'steal' (~200 mint) + 'from them.' (~90) land in the free space; on 'steal' the chain does a tiny greedy 'tug' toward disc 1 (all discs lean 6 px, settle) — personality.\nEND STATE (last frame) must be exactly the chain end state in SHARED (his face circle at disc 1, discs 2–6 charcoal, connector drawn); words may still be on screen. t4 opens on this exact chain — write your chain code as one self-contained block so t4 can copy it.\nSOUND: 'structural' pop on the disc chain popping in (~1.05).\nEverything inside x 60–960 / y 285–1480, nothing right of x 900 below y 1200 (measure). data-face 0.40. No red, no marker boil, no Caveat. Write beats.json (tag only the beats named under SOUND with a role). Hold alive to the cut."
+ },
+ {
+  "id": "t4_stanford",
+  "start": 10.667,
+  "duration": 5.066,
+  "layout": "scene",
+  "type": "blank",
+  "bespoke": true,
+  "assets": [
+   "icons/microphone.svg",
+   "icons/eye.svg",
+   "icons/chat-circle-dots.svg",
+   "icons/magnifying-glass.svg",
+   "icons/folder-open.svg",
+   "icons/watch.svg",
+   "icons/keyboard.svg",
+   "stanford_wordmark.svg",
+   "stanford_2.png"
+  ],
+  "brief": "FIRST read animations/SHARED.md — the v7 \"MINT\" section at the TOP overrides everything below it — and LOOK at the reference frames it lists (refs/). This is a STYLE TEST for a new house look, so taste matters more than speed. FULL-SCREEN OPAQUE scene.\nVISUAL mode with CAMERA TRAVEL. Habit ① — talk to it instead of typing + the Stanford study.\nSpoken: 'One, talk to it instead of typing. A Stanford study showed that speaking was three times faster than typing.' (One 0.00, talk 0.43, to 0.71, it 0.85, instead 1.01, of 1.27, typing 1.39, A 1.80, Stanford 1.97, study 2.21, showed 2.57, that 2.83, speaking 2.97, was 3.25, three 3.47, times 3.69, faster 3.93, than 4.35, typing 4.53)\nFRAME 0 = exactly t3's end state: THE HABIT CHAIN (SHARED geometry) with HIS FACE in disc 1 (play hf/assets/speaker.mp4 inside the circle for the first ~0.4 s, mint ring). Read ../t3_six/hf/index.html when it exists and copy its chain block; if it's not there yet build it from SHARED and match it later.\n0.0–0.45 ('One'): his face in disc 1 flips (3D rotateY) into the MINT disc with the white microphone glyph; a small '1' tag (charcoal pill, white Inter 700) pops on the disc's edge; the camera pushes in on disc 1 (world scale ~1.0→1.7, centred on disc 1) — the rest of the chain slides off-frame as part of the world.\n0.45–1.75: on the board area beside the zoomed mic disc: 'talk to it' (~200, 'talk' mint) lands; on 'instead of typing' a CHARCOAL keyboard disc pops beside it and gets a clean charcoal strike line across it (flat, no marker), 'instead of typing' (~110) lands.\n1.75–2.6 (camera TRAVEL): the camera glides down/right across the world (power3.inOut ~0.55 s) to a new area where the Stanford wordmark (hf/assets/stanford_wordmark.svg, ~420 wide, on a white rounded card) lands on 'Stanford' (1.97), 'study' (Inter 600 ~56 charcoal) beside it, then the REAL strip (hf/assets/stanford_2.png, white card ≥ 0.85 scale, ≥ 900 wide) slides in on 'showed' (2.57); highlighter in --mint-soft with a --brand-primary-dark edge swipes behind '3.0x faster' (strip box [517,101,196,48] × scale) on 'three' (3.47).\n3.3–5.07 HERO: below the strip a clean flat RACE: two rounded bars — 'speaking' (mic glyph) and 'typing' (keyboard glyph) — start on 'speaking' (2.97); the speaking bar fills MINT and reaches the finish 3× faster, landing on 'faster' (3.93) with a squash + a tiny flag pop; the typing bar (charcoal-grey) crawls to 1/3. A big PEACH '3×' (data = peach) rolls up 1×→3× beside the finish on 'three times' (3.47–3.9). Kinetic 'faster' (~190 charcoal) lands low.\nA slow residual camera drift (~1 %) to the cut; no dead holds.\nSOUND: 'structural' pop on the mic disc flip (0.1); 'structural' paper on the strip sliding in (2.57).\nEverything inside x 60–960 / y 285–1480, nothing right of x 900 below y 1200 (measure). data-face 0.40. No red, no marker boil, no Caveat. Write beats.json (tag only the beats named under SOUND with a role). Hold alive to the cut."
+ }
+]

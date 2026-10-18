@@ -1,0 +1,189 @@
+[
+ {
+  "t": 0.22,
+  "sfx": "scribble",
+  "dur": 0.36,
+  "what": "magnifier lens rim loop"
+ },
+ {
+  "t": 0.24,
+  "sfx": "whoosh",
+  "what": "magnifier swings in on an arc",
+  "gain_db": -4
+ },
+ {
+  "t": 0.46,
+  "sfx": "scribble",
+  "dur": 0.3,
+  "what": "magnifier neck + handle outline"
+ },
+ {
+  "t": 0.8,
+  "sfx": "pop",
+  "what": "lens parks over the spout (squash)"
+ },
+ {
+  "t": 0.98,
+  "sfx": "tick",
+  "what": "first red dots pop into tier 3",
+  "gain_db": -6
+ },
+ {
+  "t": 1.14,
+  "sfx": "whoosh",
+  "what": "post strip slides up",
+  "gain_db": -8
+ },
+ {
+  "t": 1.26,
+  "sfx": "tick",
+  "what": "dot cluster fills (lens shows it 2x)",
+  "gain_db": -6
+ },
+ {
+  "t": 1.4,
+  "sfx": "scribble",
+  "dur": 0.3,
+  "what": "highlighter behind '~5,000 people'"
+ },
+ {
+  "t": 1.55,
+  "sfx": "impact",
+  "what": "5,000 stamps (hero beat, shake)"
+ },
+ {
+  "t": 1.62,
+  "sfx": "scribble",
+  "dur": 0.38,
+  "what": "note '~5,000' written"
+ },
+ {
+  "t": 1.78,
+  "sfx": "pop",
+  "what": "people lands",
+  "gain_db": -6
+ },
+ {
+  "t": 2.28,
+  "sfx": "scribble",
+  "dur": 0.5,
+  "what": "red arrow from the 5,000 up to the lab door"
+ },
+ {
+  "t": 2.5,
+  "sfx": "whoosh",
+  "what": "post strip recedes",
+  "gain_db": -10
+ },
+ {
+  "t": 2.68,
+  "sfx": "pop",
+  "what": "top",
+  "gain_db": -4
+ },
+ {
+  "t": 2.98,
+  "sfx": "pop",
+  "what": "AI",
+  "gain_db": -4
+ },
+ {
+  "t": 2.98,
+  "sfx": "scribble",
+  "dur": 0.34,
+  "what": "door frame"
+ },
+ {
+  "t": 3.24,
+  "sfx": "scribble",
+  "dur": 0.14,
+  "what": "floor line"
+ },
+ {
+  "t": 3.26,
+  "sfx": "pop",
+  "what": "labs (door drawing)"
+ },
+ {
+  "t": 3.34,
+  "sfx": "scribble",
+  "dur": 0.26,
+  "what": "door panel"
+ },
+ {
+  "t": 3.5,
+  "sfx": "scribble",
+  "dur": 0.18,
+  "what": "door window"
+ },
+ {
+  "t": 3.6,
+  "sfx": "scribble",
+  "dur": 0.22,
+  "what": "padlock shackle + body + strap"
+ },
+ {
+  "t": 3.66,
+  "sfx": "tick",
+  "what": "padlock drawn on the door",
+  "gain_db": -4
+ },
+ {
+  "t": 3.94,
+  "sfx": "tick",
+  "what": "padlock clicks shut on 'access'"
+ },
+ {
+  "t": 3.95,
+  "sfx": "scribble",
+  "dur": 0.1,
+  "what": "click ticks around the padlock"
+ },
+ {
+  "t": 4.3,
+  "sfx": "scribble",
+  "dur": 0.26,
+  "what": "server stack doodle (systems)"
+ },
+ {
+  "t": 4.32,
+  "sfx": "pop",
+  "what": "server stack appears in the window (systems)",
+  "gain_db": -6
+ },
+ {
+  "t": 4.86,
+  "sfx": "scribble",
+  "dur": 0.24,
+  "what": "cube doodle (models)"
+ },
+ {
+  "t": 4.88,
+  "sfx": "pop",
+  "what": "cube appears in the window (models)",
+  "gain_db": -6
+ },
+ {
+  "t": 5.72,
+  "sfx": "scribble",
+  "dur": 0.36,
+  "what": "three ))) sound-wave arcs"
+ },
+ {
+  "t": 5.74,
+  "sfx": "pop",
+  "what": "heard",
+  "gain_db": -4
+ },
+ {
+  "t": 5.9,
+  "sfx": "ping",
+  "what": "))) sound waves pulse out of the door"
+ },
+ {
+  "t": 6.06,
+  "sfx": "pop",
+  "what": "about",
+  "gain_db": -4
+ }
+]

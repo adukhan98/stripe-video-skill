@@ -1,0 +1,74 @@
+<!doctype html>
+<!-- adnaan-reel scene starter: CHAPTER + REAL PAGE — coin N rolls in and turns accent, item name giant in accent,
+     the real site/repo in a browser card (hf/assets/<capture>.png) with a stat pill (v6 Mode B: no corner card).
+     Replace: words (words.txt), coin number, capture file + URL + real stat, the closing beat. Keep data-duration. -->
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>chapter page</title>
+    <link rel="stylesheet" href="brand.css" />
+    <link rel="stylesheet" href="paper.css" />
+    <link rel="stylesheet" href="marker.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+    <script src="paper.js"></script>
+    <script src="marker.js"></script>
+    <style>
+      #page-card { left: 76px; top: 760px; width: 840px; height: 640px; }
+    </style>
+  </head>
+  <body data-face="0.43">
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="6.000">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+      <div id="cam"><div id="punch">
+
+        <!-- CHAPTER header: coin + "the third one" small + item name hero in accent -->
+        <div id="coin1" class="coin" data-n="03" data-x="130" data-y="360" style="opacity:0"></div>
+        <div id="hdr" class="layer">
+          <div class="line sup" data-x="210" data-base="392" data-size="84">
+            <span class="w" data-t="0.30">the</span><span class="w gap-s" data-t="0.44">third</span><span class="w gap-s" data-t="0.60">one</span>
+          </div>
+          <div class="line hero ocean" data-x="76" data-base="640" data-size="230" data-fit="900">
+            <span class="w" data-t="0.95" data-hero data-peak="1.08" data-punch="0.95">Taste</span>
+          </div>
+        </div>
+
+        <!-- REAL PAGE in a browser card (capture.py output, 1080 px wide, scrolls slowly) -->
+        <div id="page-card" class="browser" data-float="3">
+          <div class="chrome"><i class="dot"></i><i class="dot"></i><i class="dot"></i><div class="url">github.com/owner/repo</div></div>
+          <div class="viewport"><img id="page" class="page" src="assets/page.png" alt="" /></div>
+          <div class="sheen"></div>
+        </div>
+        <div id="stat" class="pill" style="left: 560px; top: 1330px"><svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.6 7.1.7-5.3 4.8 1.6 7L12 17.5 5.7 21l1.6-7L2 9.3l7.1-.7z" fill="#FFD166"/></svg>★ 94.5k on GitHub</div>
+
+        <!-- MODE B (v6): no speaker — the doodles, kinetic type and cards own the whole zone (x 60–960, y 285–1480).
+             Need his presence for a line? Drop a split band in on it: <div id="spk" class="spk split" data-h="960" data-at="t">
+             (+ the speaker <video>, see the hook starter) and move the words into the band y 1000–1480. Floating corner
+             cards (.spk small/secondary) are allowed but rare — 0–2 per reel. -->
+
+        <!-- second phrase, lower zone, after the page is up -->
+        <div class="line sup" data-x="76" data-base="1470" data-size="96">
+          <span class="w" data-t="4.2">I've</span><span class="w gap-s" data-t="4.4">used</span><span class="w gap-s" data-t="4.6">this</span>
+          <span class="w hero ocean gap-s" style="font-size: 150px" data-t="5.0" data-hero>daily</span>
+        </div>
+
+      </div></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const P = await Paper.init({ extraFonts: ['700 60px "Caveat"'] });
+        const M = Marker.init(P);   // hand-drawn marker layer (hf/marker.js header): loops, underlines, arrows, highlighter, notes
+        const { tl, D, F } = P;
+        P.coinIn("#coin1", 0.3);                 // rolls in on an arc, squashes on contact
+        P.coinActive("#coin1", 0.95);            // flips to accent on the item name
+        P.cardIn("#page-card", 1.5, { fromY: 120, rot: -2 });
+        P.scrollPage("#page", 2.0, D - 2.0, 420); // slow linear scroll (mechanical motion)
+        P.pillIn("#stat", 3.1);
+        // staging: when the second phrase lands, the header recedes slightly
+        P.recede("#hdr", 4.1, { opacity: 0.55, blur: 4, scale: 0.98 });
+      })();
+    </script>
+  </body>
+</html>

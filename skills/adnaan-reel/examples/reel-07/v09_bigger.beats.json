@@ -1,0 +1,58 @@
+[
+ {
+  "t": 0.25,
+  "sfx": "pop",
+  "what": "'model' pops",
+  "gain_db": -3
+ },
+ {
+  "t": 0.79,
+  "sfx": "pop",
+  "what": "'handle' pops",
+  "gain_db": -3
+ },
+ {
+  "t": 1.0,
+  "sfx": "whoosh",
+  "what": "target squeezes then grows 3x",
+  "gain_db": -4
+ },
+ {
+  "t": 1.19,
+  "sfx": "impact",
+  "what": "'bigger' lands (hero) + target 3x"
+ },
+ {
+  "t": 1.47,
+  "sfx": "pop",
+  "what": "'goal' lands",
+  "gain_db": -2
+ },
+ {
+  "t": 1.48,
+  "sfx": "tick",
+  "what": "arrow thunks into the bullseye"
+ },
+ {
+  "t": 2.23,
+  "sfx": "pop",
+  "what": "'just' pops",
+  "gain_db": -3
+ },
+ {
+  "t": 2.5,
+  "sfx": "pop",
+  "what": "'don't' lands"
+ },
+ {
+  "t": 2.91,
+  "sfx": "pop",
+  "what": "'ask' lands (red)"
+ },
+ {
+  "t": 3.27,
+  "sfx": "tick",
+  "what": "'it.'",
+  "gain_db": -3
+ }
+]

@@ -1,0 +1,84 @@
+<!doctype html>
+<!-- adnaan-reel scene starter: EXPLAINER — "X is just …": short card+phrase beat, then the graphic is the hero:
+     a deep card opens, real ingredients (pills) fly in on their words, it seals and rides a dotted path into the agent puck.
+     Replace: words, the ingredient labels (real names only), timings. Keep data-duration. -->
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>explainer</title>
+    <link rel="stylesheet" href="brand.css" />
+    <link rel="stylesheet" href="paper.css" />
+    <link rel="stylesheet" href="marker.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+    <script src="paper.js"></script>
+    <script src="marker.js"></script>
+    <style>
+      #env { left: 110px; top: 700px; width: 520px; height: 360px; }
+      #env .g { left: 40px; }
+    </style>
+  </head>
+  <body data-face="0.43">
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="7.000">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+      <div id="cam"><div id="punch">
+
+        <!-- MODE B (v6): no speaker — the doodles, kinetic type and cards own the whole zone (x 60–960, y 285–1480).
+             Need his presence for a line? Drop a split band in on it: <div id="spk" class="spk split" data-h="960" data-at="t">
+             (+ the speaker <video>, see the hook starter) and move the words into the band y 1000–1480. Floating corner
+             cards (.spk small/secondary) are allowed but rare — 0–2 per reel. -->
+
+        <div class="line sup" data-x="76" data-base="420" data-size="96" data-exit="2.0">
+          <span class="w" data-t="0.2">a</span><span class="w hero ocean gap-s" style="font-size: 150px" data-t="0.5" data-hero>skill</span>
+        </div>
+        <div class="line sup" data-x="76" data-base="560" data-size="96" data-exit="2.0" data-exit-lag="2">
+          <span class="w" data-t="0.8">is</span><span class="w gap-s" data-t="0.95">just</span><span class="w gap-s" data-t="1.2">a</span>
+          <span class="w hero ink gap-s" style="font-size: 130px" data-t="1.5" data-pop>folder</span>
+        </div>
+
+        <!-- HERO OBJECT: deep card that opens and receives ingredients -->
+        <div id="env" class="uicard deep">
+          <i class="g" style="top: 40px; width: 220px; height: 18px"></i>
+          <i class="g acc" style="top: 80px; width: 140px; height: 18px"></i>
+          <i class="g" style="top: 120px; width: 300px; height: 18px"></i>
+        </div>
+        <div id="ing1" class="pill light sm" style="left: 680px; top: 760px">SKILL.md</div>
+        <div id="ing2" class="pill light sm" style="left: 680px; top: 850px">references/</div>
+        <div id="ing3" class="pill light sm" style="left: 680px; top: 940px">scripts/</div>
+
+        <svg class="paths"><path id="p1" class="dotted" d="M 370 1070 C 380 1240, 640 1200, 810 1270" /></svg>
+        <div id="agent" class="puck" data-x="660" data-y="1120"></div>
+
+        <div class="line sup" data-x="76" data-base="1330" data-size="96">
+          <span class="w" data-t="4.6">the</span><span class="w hero ocean gap-s" style="font-size: 140px" data-t="4.9" data-hero>agent</span>
+        </div>
+        <div class="line sup" data-x="76" data-base="1460" data-size="96">
+          <span class="w" data-t="5.3">reads</span><span class="w gap-s" data-t="5.6">it</span>
+        </div>
+      </div></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const P = await Paper.init({ extraFonts: ['700 60px "Caveat"'] });
+        const M = Marker.init(P);   // hand-drawn marker layer (hf/marker.js header): loops, underlines, arrows, highlighter, notes
+        const { tl, D, F } = P;
+        P.cardIn("#env", 2.1, { fromY: 100, rot: -4 });
+        // ingredients fly in on their words: pills with 3 f stagger, each then slides into the card (arc)
+        P.pillIn("#ing1, #ing2, #ing3", 2.7, { stagger: 8 * F });
+        ["#ing1", "#ing2", "#ing3"].forEach((s, i) => {
+          tl.to(s, { x: -420, duration: 0.4, ease: "power2.inOut" }, 3.5 + i * 4 * F);
+          tl.to(s, { y: -60 - i * 90 + 40, scale: 0.6, opacity: 0, duration: 0.4, ease: "power3.in" }, 3.5 + i * 4 * F);
+        });
+        P.squash("#env", 4.1, 0.05);                       // the card "seals" with a tiny squash
+        P.drawPath("#p1", 4.2, 0.5);
+        P.marchPath("#p1", 4.2, D - 4.2);
+        P.ride("#env", "#p1", 4.5, 0.9);                    // rides the dotted path into the puck
+        tl.to("#env", { scale: 0.25, opacity: 0, duration: 0.25, ease: "power3.in" }, 5.2);
+        P.puckFeed("#agent", 5.4);
+        P.breathe("#agent", 1.03);
+      })();
+    </script>
+  </body>
+</html>

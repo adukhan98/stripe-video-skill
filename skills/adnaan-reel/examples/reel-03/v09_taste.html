@@ -1,0 +1,970 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>v09 taste</title>
+    <link rel="stylesheet" href="brand.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: var(--brand-background);
+      }
+      #root {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: var(--brand-background);
+        font-family: var(--font-heading);
+        color: var(--brand-text);
+      }
+
+      /* ---------- shared v2 background: paper + 60px grid + vignette ---------- */
+      #bg {
+        position: absolute;
+        inset: 0;
+        background: var(--brand-background);
+        overflow: hidden;
+      }
+      #grid {
+        position: absolute;
+        left: -120px;
+        top: -120px;
+        width: 1320px;
+        height: 2160px;
+        background-image:
+          linear-gradient(to right, rgba(20, 20, 20, 0.055) 1.5px, transparent 1.5px),
+          linear-gradient(to bottom, rgba(20, 20, 20, 0.055) 1.5px, transparent 1.5px);
+        background-size: 60px 60px;
+      }
+      #vignette {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(ellipse at 50% 45%, transparent 45%, rgba(90, 80, 72, 0.22) 100%);
+      }
+
+      /* ---------- camera ---------- */
+      #cam,
+      #punch {
+        position: absolute;
+        inset: 0;
+      }
+
+      /* ---------- speaker card (hero 868x600; scaled per beat) ---------- */
+      #card-move {
+        position: absolute;
+        left: 62px;
+        top: 310px;
+        width: 868px;
+        height: 600px;
+      }
+      #card-float {
+        position: absolute;
+        inset: 0;
+      }
+      #card {
+        position: absolute;
+        inset: 0;
+        border-radius: 30px;
+        overflow: hidden;
+        background: #1b1b1b;
+        box-shadow:
+          0 16px 0 -2px var(--brand-primary),
+          0 50px 70px -10px rgba(40, 30, 20, 0.35);
+      }
+      #vid-wrap {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        border-radius: 30px;
+      }
+      /* source 1080x1920 scaled to the card width; window = 22.4%–61.3% of the source height (face centred) */
+      #speaker {
+        position: absolute;
+        left: 0;
+        top: -345px;
+        width: 868px;
+        height: 1543px;
+        object-fit: cover;
+      }
+      #sheen {
+        position: absolute;
+        inset: 0;
+        border-radius: 30px;
+        background: linear-gradient(
+          105deg,
+          transparent 30%,
+          rgba(255, 255, 255, 0.22) 45%,
+          rgba(255, 255, 255, 0.05) 55%,
+          transparent 65%
+        );
+        background-size: 300% 100%;
+        background-position: 100% 0;
+        opacity: 0;
+      }
+
+      /* ---------- kinetic serif ---------- */
+      .line {
+        position: absolute;
+        display: flex;
+        align-items: baseline;
+        white-space: nowrap;
+        line-height: 0.95;
+        letter-spacing: -0.015em;
+      }
+      .bl {
+        display: block;
+        width: 0;
+        height: 0;
+        align-self: baseline;
+      }
+      .w {
+        display: inline-block;
+        will-change: transform, opacity, filter;
+      }
+      .serif {
+        font-family: var(--font-heading);
+        font-weight: 600;
+        color: var(--brand-text);
+      }
+      .ital {
+        font-family: var(--font-accent);
+        font-weight: 700;
+        font-style: italic;
+        letter-spacing: -0.02em;
+      }
+      .ocean {
+        color: var(--brand-primary);
+      }
+      .ink {
+        color: var(--brand-text);
+      }
+      .gap-s {
+        margin-left: 0.24em;
+      }
+
+      #a0 {
+        font-size: 64px;
+      }
+      #a1 {
+        font-size: 96px;
+      }
+      #a2 {
+        font-size: 98px;
+      }
+      #a2 .ital {
+        font-size: 120px;
+      }
+      #a3 {
+        font-size: 84px;
+      }
+      #a3 .ital {
+        font-size: 250px;
+        line-height: 0.9;
+      }
+      #a4 {
+        font-size: 88px;
+      }
+      #a5 {
+        font-size: 72px;
+      }
+      #a5 .ital {
+        font-size: 230px;
+        line-height: 0.9;
+      }
+      #c1 {
+        font-size: 72px;
+      }
+      #c1 .big {
+        font-size: 124px;
+      }
+      #c2 .ital {
+        font-size: 180px;
+        line-height: 0.9;
+      }
+      #strike {
+        position: absolute;
+        height: 18px;
+        border-radius: 9px;
+        background: linear-gradient(90deg, var(--brand-primary), var(--brand-primary-dark));
+      }
+
+      /* ---------- orbit: dotted ring + coins ---------- */
+      #ring-svg,
+      #conn-svg {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1080px;
+        height: 1920px;
+        overflow: visible;
+      }
+      #arms {
+        position: absolute;
+        left: 510px;
+        top: 900px;
+        width: 0;
+        height: 0;
+      }
+      .arm,
+      .arm-r,
+      .cr,
+      .cr2 {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 0;
+        height: 0;
+      }
+      .coin {
+        position: absolute;
+        width: 140px;
+        height: 140px;
+        left: -70px;
+        top: -70px;
+      }
+      .coin-body {
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        background: radial-gradient(circle at 35% 30%, #ffffff, #f1eeea 70%);
+        box-shadow:
+          0 18px 30px rgba(60, 50, 40, 0.22),
+          inset 0 -4px 8px rgba(60, 50, 40, 0.06);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-body);
+        font-weight: 600;
+        font-size: 50px;
+        letter-spacing: -0.03em;
+        color: var(--brand-text);
+      }
+      .tick {
+        position: absolute;
+        background: #cfc9c2;
+        border-radius: 2px;
+      }
+
+      /* ---------- prompt box ---------- */
+      #box-wrap {
+        position: absolute;
+        left: 70px;
+        top: 650px;
+        width: 880px;
+        height: 350px;
+      }
+      #box {
+        position: absolute;
+        inset: 0;
+        border-radius: 38px;
+        background: linear-gradient(180deg, #1e1e1e 0%, #141414 40%);
+        box-shadow: 0 40px 60px -16px rgba(40, 30, 20, 0.42);
+      }
+      .chip {
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 84px;
+        padding: 0 30px 0 24px;
+        border-radius: 42px;
+        background: var(--brand-card);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        white-space: nowrap;
+        box-shadow: 0 10px 18px -8px rgba(0, 0, 0, 0.5);
+      }
+      .chip-n {
+        font-family: var(--font-body);
+        font-weight: 500;
+        font-size: 30px;
+        color: var(--brand-muted);
+        letter-spacing: -0.01em;
+      }
+      .chip-t {
+        font-family: var(--font-body);
+        font-weight: 600;
+        font-size: 38px;
+        color: var(--brand-text);
+        letter-spacing: -0.02em;
+      }
+      #caret {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 5px;
+        height: 54px;
+        border-radius: 3px;
+        background: var(--brand-card);
+      }
+      .tbar {
+        position: absolute;
+        height: 20px;
+        border-radius: 10px;
+        background: rgba(228, 222, 217, 0.14);
+      }
+      #send {
+        position: absolute;
+        left: 762px;
+        top: 238px;
+        width: 78px;
+        height: 78px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 35% 30%, #4fb3dd, var(--brand-primary) 55%, var(--brand-primary-dark));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 10px 18px -6px rgba(0, 0, 0, 0.55);
+      }
+
+      /* ---------- pills ---------- */
+      .pill {
+        position: absolute;
+        height: 104px;
+        padding: 0 48px;
+        border-radius: 52px;
+        display: flex;
+        align-items: center;
+        white-space: nowrap;
+        font-family: var(--font-body);
+        font-weight: 600;
+        font-size: 48px;
+        letter-spacing: -0.02em;
+        color: var(--brand-card);
+      }
+      .pill-solid {
+        background: var(--brand-text);
+        box-shadow: 0 26px 40px -14px rgba(40, 30, 20, 0.45);
+      }
+      .pill-bg {
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 104px;
+        border-radius: 52px;
+        background: var(--brand-text);
+        box-shadow: 0 26px 40px -14px rgba(40, 30, 20, 0.45);
+      }
+      .pw {
+        position: relative;
+        display: inline-block;
+      }
+      .pw + .pw {
+        margin-left: 0.26em;
+      }
+
+      /* ---------- cursor ---------- */
+      #cursor {
+        position: absolute;
+        left: -4px;
+        top: -4px;
+        width: 54px;
+        height: 80px;
+        filter: drop-shadow(0 10px 12px rgba(40, 30, 20, 0.32));
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-width="1080"
+      data-height="1920"
+      data-duration="10.166"
+    >
+      <div id="bg">
+        <div id="grid"></div>
+        <div id="vignette"></div>
+      </div>
+
+      <div id="cam">
+        <div id="punch">
+          <!-- BEAT B: dotted orbit ring + coins (behind the card) -->
+          <svg id="ring-svg" viewBox="0 0 1080 1920">
+            <defs>
+              <mask id="ring-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="1080" height="1920">
+                <circle
+                  id="ring-mask-c"
+                  cx="510"
+                  cy="900"
+                  r="380"
+                  fill="none"
+                  stroke="#fff"
+                  stroke-width="16"
+                  transform="rotate(-90 510 900)"
+                />
+              </mask>
+            </defs>
+            <g mask="url(#ring-mask)">
+              <circle
+                id="ring-c"
+                cx="510"
+                cy="900"
+                r="380"
+                fill="none"
+                stroke="#141414"
+                stroke-width="3"
+                stroke-dasharray="2 12"
+                stroke-linecap="round"
+              />
+            </g>
+          </svg>
+          <div id="arms"></div>
+
+          <!-- BEAT C: dotted connectors, prompt box, pills -->
+          <svg id="conn-svg" viewBox="0 0 1080 1920">
+            <defs></defs>
+          </svg>
+
+          <div id="box-wrap">
+            <div id="box">
+              <div id="chips"></div>
+              <div class="tbar" id="tb1" style="left: 40px; top: 268px; width: 112px"></div>
+              <div class="tbar" id="tb2" style="left: 168px; top: 268px; width: 72px"></div>
+              <div id="send">
+                <svg width="34" height="34" viewBox="0 0 34 34">
+                  <path
+                    d="M17 28 L17 7 M8 15 L17 6 L26 15"
+                    fill="none"
+                    stroke="#0D2731"
+                    stroke-width="4.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
+              <div id="caret"></div>
+            </div>
+          </div>
+
+          <div id="pills">
+            <div id="pill-claude" class="pill pill-solid" data-cx="250" data-top="1080">Claude</div>
+            <div id="pill-codex" class="pill pill-solid" data-cx="770" data-top="1080">Codex</div>
+            <div id="pill-what" class="pill" data-cx="510" data-top="1262">
+              <div class="pill-bg"></div>
+              <span class="pw" data-t="8.99">whatever</span><span class="pw" data-t="9.27">agent</span
+              ><span class="pw" data-t="9.65">you</span><span class="pw" data-t="9.79">use</span>
+            </div>
+          </div>
+
+          <!-- speaker card -->
+          <div id="card-move">
+            <div id="card-float">
+              <div id="card">
+                <div id="vid-wrap">
+                  <video
+                    id="speaker"
+                    class="clip"
+                    src="assets/speaker.mp4"
+                    muted
+                    playsinline
+                    data-start="0"
+                    data-duration="10.166"
+                    data-track-index="1"
+                  ></video>
+                </div>
+                <div id="sheen"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- BEAT A: kinetic stack -->
+          <div id="a0" class="line serif" data-x="96" data-base="1012">
+            <span class="bl"></span>
+            <span class="w" data-t="0.08">you</span>
+            <span class="w gap-s" data-t="0.18">just</span>
+            <span class="w gap-s" data-t="0.30">need</span>
+            <span class="w gap-s" data-t="0.44">to</span>
+          </div>
+          <div id="a1" class="line serif" data-x="70" data-base="1112">
+            <span class="bl"></span>
+            <span class="w" data-t="0.56">give</span>
+            <span class="w gap-s" data-t="0.70">your</span>
+            <span class="w gap-s" data-t="0.90">AI</span>
+            <span class="w gap-s" data-t="1.18">agents</span>
+          </div>
+          <div id="a2" class="line serif" data-right="948" data-base="1222">
+            <span class="bl"></span>
+            <span class="w" data-t="1.56">good</span>
+            <span class="w ital ink" style="margin-left: 0.2em" data-t="1.76" data-accent="1">design</span>
+            <span class="w gap-s" data-t="2.10">sense</span>
+          </div>
+          <div id="a3" class="line serif" data-right="946" data-base="1442">
+            <span class="bl"></span>
+            <span class="w" data-t="2.48">and</span>
+            <span
+              class="w ital ocean"
+              id="w-taste"
+              style="margin-left: 0.08em"
+              data-t="2.68"
+              data-hero="1"
+              data-origin="88% 85%"
+              >taste</span
+            >
+          </div>
+          <div id="a4" class="line serif" data-right="948" data-base="1240">
+            <span class="bl"></span>
+            <span class="w" data-t="3.14">they</span>
+            <span class="w gap-s" data-t="3.30">will</span>
+            <span class="w gap-s" data-t="3.48">not</span>
+            <span class="w gap-s" data-t="3.74">build</span>
+          </div>
+          <div id="a5" class="line serif" data-x="78" data-base="1410">
+            <span class="bl"></span>
+            <span class="w ital ink" id="w-slop" data-t="3.98" data-hero="1" data-rise="30" data-origin="15% 85%">slop</span>
+            <span class="w" style="margin-left: 0.34em" data-t="4.24">for</span>
+            <span class="w gap-s" data-t="4.44">you</span>
+          </div>
+          <div id="strike"></div>
+
+          <!-- BEAT C: kinetic "copy and paste" -->
+          <div id="c1" class="line serif" data-x="74" data-base="436">
+            <span class="bl"></span>
+            <span class="w big" data-t="6.43">copy</span>
+            <span class="w gap-s" data-t="6.73">and</span>
+          </div>
+          <div id="c2" class="line serif" data-x="92" data-base="596">
+            <span class="bl"></span>
+            <span class="w ital ocean" id="w-paste" data-t="6.91" data-hero="1" data-origin="8% 85%">paste</span>
+          </div>
+
+          <!-- cursor -->
+          <div id="cursor">
+            <svg width="54" height="80" viewBox="0 0 27 40">
+              <path
+                d="M2 2 L2 31 L9.2 24.6 L14 35.6 L19 33.4 L14.4 22.8 L23.8 22.8 Z"
+                fill="#FFFFFF"
+                stroke="#141414"
+                stroke-width="1.8"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (async () => {
+        const fontSpecs = [
+          '600 64px "Newsreader"',
+          'italic 700 64px "Fraunces"',
+          '500 30px "Geist"',
+          '600 30px "Geist"',
+        ];
+        await Promise.all(fontSpecs.map((f) => document.fonts.load(f)));
+        await document.fonts.ready;
+        for (const f of fontSpecs) {
+          if (!document.fonts.check(f)) throw new Error("brand font missing: " + f);
+        }
+
+        const D = 10.166;
+        const F = 1 / 30;
+        const $ = (s) => document.querySelector(s);
+        const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+        const SVGNS = "http://www.w3.org/2000/svg";
+
+        // ---- fit "paste" into the column left of the small card (x 70–500) ----
+        {
+          const p = $("#w-paste");
+          const maxW = 400;
+          if (p.offsetWidth > maxW) {
+            const fs = parseFloat(getComputedStyle(p).fontSize);
+            p.style.fontSize = Math.floor((fs * maxW) / p.offsetWidth) + "px";
+          }
+        }
+
+        // ---- place each line by its baseline ----
+        for (const line of $$(".line")) {
+          const bl = line.querySelector(".bl");
+          line.style.top = "0px";
+          line.style.left = "0px";
+          const baseOff = bl.offsetTop;
+          line.dataset.baseOff = baseOff;
+          line.style.top = parseFloat(line.dataset.base) - baseOff + "px";
+          if (line.dataset.right) {
+            line.style.left = parseFloat(line.dataset.right) - line.offsetWidth + "px";
+          } else {
+            line.style.left = line.dataset.x + "px";
+          }
+        }
+
+        // ---- strike-through across "slop" ----
+        const a5 = $("#a5");
+        const slop = $("#w-slop");
+        const strike = $("#strike");
+        const slopFs = parseFloat(getComputedStyle(slop).fontSize);
+        strike.style.left = a5.offsetLeft + slop.offsetLeft - 4 + "px";
+        strike.style.width = slop.offsetWidth + 18 + "px";
+        strike.style.top = parseFloat(a5.dataset.base) - slopFs * 0.25 - 9 + "px";
+
+        // ---- coins on the orbit (arm → radius → counter-rotations → coin) ----
+        const R = 380;
+        const coins = [];
+        for (let i = 0; i < 5; i++) {
+          const arm = document.createElement("div");
+          arm.className = "arm";
+          const armR = document.createElement("div");
+          armR.className = "arm-r";
+          const cr = document.createElement("div");
+          cr.className = "cr";
+          const cr2 = document.createElement("div");
+          cr2.className = "cr2";
+          const coin = document.createElement("div");
+          coin.className = "coin";
+          const body = document.createElement("div");
+          body.className = "coin-body";
+          body.appendChild(document.createTextNode("0" + (i + 1)));
+          for (const [x, y, w, h] of [
+            [68, 9, 4, 11],
+            [68, 120, 4, 11],
+            [9, 68, 11, 4],
+            [120, 68, 11, 4],
+          ]) {
+            const t = document.createElement("span");
+            t.className = "tick";
+            Object.assign(t.style, { left: x + "px", top: y + "px", width: w + "px", height: h + "px" });
+            body.appendChild(t);
+          }
+          coin.appendChild(body);
+          cr2.appendChild(coin);
+          cr.appendChild(cr2);
+          armR.appendChild(cr);
+          arm.appendChild(armR);
+          $("#arms").appendChild(arm);
+          coins.push({ arm, armR, cr, cr2, coin, body });
+        }
+
+        // ---- chips inside the prompt box (auto-flow) ----
+        const chipNames = ["Taste Skill", "Design & Refine", "Layers", "Meng To", "Hallmark"];
+        const chipsEl = $("#chips");
+        const chips = [];
+        const padX = 40;
+        const innerW = 880 - padX * 2;
+        let cx = 0;
+        let row = 0;
+        for (let i = 0; i < chipNames.length; i++) {
+          const c = document.createElement("div");
+          c.className = "chip";
+          const n = document.createElement("span");
+          n.className = "chip-n";
+          n.textContent = "0" + (i + 1);
+          const t = document.createElement("span");
+          t.className = "chip-t";
+          t.textContent = chipNames[i];
+          c.appendChild(n);
+          c.appendChild(t);
+          chipsEl.appendChild(c);
+          const w = c.offsetWidth;
+          if (cx > 0 && cx + w > innerW) {
+            row++;
+            cx = 0;
+          }
+          c.style.left = padX + cx + "px";
+          c.style.top = 40 + row * 100 + "px";
+          cx += w + 16;
+          chips.push(c);
+        }
+        const lastChip = chips[chips.length - 1];
+        const caretEnd = {
+          x: lastChip.offsetLeft + lastChip.offsetWidth + 16,
+          y: lastChip.offsetTop + 15,
+        };
+        const caret = $("#caret");
+        caret.style.left = "44px";
+        caret.style.top = "55px";
+
+        // ---- pills ----
+        for (const p of $$(".pill")) {
+          p.style.top = p.dataset.top + "px";
+          p.style.left = parseFloat(p.dataset.cx) - p.offsetWidth / 2 + "px";
+        }
+        const pw = $("#pill-what");
+        const pwBg = pw.querySelector(".pill-bg");
+        const pwWords = $$(".pw", pw);
+        const pwFull = pw.offsetWidth;
+        pwBg.style.width = pwFull + "px";
+        const pwStages = pwWords.map((s) => s.offsetLeft + s.offsetWidth + 48);
+
+        // ---- dotted connectors (box → pills), each drawn through a mask ----
+        const connSvg = $("#conn-svg");
+        const defs = connSvg.querySelector("defs");
+        const connD = [
+          "M 400 1012 C 400 1052, 250 1040, 250 1074",
+          "M 620 1012 C 620 1052, 770 1040, 770 1074",
+          "M 510 1012 L 510 1256",
+        ];
+        const connMasks = connD.map((d, i) => {
+          const m = document.createElementNS(SVGNS, "mask");
+          m.setAttribute("id", "conn-m" + i);
+          m.setAttribute("maskUnits", "userSpaceOnUse");
+          m.setAttribute("x", "0");
+          m.setAttribute("y", "0");
+          m.setAttribute("width", "1080");
+          m.setAttribute("height", "1920");
+          const mp = document.createElementNS(SVGNS, "path");
+          mp.setAttribute("d", d);
+          mp.setAttribute("fill", "none");
+          mp.setAttribute("stroke", "#fff");
+          mp.setAttribute("stroke-width", "16");
+          m.appendChild(mp);
+          defs.appendChild(m);
+          const g = document.createElementNS(SVGNS, "g");
+          g.setAttribute("mask", "url(#conn-m" + i + ")");
+          const p = document.createElementNS(SVGNS, "path");
+          p.setAttribute("d", d);
+          p.setAttribute("fill", "none");
+          p.setAttribute("stroke", "#141414");
+          p.setAttribute("stroke-width", "3");
+          p.setAttribute("stroke-dasharray", "2 12");
+          p.setAttribute("stroke-linecap", "round");
+          g.appendChild(p);
+          connSvg.appendChild(g);
+          const L = mp.getTotalLength() + 4;
+          mp.setAttribute("stroke-dasharray", L + " " + L);
+          mp.setAttribute("stroke-dashoffset", L);
+          return { mp, L };
+        });
+
+        const ringC = 2 * Math.PI * R + 4;
+        const ringMask = $("#ring-mask-c");
+        ringMask.setAttribute("stroke-dasharray", ringC + " " + ringC);
+        ringMask.setAttribute("stroke-dashoffset", ringC);
+
+        // ================= timeline =================
+        const tl = gsap.timeline({ paused: true });
+
+        // background drift (continuous, linear on purpose) + slow camera push
+        tl.fromTo("#grid", { x: 0, y: 0 }, { x: -20, y: -12, duration: D, ease: "none" }, 0);
+        tl.fromTo(
+          "#cam",
+          { scale: 1, transformOrigin: "510px 880px" },
+          { scale: 1.015, duration: D, ease: "none" },
+          0,
+        );
+
+        // ---------- speaker card ----------
+        gsap.set("#card", { transformPerspective: 1600, transformOrigin: "50% 50%" });
+        gsap.set("#card-move", { transformOrigin: "50% 50%" });
+        tl.fromTo("#card", { opacity: 0 }, { opacity: 1, duration: 0.14, ease: "power1.out" }, 0);
+        tl.fromTo("#card", { y: 70 }, { y: 0, duration: 0.5, ease: "power3.out", immediateRender: false }, 0);
+        tl.fromTo("#card", { scale: 0.9 }, { scale: 1, duration: 0.48, ease: "back.out(1.5)", immediateRender: false }, 0);
+        tl.fromTo("#card", { rotationX: 28 }, { rotationX: 5, duration: 0.62, ease: "back.out(1.8)", immediateRender: false }, 0);
+        tl.fromTo("#card", { rotationY: -22 }, { rotationY: -8, duration: 0.55, ease: "power3.out", immediateRender: false }, 0);
+        tl.to("#card", { rotationY: -6, rotationX: 3.5, duration: 4.46 - 0.62, ease: "sine.inOut" }, 0.62);
+        // inner parallax + slow push
+        tl.fromTo("#vid-wrap", { scale: 1.14, transformOrigin: "50% 45%" }, { scale: 1, duration: 0.7, ease: "power3.out" }, 0);
+        tl.to("#vid-wrap", { scale: 1.025, duration: D - 0.7, ease: "none" }, 0.7);
+        // light catches the card as it settles
+        tl.fromTo("#sheen", { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "power1.out" }, 0.08);
+        tl.fromTo(
+          "#sheen",
+          { backgroundPosition: "100% 0" },
+          { backgroundPosition: "0% 0", duration: 0.7, ease: "power2.inOut", immediateRender: false },
+          0.08,
+        );
+        tl.to("#sheen", { opacity: 0, duration: 0.25, ease: "power1.in" }, 0.55);
+        // gentle float for the whole slot
+        tl.to("#card-float", { y: -6, duration: 1.1, ease: "sine.inOut", yoyo: true, repeat: 8 }, 0.5);
+
+        // A → B: card shrinks and drops to the orbit centre (510, 900), 868 → 560
+        tl.to("#card-move", { x: 14, duration: 0.5, ease: "power2.inOut" }, 4.46);
+        tl.to("#card-move", { y: 290, duration: 0.5, ease: "power3.inOut" }, 4.46);
+        tl.to("#card-move", { scale: 0.645, duration: 0.5, ease: "power3.inOut" }, 4.46);
+        tl.to("#card", { rotationY: -2, rotationX: 7, duration: 0.42, ease: "power2.inOut" }, 4.46);
+        tl.to("#card", { rotationX: 3, duration: 0.4, ease: "back.out(1.6)" }, 4.88);
+        // B → C: card arcs up to the top-right corner, 560 → 420
+        tl.to("#card-move", { x: 234, duration: 0.48, ease: "power3.inOut" }, 5.98);
+        tl.to("#card-move", { y: -160, duration: 0.48, ease: "power2.inOut" }, 5.98);
+        tl.to("#card-move", { scale: 0.484, duration: 0.48, ease: "power3.inOut" }, 5.98);
+        tl.to("#card", { rotationY: -9, rotationX: 5, duration: 0.55, ease: "power2.inOut" }, 5.98);
+        tl.to("#card", { rotationY: -6, rotationX: 3, duration: D - 6.55, ease: "sine.inOut" }, 6.55);
+
+        // ---------- kinetic words ----------
+        function wordIn(w) {
+          const t = parseFloat(w.dataset.t);
+          if (w.dataset.hero) {
+            const s = Math.max(0, t - 0.2);
+            gsap.set(w, { transformOrigin: w.dataset.origin || "50% 85%" });
+            tl.fromTo(
+              w,
+              { opacity: 0, y: parseFloat(w.dataset.rise || 80), scale: 0.55, rotation: -7, filter: "blur(8px)" },
+              { opacity: 1, y: -8, scale: 1.08, rotation: 1.5, filter: "blur(0px)", duration: 0.2, ease: "power3.out" },
+              s,
+            );
+            tl.to(w, { y: 0, scale: 1, rotation: 0, duration: 0.32, ease: "back.out(1.6)" }, s + 0.2);
+          } else if (w.dataset.accent) {
+            const s = Math.max(0, t - 0.16);
+            gsap.set(w, { transformOrigin: "50% 85%" });
+            tl.fromTo(
+              w,
+              { opacity: 0, y: 56, scale: 0.78, rotation: -6, filter: "blur(6px)" },
+              { opacity: 1, y: 0, scale: 1, rotation: 0, filter: "blur(0px)", duration: 0.46, ease: "back.out(2.2)" },
+              s,
+            );
+          } else {
+            const s = Math.max(0, t - 0.13);
+            tl.fromTo(
+              w,
+              { opacity: 0, y: 40, filter: "blur(5px)" },
+              { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.38, ease: "power3.out" },
+              s,
+            );
+          }
+        }
+        for (const w of $$(".line .w")) wordIn(w);
+
+        // "taste" hero: tiny camera punch
+        tl.fromTo("#punch", { scale: 1, transformOrigin: "510px 1150px" }, { scale: 1.012, duration: 0.4, ease: "power2.out" }, 2.6);
+        tl.to("#punch", { scale: 1, duration: 0.5, ease: "power2.inOut" }, 4.46);
+
+        // first three lines lift out, 2 f apart
+        // bottom-up so the rising "and taste" never passes through a line that is still visible
+        ["#a2", "#a1", "#a0"].forEach((s, i) => {
+          tl.to(s, { y: -40, opacity: 0, filter: "blur(6px)", duration: 0.18, ease: "power2.in" }, 2.72 + i * 1.5 * F);
+        });
+        // "and taste" glides up-left on an arc and shrinks to 66 %
+        const a3 = $("#a3");
+        gsap.set(a3, { transformOrigin: "0px " + a3.dataset.baseOff + "px" });
+        const a3dx = 72 - a3.offsetLeft;
+        const a3dy = 1124 - parseFloat(a3.dataset.base);
+        tl.to(a3, { x: a3dx, duration: 0.34, ease: "power2.inOut" }, 2.8);
+        tl.to(a3, { y: a3dy, duration: 0.34, ease: "power3.inOut" }, 2.8);
+        tl.to(a3, { scale: 0.66, duration: 0.34, ease: "power3.inOut" }, 2.8);
+
+        // ocean strike-through across "slop"
+        gsap.set(strike, { transformOrigin: "0% 50%", rotation: -3 });
+        tl.fromTo(strike, { scaleX: 0 }, { scaleX: 1, duration: 0.28, ease: "power3.out" }, 4.05);
+
+        // all beat-A type lifts out, 2 f apart
+        tl.to(a3, { y: a3dy - 44, opacity: 0, filter: "blur(6px)", duration: 0.22, ease: "power2.in" }, 4.5);
+        tl.to("#a4", { y: -44, opacity: 0, filter: "blur(6px)", duration: 0.22, ease: "power2.in" }, 4.5 + 2 * F);
+        tl.to(["#a5", "#strike"], { y: -44, opacity: 0, filter: "blur(6px)", duration: 0.22, ease: "power2.in" }, 4.5 + 4 * F);
+
+        // ---------- BEAT B: ring + coins ----------
+        tl.fromTo(ringMask, { attr: { "stroke-dashoffset": ringC } }, { attr: { "stroke-dashoffset": 0 }, duration: 0.95, ease: "power2.inOut" }, 4.62);
+        tl.fromTo("#ring-c", { rotation: 0, svgOrigin: "510 900" }, { rotation: 16, duration: 6.1 - 4.62, ease: "none" }, 4.62);
+        gsap.set("#ring-svg", { transformOrigin: "510px 900px" });
+        tl.to("#ring-svg", { opacity: 0, scale: 0.95, duration: 0.24, ease: "power2.in" }, 5.78);
+        // the whole orbit drifts a few degrees once the coins are out
+        const cr2s = coins.map((c) => c.cr2);
+        tl.fromTo("#arms", { rotation: 0 }, { rotation: 7, duration: 6.2 - 4.9, ease: "sine.inOut" }, 4.9);
+        tl.fromTo(cr2s, { rotation: 0 }, { rotation: -7, duration: 6.2 - 4.9, ease: "sine.inOut" }, 4.9);
+
+        const landT = [4.95, 5.13, 5.33, 5.47, 5.59];
+        coins.forEach(({ arm, armR, cr, coin, body }, i) => {
+          const th = -90 + 72 * i;
+          const L = landT[i];
+          const s = L - 0.28;
+          tl.fromTo(arm, { rotation: th - 70 }, { rotation: th, duration: 0.5, ease: "back.out(1.3)" }, s);
+          tl.fromTo(cr, { rotation: -(th - 70) }, { rotation: -th, duration: 0.5, ease: "back.out(1.3)" }, s);
+          tl.fromTo(armR, { x: 130 }, { x: R, duration: 0.42, ease: "power3.out" }, s);
+          tl.fromTo(coin, { scale: 0.5 }, { scale: 1, duration: 0.44, ease: "back.out(1.8)" }, s);
+          tl.fromTo(coin, { opacity: 0 }, { opacity: 1, duration: 0.06, ease: "none" }, s);
+          tl.fromTo(body, { y: 0 }, { y: -5, duration: 0.4, ease: "sine.inOut", yoyo: true, repeat: 1 }, L + 0.12);
+          // exit: tiny anticipation, then shrink + fade, 2 f apart
+          const E = 5.7 + i * 1.5 * F;
+          tl.to(coin, { scale: 1.06, duration: 2 * F, ease: "power2.out" }, E);
+          tl.to(coin, { scale: 0.3, duration: 0.18, ease: "power2.in" }, E + 2 * F);
+          tl.to(armR, { x: R - 60, duration: 0.18, ease: "power2.in" }, E + 2 * F);
+          tl.to(coin, { opacity: 0, duration: 0.1, ease: "power1.in" }, E + 2 * F + 0.08);
+        });
+
+        // ---------- BEAT C: prompt box ----------
+        gsap.set("#box-wrap", { transformOrigin: "50% 60%" });
+        tl.fromTo("#box-wrap", { opacity: 0 }, { opacity: 1, duration: 0.16, ease: "power1.out" }, 6.26);
+        tl.fromTo("#box-wrap", { y: 70 }, { y: 0, duration: 0.5, ease: "power3.out", immediateRender: false }, 6.26);
+        tl.fromTo("#box-wrap", { scale: 0.94 }, { scale: 1, duration: 0.5, ease: "back.out(1.4)", immediateRender: false }, 6.26);
+        tl.fromTo(["#tb1", "#tb2"], { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.3, ease: "power3.out", stagger: 2 * F }, 6.42);
+        gsap.set("#send", { transformOrigin: "50% 50%" });
+        tl.fromTo("#send", { scale: 0.4, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.36, ease: "back.out(2)" }, 6.44);
+        // gentle float of the box
+        tl.to("#box", { y: -4, duration: 1.0, ease: "sine.inOut", yoyo: true, repeat: 3 }, 6.8);
+
+        // caret: appears, blinks, holds solid while the chips land, jumps to the end, blinks again
+        tl.fromTo(caret, { opacity: 0 }, { opacity: 1, duration: 0.06, ease: "none" }, 6.5);
+        tl.set(caret, { opacity: 0 }, 6.78);
+        tl.set(caret, { opacity: 1 }, 6.92);
+        tl.to(caret, { x: caretEnd.x - 44, y: caretEnd.y - 55, duration: 0.16, ease: "power2.out" }, 7.38);
+        for (let t = 7.9, k = 0; t < D; t += 0.45, k++) tl.set(caret, { opacity: k % 2 ? 1 : 0 }, t);
+
+        // cursor: arcs in from lower right, clicks on "paste", leaves
+        gsap.set("#cursor", { transformOrigin: "4px 4px" });
+        tl.fromTo("#cursor", { x: 860, y: 1250, opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.18, ease: "power2.out" }, 6.36);
+        tl.to("#cursor", { x: 150, duration: 0.48, ease: "power2.inOut" }, 6.38);
+        tl.to("#cursor", { y: 735, duration: 0.48, ease: "power3.out" }, 6.38);
+        tl.to("#cursor", { scale: 0.82, duration: 0.07, ease: "power2.in" }, 6.84);
+        tl.to("#cursor", { scale: 1, duration: 0.22, ease: "back.out(2.2)" }, 6.91);
+        tl.to("#cursor", { x: 300, y: 880, duration: 0.4, ease: "power2.inOut" }, 7.12);
+        tl.to("#cursor", { opacity: 0, scale: 0.85, duration: 0.2, ease: "power2.in" }, 7.36);
+
+        // chips drop into the box, 3 f apart
+        chips.forEach((c, i) => {
+          const s = 6.86 + i * 3 * F;
+          gsap.set(c, { transformOrigin: "50% 100%" });
+          tl.fromTo(c, { opacity: 0 }, { opacity: 1, duration: 0.08, ease: "none" }, s);
+          tl.fromTo(c, { y: -46, rotation: i % 2 ? 3 : -3, scale: 0.9 }, { y: 0, rotation: 0, scale: 1, duration: 0.38, ease: "back.out(1.8)", immediateRender: false }, s);
+        });
+
+        // send press, then the prompt goes out to each agent
+        tl.to("#send", { scale: 0.86, duration: 0.07, ease: "power2.in" }, 7.38);
+        tl.to("#send", { scale: 1, duration: 0.26, ease: "back.out(2.4)" }, 7.45);
+
+        function drawConn(i, s, dur) {
+          const { mp, L } = connMasks[i];
+          tl.fromTo(mp, { attr: { "stroke-dashoffset": L } }, { attr: { "stroke-dashoffset": 0 }, duration: dur, ease: "power2.inOut" }, s);
+        }
+        function popPill(el, contact) {
+          const s = contact - 0.17;
+          gsap.set(el, { transformOrigin: "50% 0%" });
+          tl.fromTo(
+            el,
+            { opacity: 0, y: 30, scale: 0.7 },
+            { opacity: 1, y: -4, scale: 1.06, duration: 0.17, ease: "power3.out" },
+            s,
+          );
+          tl.to(el, { y: 0, scale: 1, duration: 0.28, ease: "power2.out" }, contact);
+        }
+        drawConn(0, 7.4, 0.24);
+        popPill("#pill-claude", 7.65);
+        drawConn(1, 8.08, 0.24);
+        popPill("#pill-codex", 8.35);
+        drawConn(2, 8.62, 0.3);
+
+        // "whatever agent you use" pill: pops on "whatever", grows word by word, stays centred
+        const stageX = (w) => (pwFull - w) / 2;
+        gsap.set(pw, { transformOrigin: "50% 0%" });
+        gsap.set(pwBg, { width: pwStages[0] });
+        gsap.set(pw, { x: stageX(pwStages[0]) });
+        popPill(pw, 8.99);
+        pwWords.forEach((w, k) => {
+          if (k === 0) return;
+          const t = parseFloat(w.dataset.t);
+          const s = t - 0.14;
+          tl.to(pw, { x: stageX(pwStages[k]), duration: 0.24, ease: "power3.out" }, s);
+          tl.to(pwBg, { width: pwStages[k], duration: 0.24, ease: "power3.out" }, s);
+          tl.fromTo(w, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.26, ease: "power3.out" }, s + 0.04);
+        });
+
+        // pills float while holding
+        tl.to("#pill-claude", { y: -5, duration: 0.9, ease: "sine.inOut", yoyo: true, repeat: 2 }, 7.95);
+        tl.to("#pill-codex", { y: -5, duration: 0.8, ease: "sine.inOut", yoyo: true, repeat: 1 }, 8.65);
+
+        window.__timelines["main"] = tl;
+        if (window.__hfForceTimelineRebind) window.__hfForceTimelineRebind();
+      })();
+    </script>
+  </body>
+</html>

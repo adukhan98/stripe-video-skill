@@ -1,0 +1,14 @@
+[
+  {"t": 0.13, "sfx": "pop", "what": "row 1 'I talk to' rises (silent)"},
+  {"t": 0.83, "sfx": "pop", "what": "CEOs, lands (hero, silent)"},
+  {"t": 1.16, "sfx": "whoosh", "what": "feed: row 1 blurs up, CEOs, glides up (silent)"},
+  {"t": 1.45, "sfx": "pop", "what": "founders lands in mint (silent)"},
+  {"t": 1.92, "sfx": "whoosh", "what": "phrase clears on 'people' (silent)"},
+  {"t": 3.23, "sfx": "pop", "what": "day pops (silent)"},
+  {"t": 3.69, "sfx": "pop", "what": "lives pops (silent)"},
+  {"t": 4.17, "sfx": "pop", "what": "businesses lands in mint, 1 % punch (silent)"},
+  {"t": 4.30, "sfx": "pop", "what": "buildings icon disc pops, mint ring ripple (silent)"},
+  {"t": 4.30, "sfx": "whoosh", "what": "feed: day lives blur up, businesses glides up (silent)"},
+  {"t": 4.58, "sfx": "pop", "what": "on rises (silent)"},
+  {"t": 4.75, "sfx": "pop", "what": "AI. pops, disc pulses (silent)"}
+]

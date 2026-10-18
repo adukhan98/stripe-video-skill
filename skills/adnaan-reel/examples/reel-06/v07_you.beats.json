@@ -1,0 +1,118 @@
+[
+ {
+  "t": 0.3,
+  "sfx": "whoosh",
+  "what": "post card drops in on 'After that'",
+  "gain_db": -4
+ },
+ {
+  "t": 0.42,
+  "sfx": "pop",
+  "what": "X chip pops on the card corner",
+  "gain_db": -6
+ },
+ {
+  "t": 0.52,
+  "sfx": "scribble",
+  "dur": 0.45,
+  "what": "red arrow tier 1 -> tier 2 (shaft + head)"
+ },
+ {
+  "t": 1.28,
+  "sfx": "scribble",
+  "dur": 0.32,
+  "what": "highlighter swipe behind '20M people (0.2%)'"
+ },
+ {
+  "t": 1.43,
+  "sfx": "pop",
+  "what": "'20' lands"
+ },
+ {
+  "t": 1.73,
+  "sfx": "tick",
+  "what": "'million' lands"
+ },
+ {
+  "t": 2.27,
+  "sfx": "scribble",
+  "dur": 0.48,
+  "what": "tier 2 red hatch"
+ },
+ {
+  "t": 2.37,
+  "sfx": "impact",
+  "what": "'0.2%' stamps, tier 2 hatches red"
+ },
+ {
+  "t": 3.42,
+  "sfx": "scribble",
+  "dur": 0.32,
+  "what": "map pin outline"
+ },
+ {
+  "t": 3.84,
+  "sfx": "pop",
+  "what": "map pin finished (hole pops in)",
+  "gain_db": -6
+ },
+ {
+  "t": 3.84,
+  "sfx": "scribble",
+  "dur": 0.18,
+  "what": "map pin hole loop"
+ },
+ {
+  "t": 4.16,
+  "sfx": "whoosh",
+  "what": "'20 million' blurs out",
+  "gain_db": -10
+ },
+ {
+  "t": 4.4,
+  "sfx": "tick",
+  "what": "pin crouches and lifts (anticipation)",
+  "gain_db": -4
+ },
+ {
+  "t": 4.52,
+  "sfx": "whoosh",
+  "what": "pin drops on its arc",
+  "gain_db": -3
+ },
+ {
+  "t": 4.6,
+  "sfx": "scribble",
+  "dur": 0.18,
+  "what": "shockwave ellipse around the landing"
+ },
+ {
+  "t": 4.67,
+  "sfx": "impact",
+  "what": "pin lands in tier 2 + 'you' (hero beat)"
+ },
+ {
+  "t": 4.72,
+  "sfx": "scribble",
+  "dur": 0.36,
+  "what": "double underline under 'you'"
+ },
+ {
+  "t": 4.82,
+  "sfx": "tick",
+  "what": "stick people hop",
+  "gain_db": -8
+ },
+ {
+  "t": 4.84,
+  "sfx": "scribble",
+  "dur": 0.34,
+  "what": "red arrow from 'you' to the pin"
+ },
+ {
+  "t": 5.18,
+  "sfx": "ping",
+  "what": "arrow head flicks onto the pin",
+  "gain_db": -6
+ }
+]

@@ -1,0 +1,1145 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>v10 copy</title>
+    <link rel="stylesheet" href="brand.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: var(--brand-background);
+      }
+      #root {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: var(--brand-background);
+        font-family: var(--font-heading);
+        color: var(--brand-text);
+      }
+
+      /* ---------- shared v2 background: paper + 60px grid + vignette (identical to v01_hook) ---------- */
+      #bg {
+        position: absolute;
+        inset: 0;
+        background: var(--brand-background);
+        overflow: hidden;
+      }
+      #grid {
+        position: absolute;
+        left: -120px;
+        top: -120px;
+        width: 1320px;
+        height: 2160px;
+        background-image:
+          linear-gradient(to right, rgba(20, 20, 20, 0.055) 1.5px, transparent 1.5px),
+          linear-gradient(to bottom, rgba(20, 20, 20, 0.055) 1.5px, transparent 1.5px);
+        background-size: 60px 60px;
+      }
+      #vignette {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(ellipse at 50% 45%, transparent 45%, rgba(90, 80, 72, 0.22) 100%);
+      }
+
+      /* ---------- camera ---------- */
+      #cam,
+      #punch {
+        position: absolute;
+        inset: 0;
+      }
+
+      /* ---------- app cards (deep teal) ---------- */
+      .app-pos {
+        position: absolute;
+        left: 80px;
+        top: 740px;
+        width: 564px;
+        height: 679px;
+      }
+      /* the card is drawn at 490x590 and shown at 1.15x (564x679) */
+      .app-k {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 490px;
+        height: 590px;
+        transform: scale(1.15);
+        transform-origin: 0 0;
+      }
+      .app-float,
+      .app-bump {
+        position: absolute;
+        inset: 0;
+      }
+      .app-glow {
+        position: absolute;
+        left: -200px;
+        top: -200px;
+        width: 840px;
+        height: 990px;
+        background: radial-gradient(ellipse 236px 330px at 50% 50%, rgba(46, 156, 203, 0.32), rgba(46, 156, 203, 0) 100%);
+        opacity: 0;
+      }
+      .app {
+        position: absolute;
+        inset: 0;
+        border-radius: 28px;
+        overflow: hidden;
+        background: linear-gradient(160deg, #123542 0%, var(--brand-deep) 55%, #0a2029 100%);
+        box-shadow:
+          0 14px 0 -2px var(--brand-primary),
+          0 26px 40px -16px rgba(30, 30, 30, 0.34);
+      }
+      .layer {
+        position: absolute;
+        inset: 0;
+      }
+      .r {
+        position: absolute;
+      }
+      .wash {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(ellipse at 50% 45%, rgba(120, 200, 235, 0.35), rgba(46, 156, 203, 0.12) 70%);
+        opacity: 0;
+      }
+      .light {
+        position: absolute;
+        inset: 0;
+        background: rgba(251, 250, 248, 0.6);
+        opacity: 0;
+      }
+      .sheen {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          105deg,
+          transparent 30%,
+          rgba(255, 255, 255, 0.2) 45%,
+          rgba(255, 255, 255, 0.05) 55%,
+          transparent 65%
+        );
+        background-size: 300% 100%;
+        background-position: 100% 0;
+        opacity: 0;
+      }
+      #scan {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 0;
+        opacity: 0;
+      }
+      #scan-trail {
+        position: absolute;
+        left: 0;
+        top: -150px;
+        width: 100%;
+        height: 150px;
+        background: linear-gradient(to bottom, rgba(46, 156, 203, 0), rgba(46, 156, 203, 0.34));
+      }
+      #scan-line {
+        position: absolute;
+        left: 0;
+        top: -3px;
+        width: 100%;
+        height: 6px;
+        background: #7cc9ea;
+        box-shadow:
+          0 0 16px 4px rgba(46, 156, 203, 0.8),
+          0 0 40px 10px rgba(46, 156, 203, 0.35);
+      }
+      .chk {
+        position: absolute;
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 35% 30%, #6ac2e6, #2e9ccb 55%, #1f7ea8 100%);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+      }
+      .chk svg {
+        position: absolute;
+        inset: 0;
+      }
+
+      /* ---------- black pills ---------- */
+      .pill {
+        position: absolute;
+        height: 64px;
+        padding: 0 28px 0 22px;
+        border-radius: 32px;
+        background: var(--brand-text);
+        color: #fbfaf8;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-family: var(--font-body);
+        font-weight: 600;
+        font-size: 36px;
+        letter-spacing: -0.01em;
+        white-space: nowrap;
+        box-shadow: 0 18px 30px -8px rgba(30, 25, 20, 0.38);
+      }
+      .pill i {
+        display: block;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: var(--brand-primary);
+        flex: none;
+      }
+
+      /* ---------- scan beam ---------- */
+      #beam,
+      #links,
+      #timer {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1080px;
+        height: 1920px;
+        overflow: visible;
+      }
+      #beam {
+        opacity: 0;
+      }
+
+      /* ---------- agent puck (v02_skills, scaled to 220) ---------- */
+      #puck-pos {
+        position: absolute;
+        left: 670px;
+        top: 953px;
+        width: 253px;
+        height: 253px;
+      }
+      /* puck drawn at 220 and shown at 1.15x (253) */
+      #puck-k {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 220px;
+        height: 220px;
+        transform: scale(1.15);
+        transform-origin: 0 0;
+      }
+      #puck-float,
+      #puck-bob,
+      #puck {
+        position: absolute;
+        inset: 0;
+      }
+      #puck-glow {
+        position: absolute;
+        left: -46px;
+        top: -46px;
+        width: 312px;
+        height: 312px;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          rgba(46, 156, 203, 0.5) 0%,
+          rgba(46, 156, 203, 0.2) 42%,
+          rgba(46, 156, 203, 0) 70%
+        );
+        opacity: 0;
+      }
+      #puck-ring {
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        box-shadow:
+          0 0 0 7px var(--brand-primary),
+          0 0 34px 10px rgba(46, 156, 203, 0.45);
+        opacity: 0;
+      }
+      #puck-disc {
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        background: radial-gradient(circle at 34% 26%, #3d3d3d 0%, #1d1d1d 42%, #141414 72%);
+        box-shadow:
+          0 28px 44px -10px rgba(40, 30, 20, 0.5),
+          inset 0 -6px 14px rgba(0, 0, 0, 0.45);
+      }
+      #visor {
+        position: absolute;
+        left: 42px;
+        top: 78px;
+        width: 136px;
+        height: 68px;
+        border-radius: 34px;
+        background: linear-gradient(180deg, #070707 0%, #1f1f1f 100%);
+        box-shadow:
+          inset 0 3px 8px rgba(0, 0, 0, 0.7),
+          0 1px 0 rgba(255, 255, 255, 0.09);
+      }
+      #eyes {
+        position: absolute;
+        inset: 0;
+      }
+      .eye {
+        position: absolute;
+        top: 22px;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: var(--brand-primary);
+        opacity: 0.32;
+      }
+      #eye-l {
+        left: 31px;
+      }
+      #eye-r {
+        left: 81px;
+      }
+
+      /* ---------- speaker card (secondary size, v01_hook treatment) ---------- */
+      #card-float {
+        position: absolute;
+        left: 190px;
+        top: 324px;
+        width: 640px;
+        height: 506px;
+      }
+      #card {
+        position: absolute;
+        inset: 0;
+        border-radius: 30px;
+        overflow: hidden;
+        background: #1b1b1b;
+        box-shadow:
+          0 16px 0 -2px var(--brand-primary),
+          0 50px 70px -10px rgba(40, 30, 20, 0.35);
+      }
+      #vid-wrap {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        border-radius: 30px;
+        transform-origin: 50% 85%;
+      }
+      /* source 1080x1920 scaled to the card width (640x1138); window = 18.5%–63% of the source height (full head, hair kept) */
+      #speaker {
+        position: absolute;
+        left: 0;
+        top: -211px;
+        width: 640px;
+        height: 1138px;
+        object-fit: cover;
+      }
+      #sheen {
+        position: absolute;
+        inset: 0;
+        border-radius: 30px;
+        background: linear-gradient(
+          105deg,
+          transparent 30%,
+          rgba(255, 255, 255, 0.22) 45%,
+          rgba(255, 255, 255, 0.05) 55%,
+          transparent 65%
+        );
+        background-size: 300% 100%;
+        background-position: 100% 0;
+        opacity: 0;
+      }
+
+      /* ---------- kinetic serif ---------- */
+      .line {
+        position: absolute;
+        display: flex;
+        align-items: baseline;
+        white-space: nowrap;
+        line-height: 0.88;
+      }
+      .bl {
+        display: block;
+        width: 0;
+        height: 0;
+        align-self: baseline;
+      }
+      .w {
+        display: inline-block;
+        will-change: transform, opacity, filter;
+      }
+      /* v2 type: Inter Tight — supporting 800 / -0.03em, hero 900 / -0.045em, accent = colour (no italics) */
+      .serif {
+        font-family: var(--font-heading);
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        color: var(--brand-text);
+      }
+      .ital {
+        font-family: var(--font-accent);
+        font-weight: 900;
+        font-style: normal;
+        letter-spacing: -0.045em;
+      }
+      .ocean {
+        color: var(--brand-primary);
+      }
+      .ink {
+        color: var(--brand-text);
+      }
+      .gap-s {
+        margin-left: 0.24em;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-width="1080"
+      data-height="1920"
+      data-duration="8.5"
+    >
+      <div id="bg">
+        <div id="grid"></div>
+        <div id="vignette"></div>
+      </div>
+
+      <div id="cam">
+        <div id="punch">
+          <!-- ===== speaker card (beat B, upper area) ===== -->
+          <div id="card-float">
+            <div id="card">
+              <div id="vid-wrap">
+                <video
+                  id="speaker"
+                  class="clip"
+                  src="assets/speaker.mp4"
+                  muted
+                  playsinline
+                  data-start="0"
+                  data-duration="8.5"
+                  data-track-index="1"
+                ></video>
+              </div>
+              <div id="sheen"></div>
+            </div>
+          </div>
+
+          <!-- ===== dotted path (beat B) ===== -->
+          <svg id="links" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <mask id="lk" maskUnits="userSpaceOnUse" x="0" y="0" width="1080" height="1920">
+                <path id="lk-mask" fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" />
+              </mask>
+            </defs>
+            <path
+              id="lk-path"
+              fill="none"
+              stroke="#141414"
+              stroke-width="3"
+              stroke-linecap="round"
+              stroke-dasharray="2 12"
+              mask="url(#lk)"
+            />
+          </svg>
+
+          <!-- ===== timer ring around the puck (beat B) ===== -->
+          <svg id="timer" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+            <g id="timer-g">
+              <rect id="timer-crown" rx="7" fill="#141414" />
+              <circle id="timer-track" fill="none" stroke="rgba(20,20,20,0.10)" stroke-width="12" />
+              <g id="timer-ticks"></g>
+              <circle
+                id="timer-arc"
+                fill="none"
+                stroke="#2E9CCB"
+                stroke-width="12"
+                stroke-linecap="round"
+              />
+            </g>
+          </svg>
+
+          <!-- ===== "your app" card (original) ===== -->
+          <div id="app-pos" class="app-pos">
+            <div class="app-k">
+            <div class="app-float">
+              <div class="app-bump" id="app-bump">
+                <div class="app-glow" id="app-glow"></div>
+                <div class="app" id="app">
+                  <div class="layer" id="ly-ui"></div>
+                  <div class="layer" id="ly-code"></div>
+                  <div class="layer" id="ly-feat"></div>
+                  <div class="wash" id="app-wash"></div>
+                  <div id="scan">
+                    <div id="scan-trail"></div>
+                    <div id="scan-line"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            </div>
+          </div>
+
+          <!-- ===== scan beam (cone + dotted edges) ===== -->
+          <svg id="beam" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="beam-grad" gradientUnits="userSpaceOnUse" x1="770" y1="0" x2="638" y2="0">
+                <stop offset="0" stop-color="#2E9CCB" stop-opacity="0.72" />
+                <stop offset="1" stop-color="#2E9CCB" stop-opacity="0.3" />
+              </linearGradient>
+            </defs>
+            <polygon id="cone" fill="url(#beam-grad)" />
+            <line id="edge-a" x1="790" y1="1082" x2="630" y2="800" stroke="#2E9CCB" stroke-width="3" stroke-linecap="round" stroke-dasharray="2 12" />
+            <line id="edge-b" x1="790" y1="1082" x2="630" y2="928" stroke="#2E9CCB" stroke-width="3" stroke-linecap="round" stroke-dasharray="2 12" />
+          </svg>
+
+          <!-- ===== agent puck ===== -->
+          <div id="puck-pos">
+            <div id="puck-k">
+            <div id="puck-float">
+              <div id="puck-bob">
+                <div id="puck">
+                  <div id="puck-glow"></div>
+                  <div id="puck-ring"></div>
+                  <div id="puck-disc">
+                    <div id="visor">
+                      <div id="eyes">
+                        <div id="eye-l" class="eye"></div>
+                        <div id="eye-r" class="eye"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            </div>
+          </div>
+
+          <!-- ===== the copy (beat B) ===== -->
+          <div id="copy-pos" class="app-pos">
+            <div class="app-k">
+            <div class="app-float" id="copy-float">
+              <div class="app-bump" id="copy-bump">
+                <div class="app" id="copy">
+                  <div class="layer" id="cp-feat"></div>
+                  <div class="sheen" id="copy-sheen"></div>
+                  <div class="light" id="copy-light"></div>
+                </div>
+              </div>
+            </div>
+            </div>
+          </div>
+
+          <!-- ===== label pills ===== -->
+          <div id="pill-app" class="pill"><i></i>your app</div>
+          <div id="pill-else" class="pill"><i></i>someone else</div>
+
+          <!-- ===== BEAT A kinetic type (top) ===== -->
+          <div id="p0a" class="line serif" data-x="92" data-base="392" style="font-size: 84px">
+            <span class="bl"></span>
+            <span class="w" data-t="0.32">if</span>
+            <span class="w gap-s" data-t="0.38">an</span>
+          </div>
+          <div id="p0b" class="line ital ink" data-maxw="760" data-x="128" data-base="664" style="font-size: 190px">
+            <span class="bl"></span>
+            <span class="w" data-t="0.68" data-hero="1" data-origin="30% 85%">AI</span>
+            <span class="w" style="margin-left: 0.2em" data-t="1.10" data-hero="1" data-origin="20% 85%">agent</span>
+          </div>
+
+          <div id="r1" class="line serif" data-x="92" data-base="392" style="font-size: 84px">
+            <span class="bl"></span>
+            <span class="w" id="w-can" data-t="1.34">can</span>
+            <span class="w gap-s" id="w-look" data-t="1.56">look</span>
+            <span class="w gap-s" id="w-at" data-t="1.76">at</span>
+            <span class="w gap-s" id="w-your" data-t="1.88">your</span>
+          </div>
+          <div id="r1b" class="line ital ocean" data-x="560" data-base="392" style="font-size: 120px">
+            <span class="bl"></span>
+            <span class="w" data-t="4.13" data-pop="1">all</span>
+            <span class="w" style="margin-left: 0.2em" data-t="4.29" data-pop="1">the</span>
+          </div>
+
+          <div id="h-app" class="line ital ocean" data-x="420" data-base="652" style="font-size: 220px">
+            <span class="bl"></span>
+            <span class="w" data-t="2.20" data-hero="1" data-origin="40% 85%">app</span>
+          </div>
+          <div id="h-soft" class="line ital ink" data-maxw="790" data-x="100" data-base="652" style="font-size: 200px">
+            <span class="bl"></span>
+            <span class="w" data-t="3.28" data-hero="1" data-origin="30% 85%">software</span>
+          </div>
+          <div id="h-feat" class="line ital ocean" data-maxw="820" data-right="896" data-base="652" style="font-size: 190px">
+            <span class="bl"></span>
+            <span class="w" data-t="4.65" data-hero="1" data-origin="40% 85%">features</span>
+          </div>
+
+          <!-- ===== BEAT B kinetic type (bottom) ===== -->
+          <div id="b1" class="line serif" data-maxw="850" data-x="92" data-base="1290" style="font-size: 84px">
+            <span class="bl"></span>
+            <span class="w" data-t="5.27">build</span>
+            <span class="w gap-s" data-t="5.61">someone</span>
+            <span class="w gap-s" data-t="5.85">else</span>
+            <span class="w gap-s" data-t="6.07">a</span>
+          </div>
+          <div id="b2" class="line ital ink" data-maxw="800" data-right="890" data-base="1466" style="font-size: 200px">
+            <span class="bl"></span>
+            <span class="w" data-t="6.31" data-hero="1" data-origin="30% 85%">version</span>
+          </div>
+          <div id="c1" class="line serif" data-x="118" data-base="1274" style="font-size: 96px">
+            <span class="bl"></span>
+            <span class="w" data-t="7.59">a</span>
+            <span class="w gap-s" data-t="7.67">couple</span>
+            <span class="w gap-s" data-t="7.95">of</span>
+          </div>
+          <div id="c2" class="line ital ocean" data-maxw="820" data-x="0" data-base="1460" style="font-size: 220px">
+            <span class="bl"></span>
+            <span class="w" data-t="8.31" data-hero="1" data-peak="1.06" data-origin="50% 85%">minutes.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (async () => {
+        const fontSpecs = ['900 100px "Inter Tight"', '800 100px "Inter Tight"', '700 100px "Inter Tight"', '500 40px "Inter"', '600 40px "Inter"'];
+        await Promise.all(fontSpecs.map((f) => document.fonts.load(f)));
+        await document.fonts.ready;
+        for (const f of fontSpecs) {
+          if (!document.fonts.check(f)) throw new Error("brand font missing: " + f);
+        }
+
+        const D = 8.5;
+        const F = 1 / 30;
+        const $ = (s) => document.querySelector(s);
+        const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+        const svgNS = "http://www.w3.org/2000/svg";
+
+        // ---------------- fit wide lines to the zone (Inter Tight is wider than the old serif) ----------------
+        const sizes = {};
+        for (const line of $$(".line")) {
+          line.style.left = "0px";
+          if (line.dataset.maxw) {
+            const mw = parseFloat(line.dataset.maxw);
+            const fs = parseFloat(getComputedStyle(line).fontSize);
+            if (line.offsetWidth > mw) line.style.fontSize = (fs * mw) / line.offsetWidth + "px";
+          }
+          sizes[line.id] = Math.round(parseFloat(getComputedStyle(line).fontSize));
+        }
+        window.__sizes = sizes;
+        // ---------------- layout: place each line by its baseline ----------------
+        for (const line of $$(".line")) {
+          const bl = line.querySelector(".bl");
+          line.style.top = "0px";
+          line.style.left = "0px";
+          const baseOff = bl.offsetTop;
+          line.dataset.bo = baseOff;
+          line.style.top = parseFloat(line.dataset.base) - baseOff + "px";
+          if (line.dataset.right) {
+            line.style.left = parseFloat(line.dataset.right) - line.offsetWidth + "px";
+          } else {
+            line.style.left = line.dataset.x + "px";
+          }
+        }
+        {
+          const c2 = $("#c2");
+          c2.style.left = 510 - c2.offsetWidth / 2 + "px";
+        }
+        // "all the" sits where "your" was, right after "at"
+        {
+          const r1 = $("#r1");
+          const at = $("#w-at");
+          const r1b = $("#r1b");
+          const lx = r1.offsetLeft + at.offsetLeft + at.offsetWidth + 0.24 * 84;
+          const mw = 936 - lx;
+          if (r1b.offsetWidth > mw) {
+            r1b.style.fontSize = (parseFloat(getComputedStyle(r1b).fontSize) * mw) / r1b.offsetWidth + "px";
+            r1b.style.top = parseFloat(r1b.dataset.base) - r1b.querySelector(".bl").offsetTop + "px";
+          }
+          r1b.style.left = lx + "px";
+          sizes.r1b = Math.round(parseFloat(getComputedStyle(r1b).fontSize));
+        }
+
+        // ---------------- card painting ----------------
+        const PAL = {
+          t: "rgba(228,222,217,0.88)", // title bars
+          b: "rgba(228,222,217,0.2)", // body bars
+          k: "rgba(228,222,217,0.08)", // blocks
+          a: "#2E9CCB", // accent
+          A: "linear-gradient(150deg, #5fbde3 0%, #2E9CCB 55%, #1F7EA8 100%)",
+          m: "rgba(228,222,217,0.42)", // mid bars
+          c: "rgba(46,156,203,0.55)", // code accent
+          d: "rgba(142,135,128,0.55)", // code muted
+        };
+        const SX = 490 / 440; // card art was laid out at 440 wide
+        const paint = (el, list) => {
+          for (const [x, y, w, h, r, k] of list) {
+            const d = document.createElement("div");
+            d.className = "r";
+            Object.assign(d.style, {
+              left: x * SX + "px",
+              top: y + "px",
+              width: w * SX + "px",
+              height: h + "px",
+              borderRadius: r + "px",
+              background: PAL[k],
+            });
+            el.appendChild(d);
+          }
+        };
+        const HEADER = [
+          [30, 30, 26, 26, 13, "a"],
+          [272, 38, 40, 10, 5, "b"],
+          [322, 38, 40, 10, 5, "b"],
+        ];
+        const BG = (el) => {
+          el.style.background = "linear-gradient(160deg, #123542 0%, #0D2731 55%, #0a2029 100%)";
+        };
+        // UI layer: the app as you see it
+        paint($("#ly-ui"), [
+          ...HEADER,
+          [372, 32, 40, 22, 11, "k"],
+          [30, 92, 320, 34, 10, "t"],
+          [30, 138, 214, 34, 10, "t"],
+          [30, 192, 262, 10, 5, "b"],
+          [30, 224, 150, 46, 23, "a"],
+          [30, 296, 252, 168, 18, "A"],
+          [204, 318, 56, 56, 28, "m"],
+          [296, 296, 114, 168, 18, "k"],
+          [314, 316, 22, 22, 11, "a"],
+          [314, 352, 70, 9, 4.5, "b"],
+          [30, 484, 182, 80, 16, "k"],
+          [228, 484, 182, 80, 16, "k"],
+          [50, 508, 110, 9, 4.5, "b"],
+          [50, 528, 76, 9, 4.5, "b"],
+          [248, 508, 110, 9, 4.5, "b"],
+          [248, 528, 76, 9, 4.5, "b"],
+        ]);
+        // code layer: what it's made of (mono bars, indented)
+        const codeEl = $("#ly-code");
+        BG(codeEl);
+        const code = [...HEADER];
+        const rows = [
+          [0, [[60, "c"], [120, "m"]]],
+          [1, [[44, "d"], [150, "m"]]],
+          [1, [[90, "c"], [70, "b"]]],
+          [2, [[120, "m"], [50, "c"]]],
+          [2, [[70, "d"], [130, "m"]]],
+          [1, [[40, "c"]]],
+          [0, [[30, "m"]]],
+          [0, [[80, "c"], [100, "m"]]],
+          [1, [[140, "m"], [60, "d"]]],
+          [1, [[56, "c"], [90, "m"], [40, "c"]]],
+          [0, [[30, "m"]]],
+        ];
+        rows.forEach(([ind, segs], i) => {
+          const y = 96 + i * 42;
+          code.push([30, y + 3, 16, 10, 5, "d"]); // gutter number
+          let x = 72 + ind * 34;
+          for (const [w, k] of segs) {
+            code.push([x, y, w, 16, 8, k]);
+            x += w + 12;
+          }
+        });
+        paint(codeEl, code);
+        // feature layer: what it does (rows with ✓)
+        const featRows = [96, 208, 320, 432];
+        const paintFeat = (el, list) => {
+          BG(el);
+          const L = [...HEADER];
+          for (const y of featRows) {
+            L.push([28, y, 384, 92, 18, "k"], [106, y + 28, 200, 14, 7, "t"], [106, y + 54, 130, 10, 5, "b"]);
+          }
+          paint(el, L);
+          return featRows.map((y) => {
+            const c = document.createElement("div");
+            c.className = "chk";
+            c.style.left = 54 + "px";
+            c.style.top = y + 20 + "px";
+            c.innerHTML =
+              '<svg viewBox="0 0 52 52" width="52" height="52"><path d="M15,27 L23,35 L38,19" fill="none" stroke="#0D2731" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+            el.appendChild(c);
+            return c;
+          });
+        };
+        const featChecks = paintFeat($("#ly-feat"), featRows);
+        paintFeat($("#cp-feat"), featRows);
+
+        // ---------------- pills ----------------
+        const pillApp = $("#pill-app");
+        const pillElse = $("#pill-else");
+        const PA = { x: 106, y: 710 }; // beat A: top-left corner of the app card
+        pillApp.style.left = PA.x + "px";
+        pillApp.style.top = PA.y + "px";
+        // beat B: app card centre x 240 → pill centred on it; copy centre x 790
+        const pillAppBx = 240 - pillApp.offsetWidth / 2;
+        pillElse.style.left = 790 - pillElse.offsetWidth / 2 + "px";
+        pillElse.style.top = 862 + "px";
+
+        // ---------------- scan beam geometry ----------------
+        const CARD = { x: 80, y: 740, w: 490, h: 590 };
+        const K = 1.15; // display scale of the card
+        const CC = { x: CARD.x + (K * CARD.w) / 2, y: CARD.y + (K * CARD.h) / 2 };
+        const AX = 770,
+          AY = 1082; // puck's eyes (beam apex, under the puck)
+        const EX = 638; // card's right edge (with the tilt)
+        const HW = 64; // half band height at the card edge
+        const conePts = (y) => `${AX},${AY} ${EX},${y - HW} ${EX},${y + HW}`;
+        const SY0 = 26,
+          SY1 = 566; // scan range in card coords
+
+        // ---------------- dotted path (beat B) ----------------
+        const LK = "M366,990 C428,862 602,862 664,990";
+        $("#lk-path").setAttribute("d", LK);
+        const lkMask = $("#lk-mask");
+        lkMask.setAttribute("d", LK);
+        const lkLen = lkMask.getTotalLength() + 20;
+        lkMask.style.strokeDasharray = `${lkLen} ${lkLen}`;
+
+        // ---------------- timer ring (beat B, around the docked puck) ----------------
+        const TC = { x: 515, y: 1040, r: 80 };
+        const tArc = $("#timer-arc");
+        const tTrack = $("#timer-track");
+        for (const c of [tArc, tTrack]) {
+          c.setAttribute("cx", TC.x);
+          c.setAttribute("cy", TC.y);
+          c.setAttribute("r", TC.r);
+        }
+        const circ = 2 * Math.PI * TC.r;
+        tArc.setAttribute("transform", `rotate(-90 ${TC.x} ${TC.y})`);
+        tArc.style.strokeDasharray = `${circ} ${circ}`;
+        tArc.style.strokeDashoffset = circ;
+        const ticks = $("#timer-ticks");
+        for (let i = 0; i < 12; i++) {
+          const a = (i * 30 * Math.PI) / 180;
+          const r0 = TC.r + 14,
+            r1 = TC.r + (i % 3 === 0 ? 26 : 21);
+          const l = document.createElementNS(svgNS, "line");
+          l.setAttribute("x1", TC.x + r0 * Math.sin(a));
+          l.setAttribute("y1", TC.y - r0 * Math.cos(a));
+          l.setAttribute("x2", TC.x + r1 * Math.sin(a));
+          l.setAttribute("y2", TC.y - r1 * Math.cos(a));
+          l.setAttribute("stroke", i % 3 === 0 ? "#8E8780" : "#B9B2AB");
+          l.setAttribute("stroke-width", i % 3 === 0 ? 5 : 4);
+          l.setAttribute("stroke-linecap", "round");
+          ticks.appendChild(l);
+        }
+        const crown = $("#timer-crown");
+        crown.setAttribute("x", TC.x - 18);
+        crown.setAttribute("y", TC.y - TC.r - 44);
+        crown.setAttribute("width", 36);
+        crown.setAttribute("height", 16);
+
+        // ================= timeline =================
+        const tl = gsap.timeline({ paused: true });
+
+        // background drift (continuous, linear on purpose) + slow camera push
+        tl.fromTo("#grid", { x: 0, y: 0 }, { x: -20, y: -12, duration: D, ease: "none" }, 0);
+        tl.fromTo("#cam", { scale: 1, transformOrigin: "540px 1000px" }, { scale: 1.014, duration: D, ease: "none" }, 0);
+
+        // ---------- word entrances (same recipes as v01_hook / v05_refine) ----------
+        const ZB = 1474;
+        for (const w of $$(".line .w")) {
+          const t = parseFloat(w.dataset.t);
+          const line = w.closest(".line");
+          const fs = parseFloat(getComputedStyle(w).fontSize);
+          const bottom = parseFloat(line.dataset.base) + 0.26 * fs;
+          const R = (r) => (bottom + r > ZB ? -0.7 * r : r);
+          if (w.dataset.hero) {
+            const s = Math.max(0, t - 0.2);
+            const peak = parseFloat(w.dataset.peak || "1.08");
+            gsap.set(w, { transformOrigin: w.dataset.origin || "50% 80%" });
+            tl.fromTo(
+              w,
+              { opacity: 0, y: R(90), scale: 0.55, rotation: -7, filter: "blur(10px)" },
+              { opacity: 1, y: -8, scale: peak, rotation: 1.5, filter: "blur(0px)", duration: 0.2, ease: "power3.out" },
+              s,
+            );
+            tl.to(w, { y: 0, scale: 1, rotation: 0, duration: 0.32, ease: "back.out(1.6)" }, s + 0.2);
+          } else if (w.dataset.pop) {
+            const s = Math.max(0, t - 0.16);
+            gsap.set(w, { transformOrigin: w.dataset.origin || "50% 85%" });
+            tl.fromTo(
+              w,
+              { opacity: 0, y: R(60), scale: 0.72, rotation: -5, filter: "blur(6px)" },
+              { opacity: 1, y: -5, scale: 1.06, rotation: 1, filter: "blur(0px)", duration: 0.16, ease: "power3.out" },
+              s,
+            );
+            tl.to(w, { y: 0, scale: 1, rotation: 0, duration: 0.28, ease: "back.out(1.5)" }, s + 0.16);
+          } else {
+            const s = Math.max(0, t - 0.13);
+            tl.fromTo(
+              w,
+              { opacity: 0, y: R(50), filter: "blur(6px)" },
+              { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.36, ease: "power3.out" },
+              s,
+            );
+          }
+        }
+        const exitUp = (sel, t, dy = -46) =>
+          tl.to(sel, { y: dy, opacity: 0, filter: "blur(7px)", duration: 0.2, ease: "power2.in" }, t);
+        const exitOut = (sel, t) =>
+          tl.to(sel, { scale: 0.9, opacity: 0, filter: "blur(9px)", duration: 0.18, ease: "power2.in" }, t);
+
+        // ================= BEAT A =================
+        // ---- your app card: rises in with a soft 3D settle (already 30% visible on f0) ----
+        const app = "#app-pos";
+        gsap.set("#app", { transformPerspective: 1600, transformOrigin: "50% 50%" });
+        gsap.set(app, { transformOrigin: "50% 50%" });
+        tl.fromTo(app, { opacity: 0.3 }, { opacity: 1, duration: 0.12, ease: "power1.out" }, 0);
+        tl.fromTo(app, { y: 50 }, { y: 0, duration: 0.55, ease: "power3.out", immediateRender: false }, 0);
+        tl.fromTo(app, { scale: 0.86 }, { scale: 1, duration: 0.5, ease: "back.out(1.4)", immediateRender: false }, 0);
+        tl.fromTo("#app", { rotationX: 26 }, { rotationX: 4, duration: 0.62, ease: "back.out(1.8)", immediateRender: false }, 0);
+        tl.fromTo("#app", { rotationY: -14 }, { rotationY: 7, duration: 0.6, ease: "power3.out", immediateRender: false }, 0);
+        tl.to("#app", { rotationY: 5, rotationX: 3, duration: 4.3, ease: "sine.inOut" }, 0.62);
+        // label pill pops onto its corner
+        gsap.set(pillApp, { transformOrigin: "20% 100%" });
+        tl.fromTo(pillApp, { opacity: 0, scale: 0.5, y: 18 }, { opacity: 1, scale: 1, y: 0, duration: 0.34, ease: "back.out(2.2)" }, 0.32);
+        // gentle float of the card while it's the subject
+        tl.fromTo("#app-pos .app-float", { y: 0 }, { y: -4, duration: 1.2, ease: "sine.inOut", yoyo: true, repeat: 3 }, 0.6);
+
+        // ---- agent puck: pops in on "AI agent", eyes light on "agent" ----
+        gsap.set("#puck", { transformOrigin: "50% 50%" });
+        tl.fromTo("#puck", { opacity: 0 }, { opacity: 1, duration: 0.08, ease: "none" }, 0.62);
+        tl.fromTo("#puck", { scale: 0.3, y: 60, rotation: -30 }, { scale: 1.08, y: -6, rotation: 4, duration: 0.3, ease: "power3.out", immediateRender: false }, 0.62);
+        tl.to("#puck", { scale: 1, y: 0, rotation: 0, duration: 0.34, ease: "back.out(2)" }, 0.92);
+        tl.to(".eye", { opacity: 1, boxShadow: "0 0 14px 4px rgba(46,156,203,0.8)", duration: 0.1, ease: "power2.out" }, 1.06);
+        tl.fromTo("#puck-glow", { opacity: 0, scale: 0.6 }, { opacity: 0.8, scale: 1, duration: 0.3, ease: "power3.out" }, 1.06);
+        tl.to("#puck-glow", { opacity: 0.35, duration: 0.5, ease: "sine.inOut" }, 1.36);
+        gsap.set(".eye", { transformOrigin: "50% 50%" });
+        tl.to(".eye", { scaleY: 0.12, duration: 0.05, ease: "power2.in" }, 1.3);
+        tl.to(".eye", { scaleY: 1, duration: 0.08, ease: "power2.out" }, 1.35);
+        // eyes turn to the card on "look"
+        tl.to("#eyes", { x: -10, duration: 0.22, ease: "back.out(2)" }, 1.48);
+        tl.fromTo("#puck-float", { y: 0 }, { y: -6, duration: 1.0, ease: "sine.inOut", yoyo: true, repeat: 3 }, 1.0);
+
+        // ---- phrase 0 exits before "app" (in place, quick blur) ----
+        exitUp("#p0a", 1.03, -24);
+        // "AI agent" recedes while "can look at your" builds above it, then clears before "app"
+        tl.to("#p0b", { opacity: 0.32, filter: "blur(2px)", scale: 0.97, duration: 0.24, ease: "power2.out" }, 1.24);
+        exitOut("#p0b", 1.8);
+
+        // ---- the three LOOKS ----
+        gsap.set("#app-bump", { transformOrigin: "50% 50%" });
+        const look = (t0, dur, layerSel) => {
+          // puck leans in (anticipation back, then forward)
+          tl.to("#puck-bob", { x: 8, rotation: 4, duration: 0.1, ease: "power2.out" }, t0 - 0.14);
+          tl.to("#puck-bob", { x: -12, rotation: -6, duration: 0.2, ease: "power3.out" }, t0 - 0.04);
+          tl.to("#puck-bob", { x: 0, rotation: 0, duration: 0.3, ease: "back.out(1.8)" }, t0 + dur);
+          tl.to("#puck-glow", { opacity: 1, scale: 1.08, duration: 0.14, ease: "power2.out" }, t0 - 0.04);
+          tl.to("#puck-glow", { opacity: 0.4, scale: 1, duration: 0.3, ease: "sine.inOut" }, t0 + dur);
+          // beam on → sweep top to bottom → off
+          tl.fromTo("#beam", { opacity: 0 }, { opacity: 1, duration: 0.08, ease: "power1.out" }, t0 - 0.02);
+          tl.fromTo("#cone", { attr: { points: conePts(CARD.y + K * SY0) } }, { attr: { points: conePts(CARD.y + K * SY1) }, duration: dur, ease: "sine.inOut" }, t0);
+          for (const [id, s] of [["#edge-a", -1], ["#edge-b", 1]]) {
+            tl.fromTo(
+              id,
+              { attr: { x1: AX, y1: AY, x2: EX, y2: CARD.y + K * SY0 + s * HW } },
+              { attr: { x1: AX, y1: AY, x2: EX, y2: CARD.y + K * SY1 + s * HW }, duration: dur, ease: "sine.inOut" },
+              t0,
+            );
+          }
+          tl.to("#beam", { opacity: 0, duration: 0.12, ease: "power1.in" }, t0 + dur);
+          tl.fromTo("#scan", { opacity: 0 }, { opacity: 1, duration: 0.06, ease: "none" }, t0 - 0.02);
+          tl.fromTo("#scan", { y: SY0 }, { y: SY1, duration: dur, ease: "sine.inOut" }, t0);
+          tl.to("#scan", { opacity: 0, duration: 0.12, ease: "power1.in" }, t0 + dur);
+          if (layerSel) {
+            tl.fromTo(
+              layerSel,
+              { clipPath: `inset(0px 0px ${CARD.h - SY0}px 0px)` },
+              { clipPath: `inset(0px 0px ${CARD.h - SY1}px 0px)`, duration: dur, ease: "sine.inOut" },
+              t0,
+            );
+            tl.set(layerSel, { clipPath: "inset(0px 0px 0px 0px)" }, t0 + dur);
+          }
+        };
+        // hide later layers until their look
+        gsap.set(["#ly-code", "#ly-feat"], { clipPath: `inset(0px 0px ${CARD.h}px 0px)` });
+        tl.set(["#ly-code", "#ly-feat"], { clipPath: `inset(0px 0px ${CARD.h}px 0px)` }, 0);
+
+        // LOOK 1 — "app": the whole card (glow + wash + bump)
+        look(1.94, 0.5, null);
+        tl.fromTo("#app-glow", { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.2, ease: "power2.out" }, 2.08);
+        tl.to("#app-glow", { opacity: 0.0, duration: 0.6, ease: "power1.inOut" }, 2.4);
+        tl.fromTo("#app-wash", { opacity: 0 }, { opacity: 1, duration: 0.14, ease: "power2.out" }, 2.12);
+        tl.to("#app-wash", { opacity: 0, duration: 0.4, ease: "power1.inOut" }, 2.3);
+        tl.to("#app-bump", { scale: 1.035, duration: 0.14, ease: "power2.out" }, 2.12);
+        tl.to("#app-bump", { scale: 1, duration: 0.34, ease: "back.out(2)" }, 2.26);
+
+        // "can look at your" — repeated words hop on each repeat
+        const hop = (sel, t) => {
+          tl.to(sel, { y: -16, scale: 1.05, duration: 0.09, ease: "power2.out" }, t - 0.1);
+          tl.to(sel, { y: 0, scale: 1, duration: 0.26, ease: "back.out(2.2)" }, t - 0.01);
+        };
+        for (const id of ["#w-can", "#w-look", "#w-at", "#w-your"]) gsap.set(id, { transformOrigin: "50% 90%" });
+        hop("#w-can", 2.4);
+        hop("#w-look", 2.56);
+        hop("#w-at", 2.68);
+        hop("#w-your", 2.86);
+        hop("#w-can", 3.55);
+        hop("#w-look", 3.71);
+        hop("#w-at", 3.91);
+        // "your" makes room for "all the"
+        tl.to("#w-your", { y: -40, opacity: 0, filter: "blur(7px)", duration: 0.16, ease: "power2.in" }, 3.86);
+
+        // hero swaps: app → software → features
+        exitUp("#h-app", 2.92, -40);
+        exitUp("#h-soft", 4.2, -40);
+
+        // LOOK 2 — "software": code layer wipes in under the scanline
+        look(3.03, 0.5, "#ly-code");
+        tl.to("#app-bump", { scale: 1.02, duration: 0.12, ease: "power2.out" }, 3.22);
+        tl.to("#app-bump", { scale: 1, duration: 0.3, ease: "back.out(2)" }, 3.34);
+
+        // LOOK 3 — "all the features": feature rows with ✓
+        const L3 = 4.36,
+          L3D = 0.5;
+        look(L3, L3D, "#ly-feat");
+        const inv = (p) => Math.acos(1 - 2 * p) / Math.PI; // inverse of sine.inOut
+        featChecks.forEach((c, i) => {
+          const yc = featRows[i] + 46;
+          const tRow = L3 + L3D * inv(Math.min(1, Math.max(0, (yc - SY0) / (SY1 - SY0))));
+          gsap.set(c, { transformOrigin: "50% 50%" });
+          tl.fromTo(c, { scale: 0.2, rotation: -40 }, { scale: 1, rotation: 0, duration: 0.3, ease: "back.out(2.4)" }, tRow - 0.02);
+          const p = c.querySelector("path");
+          const len = p.getTotalLength() + 2;
+          p.style.strokeDasharray = `${len} ${len}`;
+          tl.fromTo(p, { strokeDashoffset: len }, { strokeDashoffset: 0, duration: 0.18, ease: "power2.out" }, tRow + 0.04);
+        });
+        tl.to("#app-bump", { scale: 1.03, duration: 0.12, ease: "power2.out" }, 4.56);
+        tl.to("#app-bump", { scale: 1, duration: 0.3, ease: "back.out(2)" }, 4.68);
+        tl.fromTo("#app-glow", { opacity: 0 }, { opacity: 0.8, duration: 0.16, ease: "power2.out", immediateRender: false }, 4.56);
+        tl.to("#app-glow", { opacity: 0, duration: 0.4, ease: "power1.inOut" }, 4.74);
+
+        // ================= TRANSITION → BEAT B (4.9 – 5.35) =================
+        // beat A type clears, bottom-up
+        exitUp("#h-feat", 4.94);
+        exitUp("#r1b", 4.94 + 2 * F, -18);
+        exitUp("#r1", 4.94 + 3 * F, -18);
+        // eyes look forward again
+        tl.to("#eyes", { x: 0, duration: 0.2, ease: "power2.inOut" }, 4.94);
+
+        // app card compacts to the left (arc: x leads, y lags)
+        const AB = { x: 240 - CC.x, y: 1040 - CC.y, s: 0.42 };
+        tl.to(app, { x: AB.x, duration: 0.42, ease: "power3.inOut" }, 4.92);
+        tl.to(app, { y: AB.y, duration: 0.42, ease: "power2.inOut" }, 4.96);
+        tl.to(app, { scale: AB.s, duration: 0.42, ease: "power3.inOut" }, 4.92);
+        tl.to(pillApp, { x: pillAppBx - PA.x, y: 862 - PA.y, duration: 0.42, ease: "power3.inOut" }, 4.96);
+
+        // puck docks between the two cards (shrinks, arcs over)
+        const PB = { x: TC.x - (670 + 126.5), y: TC.y - (953 + 126.5), s: 0.5 };
+        gsap.set("#puck-pos", { transformOrigin: "50% 50%" });
+        tl.to("#puck-pos", { x: PB.x, duration: 0.44, ease: "power3.inOut" }, 4.94);
+        tl.to("#puck-pos", { y: PB.y - 40, duration: 0.22, ease: "power2.out" }, 4.94);
+        tl.to("#puck-pos", { y: PB.y, duration: 0.22, ease: "power2.in" }, 5.16);
+        tl.to("#puck-pos", { scale: PB.s, duration: 0.44, ease: "power3.inOut" }, 4.94);
+
+        // speaker card rises into the upper area with the v01 3D settle
+        gsap.set("#card", { transformPerspective: 1600, transformOrigin: "50% 50%" });
+        tl.fromTo("#card", { opacity: 0 }, { opacity: 1, duration: 0.14, ease: "power1.out" }, 4.98);
+        tl.fromTo("#card", { y: 90 }, { y: 0, duration: 0.5, ease: "power3.out", immediateRender: false }, 4.98);
+        tl.fromTo("#card", { scale: 0.86 }, { scale: 1, duration: 0.48, ease: "back.out(1.4)", immediateRender: false }, 4.98);
+        tl.fromTo("#card", { rotationX: 28 }, { rotationX: 5, duration: 0.6, ease: "back.out(1.8)", immediateRender: false }, 4.98);
+        tl.fromTo("#card", { rotationY: 20 }, { rotationY: -8, duration: 0.55, ease: "power3.out", immediateRender: false }, 4.98);
+        tl.to("#card", { rotationY: -5.5, rotationX: 3.5, duration: D - 5.6, ease: "sine.inOut" }, 5.6);
+        tl.fromTo("#vid-wrap", { scale: 1.16 }, { scale: 1, duration: 0.7, ease: "power3.out" }, 4.98);
+        tl.to("#vid-wrap", { scale: 1.035, duration: D - 5.68, ease: "none" }, 5.68);
+        tl.fromTo("#sheen", { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "power1.out" }, 5.06);
+        tl.fromTo("#sheen", { backgroundPosition: "100% 0" }, { backgroundPosition: "0% 0", duration: 0.7, ease: "power2.inOut", immediateRender: false }, 5.06);
+        tl.to("#sheen", { opacity: 0, duration: 0.25, ease: "power1.in" }, 5.55);
+        tl.fromTo("#card-float", { y: 0 }, { y: -5, duration: 1.0, ease: "sine.inOut", yoyo: true, repeat: 2 }, 5.5);
+
+        // ================= BEAT B — build a copy =================
+        // dotted path draws from the original toward the destination
+        tl.fromTo(lkMask, { strokeDashoffset: lkLen }, { strokeDashoffset: 0, duration: 0.4, ease: "power2.inOut" }, 5.22);
+        tl.fromTo("#lk-path", { attr: { "stroke-dashoffset": 0 } }, { attr: { "stroke-dashoffset": -84 }, duration: D - 5.22, ease: "none" }, 5.22);
+
+        // the copy: appears on top of the original (B pose), light + translucent, peels off
+        const cp = "#copy-pos";
+        gsap.set(cp, { transformOrigin: "50% 50%", x: AB.x, y: AB.y, scale: AB.s, opacity: 0 });
+        gsap.set("#copy", { transformPerspective: 1600, transformOrigin: "50% 50%", rotationY: 5, rotationX: 3 });
+        gsap.set("#copy-bump", { transformOrigin: "50% 100%" });
+        tl.set(cp, { x: AB.x, y: AB.y, scale: AB.s, opacity: 0 }, 0);
+        tl.fromTo(cp, { opacity: 0 }, { opacity: 0.55, duration: 0.08, ease: "none" }, 5.2);
+        tl.fromTo("#copy-light", { opacity: 0.9 }, { opacity: 0.9, duration: 0.01 }, 5.2);
+        // peel: lifts off the top-right corner
+        tl.to(cp, { x: AB.x + 26, y: AB.y - 22, duration: 0.16, ease: "power2.out" }, 5.22);
+        tl.to("#copy", { rotation: 6, duration: 0.16, ease: "power2.out" }, 5.22);
+        tl.to(cp, { scale: AB.s * 1.05, duration: 0.16, ease: "power2.out" }, 5.22);
+        // the original reacts (tiny dip as the copy leaves)
+        tl.to("#app-bump", { y: 6, duration: 0.1, ease: "power2.out" }, 5.3);
+        tl.to("#app-bump", { y: 0, duration: 0.3, ease: "back.out(2)" }, 5.4);
+        // ride the arc to the destination (x leads, y rises then falls), solidifying on the way
+        const DX = 790 - CC.x;
+        tl.to(cp, { x: DX, duration: 0.46, ease: "power2.inOut" }, 5.38);
+        tl.to(cp, { y: AB.y - 40, duration: 0.22, ease: "power2.out" }, 5.38);
+        tl.to(cp, { y: AB.y, duration: 0.24, ease: "power2.in" }, 5.6);
+        tl.to(cp, { scale: AB.s, duration: 0.46, ease: "sine.inOut" }, 5.38);
+        tl.to("#copy", { rotation: -5, rotationY: -6, duration: 0.3, ease: "sine.inOut" }, 5.38);
+        tl.to("#copy", { rotation: 0, duration: 0.36, ease: "back.out(2)" }, 5.84);
+        tl.to(cp, { opacity: 1, duration: 0.4, ease: "power1.in" }, 5.44);
+        tl.to("#copy-light", { opacity: 0, duration: 0.42, ease: "power2.in" }, 5.46);
+        // contact on "else": squash + settle
+        tl.to("#copy-bump", { scaleX: 1.04, scaleY: 0.95, duration: 2 * F, ease: "power2.out" }, 5.84);
+        tl.to("#copy-bump", { scaleX: 1, scaleY: 1, duration: 0.3, ease: "back.out(2.2)" }, 5.84 + 2 * F);
+
+        // "someone else" pill pops at the destination (contact on "someone")
+        gsap.set(pillElse, { transformOrigin: "50% 100%" });
+        tl.fromTo(pillElse, { opacity: 0, scale: 0.5, y: 20 }, { opacity: 1, scale: 1, y: 0, duration: 0.34, ease: "back.out(2.2)" }, 5.46);
+        tl.to(pillElse, { y: -8, duration: 0.08, ease: "power2.out" }, 5.84);
+        tl.to(pillElse, { y: 0, duration: 0.3, ease: "back.out(2.4)" }, 5.92);
+
+        // the puck builds it: eyes flash + bob while the copy passes over
+        tl.to("#puck-bob", { y: -14, duration: 0.1, ease: "power2.out" }, 5.4);
+        tl.to("#puck-bob", { y: 0, duration: 0.34, ease: "back.out(2.2)" }, 5.5);
+        tl.to("#puck-glow", { opacity: 1, duration: 0.12, ease: "power2.out" }, 5.4);
+        tl.to("#puck-glow", { opacity: 0.4, duration: 0.5, ease: "sine.inOut" }, 5.6);
+        tl.fromTo("#puck-float", { y: 0 }, { y: 5, duration: 0.9, ease: "sine.inOut", yoyo: true, repeat: 2, immediateRender: false }, 5.6);
+
+        // "version": the copy catches the light
+        tl.fromTo("#copy-sheen", { opacity: 0 }, { opacity: 1, duration: 0.1, ease: "power1.out" }, 6.14);
+        tl.fromTo("#copy-sheen", { backgroundPosition: "100% 0" }, { backgroundPosition: "0% 0", duration: 0.6, ease: "power2.inOut", immediateRender: false }, 6.14);
+        tl.to("#copy-sheen", { opacity: 0, duration: 0.2, ease: "power1.in" }, 6.6);
+        tl.to("#copy-bump", { y: -12, duration: 0.14, ease: "power2.out" }, 6.18);
+        tl.to("#copy-bump", { y: 0, duration: 0.32, ease: "back.out(2)" }, 6.32);
+        // both cards float through the hold (phase offset)
+        tl.fromTo("#app-pos .app-float", { y: 0 }, { y: 5, duration: 0.9, ease: "sine.inOut", yoyo: true, repeat: 2, immediateRender: false }, 5.5);
+        tl.fromTo("#copy-float", { y: 0 }, { y: -5, duration: 0.85, ease: "sine.inOut", yoyo: true, repeat: 2 }, 6.0);
+        // blink in the hold
+        tl.to(".eye", { scaleY: 0.12, duration: 0.05, ease: "power2.in" }, 6.9);
+        tl.to(".eye", { scaleY: 1, duration: 0.08, ease: "power2.out" }, 6.95);
+
+        // ================= "in a couple of minutes" — timer =================
+        exitUp("#b2", 7.32);
+        exitUp("#b1", 7.32 + 2 * F);
+        gsap.set("#timer-g", { transformOrigin: `${TC.x}px ${TC.y}px` });
+        tl.fromTo("#timer-g", { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 0.3, ease: "back.out(1.8)" }, 7.4);
+        // the cards recede a touch so the timer is the focal point
+        tl.to(["#app-pos", "#copy-pos"], { opacity: 0.72, duration: 0.3, ease: "power1.out" }, 7.42);
+        tl.to("#links", { opacity: 0.35, duration: 0.3, ease: "power1.out" }, 7.42);
+        // the arc sweeps quickly (couple → minutes)
+        tl.fromTo(tArc, { strokeDashoffset: circ }, { strokeDashoffset: 0, duration: 0.66, ease: "power2.inOut" }, 7.6);
+        tl.fromTo("#puck-ring", { opacity: 0 }, { opacity: 1, duration: 0.1, ease: "power2.out" }, 8.24);
+        // full circle on "minutes": ring pulse, crown press, puck pops
+        tl.to("#timer-g", { scale: 1.08, duration: 0.08, ease: "power2.out" }, 8.24);
+        tl.to("#timer-g", { scale: 1, duration: 0.3, ease: "back.out(2.4)" }, 8.32);
+        tl.to("#timer-crown", { attr: { y: TC.y - TC.r - 38 }, duration: 0.06, ease: "power2.in" }, 8.2);
+        tl.to("#timer-crown", { attr: { y: TC.y - TC.r - 44 }, duration: 0.2, ease: "back.out(2)" }, 8.27);
+        tl.to("#puck", { scale: 1.08, duration: 0.08, ease: "power2.out" }, 8.26);
+        tl.to("#puck", { scale: 1, duration: 0.2, ease: "back.out(2)" }, 8.34);
+        tl.to(["#app-pos", "#copy-pos"], { opacity: 1, duration: 0.16, ease: "power1.out" }, 8.26);
+        // punch on the payoff word
+        // (no camera punch here: the tall speaker card sits at the top edge of the zone; the payoff is the word's own overshoot + timer pulse)
+
+        window.__timelines["main"] = tl;
+        if (window.__hfForceTimelineRebind) window.__hfForceTimelineRebind();
+      })();
+    </script>
+  </body>
+</html>

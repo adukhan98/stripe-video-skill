@@ -1,0 +1,137 @@
+[
+ {
+  "t": 0.01,
+  "sfx": "pop",
+  "what": "The rises",
+  "gain_db": -6
+ },
+ {
+  "t": 0.12,
+  "sfx": "scribble",
+  "dur": 0.26,
+  "what": "pencil y-axis"
+ },
+ {
+  "t": 0.27,
+  "sfx": "impact",
+  "what": "gap lands (hero 1)"
+ },
+ {
+  "t": 0.3,
+  "sfx": "scribble",
+  "dur": 0.3,
+  "what": "pencil x-axis"
+ },
+ {
+  "t": 0.62,
+  "sfx": "scribble",
+  "dur": 0.98,
+  "what": "red curve draws and bends up to vertical"
+ },
+ {
+  "t": 1.0,
+  "sfx": "scribble",
+  "dur": 0.78,
+  "what": "note 'what AI can do' written"
+ },
+ {
+  "t": 1.6,
+  "sfx": "riser",
+  "what": "red curve goes vertical (tip arrives on 'do')"
+ },
+ {
+  "t": 1.62,
+  "sfx": "scribble",
+  "dur": 0.14,
+  "what": "three zings off the tip"
+ },
+ {
+  "t": 1.72,
+  "sfx": "pop",
+  "what": "dust burst off the tip",
+  "gain_db": -4
+ },
+ {
+  "t": 1.84,
+  "sfx": "scribble",
+  "dur": 0.7,
+  "what": "flat ink line 'what people believe'"
+ },
+ {
+  "t": 2.08,
+  "sfx": "scribble",
+  "dur": 0.86,
+  "what": "note 'what people believe' written"
+ },
+ {
+  "t": 2.55,
+  "sfx": "tick",
+  "what": "flat ink line ends"
+ },
+ {
+  "t": 2.8,
+  "sfx": "scribble",
+  "dur": 0.34,
+  "what": "red curly bracket measures the gap"
+ },
+ {
+  "t": 3.06,
+  "sfx": "scribble",
+  "dur": 0.42,
+  "what": "red curve keeps climbing (bracket stretches)"
+ },
+ {
+  "t": 3.1,
+  "sfx": "ping",
+  "what": "bracket closes on the gap"
+ },
+ {
+  "t": 3.22,
+  "sfx": "whoosh",
+  "what": "chart glides up",
+  "gain_db": -3
+ },
+ {
+  "t": 3.63,
+  "sfx": "pop",
+  "what": "greatest lands"
+ },
+ {
+  "t": 4.11,
+  "sfx": "impact",
+  "what": "opportunity lands in the gap (hero 2, punch)"
+ },
+ {
+  "t": 4.24,
+  "sfx": "tick",
+  "what": "bracket nib flicks at the word"
+ },
+ {
+  "t": 4.42,
+  "sfx": "whoosh",
+  "what": "speaker card rises from the bottom corner",
+  "gain_db": -4
+ },
+ {
+  "t": 4.75,
+  "sfx": "pop",
+  "what": "in",
+  "gain_db": -6
+ },
+ {
+  "t": 4.95,
+  "sfx": "tick",
+  "what": "our"
+ },
+ {
+  "t": 5.24,
+  "sfx": "scribble",
+  "dur": 0.2,
+  "what": "red underline under 'hands'"
+ },
+ {
+  "t": 5.33,
+  "sfx": "pop",
+  "what": "hands lands"
+ }
+]

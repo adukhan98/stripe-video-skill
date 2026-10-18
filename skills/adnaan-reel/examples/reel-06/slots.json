@@ -1,0 +1,172 @@
+[
+ {
+  "id": "v01_hook",
+  "start": 0.0,
+  "duration": 4.6,
+  "layout": "scene",
+  "type": "hook",
+  "bespoke": false,
+  "brief": "FIRST read animations/SHARED.md fully \u2014 especially the reel-06 Project specifics (MARKER LAYER, THE FUNNEL, READABILITY, Words on screen) \u2014 and look at the style frames it lists, plus ~/Desktop/reels/reel-06/edit/verify/style_test_v2_red.png (the approved marker look). FULL-SCREEN OPAQUE scene \u2014 HOOK.\nSpoken: 'If you're watching this video or you have built anything with AI, you are probably in the top 0.2%'\nTEXT HOOK (user-approved, the one exception to words.txt): 'you're in the top 0.2%' \u2014 FULLY READABLE ON FRAME 0 (thumbnail), whole scene, top of the zone (y ~295\u2013560): e.g. 'you're in the top' ~96 ink on line 1, '0.2%' ~200 RED on line 2 with a red marker LOOP already drawn around it on frame 0 (M.circle with at=0, boiling). Continuous life (1 % breathe), no entrance.\nSPEAKER: PORTRAIT hero card (~740x820) below the hook (y ~600\u20131420), ~90 % settled on frame 0, settled by 0.3 s. data-face 0.42.\nKINETIC: 'built anything' ~120 ink lands on 'built' (1.54)/'anything' (1.92), 'with AI' with 'AI' ~170 RED on 'AI' (2.34) \u2014 land them on paper/strip in the lower part of the card, collage-staggered, they blur out by ~3.2. Then the HERO: 'top 0.2%' \u2014 'top' ~110 ink (3.50) and '0.2%' ~230 RED stamp-in on '0.2%' (3.76) low on the card (paper strip/glow), 1.45\u21920.95\u21921 stamp + 1 % punch = IMPACT. On the stamp: a black-marker DOUBLE underline scribbles under it (M.underline double) and 5\u20137 tiny red marker 'sparkle ticks' (short M.line dashes radiating) flick out around it, then boil. Secondary: a small red marker arrow draws from the hook's '0.2%' down toward the kinetic '0.2%' at ~3.6 (connecting the two). Keep the hook readable throughout, no collisions.\nWord times are scene-local (exact ones in words.txt; contact frame 0.13\u20130.2 s before the word). Everything inside x 60\u2013960 / y 285\u20131480 (measure). Write beats.json AND marker_beats.json. Hold alive to the cut.",
+  "assets": []
+ },
+ {
+  "id": "v02_world",
+  "start": 4.6,
+  "duration": 3.967,
+  "layout": "scene",
+  "type": "fullscreen",
+  "bespoke": false,
+  "brief": "FIRST read animations/SHARED.md fully \u2014 especially the reel-06 Project specifics (MARKER LAYER, THE FUNNEL, READABILITY, Words on screen) \u2014 and look at the style frames it lists, plus ~/Desktop/reels/reel-06/edit/verify/style_test_v2_red.png (the approved marker look). FULL-SCREEN OPAQUE scene \u2014 FULLSCREEN \u2014 him edge to edge, slow push 1.0\u21921.03.\nSpoken: 'people in the entire world. And yet you still haven't seen the real power of AI.'\nWORDS low (y \u2265 1250, inside the zone, on a .paper-strip: the polo is dark green): 'the entire world' ~110 ink on 'entire' (0.78)/'world' (1.18), blur-out by ~1.5. Then 'haven't seen' ~110 ink on 'haven't' (2.40)/'seen' (2.66) and the hero 'real power' ~200 RED on 'real' (3.08)/'power' (3.34) with overshoot + 1 % punch.\nMARKER OVER THE FOOTAGE (the one small object): on 'power' (3.34) a RED marker loop draws around 'real power' on the strip (not over his face), and a quick double underline under 'haven't seen' on 'still' (2.22). Face fully clear. data-face 0.42.\nWord times are scene-local (exact ones in words.txt; contact frame 0.13\u20130.2 s before the word). Everything inside x 60\u2013960 / y 285\u20131480 (measure). Write beats.json AND marker_beats.json. Hold alive to the cut.",
+  "assets": []
+ },
+ {
+  "id": "v03_karpathy",
+  "start": 8.567,
+  "duration": 6.8,
+  "layout": "scene",
+  "type": "chapter_page",
+  "bespoke": true,
+  "brief": "FIRST read animations/SHARED.md fully \u2014 especially the reel-06 Project specifics (MARKER LAYER, THE FUNNEL, READABILITY, Words on screen) \u2014 and look at the style frames it lists, plus ~/Desktop/reels/reel-06/edit/verify/style_test_v2_red.png (the approved marker look). FULL-SCREEN OPAQUE scene \u2014 CHAPTER + REAL POST (bespoke).\nSpoken: 'Andrej Karpathy, who is the co-founder of OpenAI now at Anthropic, posted a breakdown of how differently people are using AI across the spectrum.'\nBEAT A \u2014 WHO (0\u20133.0): his REAL avatar hf/assets/karpathy_avatar.jpg as a POLAROID (white frame, ~360 wide, tilted -5\u00b0) pressed onto the paper with M.tape at its top on 'Andrej' (0.15) \u2014 polaroid arcs in, overshoots, tape pops on. 'Andrej Karpathy' Inter Tight 900 ~120 ink beside/below it on 'Andrej'/'Karpathy' (0.15/0.39). On 'co-founder' (1.21) 'co-founder of' ~80 ink + an OpenAI chip (hf/assets/openai.png <img> in a white rounded chip + 'OpenAI' Inter 600) pops on 'OpenAI' (1.77). On 'now at' (2.19) a RED marker ARROW draws (shaft then head) from the OpenAI chip to an Anthropic chip (hf/assets/anthropic.png + 'Anthropic') that swings in and lands on 'Anthropic' (2.49) \u2014 the chip squash-lands. Small speaker card (\u2265420 wide) in a corner from ~0.1.\nBEAT B \u2014 THE POST (3.0\u20136.8): everything from A recedes/compacts upward (polaroid shrinks to a corner). On 'posted' (3.13) the REAL post header strip hf/assets/post_header.png + hf/assets/post_funnel.png stack as ONE white card (\u2265830 px wide so the text is readable) slides up and is taped on (M.tape on 2 corners), an X logo chip (hf/assets/x.png) pops on its corner. 'breakdown' ~150 ink lands (3.69). Then hf/assets/post_stats.png slides in under the card as a stats strip and the REAL numbers are emphasised: on 'differently' (4.73) a black marker underlines '6.2m Views', and kinetic '6.2m views' ~110 RED rolls up (odometer 0.0\u21926.2) beside it. On 'across the spectrum' (6.11\u20136.61) a hand-drawn spectrum line (M.line, long gentle wave) draws left\u2192right under everything with 4 small tick marks \u2014 sets up the funnel. Keep post text \u2265 0.85 scale.\nWord times are scene-local (exact ones in words.txt; contact frame 0.13\u20130.2 s before the word). Everything inside x 60\u2013960 / y 285\u20131480 (measure). Write beats.json AND marker_beats.json. Hold alive to the cut.",
+  "assets": [
+   "captures/karpathy_avatar.jpg",
+   "captures/post_header.png",
+   "captures/post_funnel.png",
+   "captures/post_stats.png",
+   "logos/x.png",
+   "logos/openai.png",
+   "logos/anthropic.png"
+  ]
+ },
+ {
+  "id": "v04_funnel",
+  "start": 15.367,
+  "duration": 9.266,
+  "layout": "scene",
+  "type": "blank",
+  "bespoke": true,
+  "brief": "FIRST read animations/SHARED.md fully \u2014 especially the reel-06 Project specifics (MARKER LAYER, THE FUNNEL, READABILITY, Words on screen) \u2014 and look at the style frames it lists, plus ~/Desktop/reels/reel-06/edit/verify/style_test_v2_red.png (the approved marker look). FULL-SCREEN OPAQUE scene \u2014 THE FUNNEL IS DRAWN (bespoke hero scene of the reel).\nSpoken: 'And he describes it as a funnel. The biggest chunk is about 75% people, which makes up to about 6 billion people in the entire world who have never interacted with AI at all.'\nBEAT A (0\u20131.6): the post card (hf/assets/post_funnel.png, \u2265830 wide, top of the zone, same card look as v03) is already there; M.highlight swipes behind 'sharp funnel' on 'describes' (0.63). On 'funnel' (1.45) the card slides up/out FAST and THE FUNNEL draws itself with the SHARED GEOMETRY (FUN.draw over ~1.0 s starting ~0.9: rim, left wall, right wall, spout \u2014 a hand drawing it) while 'funnel' ~220 RED lands top-left (y ~380) = hero word, 1 % punch. Dividers draw in quick succession (1.9\u20132.3).\nBEAT B (1.7\u20135.2): 'biggest chunk' ~110 ink lands on 'biggest' (1.89). Secondary CHARACTERS: 10\u201314 tiny hand-drawn stick people (M.line heads/bodies, ink, ~40 px tall) drop in an arc from the top and tumble INTO the rim, piling into tier 0 (2.0\u20133.2), little bounce on landing. On '75%' (3.19) tier 0 hatches in PENCIL grey (FUN.fill(0,\u2026,{color:'pencil', opacity:0.45})) and '75%' ~230 RED stamps in the lower zone (y ~1300\u20131470); real-post label note '~75%' is NOT needed \u2014 use Caveat ink note '6B' later.\nBEAT C (4.4\u20139.27): '6 billion' \u2014 an ODOMETER rolls '6,000,000,000' (Inter Tight 900 ~110 ink, digits roll and lock left\u2192right) beside/under '75%' on '6' (5.30)/'billion' (5.46); a red Caveat note '6B' writes next to tier 0 at the right of the funnel (x 720\u2013960). On 'never interacted' (7.46\u20138.00) a hand-drawn empty CHAT BUBBLE (M.line rounded bubble with a tail + three dots) draws to the right of tier 0 and on 'at all' (8.96) a black marker \u2717 (M.cross) slashes across it, bubble shakes once. Small speaker card: at the top-right (\u2265420 wide) during B\u2013C, or skip if it collides \u2014 fill the lower zone.\nWord times are scene-local (exact ones in words.txt; contact frame 0.13\u20130.2 s before the word). Everything inside x 60\u2013960 / y 285\u20131480 (measure). Write beats.json AND marker_beats.json. Hold alive to the cut.",
+  "assets": [
+   "captures/post_funnel.png"
+  ]
+ },
+ {
+  "id": "v05_free",
+  "start": 24.633,
+  "duration": 6.934,
+  "layout": "scene",
+  "type": "blank",
+  "bespoke": true,
+  "brief": "FIRST read animations/SHARED.md fully \u2014 especially the reel-06 Project specifics (MARKER LAYER, THE FUNNEL, READABILITY, Words on screen) \u2014 and look at the style frames it lists, plus ~/Desktop/reels/reel-06/edit/verify/style_test_v2_red.png (the approved marker look). FULL-SCREEN OPAQUE scene \u2014 FUNNEL \u2014 TIER 2 (bespoke).\nSpoken: 'After that is about 20% or about 2 billion people who are actually using the free version of tools like ChatGPT and Claude.'\nFrame 0: the SHARED FUNNEL already drawn with tier 0 pencil-hatched and the stick people inside (at=0, boiling). Small speaker card top-right (\u2265420 wide, y ~300\u2013760) from 0.\nBEAT A (0\u20133.3): on 'After that' (0.13) a red marker arrow points down from tier 0 to tier 1; on '20%' (1.19) tier 1 hatches pencil + '20%' ~230 RED stamps in the lower zone; on '2 billion' (2.37/2.71) '2 billion' ~110 ink lands next to it and a Caveat note '1-2B' writes at the right of tier 1 (the post's real label) \u2014 and the REAL post strip hf/assets/post_b2.png (card \u2265830 wide) flips up at the top-left zone for ~2 s with M.highlight behind '1-2B (~20%)' on '2' (2.37), then recedes.\nBEAT B (3.4\u20136.93): 'free version' \u2014 a hand-drawn PRICE TAG (M.line tag shape with a hole + string, ink) swings in on its string from the top on 'free' (4.65), pendulum overshoot, and 'free' ~160 RED lands beside it (the tag itself stays word-free or says 'free'). On 'ChatGPT' (5.81) and 'Claude' (6.73) the OFFICIAL logos (hf/assets/chatgpt.svg, hf/assets/claude.svg in white rounded chips with names Inter 600 ~44) get TAPED (M.tape) next to tier 1, each with a squash-land. Hero beat '20%'.\nWord times are scene-local (exact ones in words.txt; contact frame 0.13\u20130.2 s before the word). Everything inside x 60\u2013960 / y 285\u20131480 (measure). Write beats.json AND marker_beats.json. Hold alive to the cut.",
+  "assets": [
+   "captures/post_b2.png",
+   "logos/chatgpt.svg",
+   "logos/claude.svg"
+  ]
+ },
+ {
+  "id": "v06_sloppy",
+  "start": 31.567,
+  "duration": 5.2,
+  "layout": "scene",
+  "type": "explainer",
+  "bespoke": true,
+  "brief": "FIRST read animations/SHARED.md fully \u2014 especially the reel-06 Project specifics (MARKER LAYER, THE FUNNEL, READABILITY, Words on screen) \u2014 and look at the style frames it lists, plus ~/Desktop/reels/reel-06/edit/verify/style_test_v2_red.png (the approved marker look). FULL-SCREEN OPAQUE scene \u2014 EXPLAINER \u2014 the misuse (bespoke, comedic).\nSpoken: 'But they're using it as a glorified search engine or to write their stupid emails or their sloppy LinkedIn posts.'\nSecondary speaker card (\u2265600 wide) at the top for 0\u2013~1.0, then it slides to a corner (\u2265420) to make room. Three soft white UI cards deal in on arcs, one per phrase, stacked/fanned in the middle of the zone (each \u2265 520 wide, no fake brand text, wireframe bars only):\n1) 'glorified' (1.19): a SEARCH BAR card (magnifier icon, empty field with a blinking caret) \u2014 on 'glorified' a red marker CROWN doodle (M.line) draws on top of it, crown wobbles, 2 sparkle ticks. Kinetic 'glorified' ~150 RED + 'search engine' ~110 ink land on 1.19/1.73\u20132.05.\n2) 'stupid emails' (3.01\u20133.43): an EMAIL draft card (To/Subject wireframe rows, lines writing themselves); kinetic 'stupid emails' ~120 ink.\n3) 'sloppy LinkedIn posts' (4.37\u20135.01): a POST card with the OFFICIAL LinkedIn logo (hf/assets/linkedin.png) in its header + wireframe text lines; on 'sloppy' (4.37) the RED marker SCRAWLS a fast messy zig-zag scribble across its body (M.line with many points, 0.35 s) = the exaggerated beat (1 % punch, small shake); kinetic 'sloppy' ~200 RED lands (impact). Earlier cards recede (staging). Fill the lower zone.\nWord times are scene-local (exact ones in words.txt; contact frame 0.13\u20130.2 s before the word). Everything inside x 60\u2013960 / y 285\u20131480 (measure). Write beats.json AND marker_beats.json. Hold alive to the cut.",
+  "assets": [
+   "logos/linkedin.png"
+  ]
+ },
+ {
+  "id": "v07_you",
+  "start": 36.767,
+  "duration": 5.233,
+  "layout": "scene",
+  "type": "blank",
+  "bespoke": true,
+  "brief": "FIRST read animations/SHARED.md fully \u2014 especially the reel-06 Project specifics (MARKER LAYER, THE FUNNEL, READABILITY, Words on screen) \u2014 and look at the style frames it lists, plus ~/Desktop/reels/reel-06/edit/verify/style_test_v2_red.png (the approved marker look). FULL-SCREEN OPAQUE scene \u2014 FUNNEL \u2014 TIER 3 = YOU (bespoke hero).\nSpoken: 'After that is about 20 million or 0.2% of the people, which is where I think you land at.'\nFrame 0: SHARED FUNNEL drawn, tiers 0 and 1 pencil-hatched, stick people in (at=0). REFERENCE LAYOUT = ~/Desktop/reels/reel-06/edit/verify/style_test_v2_red.png (this scene is that frame, animated).\nBEAT A (0\u20132.8): the REAL post strip hf/assets/post_b3.png in a white card (\u2265830 wide, top of the zone, y ~300\u2013690, tilted -1.5\u00b0, X chip hf/assets/x.png on its corner) slides down on 'After that' (0.19); M.highlight swipes behind '20M people (0.2%)' on '20' (1.43). '20 million' ~104 ink lands (1.43/1.73) and '0.2%' ~236 RED stamps on '0.2%' (2.37) in the lower zone; on the stamp tier 2 hatches RED (FUN.fill(2)).\nBEAT B (2.9\u20135.23): 'where I think you land' \u2014 a hand-drawn MAP PIN (M.line teardrop + circle, red) lifts (anticipation) at the right and DROPS on an arc into tier 2 on 'you' (4.67), squash + wobble, a tiny marker shockwave ellipse around it; 'you' ~190 ink lands bottom-right with a double underline = IMPACT on 'you'. A red Caveat note 'you' is NOT needed (the kinetic word does it) \u2014 instead a red marker arrow draws from the kinetic 'you' to the pin (4.8). The post card recedes during B. Small speaker card optional only if it fits without collisions (it should NOT cover the funnel).\nWord times are scene-local (exact ones in words.txt; contact frame 0.13\u20130.2 s before the word). Everything inside x 60\u2013960 / y 285\u20131480 (measure). Write beats.json AND marker_beats.json. Hold alive to the cut.",
+  "assets": [
+   "captures/post_b3.png",
+   "logos/x.png"
+  ]
+ },
+ {
+  "id": "v08_hours",
+  "start": 42.0,
+  "duration": 7.233,
+  "layout": "scene",
+  "type": "explainer",
+  "bespoke": true,
+  "brief": "FIRST read animations/SHARED.md fully \u2014 especially the reel-06 Project specifics (MARKER LAYER, THE FUNNEL, READABILITY, Words on screen) \u2014 and look at the style frames it lists, plus ~/Desktop/reels/reel-06/edit/verify/style_test_v2_red.png (the approved marker look). FULL-SCREEN OPAQUE scene \u2014 EXPLAINER \u2014 weeks \u2192 hours (bespoke).\nSpoken: 'You are using more agentic capabilities and using tools like Claude Code and Codex to complete tasks that used to take weeks in a couple of hours.'\nBEAT A (0\u20133.9): small speaker card top-left (\u2265420) from 0. 'agentic' ~200 RED lands on 'agentic' (0.97), 'capabilities' ~110 ink (1.63). On 'Claude Code' (2.93\u20133.19) a dark terminal card (runtime UI/terminal card style, --brand-deep) slides in with the OFFICIAL Claude logo chip (hf/assets/claude.svg + 'Claude Code' Inter 600) and a prompt line typing (P.typeIn, words-free glyphs/'>_'); on 'Codex' (3.75) a second chip with hf/assets/codex.png + 'Codex' pops beside it (squash-land).\nBEAT B (3.9\u20137.23): the hero: a hand-drawn CALENDAR (M.line grid, ink) of 3 week-rows \u00d7 7 day boxes draws fast (~0.5 s) on 'complete'/'tasks' (4.51\u20135.03); on 'weeks' (6.21) the RED marker strikes through all 21 days in one zig-zag sweep (0.3 s); then the calendar collapses/scales into a hand-drawn CLOCK (circle + 2 hands) whose minute hand spins two full turns on 'couple of hours' (6.63\u20137.17), with tiny motion-line ticks; 'weeks' ~150 ink struck (P.strike or M.strikeEl) and 'hours' ~220 RED lands (hero, 1 % punch). Terminal card recedes during B. Fill the lower zone.\nWord times are scene-local (exact ones in words.txt; contact frame 0.13\u20130.2 s before the word). Everything inside x 60\u2013960 / y 285\u20131480 (measure). Write beats.json AND marker_beats.json. Hold alive to the cut.",
+  "assets": [
+   "logos/claude.svg",
+   "logos/codex.png"
+  ]
+ },
+ {
+  "id": "v09_coding",
+  "start": 49.233,
+  "duration": 3.267,
+  "layout": "scene",
+  "type": "opinion",
+  "bespoke": false,
+  "brief": "FIRST read animations/SHARED.md fully \u2014 especially the reel-06 Project specifics (MARKER LAYER, THE FUNNEL, READABILITY, Words on screen) \u2014 and look at the style frames it lists, plus ~/Desktop/reels/reel-06/edit/verify/style_test_v2_red.png (the approved marker look). FULL-SCREEN OPAQUE scene \u2014 OPINION \u2014 portrait + doodles.\nSpoken: 'You're probably using it for coding and knowledge work and all these fancy stuff.'\nPORTRAIT speaker card (~700x800) centred, settled from frame 0. Hand-drawn DOODLES draw themselves AROUND the card (on paper, never over the face): on 'coding' (1.26) a red marker '</>' doodle (M.line brackets + slash, ~150 px) at the upper-left of the card with a little bounce; on 'knowledge work' (1.74\u20132.02) an ink doc doodle (page with folded corner + 3 scribbled lines writing) at the right; on 'fancy' (2.84) 5\u20137 red sparkle stars (4-point M.line stars) pop around the card corners and twinkle (boil + scale pulse). KINETIC on paper below the card (y ~1260\u20131470): 'coding' ~150 RED (1.26), 'knowledge work' ~110 ink (1.74), 'fancy stuff' ~150 ink with 'fancy' RED (2.84). Hero beat 'fancy'.\nWord times are scene-local (exact ones in words.txt; contact frame 0.13\u20130.2 s before the word). Everything inside x 60\u2013960 / y 285\u20131480 (measure). Write beats.json AND marker_beats.json. Hold alive to the cut.",
+  "assets": []
+ },
+ {
+  "id": "v10_labs",
+  "start": 52.5,
+  "duration": 6.3,
+  "layout": "scene",
+  "type": "blank",
+  "bespoke": true,
+  "brief": "FIRST read animations/SHARED.md fully \u2014 especially the reel-06 Project specifics (MARKER LAYER, THE FUNNEL, READABILITY, Words on screen) \u2014 and look at the style frames it lists, plus ~/Desktop/reels/reel-06/edit/verify/style_test_v2_red.png (the approved marker look). FULL-SCREEN OPAQUE scene \u2014 FUNNEL \u2014 TIER 4 = 5,000 (bespoke).\nSpoken: 'And after that, about 5,000 people who work at the top AI labs who have access to systems and models that we've (just) heard about.'\nFrame 0: SHARED FUNNEL drawn, tiers 0\u20131 pencil, tier 2 red, stick people and the red pin in tier 2 (at=0).\nBEAT A (0\u20132.4): a hand-drawn MAGNIFIER (M.circle lens + handle, ink, ~300 px lens) swings in on 'after that' (0.39) and parks over the spout/tier 3; INSIDE the lens a 2\u00d7 copy of the spout region shows ~30 tiny RED dots clustered (the 5,000) \u2014 a magnifier that really magnifies (clip a scaled copy). On '5,000' (1.55) '5,000' ~240 RED stamps in the lower zone + a red Caveat note '~5,000' at the right of tier 3, real strip hf/assets/post_b4.png may flash at the top (\u2265830 wide) with M.highlight behind '~5,000 people' (1.4\u20132.6) then recede.\nBEAT B (2.4\u20136.3): 'top AI labs' ~120 ink (2.83\u20133.41). A hand-drawn LAB DOOR (M.line door frame + panel + a padlock) draws at the right/top of the funnel on 'labs'; a warm red glow line leaks from under the door; on 'access' (3.95) the padlock clicks (tiny jump). On 'systems and models' (4.49\u20135.03) small doodled boxes/stacks appear behind the door crack. On 'heard about' (5.91) three red ')))' sound-wave arcs pulse out from the door (staggered) \u2014 'heard about' ~110 ink lands. Hero beat '5,000'.\nWord times are scene-local (exact ones in words.txt; contact frame 0.13\u20130.2 s before the word). Everything inside x 60\u2013960 / y 285\u20131480 (measure). Write beats.json AND marker_beats.json. Hold alive to the cut.",
+  "assets": [
+   "captures/post_b4.png"
+  ]
+ },
+ {
+  "id": "v11_bubble",
+  "start": 58.8,
+  "duration": 10.233,
+  "layout": "scene",
+  "type": "blank",
+  "bespoke": true,
+  "brief": "FIRST read animations/SHARED.md fully \u2014 especially the reel-06 Project specifics (MARKER LAYER, THE FUNNEL, READABILITY, Words on screen) \u2014 and look at the style frames it lists, plus ~/Desktop/reels/reel-06/edit/verify/style_test_v2_red.png (the approved marker look). FULL-SCREEN OPAQUE scene \u2014 THE BUBBLE \u2192 ZOOM OUT (bespoke hero, the reel's big camera move).\nSpoken: 'From inside the AI bubble, it seems like AI has taken over literally the entire world. You see AI every single place. But if you zoom out, you will realize that we have barely scratched the surface.'\nBEAT A \u2014 INSIDE (0\u20135.9): secondary speaker card (~600 wide) centred; a big RED marker BUBBLE (M.circle, ~900x900 loose loop, slight soap-bubble highlight arc in ink) draws around him on 'bubble' (1.01). 'AI bubble' ~170 with 'AI' RED lands (0.85\u20131.01). On 'taken over' (2.25\u20132.49) and 'every single place' (4.84\u20135.70) the OFFICIAL logos as STICKERS (hf/assets/openai.png, anthropic.png, chatgpt.svg, claude.svg, codex.png \u2014 white die-cut sticker borders, slight tilt) slap onto the inside of the bubble one by one (pop + tiny squash), plus small red '\u2726' doodles, until the bubble is crowded; 'entire world' ~110 ink (3.37\u20133.67), 'every single place' ~110 ink (4.84\u20135.70).\nBEAT B \u2014 ZOOM OUT (5.9\u20138.0) = the exaggerated beat, IMPACT on 'zoom' (6.44): anticipation (a 3-frame push IN), then the WHOLE camera (#cam scale) pulls back hard 1 \u2192 ~0.12 over ~0.8 s with a whoosh, the bubble becoming a tiny red speck; simultaneously a huge hand-drawn GLOBE (ink M.circle ~800 px + 3\u20134 continent squiggles + latitude arcs, drawn fast at large scale so it reads after the pull-back) fills the frame with the speck on its surface; 'zoom out' ~200 RED lands on 'out' (6.72) \u2014 this text is NOT inside #cam (stays readable).\nBEAT C (8.0\u201310.23): 'barely scratched the surface' \u2014 'barely' ~120 ink (8.98), 'scratched the surface' ~110 ink with 'scratched' RED (9.40\u201310.14); on 'scratched' the red marker makes 3 tiny scratch marks on the globe surface next to the speck (M.line, 0.1 s each). Globe rotates its squiggles slowly (secondary). Keep everything in the zone after the pull-back.\nWord times are scene-local (exact ones in words.txt; contact frame 0.13\u20130.2 s before the word). Everything inside x 60\u2013960 / y 285\u20131480 (measure). Write beats.json AND marker_beats.json. Hold alive to the cut.",
+  "assets": [
+   "logos/openai.png",
+   "logos/anthropic.png",
+   "logos/chatgpt.svg",
+   "logos/claude.svg",
+   "logos/codex.png"
+  ]
+ },
+ {
+  "id": "v12_gap",
+  "start": 69.033,
+  "duration": 5.5,
+  "layout": "scene",
+  "type": "explainer",
+  "bespoke": true,
+  "brief": "FIRST read animations/SHARED.md fully \u2014 especially the reel-06 Project specifics (MARKER LAYER, THE FUNNEL, READABILITY, Words on screen) \u2014 and look at the style frames it lists, plus ~/Desktop/reels/reel-06/edit/verify/style_test_v2_red.png (the approved marker look). FULL-SCREEN OPAQUE scene \u2014 THE GAP (bespoke).\nSpoken: 'The gap in what AI can do and what people believe it can do is the greatest opportunity we have in our hands.'\nA hand-drawn chart (no axes numbers, no labels except the spoken words): BEAT A (0\u20133.1): on 'what AI can do' (0.75\u20131.63) a RED marker curve draws left\u2192right and BENDS UP TO VERTICAL at the right end (the curve going vertical), its tip leaving a tiny dust burst; label 'what AI can do' Caveat ink \u226564 near its top. On 'what people believe' (1.97\u20132.57) a flat INK line draws low across the same span; label 'what people believe' Caveat ink \u226564. On 'gap' \u2014 the word lands first at 0.27 as 'The gap' ~170 with 'gap' RED at the top of the zone \u2014 and again at ~3.0 a red marker BRACKET (curly brace, M.line) draws vertically between the two line ends, measuring the gap, and the bracket stretches (squash/stretch on its drawing scale) as the red curve keeps climbing a little (secondary).\nBEAT B (3.1\u20135.5): 'greatest opportunity' \u2014 'greatest' ~110 ink (3.63), 'opportunity' ~190 RED (4.11) lands at the gap, the bracket pulses; on 'in our hands' (4.75\u20135.33) small speaker card (\u2265420) slides up from the bottom corner (him), 'hands' ~110 ink. Hero beat 'gap'/'opportunity'. Fill the zone; no collisions with the chart.\nWord times are scene-local (exact ones in words.txt; contact frame 0.13\u20130.2 s before the word). Everything inside x 60\u2013960 / y 285\u20131480 (measure). Write beats.json AND marker_beats.json. Hold alive to the cut.",
+  "assets": []
+ },
+ {
+  "id": "v13_early",
+  "start": 74.533,
+  "duration": 3.834,
+  "layout": "scene",
+  "type": "opinion",
+  "bespoke": false,
+  "brief": "FIRST read animations/SHARED.md fully \u2014 especially the reel-06 Project specifics (MARKER LAYER, THE FUNNEL, READABILITY, Words on screen) \u2014 and look at the style frames it lists, plus ~/Desktop/reels/reel-06/edit/verify/style_test_v2_red.png (the approved marker look). FULL-SCREEN OPAQUE scene \u2014 OPINION \u2014 portrait + sunrise.\nSpoken: 'We're actually incredibly early and this is such a golden opportunity that we have.'\nPORTRAIT speaker card (~700x780) settled from frame 0, a bit low (y ~520\u20131300). BEHIND/AROUND the card on paper: a hand-drawn HORIZON line (ink, M.line) draws across the zone at ~y 760 on 'actually' (0.36); a RED marker SUN (M.circle + hatch fill) rises from behind the horizon/card on 'early' (1.42) with overshoot; on 'golden' (2.48) 8\u201310 sun RAYS draw outward one by one (2-frame stagger) and then boil + slowly rotate (secondary). KINETIC: 'incredibly' ~110 ink (1.04), 'early' ~220 RED (1.42, 1 % punch, hero) at the top of the zone above the sun; 'golden opportunity' ~120 with 'golden' RED (2.48\u20133.00) low on paper/strip. Never cover the face.\nWord times are scene-local (exact ones in words.txt; contact frame 0.13\u20130.2 s before the word). Everything inside x 60\u2013960 / y 285\u20131480 (measure). Write beats.json AND marker_beats.json. Hold alive to the cut.",
+  "assets": []
+ },
+ {
+  "id": "v14_lockin",
+  "start": 78.367,
+  "duration": 3.5,
+  "layout": "scene",
+  "type": "fullscreen",
+  "bespoke": false,
+  "brief": "FIRST read animations/SHARED.md fully \u2014 especially the reel-06 Project specifics (MARKER LAYER, THE FUNNEL, READABILITY, Words on screen) \u2014 and look at the style frames it lists, plus ~/Desktop/reels/reel-06/edit/verify/style_test_v2_red.png (the approved marker look). FULL-SCREEN OPAQUE scene \u2014 FULLSCREEN \u2014 him edge to edge (final line + end hold).\nSpoken: 'So lock in, my friend.' (then the end hold: his freeze frame to the end)\nHim edge to edge, slow push 1.0\u21921.03. WORDS low on a .paper-strip (y \u2265 1250): 'lock in' ~230 RED \u2014 'lock' lands on 'lock' (0.64), 'in' on 'in' (1.12); 'my friend' ~110 ink on 'my' (1.34)/'friend' (1.66). MARKER OVER THE FOOTAGE (the one object): a red hand-drawn PADLOCK (M.line body + shackle) draws beside 'lock in' (not over his face) with the shackle OPEN at 0.4 and SNAPPING SHUT on 'lock' (0.64) \u2014 anticipation lift, snap, tiny shake = IMPACT; a double underline scribbles under 'lock in' at 1.2. End hold (1.9\u20133.5): the drawing keeps boiling, a 1 % breathe on 'lock in' \u2014 alive to the last frame. data-face 0.42.\nWord times are scene-local (exact ones in words.txt; contact frame 0.13\u20130.2 s before the word). Everything inside x 60\u2013960 / y 285\u20131480 (measure). Write beats.json AND marker_beats.json. Hold alive to the cut.",
+  "assets": []
+ }
+]

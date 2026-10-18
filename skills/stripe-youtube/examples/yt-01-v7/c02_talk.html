@@ -1,0 +1,96 @@
+<!doctype html>
+<!-- stripe-youtube TALK CAPTIONS (v7 MINT, full coverage, gen_talkcaps.py): kinetic left-column captions, white words, mint hero, no box / no underline. Transparent, rendered --format mov. -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>talk captions c02_talk</title>
+    <link rel="stylesheet" href="board.css" />
+    <link rel="stylesheet" href="v7yt.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="board.js"></script>
+    <script src="v7yt.js"></script>
+    <style>
+      #col { position: absolute; left: 96px; top: 0; width: 700px; height: 1080px; }
+      .ph { position: absolute; left: 0; top: 0; width: max-content; }
+      .ln { position: relative; display: block; width: max-content; white-space: nowrap; line-height: .95; font-weight: 800; letter-spacing: -.04em; word-spacing: .16em; }
+      .ln.l0 { margin-left: 0; }
+      .ln.l1 { margin-left: 34px; font-size: .9em; }     /* collage stagger: alternate lines are offset and a touch smaller */
+      .kw { display: inline-block; will-change: transform, opacity, filter; }
+      .kw.hero { font-weight: 900; font-size: 1.3em; }
+      .w7.mint { text-shadow: 0 0 2px rgba(0,0,0,.7), 0 2px 4px rgba(0,0,0,.6), 0 4px 20px rgba(0,0,0,.75); }   /* mint must hold on grass */
+      #scrim { position: absolute; left: -96px; top: -140px; width: 940px; height: 840px; pointer-events: none;
+        background: radial-gradient(ellipse 56% 52% at 36% 50%, rgba(0,0,0,.20) 0%, rgba(0,0,0,.10) 50%, rgba(0,0,0,0) 100%); }
+    </style>
+  </head>
+  <body data-theme="light" data-bg="transparent">
+    <div id="root" class="mint" data-composition-id="main" data-start="0" data-width="1920" data-height="1080" data-duration="8.932">
+      <div id="col">
+        <div id="scrim"></div>
+        <div class="ph">
+          <div class="ln l0"><span class="kw w7" data-t="0.10">And</span> <span class="kw w7" data-t="0.17">when</span></div>
+          <div class="ln l1"><span class="kw w7 mint hero" data-t="0.31">researchers</span> <span class="kw w7" data-t="0.81">actually</span></div>
+        </div>
+        <div class="ph">
+          <div class="ln l0"><span class="kw w7" data-t="1.35">looked</span> <span class="kw w7" data-t="1.63">at</span></div>
+          <div class="ln l1"><span class="kw w7" data-t="1.75">the</span> <span class="kw w7 mint hero" data-t="1.83">chats,</span></div>
+        </div>
+        <div class="ph">
+          <div class="ln l0"><span class="kw w7" data-t="2.33">those</span> <span class="kw w7" data-t="2.49">kids</span> <span class="kw w7" data-t="2.71">were</span></div>
+          <div class="ln l1"><span class="kw w7" data-t="2.89">actually</span> <span class="kw w7 mint hero" data-t="3.23">copying</span></div>
+        </div>
+        <div class="ph">
+          <div class="ln l0"><span class="kw w7" data-t="3.59">and</span> <span class="kw w7 mint hero" data-t="3.79">pasting</span> <span class="kw w7" data-t="4.19">all</span></div>
+          <div class="ln l1"><span class="kw w7" data-t="4.29">the</span> <span class="kw w7" data-t="4.41">answers</span> <span class="kw w7" data-t="4.73">in.</span></div>
+        </div>
+        <div class="ph">
+          <div class="ln l0"><span class="kw w7" data-t="5.40">And</span> <span class="kw w7" data-t="5.49">the</span></div>
+          <div class="ln l1"><span class="kw w7 mint hero" data-t="5.61">wild</span> <span class="kw w7" data-t="5.91">part</span></div>
+        </div>
+        <div class="ph">
+          <div class="ln l0"><span class="kw w7" data-t="6.23">is</span> <span class="kw w7" data-t="6.45">that</span> <span class="kw w7" data-t="6.61">they</span></div>
+          <div class="ln l1"><span class="kw w7" data-t="6.73">didn't</span> <span class="kw w7" data-t="6.97">even</span> <span class="kw w7 mint hero" data-t="7.13">feel</span></div>
+        </div>
+        <div class="ph">
+          <div class="ln l0"><span class="kw w7" data-t="7.47">that</span> <span class="kw w7" data-t="7.63">they</span> <span class="kw w7" data-t="7.75">were</span></div>
+          <div class="ln l1"><span class="kw w7 mint hero" data-t="7.89">learning</span> <span class="kw w7" data-t="8.15">anything</span> <span class="kw w7" data-t="8.38">less.</span></div>
+        </div>
+      </div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const B = await Board.init();
+        const { tl, D, F } = B;
+        const col = document.getElementById("col");
+        const phs = Array.from(col.querySelectorAll(".ph"));
+        const lns = Array.from(col.querySelectorAll(".ln"));
+        // fit PER PHRASE: biggest size (<=110) whose widest line (indent + 1.3x hero) is <= 620 px
+        const fit = [];
+        for (const p of phs) {
+          p.style.fontSize = "100px";
+          const pl = Array.from(p.querySelectorAll(".ln"));
+          const w100 = Math.max(...pl.map((l) => l.offsetWidth + parseFloat(getComputedStyle(l).marginLeft)));
+          const size = Math.max(56, Math.min(110, Math.floor(620 / w100 * 100)));
+          p.style.fontSize = size + "px"; fit.push(size);
+        }
+        // each phrase block is centred on y = 280 (on the sky, above the buildings; was 550 = over white buildings, unreadable)
+        for (const p of phs) p.style.top = Math.round(280 - p.offsetHeight / 2) + "px";
+        window.__fit = { fit, hs: phs.map((p) => p.offsetHeight) };
+        for (const w of col.querySelectorAll(".kw")) {
+          const at = parseFloat(w.dataset.t), hero = w.classList.contains("hero");
+          // pop: scale .6 -> 1.08 -> 1 with a small rise and a blur-up (~7 f); the hero punches a little harder
+          tl.fromTo(w, { opacity: 0, y: 30, scale: 0.6, filter: "blur(8px)" }, { opacity: 1, y: 0, scale: hero ? 1.16 : 1.08, filter: "blur(0px)", duration: 4 * F, ease: "power3.out" }, at);
+          tl.to(w, { scale: 1, duration: 4 * F, ease: "power2.inOut" }, at + 4 * F);
+        }
+        // phrase swap: the previous block blurs up and fades as the next one starts
+        const starts = [0.1, 1.35, 2.33, 3.59, 5.4, 6.23, 7.47];
+        tl.fromTo("#scrim", { opacity: 0 }, { opacity: 1, duration: 10 * F, ease: "power1.out" }, Math.max(0, starts[0] - 0.1));
+        for (let k = 0; k < phs.length - 1; k++)
+          tl.to(phs[k], { y: -60, opacity: 0, filter: "blur(10px)", duration: 5 * F, ease: "power2.in", immediateRender: false }, starts[k + 1] - F);
+        // exit: the whole stack slides left and fades in the last 6 frames (last frame fully transparent)
+        tl.to(col, { x: -90, opacity: 0, duration: 5 * F, ease: "power2.in", immediateRender: false }, D - 6 * F);
+      })();
+    </script>
+  </body>
+</html>

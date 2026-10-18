@@ -1,0 +1,69 @@
+/* adnaan-reel v7 "MINT" layer (Adnaan's restyle, 2026-10-17; reel-08 style test) — loaded after paper.css.
+   Tokens come from brand.css (init-brand --look mint): --brand-primary mint · --brand-primary-dark deep mint ·
+   --brand-deep charcoal · --brand-text ink · --mint-soft · --mint-panel · --peach (DATA ONLY) · --disc-shadow ·
+   --vignette-strong. Read hf/v7.js for the API. No red, no marker boil, no Caveat in this look. */
+
+/* ---- TALK captions: charcoal ink with a soft light glow (no paper strip). Mint loses contrast on a light halo or on
+   light clothing, so mint words get a soft DARK shadow instead — and mint is for hero sizes (≥ 170 authored) only. */
+:root { --v7-glow: 0 0 22px rgba(240, 236, 230, .95), 0 0 8px rgba(240, 236, 230, .9); }
+.g7 { text-shadow: var(--v7-glow); }
+.g7 .ocean, .ocean.g7 { text-shadow: 0 4px 16px rgba(20, 20, 20, .42), 0 1px 3px rgba(20, 20, 20, .35); }
+.g7.tight { text-shadow: 0 0 3px rgba(240, 236, 230, .95), 0 0 10px rgba(240, 236, 230, .92), 0 0 20px rgba(240, 236, 230, .85); }
+/* white captions for DARK clothing (decided per reel from the still): add .w7 to the line */
+.w7 { color: #fff; text-shadow: 0 3px 18px rgba(0, 0, 0, .55), 0 1px 3px rgba(0, 0, 0, .45); }
+
+/* ---- VISUAL board: our paper + grid, a much stronger vignette on top (V7.board() adds .v7-vig) */
+.v7-vig { position: absolute; inset: 0; background: var(--vignette-strong); pointer-events: none; }
+.v7-panel { position: absolute; inset: 0; background: var(--mint-panel); }            /* full-bleed mint punctuation */
+
+/* ---- icon discs: white Phosphor FILL glyph (hf/assets/<name>.svg) masked into a circle — charcoal = default,
+   mint = the current item. The glyph is a CSS mask so it can be any colour without editing the SVG. */
+.v7-disc {
+  position: absolute; width: var(--d, 180px); height: var(--d, 180px);
+  margin: calc(var(--d, 180px) / -2) 0 0 calc(var(--d, 180px) / -2); border-radius: 50%;
+  background: var(--brand-deep); box-shadow: var(--disc-shadow); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+}
+.v7-disc.mint { background: var(--brand-primary); }
+.v7-gl {
+  display: block; width: 46%; height: 46%; background: currentColor;
+  -webkit-mask: var(--ic) center / contain no-repeat; mask: var(--ic) center / contain no-repeat;
+}
+.v7-tag {                                                   /* small number tag on a disc edge ("1") */
+  position: absolute; min-width: 56px; height: 56px; padding: 0 14px; border-radius: 28px; background: var(--brand-deep);
+  color: #fff; font: 700 34px/56px var(--font-body); text-align: center; box-shadow: 0 8px 16px -6px rgba(20, 20, 20, .45);
+}
+
+/* ---- the disc chain: a 4 px charcoal connector drawn centre→centre behind the discs */
+.v7-chain { position: absolute; inset: 0; }
+.v7-link { position: absolute; left: 0; top: 0; overflow: visible; pointer-events: none; }
+.v7-link path { fill: none; stroke: var(--brand-deep); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ---- the signature ring drawn on the shrunk footage (circle or small card), lives inside the .spk */
+.v7-ring { position: absolute; left: 0; top: 0; overflow: visible; pointer-events: none; }
+.v7-ring rect { fill: none; stroke: var(--brand-primary); }
+.v7-ripple { position: absolute; border-radius: 50%; border: 6px solid var(--brand-primary); opacity: 0; pointer-events: none; }
+
+/* ---- depth ("behind me"): the matte is the same full-screen footage with the background removed, laid over the
+   footage with identical data-push; objects between the two read as BEHIND him. */
+.spk.matte .spk-card { background: transparent; }
+.v7-behind { position: absolute; inset: 0; pointer-events: none; }
+
+/* ---- camera: a world layer bigger than the frame (authored in world px), moved by V.cam. Wrap it in a full-frame
+   .v7-view; add .v7-zone to that wrapper to dissolve anything leaving the content zone (minus the IG corner) mid-move.
+   (.v7-zone needs a sized element — a mask on a zero-size div hides everything.) */
+.v7-world { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; transform-origin: 0 0; }
+.v7-view { position: absolute; inset: 0; }            /* full-frame wrapper for a travelling layer (give it .v7-zone to mask it) */
+.v7-zone {
+  --mky: 0px;
+  -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1080' height='1920' viewBox='0 0 1080 1920'><filter id='b' x='-20%25' y='-20%25' width='140%25' height='140%25'><feGaussianBlur stdDeviation='16'/></filter><path filter='url(%23b)' fill='white' d='M100 325 H920 V1160 H860 V1440 H100 Z'/></svg>");
+  mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1080' height='1920' viewBox='0 0 1080 1920'><filter id='b' x='-20%25' y='-20%25' width='140%25' height='140%25'><feGaussianBlur stdDeviation='16'/></filter><path filter='url(%23b)' fill='white' d='M100 325 H920 V1160 H860 V1440 H100 Z'/></svg>");
+  -webkit-mask-size: 1080px 1920px; mask-size: 1080px 1920px; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+  -webkit-mask-position: 0px var(--mky); mask-position: 0px var(--mky);
+}
+
+/* ---- flat vector props: white cards, soft shadows, no outlines that wobble */
+.v7-card { position: absolute; background: var(--brand-card); border-radius: 28px;
+  box-shadow: 0 30px 50px -14px rgba(40, 36, 32, .32), 0 6px 14px -6px rgba(40, 36, 32, .18); }
+.v7-hl { position: absolute; background: var(--mint-soft); border-bottom: 4px solid var(--brand-primary-dark);
+  transform-origin: 0 50%; mix-blend-mode: multiply; border-radius: 4px; }

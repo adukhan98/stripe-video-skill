@@ -1,0 +1,244 @@
+<!doctype html>
+<!-- adnaan-reel scene v05_free — FUNNEL TIER 2 (bespoke): the shared funnel is already drawn (tier 0 pencil + stick
+     people); a red arrow points down to tier 1, tier 1 hatches and "20%" stamps (hero); the real post strip flips up with
+     a highlighter on "1-2B (~20%)"; "2 billion" + Caveat "1-2B"; four people tumble into tier 1. Then a hand-drawn price
+     tag swings in on its string for "free", and the official ChatGPT + Claude chips get taped next to tier 1. -->
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>v05_free</title>
+    <link rel="stylesheet" href="brand.css" />
+    <link rel="stylesheet" href="paper.css" />
+    <link rel="stylesheet" href="marker.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+    <script src="paper.js"></script>
+    <script src="marker.js"></script>
+    <style>
+      @font-face { font-family: "Inter Tight"; src: url("fonts/InterTight-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Inter"; src: url("fonts/Inter-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Caveat"; src: url("fonts/Caveat-Variable.ttf") format("truetype"); font-weight: 400 700; font-style: normal; font-display: block; }
+
+      .stick { position: absolute; left: 0; top: 0; width: 0; height: 0; pointer-events: none; }
+      .stick svg { position: absolute; left: -60px; top: -60px; width: 120px; height: 120px; overflow: visible; }
+      .stick svg path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+
+      /* ---------- bespoke: the real post strip on a white card ---------- */
+      #post { position: absolute; left: 74px; top: 314px; width: 862px; height: 227px; border-radius: 24px;
+        background: var(--brand-card); box-shadow: var(--card-shadow); opacity: 0; overflow: hidden; }
+      #post .strip { position: absolute; left: 14px; top: 14px; width: 958px; height: 228px; transform: scale(0.87); transform-origin: 0 0; }
+      #post .strip img { position: absolute; left: 0; top: 0; width: 958px; height: 228px; display: block; }
+
+      /* ---------- bespoke: logo chips taped next to tier 1 (bg squashes, logo + name never distort) ---------- */
+      .lchip { position: absolute; height: 88px; opacity: 0; }
+      .lchip .bg { position: absolute; inset: 0; border-radius: 26px; background: var(--brand-card);
+        box-shadow: 0 22px 36px -12px rgba(60, 50, 40, 0.34); }
+      .lchip .c { position: absolute; inset: 0; display: flex; align-items: center; gap: 16px; padding: 0 30px 0 20px;
+        font-family: var(--font-body); font-weight: 600; font-size: 44px; letter-spacing: -0.015em; color: var(--brand-text); white-space: nowrap; }
+      .lchip .c img { width: 54px; height: 54px; display: block; flex: none; }
+    </style>
+  </head>
+  <body data-face="0.42">
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="6.9167">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+      <div id="cam"><div id="punch">
+
+        <div class="spk small" id="spk1" data-x="510" data-y="304" data-w="420" data-h="360" data-face-at="0.62">
+          <div class="spk-card">
+            <div class="spk-vid"><video id="speaker" class="clip" src="assets/speaker.mp4" muted playsinline data-start="0" data-duration="6.9167" data-track-index="1"></video></div>
+            <div class="spk-sheen"></div>
+          </div>
+        </div>
+        <!-- the same card re-enters with the runtime's card entrance when the post leaves -->
+        <div class="spk small" id="spk2" data-x="510" data-y="304" data-w="420" data-h="360" data-face-at="0.62" data-at="4.5">
+          <div class="spk-card">
+            <div class="spk-vid"><video id="speaker2" class="clip" src="assets/speaker.mp4" muted playsinline data-start="3.8" data-media-start="3.8" data-duration="3.1167" data-track-index="2"></video></div>
+            <div class="spk-sheen"></div>
+          </div>
+        </div>
+
+        <!-- the real post strip (post_b2) — flips up on "or about", highlighter on "1-2B (~20%)" -->
+        <div id="post"><div class="strip"><img src="assets/post_b2.png" alt="" /></div></div>
+
+        <!-- logo chips, taped next to tier 1 -->
+        <div class="lchip" id="cgpt" style="left: 630px; top: 1054px; width: 306px;">
+          <div class="bg"></div><div class="c"><img src="assets/chatgpt.svg" alt="" />ChatGPT</div>
+        </div>
+        <div class="lchip" id="clde" style="left: 668px; top: 1170px; width: 266px;">
+          <div class="bg"></div><div class="c"><img src="assets/claude.svg" alt="" />Claude</div>
+        </div>
+
+        <!-- kinetic words (from words.html) -->
+        <div class="line hero ocean" id="l20" data-x="92" data-base="1450" data-size="230" data-fit="880">
+          <span class="w" data-t="1.19" data-hero data-peak="1.12">20%</span>
+        </div>
+        <div class="line sup" id="lbil" data-x="566" data-base="1450" data-size="110">
+          <span class="w" data-t="2.37" data-pop data-rise="30">2</span><span class="w gap-s" data-t="2.71" data-pop data-rise="30">billion</span>
+        </div>
+        <div class="line hero ocean" id="lfree" data-x="248" data-base="600" data-size="150">
+          <span class="w" data-t="4.65" data-hero>free</span>
+        </div>
+
+      </div></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const P = await Paper.init({ extraFonts: ['700 60px "Caveat"'] });
+        const M = Marker.init(P);
+        const { tl, D, F, $, $$ } = P;
+        const NS = "http://www.w3.org/2000/svg";
+        // continuity: v04 ends on its camera push (1.006 about 510,880) — start there so the cut from v04 doesn't jump
+        tl.fromTo("#cam", { scale: 1.006, transformOrigin: "510px 880px" }, { scale: 1.009, duration: D, ease: "none", immediateRender: true }, 0);
+        const grp = (parent = M.layer) => { const g = document.createElementNS(NS, "g"); parent.appendChild(g); return g; };
+
+        // ================= THE FUNNEL (shared geometry) — already drawn on frame 0 =================
+        const FUN = M.funnel({ x: 150, y: 820, w: 560, h: 330, neck: 0.16, tiers: 4, split: [0, 0.38, 0.66, 0.86, 1], spout: 56, color: "ink" });
+        FUN.fill(0, 0, { color: "pencil", opacity: 0.45, seed: 2 * 977 });   // v04 seed (its 2nd counter draw)                       // tier 0 (6B) — already there
+        const hatch1 = FUN.fill(1, 0.96, { color: "pencil", opacity: 0.45, dur: 0.42, seed: 8123 }); // tier 1 hatches on "20%"
+
+        // the pile — IDENTICAL to v04_funnel's final frame (its NOTES pile table: feet, tilt, figure geometry, seeds)
+        const PILE = [
+          [305, 966, -8], [557, 966, -6], [431, 975, -3], [368, 972, 5], [494, 972, 9],     // row 1
+          [274, 930, 12], [526, 934, 8], [400, 937, 4], [337, 935, -10], [463, 937, -14],   // row 2
+          [368, 900, -12], [494, 900, 15], [431, 897, 6],                                   // row 3
+        ];
+        const S = 0.86, host = $("#punch");
+        const people = PILE.map(([fx, fy, tilt], i) => {
+          const wrap = document.createElement("div");
+          wrap.className = "stick";
+          const svg = document.createElementNS(NS, "svg");
+          svg.setAttribute("viewBox", "-60 -60 120 120");
+          wrap.appendChild(svg);
+          host.appendChild(wrap);
+          const o = (k) => ({ parent: svg, color: "ink", width: 5, amp: 0.7, seed: 7000 + i * 61 + k * 7 });
+          M.circle(0, -27 * S, 6.6 * S, 6.6 * S, 0, { ...o(1), turns: 1.06, width: 5 });
+          M.line([[0, -19.5 * S], [0, 0]], 0, o(2));
+          M.line([[-8 * S, 14 * S], [0, 0], [8 * S, 14 * S]], 0, o(3));
+          const up = M.line([[-11 * S, -28 * S], [0, -14 * S], [11 * S, -28 * S]], 0, o(4));
+          const down = M.line([[-11 * S, -3 * S], [0, -14 * S], [11 * S, -3 * S]], 0, o(5));
+          const hx = fx, hy = fy - 14 * S;                 // wrap origin = hips
+          gsap.set(wrap, { x: hx, y: hy, rotation: tilt, transformOrigin: "0px 0px" });
+          gsap.set(svg, { transformOrigin: `60px ${60 + 14 * S}px` });
+          gsap.set(up.g, { opacity: 0 });
+          return { wrap, svg, up, down, hx, hy, tilt, i };
+        });
+        // idle life: each figure breathes on its own period (as in v04)
+        people.forEach((p, k) => {
+          const per = 0.55 + (k % 4) * 0.09;
+          tl.fromTo(p.svg, { y: 0 }, { y: -1.8, duration: per, ease: "sine.inOut", yoyo: true, repeat: Math.max(0, Math.floor(D / per) - 1) }, 0);
+        });
+
+        // the funnel outline + dividers on top of the hatch and the people
+        FUN.draw(0);
+        FUN.divider(0, 0, { seed: 3 * 977 }); FUN.divider(1, 0, { seed: 4 * 977 }); FUN.divider(2, 0, { seed: 5 * 977 });
+
+        // ================= BEAT A =================
+        // "After that" (0.13): red marker arrow down the left of the funnel, head flicks into tier 1
+        M.arrow(104, 802, 250, 988, 0.02, { bend: 0.32, width: 11, dur: 0.4 });
+
+        // "20%" (1.19): the hero stamp — camera punch + 3 px shake on the contact frame
+        P.punch(1.19, { scale: 1.008, origin: "560px 1380px", dur: 0.3 });
+        P.shake(1.2, 3);
+
+        // the speaker card gets out of the way as the post arrives: quick exit up/right (shrinks into its top-right corner, 7 f)
+        gsap.set("#spk1", { transformOrigin: "100% 0%" });
+        tl.to("#spk1", { scale: 0.8, opacity: 0, filter: "blur(8px)", duration: 7 * F, ease: "power2.in" }, 1.86);
+        tl.set("#spk1", { autoAlpha: 0 }, 1.86 + 7 * F);
+        // the post strip flips up (heavy card: 16 f, tilt into travel, overshoot + settle)
+        P.cardIn("#post", 1.96, { fromY: 80, rot: -2.5 });
+        gsap.set("#post", { transformOrigin: "50% 100%" });
+        tl.fromTo("#post", { rotationX: 62 }, { rotationX: 0, duration: 0.42, ease: "back.out(1.3)", immediateRender: false }, 1.96);
+        M.highlight($("#post .strip"), [225, 23, 255, 54], 2.22, { dur: 0.3 });     // contact on "2" (2.37)
+
+        // "billion" (2.71): the post's real label, written right of tier 1
+        M.note("1-2B", 636, 936, 2.6, { size: 74, rot: -6 });
+
+        // "people" (3.13): four of the pile's front row leave it — crouch, hop out \o/, tumble into tier 1, squash-land, arms down
+        [[0, 336, 1038], [3, 400, 1042], [2, 464, 1042], [4, 526, 1036]].forEach(([idx, tx, tf], k) => {
+          const p = people[idx], L = 3.13 + k * 3 * F, s = L - 0.4, thy = tf - 14 * S;
+          tl.to(p.svg, { scaleX: 1.15, scaleY: 0.8, duration: 3 * F, ease: "power2.in" }, s - 3 * F);            // anticipation crouch
+          tl.to(p.svg, { scaleX: 0.9, scaleY: 1.12, duration: 3 * F, ease: "power2.out" }, s);                    // stretch on take-off
+          tl.to(p.svg, { scaleX: 1, scaleY: 1, duration: 5 * F, ease: "power2.out" }, s + 3 * F);
+          tl.set(p.down.g, { opacity: 0 }, s); tl.set(p.up.g, { opacity: 0.96 }, s);
+          tl.to(p.wrap, { x: tx, duration: 0.4, ease: "power1.inOut" }, s);                                       // arc: x and y eased apart
+          tl.to(p.wrap, { y: p.hy - 26, duration: 0.13, ease: "power2.out" }, s)
+            .to(p.wrap, { y: thy, duration: 0.27, ease: "power2.in" }, s + 0.13);
+          tl.to(p.wrap, { rotation: (k % 2 ? 1 : -1) * 360, duration: 0.4, ease: "power2.inOut" }, s);             // one tumble
+          tl.set(p.wrap, { rotation: 0 }, L);
+          tl.set(p.up.g, { opacity: 0 }, L); tl.set(p.down.g, { opacity: 0.96 }, L);
+          tl.to(p.svg, { scaleX: 1.2, scaleY: 0.76, duration: 2 * F, ease: "power2.out" }, L);
+          tl.to(p.svg, { scaleX: 1, scaleY: 1, duration: 8 * F, ease: "back.out(2.5)" }, L + 2 * F);
+          tl.to(p.wrap, { y: thy - 8, duration: 4 * F, ease: "power2.out" }, L + 2 * F).to(p.wrap, { y: thy, duration: 4 * F, ease: "power2.in" }, L + 6 * F);
+        });
+
+        // post recedes and leaves (exit faster than entrance); speaker comes back
+        P.recede("#post", 3.86, { opacity: 0.55, blur: 3, scale: 0.97, dur: 0.12 });
+        P.exitUp("#post", 3.94, -20);
+
+        // ================= BEAT B — the price tag swings in on its string =================
+        const PX = 160, PY = 326;                                   // pivot (under the tape)
+        const tagG = grp(), bodyG = grp(tagG);
+        // white paper tag fill (pointed top), soft contact shadow
+        const tagPts = [[89, 462], [160, 404], [231, 462], [231, 641], [223, 650], [97, 650], [89, 641], [89, 462]];
+        const fill = document.createElementNS(NS, "polygon");
+        fill.setAttribute("points", tagPts.map((p) => p.join(",")).join(" "));
+        fill.setAttribute("fill", "var(--brand-card)");
+        fill.style.filter = "drop-shadow(0 14px 14px rgba(60,50,40,.22))";
+        bodyG.appendChild(fill);
+        M.line(tagPts, 4.3, { parent: bodyG, color: "ink", width: 9, amp: 1.6, dur: 0.24 });      // outline draws as it drops
+        M.circle(160, 438, 13, 13, 4.48, { parent: bodyG, color: "ink", width: 7, dur: 0.12, turns: 1.08 }); // the hole
+        M.circle(160, 438, 24, 24, 4.52, { parent: bodyG, color: "marker", width: 8, dur: 0.16, turns: 1.1 }); // red reinforcement ring
+        M.line([[PX, PY], [PX - 4, 382], [160, 425]], 4.22, { parent: tagG, color: "ink", width: 5, amp: 0.8, dur: 0.1 }); // string
+        M.tape(85, 304, -5, 4.18);                                 // tape slaps on first (anticipation)
+
+        tl.set(tagG, { opacity: 0 }, 0);
+        tl.set(tagG, { opacity: 1, rotation: -10, y: -16 }, 4.22);
+        tl.set(bodyG, { opacity: 0 }, 0);
+        gsap.set(tagG, { svgOrigin: `${PX} ${PY}` });
+        gsap.set(bodyG, { svgOrigin: "160 432" });
+        tl.fromTo(bodyG, { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.2, ease: "back.out(2)", immediateRender: false }, 4.3);
+        tl.fromTo(tagG, { y: -18 }, { y: 5, duration: 0.18, ease: "power2.in", immediateRender: false }, 4.26)   // string snaps taut
+          .to(tagG, { y: 0, duration: 0.2, ease: "back.out(2)" }, 4.44);
+        // pendulum: decaying overshoots, then a slow sway to the cut (secondary action)
+        tl.fromTo(tagG, { rotation: -10 }, { rotation: 1.6, duration: 0.34, ease: "sine.inOut", immediateRender: false }, 4.28)
+          .to(tagG, { rotation: -1.2, duration: 0.3, ease: "sine.inOut" }, 4.62)
+          .to(tagG, { rotation: 0.8, duration: 0.28, ease: "sine.inOut" }, 4.92)
+          .to(tagG, { rotation: -0.6, duration: 0.27, ease: "sine.inOut" }, 5.2)
+          .to(tagG, { rotation: 0.6, duration: 0.7, ease: "sine.inOut" }, 5.47)
+          .to(tagG, { rotation: -0.7, duration: 0.7, ease: "sine.inOut" }, 6.17);
+        // follow-through: the tag body lags the string (rotates about its hole, 2–3 f behind)
+        tl.fromTo(bodyG, { rotation: -4 }, { rotation: 1.2, duration: 0.3, ease: "sine.inOut", immediateRender: false }, 4.36)
+          .to(bodyG, { rotation: -1, duration: 0.3, ease: "sine.inOut" }, 4.66)
+          .to(bodyG, { rotation: 0.6, duration: 0.28, ease: "sine.inOut" }, 4.96)
+          .to(bodyG, { rotation: 0, duration: 0.3, ease: "sine.out" }, 5.24);
+
+        // "version" (4.95): a quick red underline under "free"
+        const lf = $("#lfree");
+        const fs = parseFloat(lf.style.fontSize);
+        M.underline(lf.offsetLeft + 10, lf.offsetLeft + lf.offsetWidth - 14, 600 + fs * 0.14, 4.86, { width: 11, dur: 0.24 });
+
+        // the 20% / 2 billion pair steps back while the tag is the focal point (stays readable in the lower zone)
+        // (fully opaque — staging by motion only: a tiny settle down-left as focus moves up to the tag)
+        gsap.set("#l20, #lbil", { transformOrigin: "0% 100%" });
+        tl.to("#l20, #lbil", { scale: 0.97, duration: 0.3, ease: "power2.inOut" }, 4.32);
+
+        // ================= logos taped next to tier 1 =================
+        function taped(sel, t, rot, tapeX, tapeY, tapeRot, fx = -24, fy = -70) {
+          const el = $(sel), bg = $(".bg", el), c = $(".c", el);
+          gsap.set(el, { transformOrigin: "50% 75%" });
+          tl.fromTo(el, { opacity: 0 }, { opacity: 1, duration: 4 * F, ease: "power1.out" }, t - 0.22);
+          tl.fromTo(el, { y: fy, x: fx }, { y: 0, x: 0, duration: 0.22, ease: "power2.in" }, t - 0.22);       // falls onto the paper
+          tl.fromTo(el, { scale: 1.08, rotation: rot + 5 }, { scale: 1, rotation: rot, duration: 0.22, ease: "power2.in" }, t - 0.22);
+          tl.fromTo(el, { filter: "blur(5px)" }, { filter: "blur(0px)", duration: 0.18, ease: "power2.out" }, t - 0.22);
+          P.squash(bg, t + 2 * F, 0.09);                                                                        // the card squashes, logo + name don't
+          tl.to(c, { y: 4, duration: 2 * F, ease: "power2.out" }, t).to(c, { y: 0, duration: 7 * F, ease: "back.out(2)" }, t + 2 * F);
+          M.tape(tapeX, tapeY, tapeRot, t + 3 * F);
+        }
+        taped("#cgpt", 5.81, -3, 754, 1027, -7, 0, -12);
+        taped("#clde", 6.73, 2.5, 762, 1144, 5, 0, -6);
+      })();
+    </script>
+  </body>
+</html>

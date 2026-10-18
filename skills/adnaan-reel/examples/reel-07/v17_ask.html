@@ -1,0 +1,87 @@
+<!doctype html>
+<!-- adnaan-reel scene starter: FULL-SCREEN SPEAKER — HE fills the frame edge to edge (no card, no tilt), kinetic
+     words land low on his chest / the bottom third with the paper glow. The minimal beat: nothing else on screen
+     unless the brief names ONE object. Use for the hook, verdict/opinion lines, the wrap-up, the CTA — 2–4 per reel,
+     alternating with paper-world scenes. (flashcheck knows this window is not paper: type "fullscreen" in slots.json.)
+     Optional: add <div class="paper-strip"></div> before the words if the background behind the words is busy.
+     Optional mid-scene version: start as a portrait card and call P.growFull("#spk", t) on the hero word. -->
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>v17_ask</title>
+    <link rel="stylesheet" href="brand.css" />
+    <link rel="stylesheet" href="paper.css" />
+    <link rel="stylesheet" href="marker.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+    <script src="paper.js"></script>
+    <script src="marker.js"></script>
+  </head>
+  <body data-face="0.41">
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="1.2833">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+
+      <!-- full-screen speaker: the whole frame, slow push only -->
+      <div id="spk" class="spk full" data-push="1.02">
+        <div class="spk-card">
+          <div class="spk-vid"><video id="speaker" class="clip" src="assets/speaker.mp4" muted playsinline data-start="0" data-duration="1.2833" data-track-index="1"></video></div>
+        </div>
+      </div>
+
+      <div class="paper-strip" id="strip"></div>
+
+      <div id="cam"><div id="punch">
+        <!-- 'you just need to' lands word by word on solid paper; 'ask' is the stamp -->
+        <div class="line sup ink kin" id="l1" data-x="110" data-base="1300" data-size="100">
+          <span class="w" data-t="0.05" data-pop data-rise="30">you</span><span class="w gap-s" data-t="0.25" data-pop data-rise="30">just</span><span class="w gap-s" data-t="0.45" data-pop data-rise="30">need</span><span class="w gap-s" data-t="0.71" data-pop data-rise="30">to</span>
+        </div>
+        <div class="line hero ocean kin" id="ask" data-x="110" data-base="1456" data-size="200" data-fit="600">
+          <span class="w" id="askw">ask</span>
+        </div>
+      </div></div>
+    </div>
+    <style>
+      /* solid paper under the words (navy hoodie is dark): opaque from y 1240 down, short feather above the chin line */
+      #strip { top: 1226px; bottom: 0; height: auto; background: var(--brand-background);
+        -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 14px); mask-image: linear-gradient(180deg, transparent 0, #000 14px); }
+    </style>
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const P = await Paper.init({ extraFonts: ['700 60px "Caveat"'] });
+        const M = Marker.init(P);   // hand-drawn marker layer (hf/marker.js header): loops, underlines, arrows, highlighter, notes
+        const { tl, D, F } = P;
+        document.querySelector("#punch").insertBefore(M.layer, document.querySelector("#l1"));   // marker sits BEHIND the words: the loop never strikes through letters
+        const A = document.querySelector("#askw");
+        const r = A.getBoundingClientRect();
+        const R = { x: r.left, y: r.top, w: r.width, h: r.height };
+        window.__askRect = R;
+
+        // strip: slides up in 6 f, opaque before the first word
+        tl.fromTo("#strip", { y: 300 }, { y: 0, duration: 0.2, ease: "power3.out", immediateRender: true }, 0);
+
+        // THE STAMP on 'ask' — anticipation (hangs big + faint), slams 1.2 -> 0.92 (contact 0.92, 0.07 before the word), settles 1.0
+        const HIT = 0.92;
+        gsap.set(A, { transformOrigin: "0% " + (1385 - R.y) + "px" });
+        tl.fromTo(A, { opacity: 0, scale: 1.24, y: 0, rotation: 1 }, { opacity: 1, scale: 1.2, y: 0, rotation: 0.8, duration: 0.05, ease: "power1.out", immediateRender: true }, HIT - 0.15);
+        tl.to(A, { scale: 0.92, y: 3, rotation: -1, duration: 0.1, ease: "power4.in" }, HIT - 0.1);
+        tl.to(A, { scale: 1, y: 0, rotation: 0, duration: 0.2, ease: "back.out(3)" }, HIT);
+        P.shake(HIT, 3);
+        P.punch(HIT, { scale: 1.01, origin: "700px 1380px", dur: 0.12 });
+
+        // shout rays fan out to the RIGHT of "ask" into the empty paper (0.94, 0.1 s each, 3 f apart), then boil; plus a single underline
+        const rays = [
+          [[566, 1362], [694, 1334]],
+          [[574, 1406], [730, 1406]],
+          [[566, 1450], [690, 1474]],
+        ];
+        rays.forEach((p, i) => M.line(p, HIT + 0.02 + i * 0.03, { width: 11, dur: 0.1, amp: 1.4 }));
+        M.underline(114, 394, 1469, HIT + 0.2, { width: 9, dur: 0.22, seed: 1702 });
+
+        // hold alive: the stamp breathes a hair, the ink words drift up 2 px
+        tl.fromTo(A, { scale: 1 }, { scale: 1.012, duration: 0.2, ease: "sine.inOut", immediateRender: false }, 1.12);
+      })();
+    </script>
+  </body>
+</html>

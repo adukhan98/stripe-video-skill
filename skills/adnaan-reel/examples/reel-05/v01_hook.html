@@ -1,0 +1,256 @@
+<!doctype html>
+<!-- adnaan-reel scene: v01_hook — HOOK. Text hook on frame 0 + PORTRAIT speaker card + kinetic phrases on his chest
+     + bespoke object: a soft JOB POSTING card (lands on "hiring") and a tray of 4 EMPTY dashed seats (deal in on
+     "aren't enough people"). Runtime: paper.css/paper.js (untouched). -->
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>v01_hook</title>
+    <link rel="stylesheet" href="brand.css" />
+    <link rel="stylesheet" href="paper.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+    <script src="paper.js"></script>
+    <style>
+      @font-face { font-family: "Inter Tight"; src: url("fonts/InterTight-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Inter"; src: url("fonts/Inter-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+
+      /* paper pad inside the card: the navy sweatshirt is too dark for ink words, so the lower card fades to paper */
+      .spk-card .paper-strip { position: absolute; left: 0; right: 0; bottom: 0; height: 330px; }
+
+      /* ---- bespoke object 1: job posting card (illustrative, no company names) ---- */
+      #postTilt { position: absolute; left: 0; top: 0; width: 0; height: 0; overflow: visible; }
+      #post { left: 678px; top: 700px; width: 268px; height: 322px; }
+      #post .ink { position: absolute; border-radius: 7px; background: var(--brand-text); opacity: 0.88; }
+      #post .g, #post .ink { transform-origin: 0 50%; }
+      #pillHire { left: 752px; top: 662px; height: 64px; padding: 0 28px 0 24px; border-radius: 32px; font-size: 32px; gap: 14px; }
+      #pillHire .dot { width: 16px; height: 16px; border-radius: 50%; background: var(--brand-primary); box-shadow: 0 0 0 0 rgba(46, 156, 203, 0.7); flex: none; }
+
+      /* letters split for the per-letter shimmer / cascade (layout is measured with them present) */
+      .lt, .lt2 { display: inline-block; will-change: transform, opacity, filter; }
+      .dust { position: absolute; left: 0; top: 0; width: 22px; height: 22px; margin: -11px 0 0 -11px; border-radius: 50%; opacity: 0;
+        background: radial-gradient(circle at 35% 30%, var(--brand-primary), var(--brand-primary-dark) 80%); }
+      #apply { overflow: hidden; }
+      #apply .rip { position: absolute; left: 50%; top: 50%; width: 44px; height: 44px; margin: -22px 0 0 -22px; border-radius: 50%; background: rgba(255, 255, 255, 0.55); opacity: 0; }
+      #pillHire .ring { position: absolute; left: 24px; top: 24px; width: 16px; height: 16px; border-radius: 50%; border: 2.5px solid var(--brand-primary); opacity: 0; }
+      .sil { position: absolute; top: 22px; width: 64px; height: 64px; opacity: 0; }
+      .sil svg { width: 64px; height: 64px; display: block; }
+      .sil path, .sil circle { fill: var(--brand-muted); }
+
+      /* ---- bespoke object 2: tray of 4 empty dashed seats ---- */
+      #tray { left: 630px; top: 1052px; width: 306px; height: 108px; border-radius: 36px; }
+      .seat { position: absolute; top: 20px; width: 64px; height: 64px; opacity: 0; }
+      .seat svg { width: 64px; height: 64px; display: block; overflow: visible; }
+      .seat .d { fill: none; stroke: var(--brand-muted); stroke-width: 3.2; stroke-linecap: round; stroke-dasharray: 5 8; }
+    </style>
+  </head>
+  <body data-face="0.47">
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="4.7833" data-strength="subtle">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+      <div id="cam"><div id="punch">
+
+        <!-- TEXT HOOK (user-written; readable on frame 0, stays the whole scene; breathes 1 % + tiny float) -->
+        <div class="layer" data-breathe="1.01" data-float="3">
+          <div class="line hero" data-x="76" data-base="370" data-size="92"><span>the</span><span class="gap-s">most</span></div>
+          <div class="line hero ocean" data-right="944" data-base="516" data-size="178"><span data-underline="0"><span class="lt">i</span><span class="lt">n</span><span class="lt">-</span><span class="lt">d</span><span class="lt">e</span><span class="lt">m</span><span class="lt">a</span><span class="lt">n</span><span class="lt">d</span></span></div>
+          <div class="line hero" data-x="84" data-base="636" data-size="110"><span>AI</span><span class="gap-s">job</span><span class="gap-s">of</span><span class="gap-s">2027</span></div>
+        </div>
+
+        <!-- PORTRAIT speaker card: on screen from frame 0 (data-at omitted), face centred by data-face -->
+        <div class="spk portrait" data-x="124" data-y="664" data-w="760" data-h="776">
+          <div class="spk-card">
+            <div class="spk-vid"><video id="speaker" class="clip" src="assets/speaker.mp4" muted playsinline data-start="0" data-duration="4.7833" data-track-index="1"></video></div>
+            <div class="paper-strip"></div>
+            <div class="spk-sheen"></div>
+          </div>
+        </div>
+
+        <!-- KINETIC WORDS = words.txt, landing on his chest over the paper pad (class kin = paper glow) -->
+        <!-- phrase 1: "There's one job" -->
+        <div class="line sup kin" data-x="80" data-base="1262" data-size="90" data-exit="1.5">
+          <span class="w" data-t="0.20" data-rise="40">There’s</span>
+        </div>
+        <div id="oneLine" class="line hero ocean kin" data-x="72" data-base="1412" data-size="220" data-exit="1.5" data-exit-lag="2">
+          <span class="w" id="oneW">one</span>
+        </div>
+        <div class="line hero ink kin" data-right="940" data-base="1424" data-size="200" data-exit="1.5" data-exit-lag="4">
+          <span class="w" data-t="0.86" data-hero data-rise="24" data-origin="60% 85%" data-peak="1.08">job</span>
+        </div>
+        <!-- phrase 2: "everyone is hiring" -->
+        <div class="line sup kin" data-x="76" data-base="1282" data-size="112" data-exit="3.3">
+          <span class="w" data-t="1.84" data-rise="40">everyone</span><span class="w gap-s" data-t="2.06" data-rise="40">is</span>
+        </div>
+        <div class="line hero ocean kin" data-right="926" data-base="1428" data-size="190" data-exit="3.3" data-exit-lag="3">
+          <span class="w" id="hiringW"><span class="lt2">h</span><span class="lt2">i</span><span class="lt2">r</span><span class="lt2">i</span><span class="lt2">n</span><span class="lt2">g</span></span>
+        </div>
+        <!-- phrase 3: "aren't enough people" -->
+        <div class="line sup kin" data-x="76" data-base="1296" data-size="100">
+          <span class="w" data-t="3.54" data-rise="40">aren’t</span><span class="w gap-s" data-t="3.80" data-rise="40">enough</span>
+        </div>
+        <div class="line hero ink kin" data-right="940" data-base="1424" data-size="170">
+          <span class="w" data-t="4.06" data-pop data-rise="24" data-origin="50% 85%">people</span>
+        </div>
+
+        <!-- BESPOKE OBJECT 1: job posting card + "Hiring" pill (lands on "hiring") -->
+        <div id="postTilt">
+          <div id="post" class="uicard">
+            <div class="g" style="left:24px;top:26px;width:58px;height:58px;border-radius:17px"></div>
+            <div class="ink" style="left:98px;top:34px;width:120px;height:16px"></div>
+            <div class="g" style="left:98px;top:62px;width:92px;height:13px"></div>
+            <div class="g" style="left:24px;top:112px;width:220px;height:13px"></div>
+            <div class="g" style="left:24px;top:140px;width:190px;height:13px"></div>
+            <div class="g" style="left:24px;top:168px;width:204px;height:13px"></div>
+            <div class="g" style="left:24px;top:206px;width:78px;height:34px;border-radius:17px"></div>
+            <div class="g" style="left:112px;top:206px;width:96px;height:34px;border-radius:17px"></div>
+            <div class="g acc" id="apply" style="left:24px;top:258px;width:220px;height:42px;border-radius:15px"><i class="rip" id="rip"></i></div>
+            <div class="spk-sheen sheen" style="border-radius:28px"></div>
+          </div>
+          <div id="pillHire" class="pill"><i class="ring" id="ring1"></i><i class="ring" id="ring2"></i><span class="dot" id="hdot"></span><span>Hiring</span></div>
+        </div>
+
+        <!-- BESPOKE OBJECT 2: tray with 4 empty seats (deal in on "aren't enough people", stay empty) -->
+        <div id="tray" class="uicard">
+          <div class="seat" style="left:12px"></div>
+          <div class="seat" style="left:84px"></div>
+          <div class="seat" style="left:156px"></div>
+          <div class="seat" style="left:228px"></div>
+        </div>
+
+        <!-- dust burst for the "one" stamp, and the cursor that applies -->
+        <i class="dust"></i><i class="dust"></i><i class="dust"></i><i class="dust"></i><i class="dust"></i><i class="dust"></i>
+        <div class="cursor" id="cur"></div>
+
+      </div></div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const P = await Paper.init();
+        const { tl, D, F, $, $$ } = P;
+
+        const num = (v) => parseFloat(v);
+
+        // ================= HOOK: alive from frame 0 (no entrance) =================
+        // per-letter shimmer wave across "in-demand" every ~1.5 s (letters hop 9 px and flash lighter, 2 f apart)
+        const prim = getComputedStyle(document.documentElement).getPropertyValue("--brand-primary").trim();
+        const lighter = (() => { const h = prim.replace("#", ""); const c = [0, 2, 4].map((i) => parseInt(h.substr(i, 2), 16)); return `rgb(${c.map((v) => Math.round(v + (255 - v) * 0.5)).join(",")})`; })();
+        const hookLetters = $$(".lt");
+        gsap.set(hookLetters, { transformOrigin: "50% 85%" });
+        [1.15, 2.65, 4.15].forEach((T) => hookLetters.forEach((l, i) => {
+          const t = T + i * 2 * F;
+          tl.to(l, { y: -9, scale: 1.04, color: lighter, duration: 0.12, ease: "power2.out" }, t)
+            .to(l, { y: 0, scale: 1, color: prim, duration: 0.3, ease: "back.out(2)" }, t + 0.12);
+        }));
+        // the hand-drawn underline wipes out and re-draws once with a flourish (stroke swells, then settles) in the 1.5-1.7 gap
+        const ulp = $(".ul path"), UL = ulp.getTotalLength();
+        tl.to(ulp, { strokeDashoffset: -UL, duration: 0.16, ease: "power2.in" }, 1.5);
+        tl.set(ulp, { opacity: 0 }, 1.67).set(ulp, { opacity: 1 }, 1.7);
+        tl.fromTo(ulp, { strokeDashoffset: UL }, { strokeDashoffset: 0, duration: 0.32, ease: "power3.out", immediateRender: false }, 1.7);
+        tl.to(ulp, { attr: { "stroke-width": 17 }, duration: 0.12, ease: "power2.out" }, 1.8)
+          .to(ulp, { attr: { "stroke-width": 12 }, duration: 0.26, ease: "back.out(2.2)" }, 1.92);
+
+        // ================= "one": a stamp that slams in, with an accent dust burst =================
+        const oneW = $("#oneW"), oneLine = $("#oneLine");
+        gsap.set(oneW, { transformOrigin: "0% 90%" });
+        tl.fromTo(oneW, { opacity: 0 }, { opacity: 1, duration: 0.07, ease: "power1.out", immediateRender: true }, 0.5);
+        tl.fromTo(oneW, { scale: 1.45, x: 16, y: -30, rotation: -3, filter: "blur(4px)" },
+          { scale: 0.95, x: 0, y: 5, rotation: 1.5, filter: "blur(0px)", duration: 0.14, ease: "power3.in", immediateRender: true }, 0.5);
+        tl.to(oneW, { scale: 1, y: 0, rotation: 0, duration: 0.24, ease: "back.out(2.4)" }, 0.64);
+        P.punch(0.64);                                                     // impact: 0.4 % camera punch
+        const OX = oneLine.offsetLeft + oneW.offsetLeft + oneW.offsetWidth - 30, OY = 1388;
+        const angs = [-100, -72, -44, -16, 14, -128], dist = [64, 92, 112, 104, 74, 58], size = [1, 0.7, 1.15, 0.8, 0.6, 0.9];
+        $$(".dust").forEach((d, i) => {
+          const a = (angs[i] * Math.PI) / 180, tx = OX + Math.cos(a) * dist[i], ty = OY + Math.sin(a) * dist[i];
+          tl.fromTo(d, { x: OX, y: OY, scale: 0.3, opacity: 0 }, { opacity: 0.9, scale: size[i], duration: 0.06, ease: "power1.out", immediateRender: true }, 0.64 + i * 0.01);
+          tl.to(d, { x: tx, duration: 0.5, ease: "power3.out" }, 0.64 + i * 0.01);
+          tl.to(d, { y: ty, duration: 0.5, ease: "power2.out" }, 0.64 + i * 0.01);
+          tl.to(d, { scale: 0.15, opacity: 0, duration: 0.3, ease: "power1.in" }, 0.84 + i * 0.01);
+        });
+
+        // ================= "hiring": letters cascade in (2.5 f apart), then a small wave while it holds =================
+        const hl = $$(".lt2");
+        gsap.set(hl, { transformOrigin: "50% 85%" });
+        hl.forEach((l, i) => {
+          const t = 2.02 + i * 0.04;
+          tl.fromTo(l, { opacity: 0, y: 30, scale: 0.6, rotation: -8, filter: "blur(8px)" },
+            { opacity: 1, y: -9, scale: 1.1, rotation: 2, filter: "blur(0px)", duration: 0.17, ease: "power3.out", immediateRender: true }, t);
+          tl.to(l, { y: 0, scale: 1, rotation: 0, duration: 0.26, ease: "back.out(1.8)" }, t + 0.17);
+          tl.to(l, { y: -8, duration: 0.1, ease: "power2.out" }, 2.85 + i * 0.04).to(l, { y: 0, duration: 0.26, ease: "back.out(2)" }, 2.95 + i * 0.04);
+        });
+
+        // ================= OBJECT 1: job posting card =================
+        const POST = 2.12;                                                  // hiring card pop (SFX-synced)
+        P.cardIn("#post", POST, { fromY: 70, rot: 3, ry: 0 });
+        $$("#post .g, #post .ink").forEach((b, i) => {
+          tl.fromTo(b, { scaleX: 0 }, { scaleX: 1, duration: 0.22, ease: "power3.out", immediateRender: true }, POST + 0.14 + i * 2 * F);
+        });
+        P.pillIn("#pillHire", POST + 0.16);
+        // pill dot: pulse + two sonar rings (secondary action, runs to the end)
+        const reps = Math.floor((D - 2.5) / 0.9);
+        tl.fromTo("#hdot", { scale: 1 }, { scale: 1.2, duration: 0.45, ease: "sine.inOut", yoyo: true, repeat: reps * 2 + 1, immediateRender: false }, 2.5);
+        ["#ring1", "#ring2"].forEach((r, k) => {
+          gsap.set(r, { transformOrigin: "50% 50%" });
+          tl.fromTo(r, { scale: 1, opacity: 0.85 }, { scale: 3.6, opacity: 0, duration: 0.9, ease: "power2.out", repeat: reps, immediateRender: false }, 2.5 + k * 0.45);
+        });
+        gsap.set("#postTilt", { rotation: 3.5, transformOrigin: "812px 861px" });
+        P.floatY("#postTilt", 4, 1.2);
+        P.shake(POST + 0.2, 2.5);                                           // the ONE exaggerated shake: the card hits
+
+        // a cursor arcs in, presses the accent "Apply" bar (dip + ripple, no new text) and leaves
+        tl.set("#cur", { x: 850, y: 1245 }, 0);
+        P.cursorTo("#cur", 2.55, 806, 981, { dur: 0.42 });
+        tl.set("#apply", { transformOrigin: "50% 50%" }, 2.9);
+        P.cursorClick("#cur", 3.02);
+        tl.to("#apply", { scale: 0.93, duration: 3 * F, ease: "power2.in" }, 3.02 - 3 * F).to("#apply", { scale: 1, duration: 0.24, ease: "back.out(2.5)" }, 3.02);
+        tl.fromTo("#rip", { scale: 0.2, opacity: 0.7 }, { scale: 7, opacity: 0, duration: 0.5, ease: "power2.out", immediateRender: false }, 3.02);
+        tl.to("#cur", { opacity: 0, x: "+=36", y: "+=64", duration: 0.2, ease: "power2.in" }, 3.14);
+
+        // ================= OBJECT 2: 4 empty seats =================
+        const seats = $$(".seat");
+        seats.forEach((s) => {
+          s.innerHTML = `<svg viewBox="0 0 64 64"><circle class="d" cx="32" cy="32" r="29"/><circle class="d" cx="32" cy="25" r="9"/><path class="d" d="M15 51 C16 40 24 38 32 38 C40 38 48 40 49 51"/></svg>`;
+        });
+        const TRAY = 3.34;                                                  // seat ticks 3.34 / 3.44 / 3.54 / 3.64
+        P.cardIn("#tray", TRAY, { fromY: -50, rot: -2, ry: 0 });
+        seats.forEach((s, i) => {
+          const t = TRAY + i * 3 * F;
+          gsap.set(s, { transformOrigin: "50% 60%" });
+          tl.fromTo(s, { opacity: 0, x: -44 + i * -6, y: -34, scale: 0.55, rotation: -24 },
+            { opacity: 1, x: 0, y: 0, scale: 1.06, rotation: 3, duration: 0.2, ease: "power3.out", immediateRender: true }, t);
+          tl.to(s, { scale: 1, rotation: 0, duration: 0.26, ease: "back.out(1.6)" }, t + 0.2);
+        });
+        tl.fromTo("#tray .d", { strokeDashoffset: 0 }, { strokeDashoffset: -39, duration: D - 3.5, ease: "none", immediateRender: false }, 3.5);
+
+        // playful beat on "aren't enough people": grey people try to drop into seats and get bounced back out (seats stay empty)
+        const sils = seats.map((s, i) => {
+          const el = document.createElement("div");
+          el.className = "sil";
+          el.style.left = 12 + i * 72 + "px";
+          el.innerHTML = `<svg viewBox="0 0 64 64"><circle cx="32" cy="24" r="10"/><path d="M14 52 C15 40 23 36 32 36 C41 36 49 40 50 52 Z"/></svg>`;
+          $("#tray").appendChild(el);
+          return el;
+        });
+        const tryTo = (i, t0) => {
+          const sil = sils[i], seat = seats[i], sgn = i % 2 ? 1 : -1;
+          gsap.set(sil, { transformOrigin: "50% 85%" });
+          tl.fromTo(sil, { opacity: 0, y: -46, scale: 0.8, rotation: -6 }, { opacity: 0.75, y: 0, scale: 1, rotation: 0, duration: 0.17, ease: "power2.in", immediateRender: true }, t0);
+          tl.to(sil, { scaleX: 1.1, scaleY: 0.82, duration: 2 * F, ease: "power2.out" }, t0 + 0.17);              // squash on contact (shape)
+          tl.to(seat, { y: 4, duration: 2 * F, ease: "power2.out" }, t0 + 0.17).to(seat, { y: 0, duration: 0.22, ease: "back.out(2)" }, t0 + 0.17 + 2 * F);
+          tl.to(sil, { y: -52, x: sgn * 10, rotation: sgn * 22, scaleX: 0.85, scaleY: 0.85, opacity: 0, duration: 0.28, ease: "power2.out" }, t0 + 0.24);   // popped back out
+          tl.to(seat, { x: 3, duration: F, ease: "none" }, t0 + 0.24).to(seat, { x: -3, duration: F, ease: "none" }, t0 + 0.24 + F)
+            .to(seat, { x: 2, duration: F, ease: "none" }, t0 + 0.24 + 2 * F).to(seat, { x: 0, duration: F, ease: "none" }, t0 + 0.24 + 3 * F);   // "no" head-shake
+        };
+        tryTo(0, 3.95); tryTo(1, 4.1); tryTo(3, 4.25);
+        // the third seat gives its hopeful wiggle and stays empty
+        const hope = seats[2];
+        tl.to(hope, { rotation: -9, y: -7, scale: 1.1, duration: 0.1, ease: "power2.out" }, 4.38)
+          .to(hope, { rotation: 7, y: -2, scale: 1.05, duration: 0.1, ease: "sine.inOut" }, 4.48)
+          .to(hope, { rotation: -3, y: -4, duration: 0.1, ease: "sine.inOut" }, 4.58)
+          .to(hope, { rotation: 0, y: 0, scale: 1, duration: 0.12, ease: "back.out(1.8)" }, 4.66);
+        P.recede("#post, #pillHire", 3.5, { opacity: 1, blur: 0, scale: 0.97, dur: 0.35 });
+      })();
+    </script>
+  </body>
+</html>

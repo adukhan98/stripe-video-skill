@@ -1,0 +1,413 @@
+<!doctype html>
+<!-- adnaan-reel scene: t4_stanford — v7 "MINT" VISUAL mode with CAMERA TRAVEL (blank starter, Mode B).
+     Opens on THE HABIT CHAIN (SHARED v7 geometry, t3's end state), flips his face into the mint mic disc, pushes in on
+     disc 1 (area A: "talk to it / instead of typing"), then glides down/right across the world to area B (Stanford
+     wordmark, the real strip, the speaking-vs-typing race, the peach 3x). No marker layer, no red, clean vector only. -->
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>t4_stanford</title>
+    <link rel="stylesheet" href="brand.css" />
+    <link rel="stylesheet" href="paper.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+    <script src="paper.js"></script>
+    <style>
+      @font-face { font-family: "Inter Tight"; src: url("fonts/InterTight-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Inter"; src: url("fonts/Inter-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+
+      /* v7 VISUAL board: our paper + grid, vignette much stronger */
+      #vig2 { position: absolute; inset: 0; background: var(--vignette-strong); }
+
+      /* camera: two world layers driven by the SAME camera tweens. #viewM is masked to the content zone with a soft
+         feathered edge (things leaving the zone during a camera move dissolve before the zone edge); #worldU holds the
+         wide area-B objects that never travel (strip card, race) and sits unmasked. */
+      #viewM {
+        position: absolute; inset: 0; --mky: 0px;
+        -webkit-mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1080' height='1920' viewBox='0 0 1080 1920'><filter id='b' x='-20%25' y='-20%25' width='140%25' height='140%25'><feGaussianBlur stdDeviation='16'/></filter><path filter='url(%23b)' fill='white' d='M100 325 H920 V1160 H860 V1440 H100 Z'/></svg>");
+        mask-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='1080' height='1920' viewBox='0 0 1080 1920'><filter id='b' x='-20%25' y='-20%25' width='140%25' height='140%25'><feGaussianBlur stdDeviation='16'/></filter><path filter='url(%23b)' fill='white' d='M100 325 H920 V1160 H860 V1440 H100 Z'/></svg>");
+        -webkit-mask-size: 1080px 1920px; mask-size: 1080px 1920px;
+        -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+        -webkit-mask-position: 0px var(--mky); mask-position: 0px var(--mky);
+      }
+      .world { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; transform-origin: 0 0; }
+      /* an AREA is authored in screen px: its transform is the inverse of the camera pose that frames it */
+      .area { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; transform-origin: 0 0; }
+      #areaA { transform: translate(117.647px, 207.059px) scale(0.588235); }
+      #areaBm, #areaB { transform: translate(477.647px, 827.059px) scale(0.666667); }
+
+      /* ===================== HABIT CHAIN (v7) — CSS — BEGIN (t4: copy verbatim) ===================== */
+      .hc-world { position: absolute; inset: 0; }
+      .hc-link { position: absolute; left: 0; top: 0; overflow: visible; }
+      .hc-link path { fill: none; stroke: var(--brand-deep); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+      .hc-disc {
+        position: absolute; width: 180px; height: 180px; margin: -90px 0 0 -90px; border-radius: 50%;
+        background: var(--brand-deep); box-shadow: var(--disc-shadow); color: white;
+        display: flex; align-items: center; justify-content: center;
+      }
+      .hc-disc.mint { background: var(--brand-primary); }
+      .hc-disc.face { background: var(--brand-primary); }      /* backing under his face circle: shadow + mint rim fringe */
+      .hc-disc svg { width: 46%; height: 46%; display: block; }
+      .hc-ring { position: absolute; left: 0; top: 0; overflow: visible; pointer-events: none; }
+      .hc-ring circle { fill: none; stroke: var(--brand-primary); }
+      .hc-ripple {
+        position: absolute; width: 180px; height: 180px; margin: -90px 0 0 -90px; border-radius: 50%;
+        border: 6px solid var(--brand-primary); opacity: 0;
+      }
+      /* ===================== HABIT CHAIN (v7) — CSS — END ===================== */
+      /* icon discs (area A keyboard) — same look as the chain discs */
+      .disc {
+        position: absolute; width: 180px; height: 180px; margin: -90px 0 0 -90px; border-radius: 50%;
+        background: var(--brand-deep); box-shadow: var(--disc-shadow); color: var(--brand-card);
+        display: flex; align-items: center; justify-content: center;
+      }
+      .disc .gl { width: 46%; height: 46%; display: block; }
+      .gl svg { width: 100%; height: 100%; display: block; }
+      /* t3's face circle rides the camera inside #worldM; this wrapper carries the flip */
+      #faceWrap { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+      #hc-d1 { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+
+      /* ---- area A (screen px at pose A) ---- */
+      .tag { position: absolute; width: 76px; height: 76px; margin: -38px 0 0 -38px; border-radius: 38px; background: var(--brand-deep);
+        color: var(--brand-card); font-family: var(--font-body); font-weight: 700; font-size: 44px; line-height: 76px; text-align: center;
+        box-shadow: 0 14px 22px -8px rgba(30, 30, 30, .4); opacity: 0; }
+      .ring { position: absolute; border-radius: 50%; border: 6px solid var(--brand-primary); opacity: 0; }
+      #kbd { left: 735px; top: 600px; width: 230px; height: 230px; margin: -115px 0 0 -115px; opacity: 0; }
+      .strike { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; overflow: visible; }
+      .strike path { fill: none; stroke-linecap: round; }
+
+      /* ---- area B ---- */
+      .wm { position: absolute; left: 140px; top: 360px; width: 470px; height: 140px; border-radius: 28px; background: var(--brand-card);
+        box-shadow: var(--shadow-card); display: flex; align-items: center; justify-content: center; opacity: 0; }
+      .wm img { width: 410px; height: auto; display: block; }
+      .line.lab { font-family: var(--font-body); font-weight: 600; letter-spacing: -0.01em; }
+      .strip { position: absolute; left: 70px; top: 530px; width: 880px; height: 226px; border-radius: 26px; background: #fff;
+        overflow: hidden; box-shadow: 0 28px 40px -22px rgba(50, 45, 40, .42), 0 8px 14px -10px rgba(50, 45, 40, .2); opacity: 0; }
+      .strip img { position: absolute; left: -72px; top: -24px; width: 1054px; height: 224px; display: block; }
+      .strip .hl { position: absolute; left: 441px; top: 79px; width: 202px; height: 46px; border-radius: 6px;
+        background: var(--mint-soft); border-bottom: 5px solid var(--brand-primary-dark); mix-blend-mode: multiply;
+        transform-origin: 0 50%; transform: scaleX(0); }
+      .race { position: absolute; left: 70px; top: 806px; width: 620px; height: 350px; border-radius: 30px; background: var(--brand-card);
+        box-shadow: 0 30px 44px -22px rgba(60, 50, 40, .42), 0 8px 14px -10px rgba(60, 50, 40, .2); opacity: 0; }
+      .race .rdisc { position: absolute; width: 100px; height: 100px; margin: -50px 0 0 -50px; border-radius: 50%;
+        background: var(--brand-deep); color: var(--brand-card); box-shadow: 0 12px 20px -8px rgba(30, 30, 30, .4);
+        display: flex; align-items: center; justify-content: center; }
+      .race .rdisc.mint { background: var(--brand-primary); }
+      .race .rdisc .gl { width: 48%; height: 48%; }
+      .race .rl { position: absolute; font-family: var(--font-body); font-weight: 600; font-size: 44px; letter-spacing: -0.01em;
+        color: var(--brand-text); line-height: 1; }
+      .race .track { position: absolute; left: 148px; width: 410px; height: 44px; border-radius: 22px;
+        background: color-mix(in srgb, var(--brand-deep) 9%, transparent); }
+      .race .fill { position: absolute; left: 148px; height: 44px; width: 44px; border-radius: 22px; }
+      #fillS { background: var(--brand-primary); }
+      #fillT { background: color-mix(in srgb, var(--brand-deep) 62%, var(--brand-card)); }
+      .race .finish { position: absolute; left: 568px; top: 24px; width: 4px; height: 304px; border-radius: 2px; background: var(--brand-deep); }
+      .race .flag { position: absolute; left: 572px; top: 24px; width: 40px; height: 32px; transform-origin: 0 50%; opacity: 0; }
+      .race .flag svg { width: 100%; height: 100%; display: block; }
+      #x3 { color: var(--peach); opacity: 0; }
+      #x3 .odo { display: inline-block; height: 0.8em; overflow: hidden; vertical-align: -0.035em; }
+      #x3 .col { display: block; }
+      #x3 .col span { display: block; height: 0.8em; line-height: 0.8em; text-align: center; }
+    </style>
+  </head>
+  <body data-face="0.40">
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="5.0500">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div><div id="vig2"></div></div>
+      <div id="cam"><div id="punch">
+
+        <div id="viewM">
+          <div id="worldM" class="world">
+            <!-- ===== THE HABIT CHAIN — t3's exact end state (t3's HABIT CHAIN block, built by buildHabitChain) ===== -->
+            <div id="chainWorld" class="hc-world"></div>
+            <div id="faceWrap">
+              <div id="spk" class="spk full" data-push="1">
+                <div class="spk-card">
+                  <div class="spk-vid"><video id="speaker" class="clip" src="assets/speaker.mp4" muted playsinline data-start="0" data-duration="5.0500" data-track-index="1"></video></div>
+                </div>
+              </div>
+            </div>
+            <!-- ===== end chain ===== -->
+
+            <!-- AREA A — screen px at pose A (mic disc = disc 1 at (310, 600), Ø306) -->
+            <div id="areaA" class="area">
+              <div class="ring" id="ring1" style="left:157px;top:447px;width:306px;height:306px"></div>
+              <div class="ring" id="ring2" style="left:157px;top:447px;width:306px;height:306px"></div>
+              <div class="tag" id="tag1" style="left:412px;top:478px">1</div>
+              <div class="disc" id="kbd"><i class="gl" data-g="keyboard"></i></div>
+              <svg class="strike" viewBox="0 0 1080 1920">
+                <path id="strU" d="M652 517 L818 683" stroke="var(--brand-background)" stroke-width="26" />
+                <path id="strK" d="M652 517 L818 683" stroke="var(--brand-deep)" stroke-width="11" />
+              </svg>
+              <div class="line hero" data-x="140" data-base="1010" data-size="200" data-fit="800">
+                <span class="w ocean" data-t="0.43" data-hero>talk</span><span class="w gap-s" data-t="0.71">to</span><span class="w gap-s" data-t="0.85">it</span>
+              </div>
+              <div class="line sup" data-x="140" data-base="1150" data-size="110">
+                <span class="w" data-t="1.01">instead</span><span class="w gap-s" data-t="1.27">of</span>
+              </div>
+              <div class="line sup" data-right="870" data-base="1282" data-size="120">
+                <span class="w" data-t="1.39" data-pop>typing.</span>
+              </div>
+            </div>
+
+            <!-- AREA B (masked part: arrives during the camera travel) -->
+            <div id="areaBm" class="area">
+              <div class="wm" id="wm"><img src="assets/stanford_wordmark.svg" alt="Stanford" /></div>
+              <div class="line lab" data-x="640" data-base="452" data-size="64">
+                <span class="w" data-t="2.21">study</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="worldU" class="world">
+          <!-- AREA B (unmasked: lands after the camera has arrived) — screen px at pose B -->
+          <div id="areaB" class="area">
+            <div class="strip" id="strip"><img src="assets/stanford_2.png" alt="" /><div class="hl" id="hl"></div></div>
+            <div class="race" id="race">
+              <div class="rl" style="left:148px;top:44px">speaking</div>
+              <div class="track" style="top:98px"></div>
+              <div class="fill" id="fillS" style="top:98px"></div>
+              <div class="rdisc mint" id="rMic" style="left:76px;top:120px"><i class="gl" data-g="mic"></i></div>
+              <div class="rl" style="left:148px;top:198px">typing</div>
+              <div class="track" style="top:252px"></div>
+              <div class="fill" id="fillT" style="top:252px"></div>
+              <div class="rdisc" id="rKbd" style="left:76px;top:274px"><i class="gl" data-g="keyboard"></i></div>
+              <div class="finish" id="finish"></div>
+              <div class="flag" id="flag"><svg viewBox="0 0 40 32"><path d="M0 2 Q0 0 2 1 L37 14 Q40 16 37 18 L2 31 Q0 32 0 30 Z" fill="var(--brand-primary)" /></svg></div>
+            </div>
+            <div class="line hero" id="x3" data-x="724" data-base="1062" data-size="200" data-fit="228">
+              <span class="odo"><span class="col" id="odoCol"><span>1</span><span>2</span><span>3</span></span></span><span>×</span>
+            </div>
+            <div class="line hero" data-x="100" data-base="1430" data-size="190" data-fit="860">
+              <span class="w" data-t="3.93" data-hero data-punch="3.93">faster</span>
+            </div>
+          </div>
+        </div>
+
+      </div></div>
+    </div>
+    <script>
+      /* ============================================================================================================
+         HABIT CHAIN (v7) — JS — BEGIN.  Self-contained: t4 copies this block verbatim (plus the CSS block above).
+         Geometry (SHARED.md v7): six discs, diameter 180, centres in frame px (world = frame at the end of t3).
+         Disc 1 = HIS FACE: the full-frame #spk (1080x1920 speaker.mp4) clipped to a circle of radius FACE.R around
+         source point (FACE.cx, FACE.cy) and transformed (origin = that point) so it lands on C[0] at diameter 180,
+         with a mint ring (RING px on screen) drawn inside the clip. Connector: 4 px charcoal, centre→centre 1→6,
+         behind the discs. Discs 2–6 charcoal with white Phosphor-fill glyphs at 46 % of the disc.
+           buildHabitChain(world, spk)  → { link, len, cum, discs[6], glyphs[6], ring, ringLen, ripple }
+           HC.faceEnd                   → exact end transform/clip of #spk
+           setHabitChainEnd(chain, spk) → puts everything in the END STATE (= t4 frame 0)
+         ============================================================================================================ */
+      const HC = {
+        D: 180, RING: 8,
+        C: [[300, 560], [620, 700], [330, 880], [640, 1030], [330, 1190], [600, 1360]],
+        ICONS: ["microphone", "eye", "chat-circle-dots", "magnifying-glass", "folder-open", "watch"],
+        FACE: { cx: 550, cy: 735, R: 380 },          // face circle in speaker.mp4 source px (face centre ≈ 0.37–0.40 of height)
+        GLYPH: {                                       // Phosphor "fill" 256-box paths (hf/assets/<name>.svg)
+          "microphone": "M80,128V64a48,48,0,0,1,96,0v64a48,48,0,0,1-96,0Zm128,0a8,8,0,0,0-16,0,64,64,0,0,1-128,0,8,8,0,0,0-16,0,80.11,80.11,0,0,0,72,79.6V240a8,8,0,0,0,16,0V207.6A80.11,80.11,0,0,0,208,128Z",
+          "eye": "M247.31,124.76c-.35-.79-8.82-19.58-27.65-38.41C194.57,61.26,162.88,48,128,48S61.43,61.26,36.34,86.35C17.51,105.18,9,124,8.69,124.76a8,8,0,0,0,0,6.5c.35.79,8.82,19.57,27.65,38.4C61.43,194.74,93.12,208,128,208s66.57-13.26,91.66-38.34c18.83-18.83,27.3-37.61,27.65-38.4A8,8,0,0,0,247.31,124.76ZM128,168a40,40,0,1,1,40-40A40,40,0,0,1,128,168Z",
+          "chat-circle-dots": "M128,24A104,104,0,0,0,36.18,176.88L24.83,210.93a16,16,0,0,0,20.24,20.24l34.05-11.35A104,104,0,1,0,128,24ZM84,140a12,12,0,1,1,12-12A12,12,0,0,1,84,140Zm44,0a12,12,0,1,1,12-12A12,12,0,0,1,128,140Zm44,0a12,12,0,1,1,12-12A12,12,0,0,1,172,140Z",
+          "magnifying-glass": "M168,112a56,56,0,1,1-56-56A56,56,0,0,1,168,112Zm61.66,117.66a8,8,0,0,1-11.32,0l-50.06-50.07a88,88,0,1,1,11.32-11.31l50.06,50.06A8,8,0,0,1,229.66,229.66ZM112,184a72,72,0,1,0-72-72A72.08,72.08,0,0,0,112,184Z",
+          "folder-open": "M245,110.64A16,16,0,0,0,232,104H216V88a16,16,0,0,0-16-16H130.67L102.94,51.2a16.14,16.14,0,0,0-9.6-3.2H40A16,16,0,0,0,24,64V208h0a8,8,0,0,0,8,8H211.1a8,8,0,0,0,7.59-5.47l28.49-85.47A16.05,16.05,0,0,0,245,110.64ZM93.34,64,123.2,86.4A8,8,0,0,0,128,88h72v16H69.77a16,16,0,0,0-15.18,10.94L40,158.7V64Z",
+          "watch": "M175.3,63.53l-6.24-34.38A16,16,0,0,0,153.32,16H102.68A16,16,0,0,0,86.94,29.15L80.7,63.53a79.9,79.9,0,0,0,0,128.94l6.24,34.38A16,16,0,0,0,102.68,240h50.64a16,16,0,0,0,15.74-13.15l6.24-34.38a79.9,79.9,0,0,0,0-128.94ZM102.68,32h50.64l3.91,21.55a79.75,79.75,0,0,0-58.46,0Zm50.64,192H102.68l-3.91-21.55a79.75,79.75,0,0,0,58.46,0ZM168,136H128a8,8,0,0,1-8-8V88a8,8,0,0,1,16,0v32h32a8,8,0,0,1,0,16Z",
+        },
+      };
+      HC.faceEnd = (() => {
+        const { cx, cy, R } = HC.FACE, s = HC.D / 2 / R;
+        return {
+          scale: s, x: HC.C[0][0] - cx, y: HC.C[0][1] - cy, transformOrigin: `${cx}px ${cy}px`,
+          inset: [cy - R, 1080 - (cx + R), 1920 - (cy + R), cx - R], round: R,
+          clip: `inset(${cy - R}px ${1080 - (cx + R)}px ${1920 - (cy + R)}px ${cx - R}px round ${R}px)`,
+        };
+      })();
+      function buildHabitChain(world, spk) {
+        const NS = "http://www.w3.org/2000/svg";
+        // connector (behind the discs)
+        const svg = document.createElementNS(NS, "svg");
+        svg.setAttribute("class", "hc-link"); svg.setAttribute("width", "1080"); svg.setAttribute("height", "1920");
+        svg.setAttribute("viewBox", "0 0 1080 1920");
+        const link = document.createElementNS(NS, "path");
+        link.setAttribute("d", "M " + HC.C.map((p) => p.join(" ")).join(" L "));
+        svg.appendChild(link); world.appendChild(svg);
+        const cum = [0];
+        for (let i = 1; i < HC.C.length; i++) cum.push(cum[i - 1] + Math.hypot(HC.C[i][0] - HC.C[i - 1][0], HC.C[i][1] - HC.C[i - 1][1]));
+        const len = cum[cum.length - 1];
+        // discs (disc 1 = mint backing under the face circle: carries the disc shadow; glyph kept for t4's flip)
+        const discs = [], glyphs = [];
+        HC.C.forEach(([x, y], i) => {
+          const d = document.createElement("div");
+          d.className = "hc-disc" + (i === 0 ? " face" : "");
+          d.id = "hc-d" + (i + 1);
+          d.style.left = x + "px"; d.style.top = y + "px";
+          d.dataset.origin = "50% 50%";
+          d.innerHTML = `<svg viewBox="0 0 256 256" fill="currentColor"><path d="${HC.GLYPH[HC.ICONS[i]]}"/></svg>`;
+          const g = d.querySelector("svg");
+          g.dataset.origin = "50% 50%";
+          if (i === 0) g.style.visibility = "hidden";   // t3: his face covers disc 1; t4 reveals the mic on its flip
+          world.appendChild(d); discs.push(d); glyphs.push(g);
+        });
+        // ripple (secondary action off disc 1), lives under the face circle
+        const ripple = document.createElement("div");
+        ripple.className = "hc-ripple"; ripple.style.left = HC.C[0][0] + "px"; ripple.style.top = HC.C[0][1] + "px";
+        world.insertBefore(ripple, discs[0]);
+        // mint ring: drawn in SOURCE px inside #spk so it rides the shrink exactly; RING px wide on screen, outer edge
+        // 1 screen px beyond the clip so the clip edge is always ring-coloured (no footage fringe)
+        const { cx, cy, R } = HC.FACE, fe = HC.faceEnd, w = HC.RING / fe.scale;
+        const rs = document.createElementNS(NS, "svg");
+        rs.setAttribute("class", "hc-ring"); rs.setAttribute("width", "1080"); rs.setAttribute("height", "1920");
+        rs.setAttribute("viewBox", "0 0 1080 1920");
+        const ring = document.createElementNS(NS, "circle");
+        const r = R - w / 2 + 1 / fe.scale;
+        ring.setAttribute("cx", cx); ring.setAttribute("cy", cy); ring.setAttribute("r", r);
+        ring.setAttribute("stroke-width", w + 1 / fe.scale);
+        ring.setAttribute("transform", `rotate(-120 ${cx} ${cy})`);   // draws from the upper-left, clockwise
+        rs.appendChild(ring); spk.appendChild(rs);
+        const ringLen = 2 * Math.PI * r;
+        return { link, len, cum, discs, glyphs, ring, ringLen, ripple };
+      }
+      function setHabitChainEnd(ch, spk) {
+        const fe = HC.faceEnd;
+        gsap.set(spk, { transformOrigin: fe.transformOrigin, x: fe.x, y: fe.y, scale: fe.scale, clipPath: fe.clip });
+        gsap.set(ch.link, { strokeDasharray: ch.len + " " + 3 * ch.len, strokeDashoffset: 0 });
+        gsap.set(ch.ring, { strokeDasharray: ch.ringLen + " " + 3 * ch.ringLen, strokeDashoffset: 0, opacity: 1 });
+        gsap.set(ch.discs, { opacity: 1, scale: 1, rotation: 0, x: 0, y: 0 });
+        gsap.set(ch.glyphs, { opacity: 1, scale: 1, rotation: 0 });
+        gsap.set(ch.ripple, { opacity: 0 });
+      }
+      /* ===================== HABIT CHAIN (v7) — JS — END ===================== */
+
+      window.__timelines = window.__timelines || {};
+      // Phosphor FILL glyphs (hf/assets/*.svg, fill=currentColor) inlined so they take the disc's white
+      const GLYPH = {
+        mic: "M80,128V64a48,48,0,0,1,96,0v64a48,48,0,0,1-96,0Zm128,0a8,8,0,0,0-16,0,64,64,0,0,1-128,0,8,8,0,0,0-16,0,80.11,80.11,0,0,0,72,79.6V240a8,8,0,0,0,16,0V207.6A80.11,80.11,0,0,0,208,128Z",
+        keyboard: "M224,48H32A16,16,0,0,0,16,64V192a16,16,0,0,0,16,16H224a16,16,0,0,0,16-16V64A16,16,0,0,0,224,48ZM64,168H48a8,8,0,0,1,0-16H64a8,8,0,0,1,0,16Zm96,0H96a8,8,0,0,1,0-16h64a8,8,0,0,1,0,16Zm48,0H192a8,8,0,0,1,0-16h16a8,8,0,0,1,0,16Zm0-32H48a8,8,0,0,1,0-16H208a8,8,0,0,1,0,16Zm0-32H48a8,8,0,0,1,0-16H208a8,8,0,0,1,0,16Z",
+        eye: "M247.31,124.76c-.35-.79-8.82-19.58-27.65-38.41C194.57,61.26,162.88,48,128,48S61.43,61.26,36.34,86.35C17.51,105.18,9,124,8.69,124.76a8,8,0,0,0,0,6.5c.35.79,8.82,19.57,27.65,38.4C61.43,194.74,93.12,208,128,208s66.57-13.26,91.66-38.34c18.83-18.83,27.3-37.61,27.65-38.4A8,8,0,0,0,247.31,124.76ZM128,168a40,40,0,1,1,40-40A40,40,0,0,1,128,168Z",
+        chat: "M128,24A104,104,0,0,0,36.18,176.88L24.83,210.93a16,16,0,0,0,20.24,20.24l34.05-11.35A104,104,0,1,0,128,24ZM84,140a12,12,0,1,1,12-12A12,12,0,0,1,84,140Zm44,0a12,12,0,1,1,12-12A12,12,0,0,1,128,140Zm44,0a12,12,0,1,1,12-12A12,12,0,0,1,172,140Z",
+        magnifier: "M168,112a56,56,0,1,1-56-56A56,56,0,0,1,168,112Zm61.66,117.66a8,8,0,0,1-11.32,0l-50.06-50.07a88,88,0,1,1,11.32-11.31l50.06,50.06A8,8,0,0,1,229.66,229.66ZM112,184a72,72,0,1,0-72-72A72.08,72.08,0,0,0,112,184Z",
+        folder: "M245,110.64A16,16,0,0,0,232,104H216V88a16,16,0,0,0-16-16H130.67L102.94,51.2a16.14,16.14,0,0,0-9.6-3.2H40A16,16,0,0,0,24,64V208h0a8,8,0,0,0,8,8H211.1a8,8,0,0,0,7.59-5.47l28.49-85.47A16.05,16.05,0,0,0,245,110.64ZM93.34,64,123.2,86.4A8,8,0,0,0,128,88h72v16H69.77a16,16,0,0,0-15.18,10.94L40,158.7V64Z",
+        watch: "M175.3,63.53l-6.24-34.38A16,16,0,0,0,153.32,16H102.68A16,16,0,0,0,86.94,29.15L80.7,63.53a79.9,79.9,0,0,0,0,128.94l6.24,34.38A16,16,0,0,0,102.68,240h50.64a16,16,0,0,0,15.74-13.15l6.24-34.38a79.9,79.9,0,0,0,0-128.94ZM102.68,32h50.64l3.91,21.55a79.75,79.75,0,0,0-58.46,0Zm50.64,192H102.68l-3.91-21.55a79.75,79.75,0,0,0,58.46,0ZM168,136H128a8,8,0,0,1-8-8V88a8,8,0,0,1,16,0v32h32a8,8,0,0,1,0,16Z",
+      };
+      document.querySelectorAll(".gl[data-g]").forEach((el) => {
+        el.innerHTML = `<svg viewBox="0 0 256 256" fill="currentColor"><path d="${GLYPH[el.dataset.g]}"/></svg>`;
+      });
+
+      (async () => {
+        const P = await Paper.init({ extraFonts: ['700 44px "Inter"'] });
+        const { tl, D, F, $, $$ } = P;
+        const CAM = ["#worldM", "#worldU"];
+
+        // ================= camera poses (world → screen: s·w + t, origin 0 0) =================
+        // pose 0 = t3's end (identity) · pose A = s 1.7 on disc 1 (disc 1 → screen (310,600)) · pose B = s 1.5, down/right
+        const A = { x: -200, y: -352, s: 1.7 }, A2 = { x: -206.26, y: -362.34, s: 1.715 };
+        const B = { x: -716.47, y: -1240.59, s: 1.5 }, B2 = { x: -728.73, y: -1262.0, s: 1.515 };
+        gsap.set(CAM, { x: 0, y: 0, scale: 1, transformOrigin: "0px 0px" });
+        // anticipation: a 1.5 % pull-back anchored on disc 1 (frame 0 untouched)
+        tl.to(CAM, { x: 4.5, y: 8.4, scale: 0.985, duration: 2 * F, ease: "power2.out" }, F);
+        // push in on disc 1 — the rest of the chain slides away as part of the world
+        tl.to(CAM, { x: A.x, y: A.y, scale: A.s, duration: 0.42, ease: "power3.inOut" }, 3 * F);
+        tl.to(CAM, { x: A2.x, y: A2.y, scale: A2.s, duration: 1.56 - 0.52, ease: "sine.inOut" }, 0.52);
+        // anticipation before the travel: a small nudge up-left of the camera (content drifts down-right 10/14 px)
+        tl.to(CAM, { x: A2.x + 10, y: A2.y + 14, duration: 0.08, ease: "power2.out" }, 1.56);
+        // TRAVEL down/right to area B on an arc (x and y on different eases), pulling out 1.715 → 1.5
+        tl.to(CAM, { x: B.x, duration: 0.58, ease: "power2.inOut" }, 1.64);
+        tl.to(CAM, { y: B.y, duration: 0.58, ease: "power3.inOut" }, 1.64);
+        tl.to(CAM, { scale: B.s, duration: 0.58, ease: "power3.inOut" }, 1.64);
+        // residual drift (~1 %) to the cut
+        tl.to(CAM, { x: B2.x, y: B2.y, scale: B2.s, duration: D - 2.22, ease: "sine.in" }, 2.22);
+        // the zone mask starts 80 px low so frame 0 is t3's frame exactly (disc 6 + its shadow intact), then tightens
+        tl.fromTo("#viewM", { "--mky": "80px" }, { "--mky": "0px", duration: 0.2, ease: "power1.in" }, F);
+
+        // ================= 0.0–0.45 'One': face → mint mic disc =================
+        // t3's chain, built by t3's own block and put in its END STATE (= this frame 0)
+        const spk = $("#spk");
+        const ch = buildHabitChain($("#chainWorld"), spk);
+        setHabitChainEnd(ch, spk);
+        const face = $("#faceWrap"), d1 = ch.discs[0], micG = ch.glyphs[0];
+        gsap.set(face, { transformPerspective: 700, transformOrigin: `${HC.C[0][0]}px ${HC.C[0][1]}px` });
+        gsap.set(d1, { transformPerspective: 700, transformOrigin: "50% 50%" });
+        // anticipation squash → his face turns edge-on (with the mint backing) → the mint mic side swings round
+        const FL = 3 * F, HALF = 0.1;
+        tl.to([face, d1], { scale: 0.93, duration: 2 * F, ease: "power2.in" }, F);
+        tl.to([face, d1], { rotationY: 90, scale: 1.04, duration: HALF, ease: "power2.in" }, FL);
+        tl.set(face, { opacity: 0 }, FL + HALF);
+        tl.set(micG, { visibility: "visible" }, FL + HALF);
+        tl.fromTo(d1, { rotationY: -90 }, { rotationY: 0, duration: 0.22, ease: "back.out(1.8)", immediateRender: false }, FL + HALF);
+        tl.to(d1, { scale: 1.1, duration: 0.08, ease: "power2.out" }, FL + HALF);
+        tl.to(d1, { scale: 1, duration: 0.24, ease: "back.out(2)" }, FL + HALF + 0.08);
+        tl.fromTo(micG, { scale: 0.5 }, { scale: 1, duration: 0.24, ease: "back.out(2.2)", immediateRender: false }, FL + HALF + 2 * F);   // glyph lags 2 f
+        // the other five discs + connector slide off with the world and dissolve (parts lag 1 f)
+        tl.to(ch.link, { opacity: 0, duration: 0.12, ease: "power1.in" }, 2 * F);
+        ch.discs.slice(1).forEach((el, i) => {
+          const [x, y] = HC.C[i + 1];
+          tl.to(el, { x: (x - 300) * 0.3, y: (y - 560) * 0.3, opacity: 0, filter: "blur(5px)", duration: 0.15, ease: "power1.inOut" }, 2 * F + i * F);
+        });
+        // '1' tag pops on the disc edge
+        P.pop("#tag1", 0.36, { peak: 1.14, from: 0.3 });
+        // the mic is live: sound rings on 'talk' and 'it'
+        [["#ring1", 0.40], ["#ring2", 0.82]].forEach(([r, t]) => {
+          tl.fromTo(r, { opacity: 0.95, scale: 1 }, { opacity: 0, scale: 1.38, duration: 0.6, ease: "power2.out", immediateRender: false }, t);
+        });
+        tl.to(d1, { scale: 1.05, duration: 0.1, ease: "power2.out" }, 0.40).to(d1, { scale: 1, duration: 0.25, ease: "back.out(2)" }, 0.50);
+        tl.to(d1, { scale: 1.04, duration: 0.1, ease: "power2.out" }, 0.82).to(d1, { scale: 1, duration: 0.25, ease: "back.out(2)" }, 0.92);
+
+        // ================= 'instead of typing': charcoal keyboard disc pops, gets struck =================
+        P.pop("#kbd", 1.01, { peak: 1.12, from: 0.2 });
+        tl.fromTo("#kbd .gl", { scale: 0.4, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.22, ease: "back.out(2.2)" }, 1.01 + 2 * F);
+        ["#strU", "#strK"].forEach((s, i) => {
+          const L = 235;
+          gsap.set(s, { strokeDasharray: `${L} ${L}` });
+          tl.set(s, { opacity: 0 }, 0);
+          tl.set(s, { opacity: 1 }, 1.33 + i * F);
+          tl.fromTo(s, { strokeDashoffset: L }, { strokeDashoffset: 0, duration: 0.2, ease: "power2.out" }, 1.33 + i * F);
+        });
+        gsap.set("#kbd", { transformOrigin: "50% 60%" });
+        tl.to("#kbd", { rotation: -7, y: 10, scale: 0.95, duration: 0.3, ease: "power2.out" }, 1.52);    // struck: it droops
+
+        // ================= area B: Stanford → study → the real strip =================
+        P.pop("#wm", 1.97, { peak: 1.06, from: 0.6 });
+        gsap.set("#strip", { transformOrigin: "50% 60%", transformPerspective: 1400 });
+        // the real strip slides up into place on 'showed' (heavy card: 16 f, tilt into travel, overshoot ≤ 0.5 % so it stays in the zone)
+        tl.fromTo("#strip", { opacity: 0, y: 130, scale: 0.95, rotation: -1.5, rotationX: 14 },
+          { opacity: 1, y: -6, scale: 1.004, rotation: 0.2, rotationX: 0, duration: 0.25, ease: "power3.out" }, 2.32);
+        tl.to("#strip", { y: 0, scale: 1, rotation: 0, duration: 0.3, ease: "back.out(1.6)" }, 2.57);
+        // highlighter swipes behind '3.0x faster' on 'three'
+        tl.fromTo("#hl", { scaleX: 0 }, { scaleX: 1, duration: 0.26, ease: "power2.out" }, 3.36);
+
+        // ================= HERO: the race (speaking 3x faster than typing) =================
+        P.cardIn("#race", 2.70, { fromY: 90, rot: -1.5 });
+        P.pop("#rMic", 2.97, { peak: 1.12, from: 0.3 });
+        P.pop("#rKbd", 2.97 + 2 * F, { peak: 1.12, from: 0.3 });
+        const RUN0 = 3.02, HIT = 3.93, W0 = 44, W1 = 410;
+        tl.fromTo("#fillS", { width: W0 }, { width: W1, duration: HIT - RUN0, ease: "power2.in" }, RUN0);
+        tl.fromTo("#fillT", { width: W0 }, { width: W0 + (W1 - W0) / 3, duration: HIT - RUN0, ease: "power2.in" }, RUN0);
+        tl.to("#fillT", { width: W0 + (W1 - W0) * 0.4, duration: D - HIT, ease: "power2.out" }, HIT);   // keeps crawling
+        // contact: the mint bar squashes into the finish (shape squash), the finish line kicks, the flag pops
+        gsap.set("#fillS", { transformOrigin: "100% 50%" });
+        tl.to("#fillS", { scaleY: 0.9, duration: 4 * F, ease: "power1.in" }, HIT - 4 * F);
+        tl.to("#fillS", { scaleX: 0.95, scaleY: 1.2, duration: 2 * F, ease: "power2.out" }, HIT);
+        tl.to("#fillS", { scaleX: 1, scaleY: 1, duration: 8 * F, ease: "back.out(2)" }, HIT + 2 * F);
+        gsap.set("#finish", { transformOrigin: "50% 100%" });
+        tl.to("#finish", { rotation: 3, duration: 2 * F, ease: "power2.out" }, HIT).to("#finish", { rotation: 0, duration: 0.35, ease: "elastic.out(1, 0.4)" }, HIT + 2 * F);
+        tl.fromTo("#flag", { opacity: 0, scale: 0, rotation: -25 }, { opacity: 1, scale: 1.2, rotation: 6, duration: 4 * F, ease: "power3.out" }, HIT);
+        tl.to("#flag", { scale: 1, rotation: 0, duration: 8 * F, ease: "back.out(2)" }, HIT + 4 * F);
+        tl.fromTo("#flag", { skewY: 0 }, { skewY: -6, duration: 0.22, ease: "sine.inOut", yoyo: true, repeat: 3 }, HIT + 0.4);   // flutter
+        P.pulse("#rMic", HIT + F, 1.1);
+        // the keyboard keeps tapping away (tiny key bounces) and slumps on 'typing'
+        tl.fromTo("#rKbd .gl", { y: 0 }, { y: -4, duration: 3 * F, ease: "sine.inOut", yoyo: true, repeat: 19 }, RUN0);
+        gsap.set("#rKbd", { transformOrigin: "50% 90%" });
+        tl.to("#rKbd", { rotation: -9, duration: 4 * F, ease: "power2.out" }, 4.47)
+          .to("#rKbd", { rotation: 6, duration: 5 * F, ease: "sine.inOut" }, 4.47 + 4 * F)
+          .to("#rKbd", { rotation: -3, duration: 5 * F, ease: "sine.inOut" }, 4.47 + 9 * F)
+          .to("#rKbd", { rotation: 0, duration: 6 * F, ease: "sine.out" }, 4.47 + 14 * F);
+        // PEACH 3x (data) rolls 1x → 3x on 'three times'
+        gsap.set("#x3", { transformOrigin: "40% 80%" });
+        tl.fromTo("#x3", { opacity: 0, scale: 0.5, y: 40 }, { opacity: 1, scale: 1.08, y: -4, duration: 5 * F, ease: "power3.out" }, 3.47 - 5 * F);
+        tl.to("#x3", { scale: 1, y: 0, duration: 8 * F, ease: "back.out(1.8)" }, 3.47);
+        tl.fromTo("#odoCol", { yPercent: 0 }, { yPercent: -100 / 3, duration: 0.12, ease: "power2.inOut" }, 3.62);
+        tl.to("#odoCol", { yPercent: -200 / 3, duration: 0.14, ease: "back.out(2.4)" }, 3.80);
+        tl.to("#x3", { scale: 1.07, duration: 3 * F, ease: "power2.out" }, 3.82).to("#x3", { scale: 1, duration: 9 * F, ease: "back.out(2)" }, 3.82 + 3 * F);
+      })();
+    </script>
+  </body>
+</html>

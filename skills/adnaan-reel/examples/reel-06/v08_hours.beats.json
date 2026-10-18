@@ -1,0 +1,195 @@
+[
+ {
+  "t": 0.43,
+  "sfx": "pop",
+  "what": "using rises",
+  "gain_db": -8
+ },
+ {
+  "t": 0.65,
+  "sfx": "pop",
+  "what": "more pops"
+ },
+ {
+  "t": 0.97,
+  "sfx": "impact",
+  "what": "agentic (red hero) lands",
+  "gain_db": -5
+ },
+ {
+  "t": 1.12,
+  "sfx": "scribble",
+  "dur": 0.4,
+  "what": "ink loop around agentic"
+ },
+ {
+  "t": 1.63,
+  "sfx": "pop",
+  "what": "capabilities lands",
+  "gain_db": -3
+ },
+ {
+  "t": 2.31,
+  "sfx": "whoosh",
+  "what": "agentic + capabilities glide up to make room",
+  "gain_db": -6
+ },
+ {
+  "t": 2.82,
+  "sfx": "whoosh",
+  "what": "terminal card rises",
+  "gain_db": -4
+ },
+ {
+  "t": 2.97,
+  "sfx": "pop",
+  "what": "Claude Code chip pops onto the card edge"
+ },
+ {
+  "t": 3.15,
+  "sfx": "tick",
+  "what": "prompt glyphs typing",
+  "gain_db": -8
+ },
+ {
+  "t": 3.4,
+  "sfx": "tick",
+  "what": "prompt glyphs typing",
+  "gain_db": -8
+ },
+ {
+  "t": 3.75,
+  "sfx": "pop",
+  "what": "Codex chip squash-lands"
+ },
+ {
+  "t": 3.96,
+  "sfx": "whoosh",
+  "what": "terminal glides to the top-right corner, tucked behind the speaker card",
+  "gain_db": -6
+ },
+ {
+  "t": 4.32,
+  "sfx": "scribble",
+  "dur": 0.28,
+  "what": "calendar box + header line"
+ },
+ {
+  "t": 4.54,
+  "sfx": "tick",
+  "what": "calendar box closes on complete",
+  "gain_db": -5
+ },
+ {
+  "t": 4.54,
+  "sfx": "scribble",
+  "dur": 0.4,
+  "what": "header hatch, binder rings and day grid"
+ },
+ {
+  "t": 4.92,
+  "sfx": "scribble",
+  "dur": 0.37,
+  "what": "task scribbles in the days"
+ },
+ {
+  "t": 5.03,
+  "sfx": "pop",
+  "what": "tasks pops",
+  "gain_db": -3
+ },
+ {
+  "t": 5.3,
+  "sfx": "whoosh",
+  "what": "complete / tasks clear (6 f exit)",
+  "gain_db": -8
+ },
+ {
+  "t": 5.81,
+  "sfx": "pop",
+  "what": "take pops (row 2)",
+  "gain_db": -4
+ },
+ {
+  "t": 6.06,
+  "sfx": "scribble",
+  "dur": 0.3,
+  "what": "red zig-zag through all 21 days"
+ },
+ {
+  "t": 6.21,
+  "sfx": "pop",
+  "what": "weeks lands (mid zig-zag)"
+ },
+ {
+  "t": 6.4,
+  "sfx": "whoosh",
+  "what": "calendar collapses into the clock centre",
+  "gain_db": -5
+ },
+ {
+  "t": 6.4,
+  "sfx": "scribble",
+  "dur": 0.2,
+  "what": "red strike through weeks"
+ },
+ {
+  "t": 6.5,
+  "sfx": "scribble",
+  "dur": 0.3,
+  "what": "clock rim, bells, legs and hands"
+ },
+ {
+  "t": 6.62,
+  "sfx": "riser",
+  "what": "alarm clock pops in (riser builds over the strike + collapse)",
+  "gain_db": -4
+ },
+ {
+  "t": 6.72,
+  "sfx": "scribble",
+  "dur": 0.07,
+  "what": "first speed tick chasing the minute hand"
+ },
+ {
+  "t": 6.78,
+  "sfx": "tick",
+  "what": "minute hand spinning",
+  "gain_db": -6
+ },
+ {
+  "t": 6.84,
+  "sfx": "scribble",
+  "dur": 0.07,
+  "what": "speed tick"
+ },
+ {
+  "t": 6.92,
+  "sfx": "tick",
+  "what": "minute hand spinning",
+  "gain_db": -6
+ },
+ {
+  "t": 6.96,
+  "sfx": "scribble",
+  "dur": 0.07,
+  "what": "speed tick"
+ },
+ {
+  "t": 7.03,
+  "sfx": "impact",
+  "what": "hours (red hero) lands, 1 % punch"
+ },
+ {
+  "t": 7.06,
+  "sfx": "scribble",
+  "dur": 0.1,
+  "what": "speed tick + bell ring marks"
+ },
+ {
+  "t": 7.15,
+  "sfx": "ding",
+  "what": "alarm bells rattle",
+  "gain_db": -7
+ }
+]

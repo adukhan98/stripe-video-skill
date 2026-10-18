@@ -1,0 +1,17 @@
+[
+  {"t": 0.38, "sfx": "tick", "what": "'two' pops; board label '1.' bobs", "gain_db": -6},
+  {"t": 0.51, "sfx": "tick", "what": "board label '2.' bobs", "gain_db": -8},
+  {"t": 0.70, "sfx": "scribble", "dur": 0.3, "what": "red star drawn above problem 1"},
+  {"t": 0.84, "sfx": "scribble", "dur": 0.3, "what": "ink sparkle ticks flick around problem 1", "gain_db": -4},
+  {"t": 0.87, "sfx": "ping", "what": "star pops on 'famous'", "gain_db": -6},
+  {"t": 1.11, "sfx": "whoosh", "what": "stamp lifts into the air above the board", "gain_db": -6},
+  {"t": 1.41, "sfx": "impact", "what": "HERO: 'unsolved' stamp slams, board jolts 6 px, red dust"},
+  {"t": 1.48, "sfx": "tick", "what": "the two red checks wobble", "gain_db": -8},
+  {"t": 1.58, "sfx": "whoosh", "what": "real article strip flips up into the lower zone", "gain_db": -6},
+  {"t": 1.81, "sfx": "pop", "what": "'problems' lands", "gain_db": -4},
+  {"t": 1.91, "sfx": "tick", "what": "tape pressed on both ends of the strip (1.90 / 1.96)", "gain_db": -4},
+  {"t": 1.98, "sfx": "scribble", "dur": 0.28, "what": "highlighter behind 'They were two unsolved'"},
+  {"t": 2.09, "sfx": "tick", "what": "'in' lands", "gain_db": -8},
+  {"t": 2.30, "sfx": "scribble", "dur": 0.3, "what": "highlighter behind 'problems in statistics.'"},
+  {"t": 2.49, "sfx": "pop", "what": "'statistics.' lands", "gain_db": -3}
+]

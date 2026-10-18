@@ -1,0 +1,87 @@
+<!doctype html>
+<!-- adnaan-reel scene starter: CHAPTER + MECHANISM — what the thing does, step by step, as objects:
+     header (coin + name) compacts to the top; cards deal into a fan on their words; the cursor arcs in and picks one;
+     the picked card flips to deep and merges; it drops into a "</> codebase" pill. Replace copy/timings/card count. -->
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>mechanism</title>
+    <link rel="stylesheet" href="brand.css" />
+    <link rel="stylesheet" href="paper.css" />
+    <link rel="stylesheet" href="marker.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+    <script src="paper.js"></script>
+    <script src="marker.js"></script>
+    <style>
+      .vc { width: 300px; height: 210px; left: 390px; top: 820px; }
+      .vc .g { left: 28px; }
+    </style>
+  </head>
+  <body data-face="0.43">
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="8.000">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+      <div id="cam"><div id="punch">
+
+        <div id="hdr" class="layer">
+          <div id="coin1" class="coin" data-n="04" data-x="130" data-y="380" style="opacity:0"></div>
+          <div class="line hero ocean" data-x="210" data-base="420" data-size="128"><span class="w" data-t="0.4" data-hero>Refine</span></div>
+        </div>
+
+        <!-- variations deal into a fan -->
+        <div id="c1" class="uicard vc"><i class="g" style="top: 30px; width: 160px; height: 16px"></i><i class="g" style="top: 66px; width: 220px; height: 16px"></i><i class="g acc" style="top: 102px; width: 90px; height: 16px"></i></div>
+        <div id="c2" class="uicard vc"><i class="g" style="top: 30px; width: 220px; height: 16px"></i><i class="g acc" style="top: 66px; width: 120px; height: 16px"></i><i class="g" style="top: 102px; width: 180px; height: 16px"></i></div>
+        <div id="c3" class="uicard vc"><i class="g acc" style="top: 30px; width: 100px; height: 16px"></i><i class="g" style="top: 66px; width: 200px; height: 16px"></i><i class="g" style="top: 102px; width: 240px; height: 16px"></i></div>
+        <div id="cur" class="cursor"></div>
+
+        <!-- MODE B (v6): no speaker — the doodles, kinetic type and cards own the whole zone (x 60–960, y 285–1480).
+             Need his presence for a line? Drop a split band in on it: <div id="spk" class="spk split" data-h="960" data-at="t">
+             (+ the speaker <video>, see the hook starter) and move the words into the band y 1000–1480. Floating corner
+             cards (.spk small/secondary) are allowed but rare — 0–2 per reel. -->
+
+        <div class="line sup" data-x="76" data-base="1180" data-size="96" data-exit="5.0">
+          <span class="w" data-t="1.3">it</span><span class="w gap-s" data-t="1.5">makes</span>
+          <span class="w hero ink gap-s" style="font-size: 140px" data-t="1.9" data-pop>variations</span>
+        </div>
+        <div class="line sup" data-x="76" data-base="1180" data-size="96">
+          <span class="w" data-t="5.2">I</span><span class="w gap-s" data-t="5.35">pick</span><span class="w gap-s" data-t="5.6">what</span><span class="w gap-s" data-t="5.75">I</span>
+          <span class="w hero ocean gap-s" style="font-size: 140px" data-t="6.0" data-hero data-punch="6.0">like</span>
+        </div>
+        <div id="dest" class="pill" style="left: 300px; top: 1360px"><svg viewBox="0 0 24 24"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5" stroke="#fff" stroke-width="2.6" stroke-linecap="round" fill="none"/></svg>my codebase</div>
+
+      </div></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const P = await Paper.init({ extraFonts: ['700 60px "Caveat"'] });
+        const M = Marker.init(P);   // hand-drawn marker layer (hf/marker.js header): loops, underlines, arrows, highlighter, notes
+        const { tl, F } = P;
+        P.coinIn("#coin1", 0.4); P.coinActive("#coin1", 0.4);
+        // deal: three cards from one stack into a fan, 4 f apart, tilting into travel (arcs), heavy = 16 f
+        const fan = [{ x: -300, r: -9 }, { x: 0, r: 0 }, { x: 300, r: 9 }];
+        ["#c1", "#c2", "#c3"].forEach((s, i) => {
+          tl.fromTo(s, { opacity: 0, y: 160, x: 0, rotation: -14, scale: 0.9 }, { opacity: 1, y: 0, duration: 0.3, ease: "power3.out" }, 1.75 + i * 4 * F);
+          tl.to(s, { x: fan[i].x, duration: 0.5, ease: "power3.out" }, 1.75 + i * 4 * F);
+          tl.to(s, { rotation: fan[i].r, scale: 1, duration: 0.55, ease: "back.out(1.5)" }, 1.75 + i * 4 * F);
+        });
+        // cursor picks the middle card: arc in, anticipation dip, click; the picked card lifts and flips to deep
+        P.cursorTo("#cur", 3.6, 560, 980);
+        P.cursorClick("#cur", 4.05);
+        P.recede("#c1, #c3", 4.05, { opacity: 0.45, blur: 5, scale: 0.96 });
+        gsap.set("#c2", { transformPerspective: 1200 });
+        tl.to("#c2", { y: -36, scale: 1.08, duration: 0.32, ease: "back.out(1.8)" }, 4.05);
+        tl.to("#c2", { rotationY: 180, duration: 0.38, ease: "power2.inOut" }, 4.05);
+        tl.set("#c2", { className: "uicard vc deep" }, 4.24);   // flips to the deep "picked" card (brand token)
+        P.cursorOut("#cur", 4.6);
+        // drop into the pill on "like" (6.0): arc down, squash the pill on impact, exaggerate with a shake
+        P.pillIn("#dest", 5.3);
+        tl.to("#c2", { x: 0, duration: 0.5, ease: "power2.inOut" }, 5.6);
+        tl.to("#c2", { y: 520, scale: 0.3, opacity: 0, duration: 0.5, ease: "power2.in" }, 5.6);
+        P.squash("#dest", 6.1, 0.08);
+        P.shake(6.1, 2);
+      })();
+    </script>
+  </body>
+</html>

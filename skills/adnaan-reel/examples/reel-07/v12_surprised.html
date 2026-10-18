@@ -1,0 +1,102 @@
+<!doctype html>
+<!-- v12_surprised - FULLSCREEN: him edge to edge, words low on a solid paper strip. "surprised" = per-letter red cascade + marker burst
+     of 5 rays (the one exaggerated beat); "close." gets a small red ][ bracket whose halves nudge almost together. Runtime = paper.js + marker.js. -->
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>v12_surprised</title>
+    <link rel="stylesheet" href="brand.css" />
+    <link rel="stylesheet" href="paper.css" />
+    <link rel="stylesheet" href="marker.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+    <script src="paper.js"></script>
+    <script src="marker.js"></script>
+  </head>
+  <body data-face="0.41">
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="2.5833">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+
+      <!-- full-screen speaker: the whole frame, slow push only -->
+      <div id="spk" class="spk full" data-push="1.03">
+        <div class="spk-card">
+          <div class="spk-vid"><video id="speaker" class="clip" src="assets/speaker.mp4" muted playsinline data-start="0" data-duration="2.5833" data-track-index="1"></video></div>
+        </div>
+      </div>
+
+      <!-- SOLID paper strip under the words (navy hoodie = dark): opaque from y 1209, soft top edge just under the beard -->
+      <div class="paper-strip" id="strip" style="top:1186px; height:734px; bottom:auto; background:linear-gradient(180deg, rgba(228,222,217,0) 0px, rgba(228,222,217,1) 24px, rgba(228,222,217,1) 100%);"></div>
+
+      <div id="cam"><div id="punch">
+        <!-- phrase 1: "you'd be surprised" -->
+        <div class="line sup ink kin" id="lnBe" data-x="84" data-base="1286" data-size="100">
+          <span class="w" data-t="0.01">You'd</span><span class="w gap-s" data-t="0.25">be</span>
+        </div>
+        <div class="line hero ocean kin" id="lnSur" data-x="94" data-base="1424" data-size="230" data-fit="780">
+          <span class="w" id="sur"><span class="l">s</span><span class="l">u</span><span class="l">r</span><span class="l">p</span><span class="l">r</span><span class="l">i</span><span class="l">s</span><span class="l">e</span><span class="l">d</span></span>
+        </div>
+
+        <!-- phrase 2: "how often it gets close." (collage: often + close bigger) -->
+        <div class="line sup ink kin" id="lnHow" data-right="944" data-base="1322" data-size="110">
+          <span class="w" data-t="1.26" data-pop data-rise="16">how</span><span class="w gap-s" data-t="1.55" data-pop data-rise="16" style="font-size:1.28em">often</span>
+        </div>
+        <div class="line sup ink kin" id="lnClose" data-x="84" data-base="1448" data-size="110">
+          <span class="w" data-t="1.71" data-pop data-rise="16">it</span><span class="w gap-s" data-t="1.91" data-pop data-rise="16">gets</span><span class="w gap-s" id="close" data-t="2.23" data-pop data-rise="16" style="font-size:1.28em">close.</span>
+        </div>
+      </div></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const P = await Paper.init({ extraFonts: ['700 60px "Caveat"'] });
+        const M = Marker.init(P);
+        const { tl, D, F, $, $$ } = P;
+
+        // the solid paper strip rises under the first words (frame 0 is untouched footage)
+        tl.fromTo("#strip", { y: 64 }, { y: 0, duration: 0.15, ease: "power3.out" }, 0);
+
+        // ---- HERO BEAT: "surprised" — per-letter cascade (anticipation dip, rise, overshoot, settle), contact on 0.75
+        const ls = $$("#sur .l");
+        const rots = [-9, 7, -6, 10, -8, 6, -10, 8, -5];
+        ls.forEach((l, i) => {
+          const s = 0.46 + i * 0.022;
+          gsap.set(l, { display: "inline-block", transformOrigin: "50% 85%" });
+          tl.fromTo(l, { opacity: 0, y: 30, scale: 0.55, rotation: rots[i], filter: "blur(8px)" }, { opacity: 0.001, y: 40, scale: 0.5, duration: 2 * F, ease: "power2.in" }, s - 2 * F);
+          tl.fromTo(l, { opacity: 0, y: 40, scale: 0.5, rotation: rots[i], filter: "blur(8px)" },
+            { opacity: 1, y: -14, scale: 1.14, rotation: -rots[i] * 0.3, filter: "blur(0px)", duration: 0.15, ease: "power3.out", immediateRender: false }, s);
+          tl.to(l, { y: 0, scale: 1, rotation: 0, duration: 0.26, ease: "back.out(2)" }, s + 0.15);
+        });
+        // the whole word hits as one: tiny word-level pulse + camera punch + 4 f shake on the last letter's contact
+        gsap.set("#sur", { transformOrigin: "50% 85%" });
+        tl.to("#sur", { scale: 1.045, duration: 0.09, ease: "power2.out" }, 0.74).to("#sur", { scale: 1, duration: 0.3, ease: "back.out(2)" }, 0.83);
+        P.punch(0.75, { scale: 1.014, origin: "540px 1380px", dur: 0.22 });
+        P.shake(0.76, 4);
+
+        // phrase 1 leaves in 4 f (exits faster than entrances) so phrase 2 never overlaps a fading word
+        tl.to(["#lnBe", "#lnSur"], { y: -46, opacity: 0, filter: "blur(8px)", duration: 4 * F, ease: "power2.in" }, 0.96);
+
+        // red marker burst: 5 short rays round the word (drawn on the contact, erased with the phrase)
+        const RAYS = window.__rays = [
+          [[520, 1258], [500, 1198]], [[640, 1292], [634, 1204]], [[745, 1290], [772, 1206]],
+          [[893, 1300], [944, 1242]], [[893, 1368], [948, 1366]],
+        ];
+        const burst = RAYS.map((r, i) => M.line(r, 0.72 + i * 0.02, { width: 14, dur: 0.09, amp: 1.2, until: 1.12, seed: 4001 + i * 37 }));
+        burst.forEach((b, i) => M.erase(b, 0.93 + i * 0.01, 0.1));
+
+        // ---- phrase 2: "close." gets a small red ][ drawn beside it; its two halves nudge almost together
+        const cl = $("#close"), fsC = parseFloat(getComputedStyle(cl).fontSize);
+        const cEnd = $("#lnClose").offsetLeft + cl.offsetLeft + cl.offsetWidth;   // untransformed layout, not the pre-pop rect
+        window.__C = { cEnd, fsC };
+        const cy = 1448 - 0.37 * fsC, hh = 54, arm = 28;
+        const bx = Math.min(cEnd + 44, 860);
+        const gL = bx, gR = bx + 58;
+        const left = M.line([[gL - arm, cy - hh], [gL, cy - hh], [gL, cy + hh], [gL - arm, cy + hh]], 2.07, { width: 12, dur: 0.14, amp: 1.4, seed: 5001 });
+        const right = M.line([[gR + arm, cy - hh], [gR, cy - hh], [gR, cy + hh], [gR + arm, cy + hh]], 2.17, { width: 12, dur: 0.14, amp: 1.4, seed: 5002 });
+        // anticipation (they ease apart 2 f), then nudge together with a tiny overshoot; hold alive to the cut
+        tl.to(left.g, { x: -4, duration: 2 * F, ease: "power2.out" }, 2.28).to(left.g, { x: 20, duration: 0.2, ease: "power3.out" }, 2.28 + 2 * F).to(left.g, { x: 18, duration: 0.2, ease: "sine.inOut" }, 2.28 + 2 * F + 0.2);
+        tl.to(right.g, { x: 4, duration: 2 * F, ease: "power2.out" }, 2.28).to(right.g, { x: -20, duration: 0.2, ease: "power3.out" }, 2.28 + 2 * F).to(right.g, { x: -18, duration: 0.2, ease: "sine.inOut" }, 2.28 + 2 * F + 0.2);
+      })();
+    </script>
+  </body>
+</html>

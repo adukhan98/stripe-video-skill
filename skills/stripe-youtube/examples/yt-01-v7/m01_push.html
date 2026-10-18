@@ -1,0 +1,82 @@
+<!doctype html>
+<!-- m01_push — v7 MINT. Opens on m00's end state (WHOLE pose, all 11 discs charcoal, no labels, no checks) and travels to
+     FOCUS 1 (CHAIN_SHARED: (x1+267, y1+92, 1.2)). One pure camera function of time (seek-safe, applied by a clock):
+     anticipation dip (pull back a hair) → arc to FOCUS 1 (cx power2.inOut leads, cy power3.inOut follows, scale in log
+     space) with a soft overshoot that settles → the remaining scale is one slow sine push that lands EXACTLY on FOCUS 1
+     at the last frame. Disc 1 turns mint + punches as the camera arrives, label 1 + 'HABIT 1 OF 11' land beside it;
+     the neighbour discs breathe (back to scale 1 well before the end). End state = m02_push frame 0. -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>m01_push</title>
+    <link rel="stylesheet" href="board.css" />
+    <link rel="stylesheet" href="v7yt.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="board.js"></script>
+    <script src="v7yt.js"></script>
+    <script src="chain_common.js"></script>
+  </head>
+  <body data-theme="light">
+    <div id="root" class="mint" data-composition-id="main" data-start="0" data-width="1920" data-height="1080" data-duration="2.35">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+      <div id="cam"><div id="punch"></div></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const B = await Board.init();
+        const V = V7Y.init(B);
+        const { tl, D, F } = B;
+        const LAST = 70 / 30;                                  // time of the last rendered frame (71 frames)
+
+        // ---------------- the chain: m00's end state (all charcoal, drawn, no labels, no checks) ----------------
+        const C = buildChain(V, B, { state: "end", current: 0, done: [], labels: [] });
+
+        // ---------------- camera: WHOLE → FOCUS 1, one pure function of time ----------------
+        const E = (n) => gsap.parseEase(n);
+        const e2io = E("power2.inOut"), e3io = E("power3.inOut"), esio = E("sine.inOut");
+        const cl = (v) => Math.max(0, Math.min(1, v));
+        const [X0, Y0, S0] = C.pose("whole"), [X1, Y1, S1] = C.pose(1);
+        const T0 = 0.13, DUR = 1.0;                            // travel starts after the anticipation dip (whoosh at T0)
+        const OVX = -34, OVY = -14;                            // soft overshoot past FOCUS 1 (world px), settles by 1.75
+        const DIP = 0.012;                                     // pull-back before the move (log scale)
+        const LMID = Math.log(S1 * 0.975);                     // travel brings scale to 97.5 %, the slow push finishes it
+        function camPose(t) {
+          const ux = e2io(cl((t - T0) / DUR)), uy = e3io(cl((t - T0) / DUR)), us = e3io(cl((t - T0) / (DUR + 0.08)));
+          const dip = DIP * Math.sin(Math.PI * cl(t / T0)) * (t < T0 ? 1 : 0);
+          const so = esio(cl((t - (T0 + DUR - 0.2)) / 0.65));  // overshoot → exact
+          const sp = esio(cl((t - (T0 + DUR - 0.25)) / (LAST - (T0 + DUR - 0.25))));  // slow push → exact
+          const cx = X0 + (X1 + OVX - X0) * ux - OVX * so;
+          const cy = Y0 + (Y1 + OVY - Y0) * uy - OVY * so;
+          const L0 = Math.log(S0);
+          const ls = L0 - dip + (LMID - L0) * us + (Math.log(S1) - LMID) * sp;
+          return [cx, cy, Math.exp(ls)];
+        }
+        const applyCam = (t) => B.camSet(...camPose(t));
+        applyCam(0);
+        const clock = { t: 0 };
+        tl.fromTo(clock, { t: 0 }, { t: D, duration: D, ease: "none", onUpdate: () => applyCam(clock.t) }, 0);
+
+        // ---------------- disc 1 turns mint + punches as the camera arrives; label 1 lands beside it ----------------
+        C.mintTo(1, 0.90);
+        C.label(1, 1.00);
+
+        // ---------------- focus: the label (CHAIN_SHARED geometry) runs across discs 2-3 and the connector, so the rest of
+        // the chain recedes behind it as the label lands (B.recede idea: one focal point, never the words) ----------------
+        if (0) tl.to([...C.ch.discs.slice(1), C.ch.link], { opacity: 0.24, duration: 8 * F, ease: "power2.out", immediateRender: false }, 1.00);
+
+        // ---------------- alive: neighbours breathe (scale 1 → 1.035 → 1, ~2.6 px at disc size), a pencil wiggle ----------------
+        [2, 3, 8, 7, 4].forEach((n, i) => {
+          const el = C.disc(n), t = 1.12 + i * 0.07;
+          tl.to(el, { scale: 1.035, duration: 8 * F, ease: "sine.out" }, t);
+          tl.to(el, { scale: 1, duration: 12 * F, ease: "sine.inOut" }, t + 8 * F);
+        });
+        const g1 = C.ch.glyphs[0];
+        tl.to(g1, { rotation: -12, duration: 4 * F, ease: "power2.out" }, 1.50);
+        tl.to(g1, { rotation: 6, duration: 5 * F, ease: "power2.inOut" }, 1.50 + 4 * F);
+        tl.to(g1, { rotation: 0, duration: 7 * F, ease: "power2.inOut" }, 1.50 + 9 * F);
+      })();
+    </script>
+  </body>
+</html>

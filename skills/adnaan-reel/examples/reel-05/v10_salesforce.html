@@ -1,0 +1,360 @@
+<!doctype html>
+<!-- adnaan-reel scene: v10_salesforce — CHAPTER + REAL PAGE (chapter_page starter on the shared runtime). Creative pass.
+     Beat A: official Salesforce logo chip + "Salesforce", the real newsroom article (headline highlighter swipe), secondary speaker card.
+     Beat B: "tripled" splits into three stacked ink echoes and snaps back; FDE-team card (avatars wave hello) peels two copies
+     with a page-curl, the ×1→×2→×3 counter ticks on each landing; a six-tile calendar strip flips on "six months".
+     Beat C: anonymous company tiles pop on "every single other company"; "Hiring: FDE" pills arrive from alternate sides with
+     dot ripples and the notification tower sways. Keep data-duration. -->
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>v10_salesforce</title>
+    <link rel="stylesheet" href="brand.css" />
+    <link rel="stylesheet" href="paper.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+    <script src="paper.js"></script>
+    <style>
+      @font-face { font-family: "Inter Tight"; src: url("fonts/InterTight-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Inter"; src: url("fonts/Inter-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+
+      /* ---- beat A: logo chip + real page ---- */
+      #sfchip { left: 76px; top: 300px; height: 114px; padding: 0 22px; border-radius: 32px; }
+      #sfchip img { width: 136px; height: 102px; border-radius: 0; object-fit: contain; }
+      #pageX { position: absolute; inset: 0; }
+      #tilt { position: absolute; left: 100px; top: 686px; width: 760px; height: 590px;
+        transform: perspective(1400px) rotateY(5deg) rotateZ(-1.6deg); transform-origin: 50% 50%; }
+      #page-card { left: 0; top: 0; width: 760px; height: 590px; }
+      #page { top: -195px; }
+      /* highlighter behind the real headline's first line (capture y 323–376 → card px), scrolls with the page */
+      #hl { position: absolute; left: 38px; top: 47px; width: 636px; height: 26px; border-radius: 8px; z-index: 1;
+        background: color-mix(in srgb, var(--brand-primary) 38%, transparent); mix-blend-mode: multiply; transform-origin: 0 50%; }
+
+      /* ---- beat B: "tripled" echoes ---- */
+      .ghost { color: var(--brand-text); opacity: 0; }
+
+      /* ---- beat B: the FDE team card and its copies (bespoke hero object) ---- */
+      .team { position: absolute; width: 540px; height: 132px; }
+      .tfloat, .tbump { position: absolute; inset: 0; }
+      .tcard { position: absolute; inset: 0; border-radius: 28px; background: var(--brand-card); box-shadow: var(--shadow-card); overflow: hidden; }
+      .avs { position: absolute; left: 24px; top: 22px; height: 88px; display: flex; }
+      .av { position: relative; width: 88px; height: 88px; margin-left: -22px; border-radius: 50%;
+        border: 5px solid var(--brand-card); overflow: hidden; background: var(--wire); }
+      .av:first-child { margin-left: 0; }
+      .av i { position: absolute; inset: 0; border-radius: 50%; }
+      .av i::before { content: ""; position: absolute; left: 50%; top: 14px; width: 28px; height: 28px; margin-left: -14px; border-radius: 50%; }
+      .av i::after { content: ""; position: absolute; left: 50%; top: 47px; width: 54px; height: 44px; margin-left: -27px; border-radius: 27px 27px 0 0; }
+      .av .g0::before, .av .g0::after { background: color-mix(in srgb, var(--brand-muted) 55%, var(--brand-card)); }
+      .av .a0 { opacity: 0; background: color-mix(in srgb, var(--brand-primary) 22%, var(--brand-card)); }
+      .av .a0::before, .av .a0::after { background: var(--brand-primary); }
+      .tlabel { position: absolute; left: 254px; top: 26px; font-family: var(--font-body); font-weight: 600; font-size: 44px;
+        letter-spacing: -0.01em; color: var(--brand-text); white-space: nowrap; }
+      .tbar { left: 256px; top: 90px; width: 190px; height: 14px; }
+      .tbar2 { left: 460px; top: 90px; width: 50px; height: 14px; }
+      /* page-curl: the copy's lifted corner shows the paper's back */
+      .curl { position: absolute; right: 0; top: 0; width: 74px; height: 74px; opacity: 0; transform-origin: 100% 0;
+        border-bottom-left-radius: 14px; box-shadow: -8px 8px 14px -4px rgba(60, 50, 40, 0.28);
+        background: linear-gradient(225deg, var(--brand-background) 0 50%, color-mix(in srgb, var(--brand-card) 78%, var(--brand-muted)) 50% 100%); }
+      #team0 { left: 84px; top: 760px; }
+      #team1 { left: 124px; top: 906px; }
+      #team2 { left: 164px; top: 1052px; }
+      #x3 { left: 790px; top: 938px; height: 100px; padding: 0 34px; border-radius: 50px; font-size: 56px; letter-spacing: -0.02em; gap: 4px; }
+      #x3 .cnt { display: block; height: 62px; overflow: hidden; }
+      #x3 .col { display: flex; flex-direction: column; }
+      #x3 .col i { display: block; height: 62px; line-height: 62px; font-style: normal; font-variant-numeric: tabular-nums; }
+      #stackX, #stack { position: absolute; inset: 0; }
+
+      /* ---- beat B: six-tile calendar strip ---- */
+      #cal { position: absolute; left: 486px; top: 1226px; width: 452px; height: 100px; }
+      .mt { position: absolute; top: 0; width: 64px; height: 72px; border-radius: 14px; background: var(--brand-card);
+        box-shadow: 0 14px 22px -10px rgba(60, 50, 40, 0.32); overflow: hidden; opacity: 0; }
+      .mt b { position: absolute; left: 0; right: 0; top: 0; height: 18px; background: var(--wire); }
+      .mt.last b { background: var(--brand-primary); }
+      .mt i { position: absolute; left: 14px; top: 32px; width: 36px; height: 9px; border-radius: 5px; background: var(--wire); }
+      .mt i + i { top: 48px; width: 22px; }
+      #calbar { position: absolute; left: 0; top: 86px; width: 450px; height: 8px; border-radius: 4px; background: var(--brand-primary); transform-origin: 0 50%; transform: scaleX(0); }
+
+      /* ---- beat C: anonymous company tiles ---- */
+      #tilesX, #tiles { position: absolute; inset: 0; }
+      .ctile { position: absolute; width: 170px; height: 170px; border-radius: 38px; background: var(--brand-card); box-shadow: var(--shadow-card); opacity: 0; }
+      .ctile .gl { position: absolute; left: 53px; top: 30px; width: 64px; height: 64px; background: var(--wire); border-radius: 50%; }
+      .ctile.s1 .gl { border-radius: 18px; }
+      .ctile.s2 .gl { border-radius: 32px 32px 10px 10px; }
+      .ctile.s3 .gl { width: 84px; left: 43px; border-radius: 32px; }
+      .ctile .b1 { left: 38px; top: 112px; width: 94px; height: 12px; }
+      .ctile .b2 { left: 58px; top: 132px; width: 54px; height: 10px; }
+
+      /* ---- beat C: "Hiring: FDE" notification pills ---- */
+      #tower { position: absolute; inset: 0; }
+      .slot { position: absolute; top: 1310px; width: 0; height: 100px; }
+      .hire { left: 0; top: 0; height: 100px; border-radius: 50px; font-size: 44px; padding: 0 40px 0 34px; gap: 18px; }
+      .hd { position: relative; width: 18px; height: 18px; flex: none; }
+      .hd i { position: absolute; inset: 0; border-radius: 50%; background: var(--brand-primary); }
+      .hd i.ring { opacity: 0; background: transparent; box-shadow: 0 0 0 3px var(--brand-primary); }
+      .wb { width: 130px; height: 14px; border-radius: 7px; background: color-mix(in srgb, var(--brand-card) 22%, transparent); flex: none; }
+    </style>
+  </head>
+  <body data-face="0.47">
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="6.1167">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+      <div id="cam"><div id="punch">
+
+        <!-- REAL PAGE: the Salesforce newsroom article, tilted browser card, slow scroll, headline highlighter -->
+        <div id="pageX">
+          <div id="tilt" data-float="3">
+            <div id="page-card" class="browser">
+              <div class="chrome"><i class="dot"></i><i class="dot"></i><i class="dot"></i><div class="url">salesforce.com/news</div></div>
+              <div class="viewport"><img id="page" class="page" src="assets/salesforce_fde.png" alt="" /><div id="hl"></div></div>
+              <div class="sheen"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECONDARY speaker card, lower-right corner, on from frame 0 -->
+        <div id="spkX" class="layer">
+          <div class="spk secondary" data-x="330" data-y="920" data-w="600" data-h="470" data-face-at="0.54" data-at="0">
+            <div class="spk-card">
+              <div class="spk-vid"><video id="speaker" class="clip" src="assets/speaker.mp4" muted playsinline data-start="0" data-duration="6.1167" data-track-index="1"></video></div>
+              <div class="spk-sheen"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CHAPTER header: official logo chip + "Salesforce" (compacts to one row on the B beat) -->
+        <div id="hdrX" class="layer" data-exit="3.86" data-exit-dy="-4">
+          <div id="hdr" class="layer">
+            <div id="sfchip" class="chip"><img src="assets/salesforce.png" alt="Salesforce" /></div>
+            <div id="sfline" class="line hero" data-cx="512" data-base="582" data-size="170" data-fit="900">
+              <span class="w" data-t="0.17" data-hero>Salesforce</span>
+            </div>
+          </div>
+        </div>
+        <div class="line sup" data-right="950" data-base="666" data-size="84" data-exit="1.26">
+          <span class="w" data-t="0.73">has</span><span class="w gap-s" data-t="1.13">actually</span>
+        </div>
+
+        <!-- BEAT B: "tripled" — the one exaggerated beat; two ink echoes behind it (same layout, no data-t) -->
+        <div id="ghostX" class="layer">
+          <div id="gh2" class="line hero ghost" data-cx="510" data-base="700" data-size="240" data-fit="850"><span class="w">tripled</span></div>
+          <div id="gh1" class="line hero ghost" data-cx="510" data-base="700" data-size="240" data-fit="850"><span class="w">tripled</span></div>
+        </div>
+        <div id="tripline" class="line hero ocean" data-cx="510" data-base="700" data-size="240" data-fit="850" data-exit="3.82">
+          <span class="w" data-t="1.63" data-hero data-peak="1.12" data-rise="120">tripled</span>
+        </div>
+
+        <!-- BEAT B: the FDE team card peels two copies (x3) — cards built below in script (identical markup) -->
+        <div id="stackX" data-exit="3.80" data-exit-dy="-40">
+          <div id="stack">
+            <svg class="paths"><path id="dup" class="dotted" d="M 636 822 C 776 838, 796 1084, 716 1124" /></svg>
+            <div id="team2" class="team new"></div>
+            <div id="team1" class="team new"></div>
+            <div id="team0" class="team"></div>
+            <div id="x3" class="pill"><b>×</b><span class="cnt"><span class="col"><i>1</i><i>2</i><i>3</i></span></span></div>
+          </div>
+        </div>
+
+        <div class="line small" data-x="76" data-base="1300" data-size="90" data-exit="3.78">
+          <span class="w" data-t="2.57">in</span><span class="w gap-s" data-t="2.67">the</span><span class="w gap-s" data-t="2.83">last</span>
+        </div>
+        <div id="cal" data-exit="3.74" data-exit-dy="-30"><div id="calbar"></div></div>
+        <div class="line sup" data-right="930" data-base="1430" data-size="130" data-exit="3.74">
+          <span class="w" data-t="3.05" data-pop data-rise="40">six</span><span class="w gap-s" data-t="3.33" data-pop data-rise="40">months</span>
+        </div>
+
+        <!-- BEAT C: every single other company is hiring for -->
+        <div id="cWords" class="layer">
+          <div class="line sup" data-x="76" data-base="440" data-size="110">
+            <span class="w" data-t="4.13">every</span><span class="w gap-s" data-t="4.49">single</span>
+          </div>
+          <div class="line sup" data-right="936" data-base="566" data-size="110">
+            <span class="w" data-t="4.77">other</span><span class="w gap-s" data-t="5.11" data-accent>company</span>
+          </div>
+        </div>
+        <div class="line sup" data-x="76" data-base="772" data-size="84">
+          <span class="w" data-t="5.35">is</span><span class="w hero ocean gap-s" style="font-size: 166px" data-t="5.61" data-pop>hiring</span><span class="w gap-s" data-t="5.89">for</span>
+        </div>
+
+        <!-- BEAT C: anonymous company tiles (illustrative, no names) -->
+        <div id="tilesX"><div id="tiles"></div></div>
+
+        <!-- BEAT C: notification tower (pills built in script) -->
+        <div id="tower"></div>
+
+      </div></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      // ---- build repeated bespoke markup (deterministic, before the runtime lays out) ----
+      const AV = '<span class="av"><i class="g0"></i><i class="a0"></i></span>';
+      for (const id of ["team0", "team1", "team2"]) {
+        document.getElementById(id).innerHTML = `<div class="tfloat" data-float="3" data-float-period="${{ team0: 1.55, team1: 1.4, team2: 1.25 }[id]}"><div class="tbump"><div class="tcard">
+          <div class="avs">${AV}${AV}${AV}</div><div class="tlabel">FDE team</div><i class="g tbar"></i><i class="g tbar2"></i>
+          ${id === "team0" ? "" : '<div class="curl"></div>'}</div></div></div>`;
+      }
+      const cal = document.getElementById("cal");
+      for (let i = 0; i < 6; i++) cal.insertAdjacentHTML("beforeend", `<div class="mt${i === 5 ? " last" : ""}" style="left:${i * 77}px"><b></b><i></i><i></i></div>`);
+      const TILES = [[110, 880, "s0"], [395, 850, "s1"], [680, 890, "s2"], [170, 1110, "s3"], [455, 1085, "s0"], [730, 1125, "s1"]];
+      document.getElementById("tiles").innerHTML = TILES.map(([x, y, s]) => `<div class="ctile ${s}" style="left:${x}px;top:${y}px"><i class="gl"></i><i class="g b1"></i><i class="g b2"></i></div>`).join("");
+      const PILLX = [110, 380, 190, 410, 90];      // final zig-zag; even pills arrive from the right, odd from the left
+      document.getElementById("tower").innerHTML = PILLX.map((x, i) => `<div id="s${i}" class="slot" style="left:${x}px"><div class="pill hire"><span class="hd"><i class="ring"></i><i></i></span>Hiring: FDE<span class="wb"></span></div></div>`).join("");
+
+      (async () => {
+        const P = await Paper.init();
+        const { tl, D, F, $, $$ } = P;
+
+        // ================= BEAT A — logo chip, article, speaker =================
+        P.pop("#sfchip", 0.17, { peak: 1.08, from: 0.5 });                 // logo: uniform scale only
+        P.cardIn("#page-card", 0.3, { fromY: 140, rot: -3 });              // heavy card, 16 f, sheen lags
+        P.scrollPage("#page", 0.5, D - 0.5, 200);                          // slow linear scroll (mechanical)
+        P.scrollPage("#hl", 0.5, D - 0.5, 200);                            // the highlighter rides with the page
+        tl.fromTo("#hl", { scaleX: 0 }, { scaleX: 1, duration: 0.32, ease: "power2.inOut" }, 0.86);   // swipe under the headline
+
+        P.exitDown("#spkX", 2.16, 60);
+        gsap.set("#spkX", { transformOrigin: "640px 1190px" });
+        P.recede("#spkX", 1.30, { opacity: 0.5, blur: 4, scale: 0.92, dur: 0.3 });   // staging: steps back for "tripled"
+        tl.to("#pageX", { y: -70, scale: 0.9, opacity: 0, filter: "blur(8px)", duration: 0.22, ease: "power2.in", transformOrigin: "420px 700px" }, 1.22);
+
+        // header compacts to one row at the top: chip shrinks first, the word lags 2 f
+        const line = $("#sfline"), bl = line.querySelector(".bl");
+        const lx = line.offsetLeft, lbase = line.offsetTop + bl.offsetTop;
+        gsap.set("#sfchip", { transformOrigin: "0% 0%" });
+        gsap.set(line, { transformOrigin: `0px ${bl.offsetTop}px` });
+        const chipW = $("#sfchip").offsetWidth * 0.78;
+        tl.to("#sfchip", { scale: 0.78, duration: 0.32, ease: "power3.inOut" }, 1.20);
+        P.moveTo(line, 1.20 + 2 * F, { x: 76 + chipW + 22 - lx, y: 300 + 114 * 0.78 * 0.5 + 30 - lbase, scale: 0.5, dur: 0.32 });
+
+        // ================= HERO BEAT — "tripled" impact 1.63, splits into three stacked echoes, snaps back =================
+        P.punch(1.63, { scale: 1.01, origin: "510px 600px", dur: 0.3 });
+        P.shake(1.64, 3);
+        // echoes: born on the impact, fan upward (parts lag 2 f), hold with a tiny drift, then snap back into the word
+        gsap.set(["#gh1", "#gh2"], { transformOrigin: "510px 700px" });
+        [["#gh1", -56, 0.26, 0.97, 0, 0], ["#gh2", -112, 0.12, 0.94, 1.5, 2 * F]].forEach(([g, dy, op, sc, bl, lag]) => {
+          tl.fromTo(g, { y: 0, opacity: 0, scale: 1, filter: "blur(0px)" },
+            { y: dy * 1.1, opacity: op, scale: sc, filter: `blur(${bl}px)`, duration: 0.16, ease: "power3.out" }, 1.66 + lag);
+          tl.to(g, { y: dy, duration: 0.14, ease: "back.out(2)" }, 1.82 + lag);
+          tl.to(g, { y: dy * 0.94, duration: 0.18, ease: "sine.inOut" }, 1.96 + lag);
+          tl.to(g, { y: 0, scale: 1, opacity: 0, duration: 4 * F, ease: "power3.in" }, 2.16 - lag);      // snap (contact ~2.29)
+        });
+        // the word takes the snap: tiny recoil (uniform scale only)
+        tl.to("#tripline", { scale: 1.03, duration: 2 * F, ease: "power2.out", transformOrigin: "510px 660px" }, 2.29);
+        tl.to("#tripline", { scale: 1, duration: 0.24, ease: "back.out(2)" }, 2.29 + 2 * F);
+
+        // ================= BEAT B — FDE team card, avatars wave hello, two copies page-curl off (×1→×2→×3) =================
+        P.enter("#team0", 1.74, { rise: 70, scaleFrom: 0.88 });            // contact ~2.06 on "FDE"
+        const av0 = $$("#team0 .av");
+        av0.forEach((av, i) => P.pop(av, 2.02 + i * 3 * F, { peak: 1.12, from: 0.5 }));
+        tl.fromTo("#team0 .tlabel", { opacity: 0, x: -16 }, { opacity: 1, x: 0, duration: 0.3, ease: "power3.out" }, 1.98);
+        // "hello": each avatar hops and tilts, 2 f apart (secondary action, appeal)
+        function hello(avs, t) {
+          avs.forEach((av, i) => {
+            const s = t + i * 2 * F;
+            tl.to(av, { y: -12, rotation: i % 2 ? -8 : 8, duration: 0.1, ease: "power2.out" }, s);
+            tl.to(av, { y: 0, rotation: 0, duration: 0.3, ease: "back.out(2.4)" }, s + 0.1);
+          });
+        }
+        hello(av0, 2.34);
+
+        // ×N counter: pops in at ×1 when the first card has landed, ticks on each copy's contact
+        P.pop("#x3", 2.42, { peak: 1.1, from: 0.4 });
+        P.squash("#x3", 2.42 + 5 * F, 0.06);
+
+        const ROW = 146, DX = 40;
+        function peel(sel, t, rows) {
+          const dy = -ROW * rows, dx = -DX * rows, travel = 0.3 + 0.06 * rows;
+          const tb = sel + " .tbump", tc = sel + " .tcard", cu = sel + " .curl";
+          gsap.set(sel, { transformOrigin: "50% 50%" });
+          gsap.set(tb, { transformOrigin: "50% 100%" });
+          gsap.set(tc, { transformPerspective: 900, transformOrigin: "0% 100%" });
+          tl.set(sel, { x: dx, y: dy, opacity: 0 }, 0);
+          tl.to(sel, { opacity: 0.6, duration: 2 * F, ease: "none" }, t);
+          // page-curl: the top-right corner lifts toward us (3D) and shows the paper's back, then the sheet flattens in flight
+          tl.fromTo(cu, { opacity: 0, scale: 0.3 }, { opacity: 1, scale: 1.25, duration: 0.14, ease: "power2.out" }, t);
+          tl.to(tc, { rotationY: -22, rotationX: 14, duration: 0.16, ease: "power2.out" }, t + F);
+          tl.to(sel, { x: dx + 34, y: dy - 18, scale: 1.04, rotation: 5, duration: 0.14, ease: "power2.out" }, t + 2 * F);
+          const t2 = t + 2 * F + 0.14;
+          tl.to(sel, { x: dx + 120, duration: travel * 0.45, ease: "power2.out" }, t2);
+          tl.to(sel, { x: 0, duration: travel * 0.55, ease: "power2.inOut" }, t2 + travel * 0.45);
+          tl.to(sel, { y: 0, duration: travel, ease: "power2.in" }, t2);
+          tl.to(sel, { rotation: -3, scale: 1, duration: travel, ease: "sine.inOut" }, t2);
+          tl.to(sel, { opacity: 1, duration: travel * 0.8, ease: "power1.in" }, t2);
+          tl.to(tc, { rotationY: 0, rotationX: -4, duration: travel, ease: "power2.inOut" }, t2);
+          tl.to(cu, { opacity: 0, scale: 0, duration: travel * 0.9, ease: "power2.in" }, t2);
+          const c = t2 + travel;                                            // contact
+          tl.to(tc, { rotationX: 0, duration: 0.3, ease: "back.out(2)" }, c);
+          tl.to(sel, { rotation: 0, duration: 0.3, ease: "back.out(2)" }, c);
+          tl.to(tb, { scaleX: 1.03, scaleY: 0.96, duration: 2 * F, ease: "power2.out" }, c);
+          tl.to(tb, { scaleX: 1, scaleY: 1, duration: 0.3, ease: "back.out(2.2)" }, c + 2 * F);
+          // new hires: avatars tint accent 2 f apart, then wave hello
+          $$(sel + " .a0").forEach((a, i) => {
+            gsap.set(a, { transformOrigin: "50% 50%" });
+            tl.fromTo(a, { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.22, ease: "back.out(2)" }, c + (i + 1) * 2 * F);
+          });
+          hello($$(sel + " .av"), c + 0.16);
+          // the original reacts: tiny dip as the copy leaves
+          tl.to("#team0 .tbump", { y: 6, duration: 0.1, ease: "power2.out" }, t + 2 * F);
+          tl.to("#team0 .tbump", { y: 0, duration: 0.3, ease: "back.out(2)" }, t + 2 * F + 0.1);
+          return c;
+        }
+        const c1 = peel("#team1", 2.36, 1);                                 // contact 2.93
+        const c2 = peel("#team2", 2.48, 2);                                 // contact 3.11
+        P.drawPath("#dup", 2.40, 0.5);
+        P.marchPath("#dup", 2.40, D - 2.40, 60);
+        // counter ticks on each contact: digit column rolls (overshoot), pill pulses + squashes
+        [[c1, -62], [c2, -124]].forEach(([c, y]) => {
+          tl.to("#x3 .col", { y: y - 8, duration: 3 * F, ease: "power3.out" }, c - F);
+          tl.to("#x3 .col", { y, duration: 0.22, ease: "back.out(2.4)" }, c + 2 * F);
+          P.pulse("#x3", c, 1.12);
+          P.squash("#x3", c + 4 * F, 0.06);
+        });
+
+        // ================= "six months" — six calendar tiles flip down one by one, then a bracket spans them =================
+        const mts = $$("#cal .mt");
+        mts.forEach((m, i) => {
+          const s = 3.00 + i * 2 * F;                                       // contact (flat) = s + 4 f
+          gsap.set(m, { transformPerspective: 500, transformOrigin: "50% 0%" });
+          tl.fromTo(m, { opacity: 0, rotationX: -110, y: -10 }, { opacity: 1, rotationX: 12, y: 0, duration: 4 * F, ease: "power2.in" }, s);
+          tl.to(m, { rotationX: 0, duration: 0.2, ease: "back.out(2.5)" }, s + 4 * F);
+        });
+        tl.to("#calbar", { scaleX: 1, duration: 0.3, ease: "power2.inOut" }, 3.40);
+        P.pulse(mts[5], 3.66, 1.1);
+
+        // ================= BEAT C — company tiles pop on "every single other company", wave on "company" =================
+        const tiles = $$(".ctile");
+        [4.13, 4.23, 4.49, 4.59, 4.77, 4.87].forEach((t, i) => P.pop(tiles[i], t, { peak: 1.1, from: 0.4 }));
+        tiles.forEach((el, i) => {
+          const s = 5.0 + i * 2 * F;
+          tl.to(el, { y: -16, duration: 0.11, ease: "power2.out" }, s);
+          tl.to(el, { y: 0, duration: 0.28, ease: "back.out(2.4)" }, s + 0.11);
+        });
+        P.exitDown("#tilesX", 5.30, 50);
+
+        // notification tower: pills slide in from alternate sides on an arc, contact on the ping (5.61 + 0.1·i),
+        // each new one pushes the older ones up a slot; dot ripples on contact; the tower sways like a stack of cards
+        const STEP = 122, GAP = 3 * F;
+        const slots = $$(".slot");
+        slots.forEach((s, i) => {
+          const p = $(".pill", s), c = 5.61 + i * GAP, t = c - 8 * F;
+          const side = i % 2 ? -1 : 1;                                       // even: from the right, odd: from the left
+          gsap.set(p, { transformOrigin: "50% 100%" });
+          tl.fromTo(p, { opacity: 0, x: 90 * side, rotation: 5 * side, filter: "blur(6px)" },
+            { opacity: 1, x: -6 * side, rotation: -1 * side, filter: "blur(0px)", duration: 8 * F, ease: "power3.out" }, t);
+          tl.fromTo(p, { y: 36 }, { y: 0, duration: 8 * F, ease: "power1.out" }, t);
+          tl.to(p, { x: 0, rotation: 0, duration: 9 * F, ease: "back.out(1.8)" }, c);
+          P.squash(p, c, 0.05);
+          for (let j = 0; j < i; j++) tl.to(slots[j], { y: -STEP * (i - j), duration: 0.16, ease: "power3.out" }, t - F);
+          const ring = $(".hd .ring", s);
+          gsap.set(ring, { transformOrigin: "50% 50%" });
+          tl.fromTo(ring, { opacity: 0.9, scale: 1 }, { opacity: 0, scale: 4.2, duration: 0.45, ease: "power2.out" }, c);
+          tl.fromTo(ring, { opacity: 0.6, scale: 1 }, { opacity: 0, scale: 2.4, duration: 0.4, ease: "power2.out", immediateRender: false }, c + 0.45);
+        });
+        gsap.set("#tower", { transformOrigin: "510px 1410px" });
+        tl.to("#tower", { rotation: 1.1, duration: 0.3, ease: "sine.inOut" }, 5.72);
+        tl.to("#tower", { rotation: -0.8, duration: 0.3, ease: "sine.inOut" }, 6.02);
+
+        // staging: the top phrase steps back a touch when the pills take focus
+        P.recede("#cWords", 5.5, { opacity: 0.72, blur: 1.5, scale: 0.985, dur: 0.3 });
+      })();
+    </script>
+  </body>
+</html>

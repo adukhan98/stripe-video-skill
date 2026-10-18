@@ -1,0 +1,50 @@
+[
+ {
+  "t": 0.02,
+  "sfx": "whoosh",
+  "gain_db": -9,
+  "what": "paper strip slides up under the words"
+ },
+ {
+  "t": 0.14,
+  "sfx": "pop",
+  "gain_db": -4,
+  "what": "'you' lands"
+ },
+ {
+  "t": 0.25,
+  "sfx": "pop",
+  "gain_db": -4,
+  "what": "'just' lands"
+ },
+ {
+  "t": 0.45,
+  "sfx": "pop",
+  "gain_db": -4,
+  "what": "'need' lands"
+ },
+ {
+  "t": 0.71,
+  "sfx": "pop",
+  "gain_db": -4,
+  "what": "'to' lands"
+ },
+ {
+  "t": 0.92,
+  "sfx": "impact",
+  "what": "'ask' stamps in (scale 1.45 to 0.95 to 1.0, camera shake)"
+ },
+ {
+  "t": 0.94,
+  "sfx": "scribble",
+  "dur": 0.2,
+  "what": "three red shout rays fan out right of 'ask'"
+ },
+ {
+  "t": 1.12,
+  "sfx": "scribble",
+  "dur": 0.2,
+  "gain_db": -3,
+  "what": "red underline under 'ask'"
+ }
+]

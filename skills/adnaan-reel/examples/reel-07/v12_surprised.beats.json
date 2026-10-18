@@ -1,0 +1,14 @@
+[
+ {"t": 0.02, "sfx": "whoosh", "what": "paper strip rises under the words", "gain_db": -10},
+ {"t": 0.46, "sfx": "whoosh", "what": "per-letter cascade of 'surprised' starts", "gain_db": -7},
+ {"t": 0.72, "sfx": "scribble", "dur": 0.2, "what": "five marker rays burst round 'surprised'"},
+ {"t": 0.76, "sfx": "riser", "what": "riser hits on 'surprised' (last letter lands)", "gain_db": -6},
+ {"t": 0.76, "sfx": "impact", "what": "'surprised' slams: camera punch + 4 f shake"},
+ {"t": 1.12, "sfx": "tick", "what": "phrase swap: 'how' pops in", "gain_db": -9},
+ {"t": 1.42, "sfx": "pop", "what": "'often' pops in", "gain_db": -6},
+ {"t": 1.76, "sfx": "tick", "what": "'it' / 'gets' land", "gain_db": -9},
+ {"t": 2.07, "sfx": "scribble", "dur": 0.14, "what": "bracket half ] drawn beside 'close.'"},
+ {"t": 2.1, "sfx": "pop", "what": "'close.' pops in", "gain_db": -6},
+ {"t": 2.17, "sfx": "scribble", "dur": 0.14, "what": "bracket half [ drawn"},
+ {"t": 2.48, "sfx": "ping", "what": "the two halves nudge almost together", "gain_db": -6}
+]

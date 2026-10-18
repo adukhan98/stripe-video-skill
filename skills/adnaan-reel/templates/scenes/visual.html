@@ -1,0 +1,54 @@
+<!doctype html>
+<!-- adnaan-reel v7 starter: VISUAL — no speaker: the paper board with the STRONG vignette (V.board()), a WORLD layer
+     bigger than the frame (author in world px) and a CAMERA that travels across it (V.cam / V.pose — one move per
+     sentence, eased, x and y on different eases = an arc). Icon discs (V.disc), flat vector props, real pages as big
+     readable cards with a mint highlighter. Wrap the travelling layer in .v7-zone if things leave the zone mid-move.
+     Peach = data only. Keep data-duration. -->
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>scene</title>
+    <link rel="stylesheet" href="brand.css" />
+    <link rel="stylesheet" href="paper.css" />
+    <link rel="stylesheet" href="v7.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+    <script src="paper.js"></script>
+    <script src="v7.js"></script>
+    <style>
+      @font-face { font-family: "Inter Tight"; src: url("fonts/InterTight-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Inter"; src: url("fonts/Inter-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      /* bespoke flat-vector object styles: palette tokens only, soft shadows, no wobbling outlines */
+    </style>
+  </head>
+  <body data-face="0.40">
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="5.000">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+
+      <div id="view" class="v7-view v7-zone">
+        <div id="world" class="v7-world">
+          <!-- area A (world px) … area B further down/right — the camera travels between them -->
+        </div>
+      </div>
+
+      <div id="cam"><div id="punch">
+        <div class="line hero ocean" data-x="90" data-base="1400" data-size="210" data-fit="820">
+          <span class="w" data-t="1.0" data-hero data-punch="1.0">hero</span>
+        </div>
+      </div></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const P = await Paper.init();
+        const V = V7.init(P);
+        const { tl, D, F, $ } = P;
+        V.board();
+        const a = V.disc("#world", { x: 300, y: 600, d: 220, icon: "lightning", mint: true });
+        V.discIn(a, 0.2);
+        // travel: V.cam("#world", 1.6, V.pose(900, 1700, 1.2))  — world point (900,1700) to the screen centre at 1.2×
+      })();
+    </script>
+  </body>
+</html>

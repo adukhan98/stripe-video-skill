@@ -1,0 +1,92 @@
+[
+ {
+  "t": 0.49,
+  "sfx": "pop",
+  "gain_db": -17
+ },
+ {
+  "t": 1.71,
+  "sfx": "pop",
+  "gain_db": -23
+ },
+ {
+  "t": 1.89,
+  "sfx": "pop",
+  "gain_db": -23
+ },
+ {
+  "t": 2.07,
+  "sfx": "pop",
+  "gain_db": -23
+ },
+ {
+  "t": 2.15,
+  "sfx": "impact",
+  "gain_db": -21
+ },
+ {
+  "t": 2.34,
+  "sfx": "whoosh",
+  "gain_db": -23
+ },
+ {
+  "t": 2.78,
+  "sfx": "pop",
+  "gain_db": -22
+ },
+ {
+  "t": 3.45,
+  "sfx": "whoosh",
+  "gain_db": -19
+ },
+ {
+  "t": 3.85,
+  "sfx": "ping",
+  "gain_db": -26
+ },
+ {
+  "t": 4.2,
+  "sfx": "ping",
+  "gain_db": -26
+ },
+ {
+  "t": 4.53,
+  "sfx": "ping",
+  "gain_db": -26
+ },
+ {
+  "t": 4.97,
+  "sfx": "ping",
+  "gain_db": -26
+ },
+ {
+  "t": 5.2,
+  "sfx": "ping",
+  "gain_db": -26
+ },
+ {
+  "t": 6.17,
+  "sfx": "whoosh",
+  "gain_db": -22
+ },
+ {
+  "t": 6.51,
+  "sfx": "tick",
+  "gain_db": -26
+ },
+ {
+  "t": 6.69,
+  "sfx": "tick",
+  "gain_db": -26
+ },
+ {
+  "t": 6.87,
+  "sfx": "tick",
+  "gain_db": -26
+ },
+ {
+  "t": 7.0,
+  "sfx": "ding",
+  "gain_db": -23
+ }
+]

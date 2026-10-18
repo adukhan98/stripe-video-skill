@@ -1,0 +1,57 @@
+<!doctype html>
+<!-- stripe-youtube starter: CANVAS — the default designed beat. Chapter heading, ONE real thing (a readable page strip
+     with the yellow highlighter on the spoken phrase), one bespoke object that acts out the sentence, a big kinetic
+     number/phrase, marker work. The speaker card is composited later by compose.py: keep #card-zone EMPTY.
+     Replace: hue class on #root (the chapter's hue), chapter number + title, the strip, words + times, the object. -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>canvas</title>
+    <link rel="stylesheet" href="board.css" />
+    <link rel="stylesheet" href="marker.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="board.js"></script>
+    <script src="marker.js"></script>
+  </head>
+  <body data-theme="{{THEME}}">
+    <div id="root" class="{{HUE}}" data-composition-id="main" data-start="0" data-width="1920" data-height="1080" data-duration="{{DURATION}}">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+      <div id="cam"><div id="punch">
+
+        <div class="chap" data-in="left" data-at="0"><div class="coin">1</div><div class="t"><span class="num">01 · </span>Talk instead of typing</div></div>
+
+        <!-- the real page, as a readable strip (capture.py --readable), highlighter ON the spoken phrase -->
+        <div id="strip" class="page" style="left:120px;top:250px;width:1208px;height:300px">
+          <img src="assets/strip.png" style="position:absolute;left:24px;top:28px;width:1159px" alt="" />
+        </div>
+
+        <!-- bespoke object: a two-bar race (replace with the object that acts out THIS sentence) -->
+        <div class="label" style="left:126px;top:668px;font-size:40px" data-in="fade" data-at="2.4">speaking</div>
+        <div class="label" style="left:126px;top:818px;font-size:40px" data-in="fade" data-at="2.5">typing</div>
+        <div id="bar1" class="tile" style="left:330px;top:654px;width:740px;height:74px;border-radius:14px;transform-origin:0 50%"></div>
+        <div id="bar2" class="hatch" style="left:330px;top:804px;width:247px;height:74px;transform-origin:0 50%"></div>
+
+        <div class="k k900 emph" style="left:1150px;top:618px;font-size:250px"><span class="w" data-t="3.2" data-hero>3×</span></div>
+        <div class="k" style="left:1160px;top:850px;font-size:96px"><span class="w" data-t="3.6">faster</span></div>
+
+      </div></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const B = await Board.init();
+        const M = Marker.init(B);
+        const { tl, F } = B;
+        B.pageIn("#strip", 0.12, { rot: 0 });          // frame 0 already shows the heading; the page lands in 0.5 s
+        M.highlight(document.querySelector("#strip"), [593, 134, 220, 56], 1.4);       // box from <name>.strips.json × scale
+        M.tape(1240, 232, 14, 0.9);
+        M.note("a Stanford study", 1350, 300, 1.0, { size: 54, rot: -4 });
+        B.in("#bar1", 2.6, { type: "grow" });
+        B.in("#bar2", 2.6, { type: "grow", dur: 30 * F });                               // typing crawls
+        M.arrow(1000, 575, 1140, 690, 3.0, { bend: 0.3 });
+        M.underline(1160, 1520, 975, 3.8);
+      })();
+    </script>
+  </body>
+</html>

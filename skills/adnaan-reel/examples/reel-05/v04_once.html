@@ -1,0 +1,113 @@
+<!doctype html>
+<!-- adnaan-reel scene starter: FULL-SCREEN SPEAKER — HE fills the frame edge to edge (no card, no tilt), kinetic
+     words land low on his chest / the bottom third with the paper glow. The minimal beat: nothing else on screen
+     unless the brief names ONE object. Use for the hook, verdict/opinion lines, the wrap-up, the CTA — 2–4 per reel,
+     alternating with paper-world scenes. (flashcheck knows this window is not paper: type "fullscreen" in slots.json.)
+     Optional: add <div class="paper-strip"></div> before the words if the background behind the words is busy.
+     Optional mid-scene version: start as a portrait card and call P.growFull("#spk", t) on the hero word. -->
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>v04_once</title>
+    <link rel="stylesheet" href="brand.css" />
+    <link rel="stylesheet" href="paper.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+    <script src="paper.js"></script>
+  </head>
+  <body data-face="0.47">
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="5.3167">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+
+      <!-- full-screen speaker: the whole frame, slow push only -->
+      <div id="spk" class="spk full" data-push="1.03">
+        <div class="spk-card">
+          <div class="spk-vid"><video id="speaker" class="clip" src="assets/speaker.mp4" muted playsinline data-start="0" data-duration="5.3167" data-track-index="1"></video></div>
+        </div>
+      </div>
+
+      <!-- paper strip: navy sweatshirt, so the low words sit on paper (fades in with the first phrase) -->
+      <div id="strip" class="paper-strip" style="height:700px"></div>
+
+      <div id="cam" data-push="1.012">
+        <!-- accent shockwave: a flat soft ring on the "floor" behind "at once" (colour from the brand token, no outline) -->
+        <div id="ring"></div>
+        <div id="punch">
+        <!-- phrase 1: slide in from opposite sides, lock together on "&"/"companies" -->
+        <div id="l1" class="line sup kin" data-x="76" data-base="1362" data-size="96" data-exit="3.0">
+          <span class="w" id="w-org" data-t="1.55" data-rise="30">organizations</span>
+        </div>
+        <div id="l2" class="line sup kin" data-x="190" data-base="1448" data-size="96" data-exit="3.0" data-exit-lag="2">
+          <span class="w" data-t="1.87" data-pop data-rise="30">&amp;</span><span class="w gap-s" id="w-comp" data-t="2.33" data-rise="30">companies</span>
+        </div>
+        <!-- phrase 2: "all" then every letter of "at once" slams in together at 4.10 -->
+        <div id="lall" class="line hero ink kin" data-x="76" data-base="1330" data-size="212" data-fit="900">
+          <span class="w" id="w-all" data-t="3.58" data-hero data-rise="70">all</span>
+        </div>
+        <div id="atonce" class="line hero ocean kin" data-right="920" data-base="1460" data-size="226" data-fit="880">
+          <span class="ww"><span class="lt">a</span><span class="lt">t</span></span><span class="ww gap-s"><span class="lt">o</span><span class="lt">n</span><span class="lt">c</span><span class="lt">e</span></span>
+        </div>
+      </div></div>
+    </div>
+    <style>
+      .lt { display: inline-block; will-change: transform, opacity, filter; }
+      .ww { display: inline-block; white-space: nowrap; }
+      #ring { position: absolute; left: 160px; top: 1262px; width: 800px; height: 218px; opacity: 0; pointer-events: none;
+        border-radius: 50%; border: 22px solid var(--brand-primary); box-sizing: border-box; filter: blur(9px); }
+    </style>
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const P = await Paper.init();
+        const { tl, D, F, $, $$ } = P;
+
+        // ---- paper strip: fades in ahead of the first phrase, takes a tiny bounce on the impact
+        tl.set("#strip", { opacity: 0 }, 0);
+        tl.to("#strip", { opacity: 1, duration: 0.35, ease: "power2.out" }, 1.2);
+        gsap.set("#strip", { transformOrigin: "50% 100%" });
+        tl.to("#strip", { scaleY: 1.06, duration: 0.07, ease: "power2.out" }, 4.12);
+        tl.to("#strip", { scaleY: 1, duration: 0.4, ease: "back.out(2.4)" }, 4.19);
+
+        // ---- phrase 1: opposite sides, lock on "companies"
+        tl.fromTo("#w-org", { x: -260 }, { x: 0, duration: 0.42, ease: "power4.out" }, 1.4);
+        tl.fromTo("#w-comp", { x: 220 }, { x: 0, duration: 0.46, ease: "back.out(1.1)" }, 2.2);
+        gsap.set("#l1", { transformOrigin: "0% 100%" });
+        gsap.set("#l2", { transformOrigin: "0% 100%" });
+        P.pulse("#l1", 2.33, 1.025);          // the lock: both lines give a small shared pulse
+        P.pulse("#l2", 2.335, 1.03);
+
+        // ---- "all" comes in from the left, braces, takes the knock of the slam
+        tl.fromTo("#w-all", { x: -150 }, { x: 0, duration: 0.42, ease: "power3.out" }, 3.38);
+        gsap.set("#lall", { transformOrigin: "0% 100%" });
+        tl.to("#lall", { scale: 0.965, duration: 0.12, ease: "power2.in" }, 3.95);                // anticipation
+        tl.to("#lall", { scale: 1, y: 9, duration: 0.07, ease: "power3.out" }, 4.1);              // knocked by the impact
+        tl.to("#lall", { y: 0, duration: 0.4, ease: "back.out(2.2)" }, 4.17);
+        tl.to("#lall", { y: -4, duration: 0.6, ease: "sine.inOut", yoyo: true, repeat: 1 }, 4.6);   // alive to the cut
+
+        // ---- 4.10: every letter of "at once" slams in at the same instant from a different direction
+        const L = $$("#atonce .lt");
+        const fl = [[-140, -50, -24, 1.3], [-60, -80, 16, 1.4], [-100, 30, -14, 1.25], [50, 30, 20, 1.3], [110, -60, -18, 1.3], [140, 10, 26, 1.25]];
+        L.forEach((l, i) => {
+          const [dx, dy, r, sc] = fl[i];
+          gsap.set(l, { transformOrigin: "50% 70%" });
+          tl.fromTo(l, { x: dx, y: dy, rotation: r, scale: sc, opacity: 0, filter: "blur(10px)" },
+            { x: 0, y: 0, rotation: 0, scale: 1, filter: "blur(0px)", duration: 0.14, ease: "power3.in", immediateRender: true }, 3.96);
+          tl.to(l, { opacity: 1, duration: 0.07, ease: "none" }, 3.98);
+        });
+        tl.to(L, { scale: 1.13, y: -6, duration: 0.08, ease: "power2.out", stagger: 0.012 }, 4.1);   // overshoot
+        tl.to(L, { scale: 1, y: 0, duration: 0.38, ease: "back.out(2)", stagger: 0.012 }, 4.18);     // settle
+        L.forEach((l, i) => tl.to(l, { y: -5, duration: 0.5, ease: "sine.inOut", yoyo: true, repeat: 1 }, 4.62 + i * 0.04)); // wave, alive to the cut
+
+        // soft accent shockwave on the impact
+        tl.fromTo("#ring", { opacity: 1, scale: 0.5 }, { opacity: 0, scale: 1.0, duration: 0.55, ease: "power2.out", immediateRender: false }, 4.1);
+        tl.set("#ring", { opacity: 0, scale: 0.5 }, 0);
+
+        // the one exaggerated beat: 1 % punch on the words + a gentle push-in on him
+        P.punch(4.1, { scale: 1.01, origin: "700px 1380px", dur: 0.22 });
+        gsap.set(".spk-card", { transformOrigin: "50% 40%" });
+        tl.fromTo(".spk-card", { scale: 1 }, { scale: 1.04, duration: 0.7, ease: "power3.out", immediateRender: false }, 4.1);
+      })();
+    </script>
+  </body>
+</html>

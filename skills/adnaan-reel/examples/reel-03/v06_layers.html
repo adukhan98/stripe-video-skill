@@ -1,0 +1,892 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>v06 layers</title>
+    <link rel="stylesheet" href="brand.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: var(--brand-background);
+      }
+      #root {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: var(--brand-background);
+        font-family: var(--font-heading);
+        color: var(--brand-text);
+      }
+
+      /* ---------- shared v2 background: paper + 60px grid + vignette ---------- */
+      #bg {
+        position: absolute;
+        inset: 0;
+        background: var(--brand-background);
+        overflow: hidden;
+      }
+      #grid {
+        position: absolute;
+        left: -120px;
+        top: -120px;
+        width: 1320px;
+        height: 2160px;
+        background-image:
+          linear-gradient(to right, rgba(20, 20, 20, 0.055) 1.5px, transparent 1.5px),
+          linear-gradient(to bottom, rgba(20, 20, 20, 0.055) 1.5px, transparent 1.5px);
+        background-size: 60px 60px;
+      }
+      #vignette {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(ellipse at 50% 45%, transparent 45%, rgba(90, 80, 72, 0.22) 100%);
+      }
+
+      /* ---------- camera ---------- */
+      #cam,
+      #punch,
+      #stackLayer,
+      #dirLayer {
+        position: absolute;
+        inset: 0;
+      }
+
+      /* ---------- slabs (axonometric, built in JS) ---------- */
+      .slab,
+      .slab-bob,
+      .slab-body {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 0;
+        height: 0;
+      }
+      .slab-body {
+        filter: drop-shadow(0 14px 16px rgba(60, 50, 40, 0.2));
+      }
+      .slab svg {
+        position: absolute;
+        overflow: visible;
+      }
+      #ground {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 0;
+        height: 0;
+      }
+      #ground svg {
+        position: absolute;
+        overflow: visible;
+        filter: blur(18px);
+      }
+
+      /* ---------- agent puck ---------- */
+      #puck-shadow {
+        position: absolute;
+        width: 220px;
+        height: 60px;
+        border-radius: 50%;
+        background: radial-gradient(ellipse at 50% 50%, rgba(13, 39, 49, 0.42), rgba(13, 39, 49, 0) 70%);
+      }
+      #puck-wrap {
+        position: absolute;
+        width: 196px;
+        height: 196px;
+      }
+      #puck {
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        background: radial-gradient(circle at 34% 28%, #3a3a3a, #141414 62%);
+        box-shadow:
+          0 22px 34px rgba(40, 30, 20, 0.34),
+          inset 0 -6px 12px rgba(0, 0, 0, 0.35),
+          inset 0 3px 6px rgba(255, 255, 255, 0.08);
+      }
+      #puck svg {
+        position: absolute;
+        left: 40px;
+        top: 37px;
+        width: 116px;
+        height: 116px;
+        overflow: visible;
+      }
+      #needle {
+        position: absolute;
+        width: 0;
+        height: 0;
+      }
+      #needle svg {
+        position: absolute;
+        left: 0;
+        top: -30px;
+        width: 220px;
+        height: 60px;
+        overflow: visible;
+      }
+      #pathSvg {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1080px;
+        height: 1920px;
+        overflow: visible;
+      }
+      #end-dot,
+      #end-ring {
+        position: absolute;
+        width: 24px;
+        height: 24px;
+        margin-left: -12px;
+        margin-top: -12px;
+        border-radius: 50%;
+      }
+      #end-dot {
+        background: radial-gradient(circle at 35% 30%, #6cc0e2, var(--brand-primary) 60%, var(--brand-primary-dark));
+        box-shadow: 0 6px 12px rgba(31, 126, 168, 0.35);
+      }
+      #end-ring {
+        border: 3px solid var(--brand-primary);
+        opacity: 0;
+      }
+
+      /* ---------- coin 03 (3D flip white -> ocean) ---------- */
+      #coin {
+        position: absolute;
+        width: 220px;
+        height: 220px;
+        margin-left: -110px;
+        margin-top: -110px;
+      }
+      #coin-float,
+      #coin-flip,
+      .coin-face,
+      #coin-shadow {
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+      }
+      #coin-shadow {
+        box-shadow: 0 18px 30px rgba(60, 50, 40, 0.24);
+      }
+      #coin-flip {
+        transform-style: preserve-3d;
+      }
+      .coin-face {
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-body);
+        font-weight: 600;
+        font-size: 92px;
+        letter-spacing: -0.03em;
+      }
+      .coin-face.front {
+        background: radial-gradient(circle at 35% 30%, #ffffff, #f1eeea 70%);
+        box-shadow: inset 0 -8px 16px rgba(60, 50, 40, 0.07);
+        color: var(--brand-text);
+      }
+      .coin-face.back {
+        background: radial-gradient(circle at 35% 30%, #7cc6e6, var(--brand-primary) 58%, var(--brand-primary-dark) 100%);
+        box-shadow: inset 0 -8px 16px rgba(13, 39, 49, 0.18);
+        color: var(--brand-deep);
+        transform: rotateY(180deg);
+      }
+      .tick {
+        position: absolute;
+        border-radius: 2px;
+      }
+      .front .tick {
+        background: #cfc9c2;
+      }
+      .back .tick {
+        background: rgba(13, 39, 49, 0.35);
+      }
+
+      /* ---------- kinetic serif ---------- */
+      .line {
+        position: absolute;
+        display: flex;
+        align-items: baseline;
+        white-space: nowrap;
+        line-height: 0.95;
+        letter-spacing: -0.015em;
+      }
+      .bl {
+        display: block;
+        width: 0;
+        height: 0;
+        align-self: baseline;
+      }
+      .w {
+        display: inline-block;
+        will-change: transform, opacity, filter;
+      }
+      .serif {
+        font-family: var(--font-heading);
+        font-weight: 600;
+        color: var(--brand-text);
+      }
+      .ital {
+        font-family: var(--font-accent);
+        font-weight: 700;
+        font-style: italic;
+        letter-spacing: -0.02em;
+      }
+      .ocean {
+        color: var(--brand-primary);
+      }
+      .ink {
+        color: var(--brand-text);
+      }
+      .gap-s {
+        margin-left: 0.24em;
+      }
+      #l-third {
+        font-size: 96px;
+      }
+      #l-layers {
+        font-size: 240px;
+        line-height: 0.9;
+      }
+      #lA .sm {
+        font-size: 72px;
+      }
+      #lA .md {
+        font-size: 110px;
+      }
+      #lA .hero {
+        font-size: 210px;
+        line-height: 0.9;
+      }
+      #lB {
+        font-size: 110px;
+      }
+      #lB .amp {
+        font-size: 124px;
+      }
+      #lC {
+        font-size: 100px;
+      }
+      #lD1 {
+        font-size: 74px;
+      }
+      #lD2 {
+        font-size: 108px;
+      }
+      #lE {
+        font-size: 176px;
+        line-height: 0.9;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-width="1080" data-height="1920" data-duration="5.7">
+      <div id="bg">
+        <div id="grid"></div>
+        <div id="vignette"></div>
+      </div>
+
+      <div id="cam">
+        <div id="punch">
+          <!-- the stack of seven layers -->
+          <div id="stackLayer">
+            <div id="ground"></div>
+            <div id="slabs"></div>
+          </div>
+
+          <!-- direction: puck + needle + dotted path -->
+          <div id="dirLayer">
+            <svg id="pathSvg" viewBox="0 0 1080 1920">
+              <defs>
+                <mask id="pathMask" maskUnits="userSpaceOnUse" x="0" y="0" width="1080" height="1920">
+                  <path id="pathReveal" fill="none" stroke="#fff" stroke-width="14" stroke-linecap="round" />
+                </mask>
+              </defs>
+              <path
+                id="pathDots"
+                fill="none"
+                stroke="#141414"
+                stroke-width="3"
+                stroke-linecap="round"
+                stroke-dasharray="2 12"
+                mask="url(#pathMask)"
+              />
+            </svg>
+            <div id="end-ring"></div>
+            <div id="end-dot"></div>
+            <div id="puck-shadow"></div>
+            <div id="needle">
+              <svg viewBox="0 -30 220 60">
+                <defs>
+                  <linearGradient id="needleGrad" x1="100" y1="0" x2="204" y2="0" gradientUnits="userSpaceOnUse">
+                    <stop offset="0" stop-color="#1F7EA8" />
+                    <stop offset="1" stop-color="#2E9CCB" />
+                  </linearGradient>
+                </defs>
+                <!-- shaft + head, pointing along +x, pivot at (0,0) = puck centre -->
+                <path
+                  d="M 84 -6.5 L 168 -5.5 L 166 -18 Q 166 -22 170 -20 L 204 -2 Q 208 0 204 2 L 170 20 Q 166 22 166 18 L 168 5.5 L 84 6.5 Z"
+                  fill="url(#needleGrad)"
+                />
+              </svg>
+            </div>
+            <div id="puck-wrap">
+              <div id="puck">
+                <svg viewBox="0 0 100 100">
+                  <!-- robot face -->
+                  <line x1="50" y1="12" x2="50" y2="24" stroke="#FBFAF8" stroke-width="5" stroke-linecap="round" />
+                  <circle cx="50" cy="10" r="5.5" fill="#FBFAF8" />
+                  <rect x="9" y="44" width="8" height="18" rx="4" fill="#FBFAF8" />
+                  <rect x="83" y="44" width="8" height="18" rx="4" fill="#FBFAF8" />
+                  <rect x="19" y="26" width="62" height="54" rx="18" fill="none" stroke="#FBFAF8" stroke-width="5.5" />
+                  <rect x="28" y="40" width="44" height="24" rx="12" fill="#0D2731" />
+                  <g id="eyes">
+                    <circle class="eye" cx="40" cy="52" r="5.6" fill="#2E9CCB" />
+                    <circle class="eye" cx="60" cy="52" r="5.6" fill="#2E9CCB" />
+                  </g>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- coin 03: chapter coin, compacts into the header -->
+          <div id="coin">
+            <div id="coin-float">
+              <div id="coin-shadow"></div>
+              <div id="coin-flip">
+                <div class="coin-face front">03</div>
+                <div class="coin-face back">03</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- chapter -->
+          <div id="l-third" class="line serif" data-x="338" data-base="688">
+            <span class="bl"></span>
+            <span class="w" data-t="0.00" data-first="1">third</span>
+            <span class="w gap-s" data-t="0.19">one</span>
+          </div>
+          <div id="l-layers" class="line ital ocean" data-x="104" data-base="968">
+            <span class="bl"></span>
+            <span class="w" data-t="0.51" data-hero="1" data-origin="30% 85%" data-peak="1.08">Layers</span>
+          </div>
+
+          <!-- stack phrases -->
+          <div id="lA" class="line serif" data-x="74" data-base="1198">
+            <span class="bl"></span>
+            <span class="w sm" data-t="1.19">built</span>
+            <span class="w sm gap-s" data-t="1.47">on</span>
+            <span class="w md" style="margin-left: 0.2em" data-t="1.67">good</span>
+            <span class="w hero ital ocean" style="margin-left: 0.12em" data-t="1.93" data-hero="1" data-origin="30% 85%" data-peak="1.1">UX</span>
+          </div>
+          <div id="lB" class="line serif" data-x="236" data-base="1314">
+            <span class="bl"></span>
+            <span class="w amp ital ink" data-t="2.31" data-accent="1">&amp;</span>
+            <span class="w" style="margin-left: 0.22em" data-t="2.53">product</span>
+          </div>
+          <div id="lC" class="line serif" data-x="112" data-base="1426">
+            <span class="bl"></span>
+            <span class="w" data-t="2.83" data-rise="24">design</span>
+            <span class="w gap-s" data-t="3.19" data-rise="24">principles</span>
+          </div>
+
+          <!-- direction phrases -->
+          <div id="lD1" class="line serif" data-x="80" data-base="1174">
+            <span class="bl"></span>
+            <span class="w" data-t="4.01">it</span>
+            <span class="w gap-s" data-t="4.15">gives</span>
+            <span class="w gap-s" data-t="4.39">your</span>
+          </div>
+          <div id="lD2" class="line ital ink" data-right="934" data-base="1282">
+            <span class="bl"></span>
+            <span class="w" data-t="4.61" data-accent="1">AI</span>
+            <span class="w" style="margin-left: 0.22em" data-t="4.95" data-accent="1">agents</span>
+          </div>
+          <div id="lE" class="line ital ocean" data-x="96" data-base="1440">
+            <span class="bl"></span>
+            <span class="w" data-t="5.37" data-hero="1" data-origin="50% 85%" data-peak="1.05" data-rise="30">direction.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (async () => {
+        const fontSpecs = ['600 64px "Newsreader"', 'italic 700 64px "Fraunces"', '500 30px "Geist"', '600 30px "Geist"'];
+        await Promise.all(fontSpecs.map((f) => document.fonts.load(f)));
+        await document.fonts.ready;
+        for (const f of fontSpecs) {
+          if (!document.fonts.check(f)) throw new Error("brand font missing: " + f);
+        }
+
+        const D = 5.7;
+        const F = 1 / 30;
+        const $ = (s) => document.querySelector(s);
+        const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+        const NS = "http://www.w3.org/2000/svg";
+        const svgEl = (tag, attrs) => {
+          const e = document.createElementNS(NS, tag);
+          for (const k in attrs) e.setAttribute(k, attrs[k]);
+          return e;
+        };
+
+        // ---- place each line by its baseline (deterministic layout, measured once) ----
+        for (const line of $$(".line")) {
+          const bl = line.querySelector(".bl");
+          line.style.top = "0px";
+          line.style.left = "0px";
+          const baseOff = bl.offsetTop;
+          line.dataset.baseOff = baseOff;
+          line.style.top = parseFloat(line.dataset.base) - baseOff + "px";
+          if (line.dataset.right) {
+            line.style.left = parseFloat(line.dataset.right) - line.offsetWidth + "px";
+          } else {
+            line.style.left = line.dataset.x + "px";
+          }
+        }
+
+        // ---- coin ticks ----
+        for (const face of $$(".coin-face")) {
+          for (const [x, y, w, h] of [
+            [106.5, 16, 7, 20],
+            [106.5, 184, 7, 20],
+            [16, 106.5, 20, 7],
+            [184, 106.5, 20, 7],
+          ]) {
+            const t = document.createElement("span");
+            t.className = "tick";
+            Object.assign(t.style, { left: x + "px", top: y + "px", width: w + "px", height: h + "px" });
+            face.appendChild(t);
+          }
+        }
+
+        // ================= axonometric slab geometry =================
+        const ALPHA = (-22 * Math.PI) / 180; // yaw: front faces rise gently to the right
+        const BETA = (30 * Math.PI) / 180; // camera elevation
+        const cA = Math.cos(ALPHA),
+          sA = Math.sin(ALPHA),
+          cB = Math.cos(BETA),
+          sB = Math.sin(BETA);
+        const SW = 740,
+          SD = 200,
+          ST = 64,
+          SR = 30; // slab width, depth, thickness, corner radius (plane units)
+        const GAP = 8;
+        const PITCH = ST * cB + GAP; // vertical screen distance between slabs
+        const P = (u, v, h) => {
+          const x = u * cA - v * sA;
+          const z = u * sA + v * cA;
+          return [x, -h * cB + z * sB];
+        };
+        // light from upper-right-front
+        const L = (() => {
+          const v = [0.35, 0.75, 0.55];
+          const m = Math.hypot(...v);
+          return v.map((c) => c / m);
+        })();
+        const outline = (() => {
+          const N = 10,
+            hw = SW / 2 - SR,
+            hd = SD / 2 - SR,
+            pts = [];
+          for (const [cu, cv, a0] of [
+            [hw, hd, 0],
+            [-hw, hd, 90],
+            [-hw, -hd, 180],
+            [hw, -hd, 270],
+          ]) {
+            for (let i = 0; i <= N; i++) {
+              const a = ((a0 + (90 * i) / N) * Math.PI) / 180;
+              pts.push({ u: cu + SR * Math.cos(a), v: cv + SR * Math.sin(a), nu: Math.cos(a), nv: Math.sin(a) });
+            }
+          }
+          return pts;
+        })();
+        const hex = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+        const mix = (a, b, t) => {
+          const A = hex(a),
+            B = hex(b);
+          return "rgb(" + A.map((c, i) => Math.round(c + (B[i] - c) * t)).join(",") + ")";
+        };
+        const poly = (pts) => "M" + pts.map((p) => p[0].toFixed(2) + " " + p[1].toFixed(2)).join(" L") + " Z";
+        const hull = (pts) => {
+          const s = pts.slice().sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+          const cross = (o, a, b) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
+          const lo = [],
+            up = [];
+          for (const p of s) {
+            while (lo.length >= 2 && cross(lo[lo.length - 2], lo[lo.length - 1], p) <= 0) lo.pop();
+            lo.push(p);
+          }
+          for (let i = s.length - 1; i >= 0; i--) {
+            const p = s[i];
+            while (up.length >= 2 && cross(up[up.length - 2], up[up.length - 1], p) <= 0) up.pop();
+            up.push(p);
+          }
+          up.pop();
+          lo.pop();
+          return lo.concat(up);
+        };
+
+        const LAYERS = [
+          ["01", "Observed behaviour"],
+          ["02", "The domain"],
+          ["03", "User needs"],
+          ["04", "Product & service strategy"],
+          ["05", "Conceptual model"],
+          ["06", "Interaction structure & flow"],
+          ["07", "Surface"],
+        ];
+        const WHITE = { topF: "#FDFCFA", topB: "#EFEBE6", sideD: "#D3CBC3", sideL: "#F1EDE8", hi: "rgba(255,255,255,0.95)", num: "#8E8780" };
+        const OCEAN = { topF: "#6DC0E3", topB: "#2E9CCB", sideD: "#1F7EA8", sideL: "#38A5D3", hi: "rgba(255,255,255,0.55)", num: "#0D2731" };
+
+        const topPts = outline.map((p) => P(p.u, p.v, 0));
+        const botPts = outline.map((p) => P(p.u, p.v, -ST));
+        const allPts = topPts.concat(botPts);
+        const minX = Math.min(...allPts.map((p) => p[0])) - 6,
+          maxX = Math.max(...allPts.map((p) => p[0])) + 6,
+          minY = Math.min(...allPts.map((p) => p[1])) - 6,
+          maxY = Math.max(...allPts.map((p) => p[1])) + 6;
+
+        function buildSlabSVG(k, pal) {
+          const svg = svgEl("svg", {
+            viewBox: `${minX} ${minY} ${maxX - minX} ${maxY - minY}`,
+            width: maxX - minX,
+            height: maxY - minY,
+          });
+          svg.style.left = minX + "px";
+          svg.style.top = minY + "px";
+          const defs = svgEl("defs", {});
+          const g0 = P(0, -SD / 2, 0),
+            g1 = P(0, SD / 2, 0);
+          const grad = svgEl("linearGradient", {
+            id: "topg" + k,
+            gradientUnits: "userSpaceOnUse",
+            x1: g0[0],
+            y1: g0[1],
+            x2: g1[0],
+            y2: g1[1],
+          });
+          grad.appendChild(svgEl("stop", { offset: "0", "stop-color": pal.topB }));
+          grad.appendChild(svgEl("stop", { offset: "1", "stop-color": pal.topF }));
+          defs.appendChild(grad);
+          svg.appendChild(defs);
+          // side base (hull) to avoid seams
+          svg.appendChild(svgEl("path", { d: poly(hull(allPts)), fill: mix(pal.sideD, pal.sideL, 0.55) }));
+          // shaded side quads
+          const n = outline.length;
+          const hiEdges = [];
+          for (let i = 0; i < n; i++) {
+            const a = outline[i],
+              b = outline[(i + 1) % n];
+            let nu = (a.nu + b.nu) / 2,
+              nv = (a.nv + b.nv) / 2;
+            const m = Math.hypot(nu, nv) || 1;
+            nu /= m;
+            nv /= m;
+            const nx = nu * cA - nv * sA;
+            const nz = nu * sA + nv * cA;
+            if (nz <= 0.001) continue;
+            const dot = nx * L[0] + nz * L[2];
+            const shade = Math.max(0, Math.min(1, 0.18 + 0.95 * dot));
+            const col = mix(pal.sideD, pal.sideL, shade);
+            const q = [topPts[i], topPts[(i + 1) % n], botPts[(i + 1) % n], botPts[i]];
+            svg.appendChild(svgEl("path", { d: poly(q), fill: col, stroke: col, "stroke-width": 1, "stroke-linejoin": "round" }));
+            hiEdges.push(i);
+          }
+          // top face
+          svg.appendChild(svgEl("path", { d: poly(topPts), fill: `url(#topg${k})` }));
+          // soft bevel highlight along the visible front edge of the top face
+          let hd = "";
+          let prev = -2;
+          for (const i of hiEdges) {
+            const a = topPts[i],
+              b = topPts[(i + 1) % n];
+            hd += (i === prev + 1 ? " L" : " M") + a[0].toFixed(2) + " " + a[1].toFixed(2) + " L" + b[0].toFixed(2) + " " + b[1].toFixed(2);
+            prev = i;
+          }
+          svg.appendChild(
+            svgEl("path", { d: hd, fill: "none", stroke: pal.hi, "stroke-width": 2.2, "stroke-linecap": "round", "stroke-linejoin": "round" }),
+          );
+          // label on the front face (face plane: u along the slab, down = -h)
+          const u0 = -(SW / 2 - SR) + 22;
+          const o = P(u0, SD / 2, 0);
+          const lg = svgEl("g", { class: "label" });
+          const txt = svgEl("text", {
+            transform: `matrix(${cA} ${sA * sB} 0 ${cB} ${o[0]} ${o[1]})`,
+            x: 0,
+            y: ST / 2 + 14,
+            "font-family": "Geist",
+            "font-size": 38,
+          });
+          const t1 = svgEl("tspan", { "font-weight": 600, fill: pal.num });
+          t1.textContent = LAYERS[k][0];
+          const t2 = svgEl("tspan", { "font-weight": 500, fill: "#141414", dx: 16 });
+          t2.textContent = LAYERS[k][1];
+          txt.appendChild(t1);
+          txt.appendChild(t2);
+          lg.appendChild(txt);
+          svg.appendChild(lg);
+          return svg;
+        }
+
+        // stack placement (page px): slab k (0 = bottom) top-face centre
+        const SCX = 515;
+        const C7 = 526;
+        const slabC = (k) => [SCX, C7 + (6 - k) * PITCH];
+        const STACK_BOTTOM = slabC(0)[1] + maxY; // lowest point of the stack
+        const slabs = [];
+        const slabsEl = $("#slabs");
+        for (let k = 0; k < 7; k++) {
+          const [x, y] = slabC(k);
+          const s = document.createElement("div");
+          s.className = "slab";
+          s.style.left = x + "px";
+          s.style.top = y + "px";
+          const bob = document.createElement("div");
+          bob.className = "slab-bob";
+          const body = document.createElement("div");
+          body.className = "slab-body";
+          body.appendChild(buildSlabSVG(k, k === 6 ? OCEAN : WHITE));
+          bob.appendChild(body);
+          s.appendChild(bob);
+          slabsEl.appendChild(s);
+          slabs.push({ el: s, bob, body, label: body.querySelector(".label") });
+        }
+
+        // ground contact shadow under the bottom slab
+        {
+          const [x, y] = slabC(0);
+          const gEl = $("#ground");
+          gEl.style.left = x + "px";
+          gEl.style.top = y + 26 + "px";
+          const svg = svgEl("svg", {
+            viewBox: `${minX - 40} ${minY - 40} ${maxX - minX + 80} ${maxY - minY + 80}`,
+            width: maxX - minX + 80,
+            height: maxY - minY + 80,
+          });
+          svg.style.left = minX - 40 + "px";
+          svg.style.top = minY - 40 + "px";
+          svg.appendChild(svgEl("path", { d: poly(hull(allPts)), fill: "rgba(60,50,40,0.34)" }));
+          gEl.appendChild(svg);
+        }
+
+        // ================= direction geometry (after the stack has scaled) =================
+        const S2 = 0.88; // stack scale in the DIRECTION beat (about its bottom centre)
+        const ORIGIN = [SCX, STACK_BOTTOM];
+        const c7After = [SCX, ORIGIN[1] - S2 * (ORIGIN[1] - C7)];
+        const PUCK = [c7After[0], c7After[1] - 42]; // puck centre, standing on the Surface slab
+        const NEEDLE_DEG = -38;
+        Object.assign($("#puck-wrap").style, { left: PUCK[0] - 98 + "px", top: PUCK[1] - 98 + "px" });
+        Object.assign($("#puck-shadow").style, { left: PUCK[0] - 110 + "px", top: PUCK[1] + 98 - 34 + "px" });
+        Object.assign($("#needle").style, { left: PUCK[0] + "px", top: PUCK[1] + "px" });
+        const rad = (NEEDLE_DEG * Math.PI) / 180;
+        const p0 = [PUCK[0] + 216 * Math.cos(rad), PUCK[1] + 216 * Math.sin(rad)];
+        const pEnd = [926, 318];
+        const pathD = `M ${p0[0].toFixed(1)} ${p0[1].toFixed(1)} C ${(p0[0] + 95).toFixed(1)} ${(p0[1] - 70).toFixed(1)}, ${(pEnd[0] - 95).toFixed(1)} ${(pEnd[1] + 30).toFixed(1)}, ${pEnd[0]} ${pEnd[1]}`;
+        $("#pathDots").setAttribute("d", pathD);
+        $("#pathReveal").setAttribute("d", pathD);
+        const pathLen = $("#pathReveal").getTotalLength();
+        $("#pathReveal").setAttribute("stroke-dasharray", pathLen + " " + (pathLen + 40));
+        for (const id of ["#end-dot", "#end-ring"]) Object.assign($(id).style, { left: pEnd[0] + "px", top: pEnd[1] + "px" });
+
+        // ================= timeline =================
+        const tl = gsap.timeline({ paused: true });
+
+        // background drift (continuous, linear on purpose) + slow camera push
+        tl.fromTo("#grid", { x: 0, y: 0 }, { x: -20, y: -12, duration: D, ease: "none" }, 0);
+        tl.fromTo("#cam", { scale: 1, transformOrigin: "510px 880px" }, { scale: 1.012, duration: D, ease: "none" }, 0);
+
+        // ---------- CHAPTER: coin 03 ----------
+        const COIN0 = [198, 654];
+        const COIN1 = [122, 360];
+        const COIN_S1 = 104 / 220;
+        gsap.set("#coin", { left: COIN0[0], top: COIN0[1] });
+        gsap.set("#coin-flip", { transformPerspective: 900 });
+        // pop in (already half-way at f0: the scene hard-cuts in on "Third")
+        tl.fromTo("#coin", { opacity: 0.6 }, { opacity: 1, duration: 0.08, ease: "power1.out" }, 0);
+        tl.fromTo("#coin", { scale: 0.72, rotation: -12 }, { scale: 1.06, rotation: 2, duration: 0.16, ease: "power3.out", immediateRender: false }, 0);
+        tl.to("#coin", { scale: 1, rotation: 0, duration: 0.26, ease: "back.out(1.6)" }, 0.16);
+        // flip white -> ocean, landing with "Layers"
+        tl.fromTo("#coin-flip", { rotationY: 0 }, { rotationY: 180, duration: 0.3, ease: "power2.inOut" }, 0.3);
+        tl.to("#coin-flip", { rotationY: 192, duration: 0.07, ease: "power1.out" }, 0.6);
+        tl.to("#coin-flip", { rotationY: 180, duration: 0.18, ease: "sine.inOut" }, 0.67);
+        // compact into the header on an arc
+        tl.to("#coin", { x: COIN1[0] - COIN0[0], duration: 0.3, ease: "power2.inOut" }, 0.68);
+        tl.to("#coin", { y: COIN1[1] - COIN0[1], duration: 0.3, ease: "power3.inOut" }, 0.68);
+        tl.to("#coin", { scale: COIN_S1, duration: 0.3, ease: "power3.inOut" }, 0.68);
+        // header float
+        tl.to("#coin-float", { y: -4, duration: 1.1, ease: "sine.inOut", yoyo: true, repeat: 3 }, 1.2);
+
+        // ---------- word entrances (contact frame on the spoken word) ----------
+        for (const w of $$(".line .w")) {
+          const t = parseFloat(w.dataset.t);
+          if (w.dataset.first) {
+            // already rising at f0 (spoken at 0.00)
+            tl.fromTo(
+              w,
+              { opacity: 0.6, y: 20, filter: "blur(2px)" },
+              { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.26, ease: "power3.out" },
+              0,
+            );
+          } else if (w.dataset.hero) {
+            const s = Math.max(0, t - 0.2);
+            const peak = parseFloat(w.dataset.peak || "1.07");
+            gsap.set(w, { transformOrigin: w.dataset.origin || "50% 80%" });
+            tl.fromTo(
+              w,
+              { opacity: 0, y: parseFloat(w.dataset.rise || "110"), scale: 0.55, rotation: -7, filter: "blur(10px)" },
+              { opacity: 1, y: -10, scale: peak, rotation: 1.5, filter: "blur(0px)", duration: 0.2, ease: "power3.out" },
+              s,
+            );
+            tl.to(w, { y: 0, scale: 1, rotation: 0, duration: 0.32, ease: "back.out(1.6)" }, s + 0.2);
+          } else if (w.dataset.accent) {
+            const s = Math.max(0, t - 0.16);
+            gsap.set(w, { transformOrigin: "50% 85%" });
+            tl.fromTo(
+              w,
+              { opacity: 0, y: parseFloat(w.dataset.rise || "80"), scale: 0.78, rotation: -6, filter: "blur(8px)" },
+              { opacity: 1, y: 0, scale: 1, rotation: 0, filter: "blur(0px)", duration: 0.46, ease: "back.out(2.2)" },
+              s,
+            );
+          } else {
+            const s = Math.max(0, t - 0.13);
+            tl.fromTo(
+              w,
+              { opacity: 0, y: parseFloat(w.dataset.rise || "56"), filter: "blur(6px)" },
+              { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.38, ease: "power3.out" },
+              s,
+            );
+          }
+        }
+
+        // "third one" lifts away; "Layers" compacts into the header beside the coin (arc: x and y on different eases)
+        tl.to("#l-third", { y: -60, opacity: 0, filter: "blur(8px)", duration: 0.2, ease: "power2.in" }, 0.74);
+        {
+          const el = $("#l-layers");
+          const baseOff = parseFloat(el.dataset.baseOff);
+          gsap.set(el, { transformOrigin: `0px ${baseOff}px` });
+          const S = 118 / 240;
+          tl.to(el, { x: 194 - parseFloat(el.dataset.x), duration: 0.3, ease: "power2.out" }, 0.78);
+          tl.to(el, { y: 397 - parseFloat(el.dataset.base), duration: 0.4, ease: "power3.inOut" }, 0.78);
+          tl.to(el, { scale: S, duration: 0.4, ease: "power3.inOut" }, 0.78);
+        }
+
+        // ---------- STACK: seven slabs drop and settle on the words ----------
+        const CONTACT = [1.16, 1.44, 1.64, 1.9, 2.5, 2.8, 3.16];
+        tl.fromTo("#ground", { opacity: 0, scale: 0.8, transformOrigin: "0px 0px" }, { opacity: 1, scale: 1, duration: 0.3, ease: "power2.out" }, 1.0);
+        slabs.forEach((sl, k) => {
+          const tc = CONTACT[k];
+          const drop = k === 6 ? 46 : k === 0 ? 80 : 104 - k * 6;
+          const fall = k === 0 ? 0.16 : 0.2;
+          tl.fromTo(sl.el, { opacity: 0 }, { opacity: 1, duration: 0.08, ease: "power1.out" }, tc - fall);
+          tl.fromTo(sl.el, { y: -drop }, { y: 0, duration: fall, ease: "power2.in", immediateRender: true }, tc - fall);
+          // rebound + settle
+          tl.to(sl.el, { y: k === 6 ? -12 : -8, duration: 4 * F, ease: "power2.out" }, tc);
+          tl.to(sl.el, { y: 0, duration: 7 * F, ease: "sine.inOut" }, tc + 4 * F);
+          // the stack below takes the weight: ripple down, 1 f per layer
+          for (let j = k - 1; j >= 0; j--) {
+            const d = (k - 1 - j) * F;
+            const amp = (k === 6 ? 7 : 5) * Math.pow(0.8, k - 1 - j);
+            tl.fromTo(slabs[j].bob, { y: 0 }, { y: amp, duration: 2 * F, ease: "power2.out", immediateRender: false }, tc + d);
+            tl.fromTo(slabs[j].bob, { y: amp }, { y: 0, duration: 6 * F, ease: "power2.out", immediateRender: false }, tc + d + 2 * F);
+          }
+          // label slides in along the face, 3 f after contact (parts lag the whole)
+          tl.fromTo(
+            sl.label,
+            { opacity: 0, x: -14 * cA, y: -14 * sA * sB },
+            { opacity: 1, x: 0, y: 0, duration: 0.3, ease: "power3.out" },
+            tc + 3 * F,
+          );
+        });
+        // the hero layer (Surface, ocean) gets a touch more: a soft lift-and-settle on the stack
+        tl.to("#stackLayer", { y: 3, duration: 3 * F, ease: "power2.out" }, 3.16);
+        tl.to("#stackLayer", { y: 0, duration: 8 * F, ease: "sine.inOut" }, 3.16 + 3 * F);
+
+        // hold life: gentle breathing of the whole stack
+        tl.to("#slabs", { y: -4, duration: 0.5, ease: "sine.inOut", yoyo: true, repeat: 1 }, 3.4);
+
+        // ---------- exit the stack phrases, reframe for DIRECTION ----------
+        tl.to("#lA", { y: -50, opacity: 0, filter: "blur(8px)", duration: 0.22, ease: "power2.in" }, 3.66);
+        tl.to("#lB", { y: -50, opacity: 0, filter: "blur(8px)", duration: 0.22, ease: "power2.in" }, 3.66 + 2 * F);
+        tl.to("#lC", { y: -50, opacity: 0, filter: "blur(8px)", duration: 0.22, ease: "power2.in" }, 3.66 + 4 * F);
+        tl.fromTo(
+          "#stackLayer",
+          { scale: 1, transformOrigin: `${ORIGIN[0]}px ${ORIGIN[1]}px` },
+          { scale: S2, duration: 0.55, ease: "power2.inOut", immediateRender: false },
+          3.72,
+        );
+
+        // ---------- DIRECTION: the agent puck lands on the Surface layer ----------
+        const PC = 4.58; // puck contact ("AI" 4.61)
+        gsap.set("#puck-wrap", { transformOrigin: "50% 100%" });
+        tl.fromTo("#puck-wrap", { opacity: 0 }, { opacity: 1, duration: 0.08, ease: "power1.out" }, PC - 0.22);
+        tl.fromTo("#puck-wrap", { y: -54 }, { y: 0, duration: 0.22, ease: "power2.in", immediateRender: false }, PC - 0.22);
+        tl.fromTo("#puck-wrap", { scaleX: 0.82, scaleY: 0.9 }, { scaleX: 1.08, scaleY: 0.9, duration: 0.22, ease: "power2.in", immediateRender: false }, PC - 0.22);
+        tl.to("#puck-wrap", { scaleX: 1, scaleY: 1, duration: 0.34, ease: "back.out(2.6)" }, PC);
+        tl.to("#puck-wrap", { y: -6, duration: 4 * F, ease: "power2.out" }, PC);
+        tl.to("#puck-wrap", { y: 0, duration: 8 * F, ease: "sine.inOut" }, PC + 4 * F);
+        tl.fromTo("#puck-shadow", { opacity: 0, scale: 0.45 }, { opacity: 1, scale: 1, duration: 0.22, ease: "power2.in" }, PC - 0.22);
+        // the stack takes the puck's weight
+        for (let j = 6; j >= 0; j--) {
+          const d = (6 - j) * F;
+          const amp = 6 * Math.pow(0.8, 6 - j);
+          tl.fromTo(slabs[j].bob, { y: 0 }, { y: amp, duration: 2 * F, ease: "power2.out", immediateRender: false }, PC + d);
+          tl.fromTo(slabs[j].bob, { y: amp }, { y: 0, duration: 7 * F, ease: "power2.out", immediateRender: false }, PC + d + 2 * F);
+        }
+        // eyes light up on "agents"
+        gsap.set(".eye", { transformOrigin: "50% 50%" });
+        tl.fromTo(".eye", { opacity: 0.3, scale: 0.6 }, { opacity: 1, scale: 1.25, duration: 0.12, ease: "power2.out", immediateRender: true }, 4.82);
+        tl.to(".eye", { scale: 1, duration: 0.2, ease: "sine.inOut" }, 4.94);
+        tl.to(".eye", { scaleY: 0.15, duration: 3 * F, ease: "power2.in" }, 5.5);
+        tl.to(".eye", { scaleY: 1, duration: 4 * F, ease: "power2.out" }, 5.5 + 3 * F);
+        // puck float during the hold
+        tl.to("#puck", { y: -3, duration: 0.45, ease: "sine.inOut", yoyo: true, repeat: 1 }, 4.9);
+
+        // compass needle swings out and settles up-right
+        gsap.set("#needle", { transformOrigin: "0px 0px" });
+        tl.fromTo("#needle", { opacity: 0 }, { opacity: 1, duration: 0.08, ease: "power1.out" }, 4.78);
+        tl.fromTo("#needle", { scale: 0.55 }, { scale: 1, duration: 0.24, ease: "back.out(2)", immediateRender: false }, 4.78);
+        tl.fromTo("#needle", { rotation: 70 }, { rotation: -56, duration: 0.235, ease: "power2.out", immediateRender: false }, 4.78);
+        tl.to("#needle", { rotation: -30, duration: 0.15, ease: "sine.inOut" }, 5.02);
+        tl.to("#needle", { rotation: -42, duration: 0.13, ease: "sine.inOut" }, 5.17);
+        tl.to("#needle", { rotation: NEEDLE_DEG, duration: 0.14, ease: "sine.out" }, 5.3);
+        tl.to("#needle", { rotation: NEEDLE_DEG + 1.5, duration: 0.13, ease: "sine.inOut", yoyo: true, repeat: 1 }, 5.44);
+
+        // dotted path draws up-right from the needle tip
+        tl.fromTo(
+          "#pathReveal",
+          { attr: { "stroke-dashoffset": pathLen } },
+          { attr: { "stroke-dashoffset": 0 }, duration: 0.42, ease: "power2.inOut" },
+          5.0,
+        );
+        // dashes keep marching after (continuous mechanical motion)
+        tl.fromTo("#pathDots", { attr: { "stroke-dashoffset": 0 } }, { attr: { "stroke-dashoffset": -42 }, duration: 0.7, ease: "none" }, 5.0);
+        tl.fromTo("#end-dot", { opacity: 0, scale: 0.2 }, { opacity: 1, scale: 1, duration: 0.26, ease: "back.out(2.6)" }, 5.36);
+        tl.fromTo("#end-ring", { opacity: 0.6, scale: 0.8 }, { opacity: 0, scale: 2.4, duration: 0.3, ease: "power2.out", immediateRender: false }, 5.38);
+
+        // tiny camera punch on "direction."
+        tl.fromTo("#punch", { scale: 1, transformOrigin: "510px 900px" }, { scale: 1.006, duration: 0.4, ease: "power2.out" }, 5.3);
+
+        window.__timelines["main"] = tl;
+        if (window.__hfForceTimelineRebind) window.__hfForceTimelineRebind();
+      })();
+    </script>
+  </body>
+</html>

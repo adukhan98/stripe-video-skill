@@ -1,0 +1,667 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>v08 perfect</title>
+    <link rel="stylesheet" href="brand.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Inter Tight"; src: url("fonts/InterTight-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Inter"; src: url("fonts/Inter-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: var(--brand-background);
+      }
+      #root {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: var(--brand-background);
+        font-family: var(--font-heading);
+        color: var(--brand-text);
+      }
+
+      /* ---------- shared v2 background: paper + 60px grid + vignette ---------- */
+      #bg {
+        position: absolute;
+        inset: 0;
+        background: var(--brand-background);
+        overflow: hidden;
+      }
+      #grid {
+        position: absolute;
+        left: -120px;
+        top: -120px;
+        width: 1320px;
+        height: 2160px;
+        background-image:
+          linear-gradient(to right, rgba(20, 20, 20, 0.055) 1.5px, transparent 1.5px),
+          linear-gradient(to bottom, rgba(20, 20, 20, 0.055) 1.5px, transparent 1.5px);
+        background-size: 60px 60px;
+      }
+      #vignette {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(ellipse at 50% 45%, transparent 45%, rgba(90, 80, 72, 0.22) 100%);
+      }
+
+      /* ---------- camera ---------- */
+      #cam,
+      #punch {
+        position: absolute;
+        inset: 0;
+      }
+
+      /* ---------- speaker card: v2 PORTRAIT hero (card styling copied from v01_hook) ---------- */
+      #card-float {
+        position: absolute;
+        left: 100px;
+        top: 304px;
+        width: 820px;
+        height: 1072px;
+      }
+      #card {
+        position: absolute;
+        inset: 0;
+        border-radius: 34px;
+        overflow: hidden;
+        background: #1b1b1b;
+        box-shadow:
+          0 16px 0 -2px var(--brand-primary),
+          0 50px 70px -10px rgba(40, 30, 20, 0.35);
+      }
+      #vid-wrap {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        border-radius: 34px;
+      }
+      /* source 1080x1920 scaled to the card width (820x1458); window = 17.3%–90.8% of the source height:
+         full head + shoulders + sweatshirt, face centre at ~34 % of the card, hair never cut */
+      #speaker {
+        position: absolute;
+        left: 0;
+        top: -252px;
+        width: 820px;
+        height: 1458px;
+        object-fit: cover;
+      }
+      #sheen {
+        position: absolute;
+        inset: 0;
+        border-radius: 34px;
+        background: linear-gradient(
+          105deg,
+          transparent 30%,
+          rgba(255, 255, 255, 0.22) 45%,
+          rgba(255, 255, 255, 0.05) 55%,
+          transparent 65%
+        );
+        background-size: 300% 100%;
+        background-position: 100% 0;
+        opacity: 0;
+      }
+
+      /* ---------- kinetic type v2: Inter Tight, accent = colour, no italics ---------- */
+      .line {
+        position: absolute;
+        display: flex;
+        align-items: baseline;
+        white-space: nowrap;
+        line-height: 0.88;
+        letter-spacing: -0.03em;
+        text-shadow:
+          0 0 28px rgba(228, 222, 217, 0.95),
+          0 0 6px rgba(228, 222, 217, 0.9);
+      }
+      .bl {
+        display: block;
+        width: 0;
+        height: 0;
+        align-self: baseline;
+      }
+      .w {
+        display: inline-block;
+        will-change: transform, opacity, filter;
+      }
+      .sup {
+        font-family: "Inter Tight", sans-serif;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        color: var(--brand-text);
+      }
+      .hero {
+        font-family: "Inter Tight", sans-serif;
+        font-weight: 900;
+        font-style: normal;
+        letter-spacing: -0.045em;
+      }
+      .ocean {
+        color: var(--brand-primary);
+      }
+      .ink {
+        color: var(--brand-text);
+      }
+      .gap-s {
+        margin-left: 0.22em;
+      }
+
+      #rA {
+        font-size: 100px;
+      }
+      #rP {
+        font-size: 220px;
+      }
+      #rD {
+        font-size: 84px;
+      }
+      #rW {
+        font-size: 196px;
+        text-shadow:
+          0 0 28px rgba(228, 222, 217, 0.95),
+          0 0 6px rgba(228, 222, 217, 0.9),
+          0 0 54px rgba(228, 222, 217, 0.7);
+      }
+      #rM {
+        font-size: 68px;
+      }
+      #rM .hero {
+        font-size: 88px;
+      }
+      #strike {
+        position: absolute;
+        height: 20px;
+        border-radius: 10px;
+        background: linear-gradient(90deg, var(--brand-primary), var(--brand-primary-dark));
+      }
+
+      /* ---------- black pills ---------- */
+      .pill {
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 92px;
+      }
+      .pill-bg {
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 92px;
+        border-radius: 46px;
+        background: var(--brand-text);
+        box-shadow:
+          0 26px 40px -14px rgba(40, 30, 20, 0.45),
+          inset 0 1px 0 rgba(255, 255, 255, 0.07);
+      }
+      .pill-in {
+        position: relative;
+        height: 92px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        padding: 0 38px 0 16px;
+        white-space: nowrap;
+        font-family: "Inter", sans-serif;
+        font-style: normal;
+        font-size: 44px;
+        letter-spacing: -0.02em;
+        text-shadow: none;
+      }
+      .disc {
+        width: 60px;
+        height: 60px;
+        flex: 0 0 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+      }
+      .disc svg {
+        width: 32px;
+        height: 32px;
+        overflow: visible;
+      }
+      .disc-x {
+        background: radial-gradient(circle at 35% 30%, #4a4643 0%, #34312f 60%, #2a2826 100%);
+      }
+      .disc-ok {
+        background: radial-gradient(circle at 35% 30%, #63bde3 0%, #2e9ccb 52%, #1f7ea8 100%);
+      }
+      .pt {
+        position: relative;
+        display: inline-block;
+        font-weight: 600;
+        color: var(--brand-card);
+      }
+      .pt.soft {
+        font-weight: 500;
+        color: rgba(251, 250, 248, 0.72);
+      }
+      .pt + .pt {
+        margin-left: -6px;
+      }
+
+      /* ---------- big check + dotted question loop ---------- */
+      #big-check,
+      #qloop {
+        position: absolute;
+        left: 0;
+        top: 0;
+        overflow: visible;
+      }
+      #big-check {
+        filter: drop-shadow(0 16px 18px rgba(31, 126, 168, 0.3));
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-width="1080"
+      data-height="1920"
+      data-duration="3.8"
+    >
+      <div id="bg">
+        <div id="grid"></div>
+        <div id="vignette"></div>
+      </div>
+
+      <div id="cam">
+        <div id="punch">
+          <!-- speaker card -->
+          <div id="card-float">
+            <div id="card">
+              <div id="vid-wrap">
+                <video
+                  id="speaker"
+                  class="clip"
+                  src="assets/speaker.mp4"
+                  muted
+                  playsinline
+                  data-start="0"
+                  data-duration="3.8"
+                  data-track-index="1"
+                ></video>
+              </div>
+              <div id="sheen"></div>
+            </div>
+          </div>
+
+          <!-- beat A: "are they / perfect?" -->
+          <div id="rA" class="line sup" data-x="100" data-base="1115">
+            <span class="bl"></span>
+            <span class="w" data-t="0.23">are</span>
+            <span class="w gap-s" data-t="0.37">they</span>
+          </div>
+          <div id="rP" class="line hero ink" data-x="96" data-base="1316">
+            <span class="bl"></span>
+            <span class="w" id="w-perfect" data-t="0.69" data-hero="1" data-peak="1.02" data-rot="0" data-origin="50% 85%">perfect?</span>
+            <div id="strike"></div>
+            <div id="pn-move" class="pill"><div id="pill-no" class="pill" style="position: relative">
+            <div class="pill-bg"></div>
+            <div class="pill-in">
+              <div class="disc disc-x">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#FBFAF8" stroke-width="3.6" stroke-linecap="round">
+                  <path class="xs" d="M6.5 6.5 L17.5 17.5" />
+                  <path class="xs" d="M17.5 6.5 L6.5 17.5" />
+                </svg>
+              </div>
+              <span class="pt">no</span>
+            </div>
+          </div></div>
+          </div>
+
+          <!-- beat B: "do they / work?" + verdict -->
+          <div id="rD" class="line sup" data-x="100" data-base="1191">
+            <span class="bl"></span>
+            <span class="w" data-t="1.29">do</span>
+            <span class="w gap-s" data-t="1.39">they</span>
+          </div>
+          <div id="rW" class="line hero ocean" data-x="100" data-base="1362">
+            <span class="bl"></span>
+            <span class="w" id="w-work" data-t="1.57" data-hero="1" data-peak="1.06" data-origin="20% 85%">work?</span>
+          </div>
+          <svg id="big-check" width="180" height="152" viewBox="0 0 190 160">
+            <path
+              id="big-check-p"
+              d="M18 86 L70 136 L172 22"
+              fill="none"
+              stroke="url(#ckgrad)"
+              stroke-width="30"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <defs>
+              <linearGradient id="ckgrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#2E9CCB" />
+                <stop offset="1" stop-color="#1F7EA8" />
+              </linearGradient>
+            </defs>
+          </svg>
+          <div id="pill-yes" class="pill">
+            <div class="pill-bg"></div>
+            <div class="pill-in">
+              <div class="disc disc-ok">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#0D2731" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round">
+                  <path id="ok-p" d="M20 6 9 17l-5-5" />
+                </svg>
+              </div>
+              <span class="pt soft" id="pt-def">definitely</span>
+              <span class="pt" id="pt-yes">yes</span>
+            </div>
+          </div>
+
+          <!-- beat C: "makes me wonder" + dotted ? loop -->
+          <div id="rM" class="line sup" data-right="856" data-base="1466">
+            <span class="bl"></span>
+            <span class="w" data-t="3.15" data-rise="24">makes</span>
+            <span class="w gap-s" data-t="3.33" data-rise="24">me</span>
+            <span class="w hero ink" id="w-wonder" style="margin-left: 0.24em" data-t="3.55" data-pop="1" data-rise="22" data-origin="20% 85%">wonder</span>
+          </div>
+          <svg id="qloop" width="100" height="144" viewBox="0 0 90 130">
+            <defs>
+              <mask id="q-mask" maskUnits="userSpaceOnUse" x="-20" y="-20" width="130" height="170">
+                <path
+                  id="q-mask-p"
+                  d="M14 40 C12 14 36 4 54 10 C76 18 78 44 60 56 C46 66 42 74 42 92"
+                  fill="none"
+                  stroke="#fff"
+                  stroke-width="12"
+                  stroke-linecap="round"
+                />
+              </mask>
+            </defs>
+            <path
+              d="M14 40 C12 14 36 4 54 10 C76 18 78 44 60 56 C46 66 42 74 42 92"
+              fill="none"
+              stroke="#141414"
+              stroke-width="4.6"
+              stroke-dasharray="2 11"
+              stroke-linecap="round"
+              mask="url(#q-mask)"
+            />
+            <circle id="q-dot" cx="42" cy="116" r="7" fill="#2E9CCB" />
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const fontSpecs = [
+          "900 100px 'Inter Tight'",
+          "800 100px 'Inter Tight'",
+          "700 100px 'Inter Tight'",
+          "500 40px Inter",
+          "600 40px Inter",
+        ];
+        await Promise.all(fontSpecs.map((f) => document.fonts.load(f)));
+        await document.fonts.ready;
+        for (const f of fontSpecs) {
+          if (!document.fonts.check(f)) throw new Error("brand font missing: " + f);
+        }
+
+        const D = 3.8;
+        const F = 1 / 30;
+        const $ = (s) => document.querySelector(s);
+        const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+        const ZR = 940; // right edge for content
+
+        // ---- fit the hero words into the zone width ----
+        const fit = (el, maxW) => {
+          if (el.offsetWidth > maxW) {
+            const fs = parseFloat(getComputedStyle(el).fontSize);
+            el.style.fontSize = Math.floor((fs * maxW) / el.offsetWidth) + "px";
+          }
+        };
+        fit($("#w-perfect"), 830);
+        fit($("#w-work"), 600);
+
+        // ---- place each line by its baseline ----
+        for (const line of $$(".line")) {
+          const bl = line.querySelector(".bl");
+          line.style.top = "0px";
+          line.style.left = "0px";
+          const baseOff = bl.offsetTop;
+          line.dataset.baseOff = baseOff;
+          line.style.top = parseFloat(line.dataset.base) - baseOff + "px";
+          if (line.dataset.right) {
+            line.style.left = parseFloat(line.dataset.right) - line.offsetWidth + "px";
+          } else {
+            line.style.left = line.dataset.x + "px";
+          }
+        }
+
+        // ---- strike-through across "perfect?" (child of the line, so it compacts with it) ----
+        const rP = $("#rP");
+        const perfect = $("#w-perfect");
+        const strike = $("#strike");
+        const pFs = parseFloat(getComputedStyle(perfect).fontSize);
+        const pBaseOff = parseFloat(rP.dataset.baseOff);
+        strike.style.left = perfect.offsetLeft - 6 + "px";
+        strike.style.width = perfect.offsetWidth + 6 + "px";
+        strike.style.top = pBaseOff - pFs * 0.28 - 10 + "px";
+
+        // ---- pill "x no": under "perfect?", right-aligned ----
+        const pillNo = $("#pill-no");
+        const pnIn = pillNo.querySelector(".pill-in");
+        const pnW = pnIn.offsetWidth;
+        pillNo.querySelector(".pill-bg").style.width = pnW + "px";
+        pillNo.style.width = pnW + "px";
+        const pnMove = $("#pn-move");
+        pnMove.style.width = pnW + "px";
+        // local to the "perfect?" line: right-aligned with the word's end, tucked under the "?"
+        const pnLX = perfect.offsetLeft + perfect.offsetWidth - pnW + 4;
+        const pnLY = pBaseOff + 58;
+        pnMove.style.left = pnLX + "px";
+        pnMove.style.top = pnLY + "px";
+
+        // compact pose for beat B: "perfect?" at 50 % on a row just under the card, pill beside it
+        const CS = 0.42;
+        const cBase = 1090;
+        const cX = 100;
+        const rPx0 = rP.offsetLeft;
+        const perfW = perfect.offsetWidth;
+        gsap.set(rP, { transformOrigin: "0px " + pBaseOff + "px" });
+        const rPdx = cX - rPx0 - perfect.offsetLeft * CS;
+        const rPdy = cBase - parseFloat(rP.dataset.base);
+        const PS = 0.82;
+        // the pill rides inside the line, so it compacts WITH the word; in line-local space it slides
+        // from under the "?" to beside the word and counter-scales to PS on screen
+        const pnVX = cX + perfW * CS + 24; // on-screen compact pill left
+        const pnVCY = cBase - pFs * CS * 0.28; // on-screen compact pill centre (x-height of the word)
+        gsap.set(pnMove, { transformOrigin: "0px 46px" });
+        const pnDx = (pnVX - rPx0 - rPdx) / CS - pnLX;
+        const pnDy = (pnVCY - cBase) / CS + pBaseOff - (pnLY + 46);
+
+        // ---- "work?" + big check ----
+        const rW = $("#rW");
+        const work = $("#w-work");
+        const wFs = parseFloat(getComputedStyle(work).fontSize);
+        const workRight = rW.offsetLeft + work.offsetLeft + work.offsetWidth;
+        const bc = $("#big-check");
+        const bcX = Math.min(workRight + 16, ZR + 8 - 180);
+        bc.style.left = bcX + "px";
+        bc.style.top = parseFloat(rW.dataset.base) - 146 + "px";
+        const bcp = $("#big-check-p");
+        const bcL = bcp.getTotalLength();
+        bcp.setAttribute("stroke-dasharray", bcL + " " + (bcL + 10));
+
+        // ---- pill "check definitely yes": right side of the "do they" row, grows on "yes" ----
+        const pillYes = $("#pill-yes");
+        const pyIn = pillYes.querySelector(".pill-in");
+        const pyBg = pillYes.querySelector(".pill-bg");
+        const pyFull = pyIn.offsetWidth;
+        const yesEl = $("#pt-yes");
+        const defEl = $("#pt-def");
+        const pyStage1 = defEl.offsetLeft + defEl.offsetWidth + 44; // up to "definitely" + right padding
+        const pyX = ZR - pyFull;
+        const rD = $("#rD");
+        const pyCY = parseFloat(rD.dataset.base) - 84 * 0.28; // x-height centre of "do they"
+        pillYes.style.left = pyX + "px";
+        pillYes.style.top = pyCY - 46 + "px";
+        pyBg.style.width = pyFull + "px";
+
+        // ---- dotted ? loop after "wonder" ----
+        const rM = $("#rM");
+        const ql = $("#qloop");
+        const rMRight = rM.offsetLeft + rM.offsetWidth;
+        ql.style.left = rMRight + 4 + "px";
+        ql.style.top = parseFloat(rM.dataset.base) - 150 + "px";
+        const qmp = $("#q-mask-p");
+        const qL = qmp.getTotalLength();
+        qmp.setAttribute("stroke-dasharray", qL + " " + (qL + 10));
+
+        // ================= timeline =================
+        const tl = gsap.timeline({ paused: true });
+
+        // background drift (continuous, linear on purpose) + slow camera push
+        tl.fromTo("#grid", { x: 0, y: 0 }, { x: -20, y: -12, duration: D, ease: "none" }, 0);
+        tl.fromTo("#cam", { scale: 1, transformOrigin: "500px 880px" }, { scale: 1.008, duration: D, ease: "none" }, 0);
+
+        // speaker card: fast rise + soft 3D settle (readable by ~0.2 s)
+        gsap.set("#card", { transformPerspective: 1600, transformOrigin: "50% 50%" });
+        tl.fromTo("#card", { opacity: 0 }, { opacity: 1, duration: 0.1, ease: "power1.out" }, 0);
+        tl.fromTo("#card", { y: 120 }, { y: 0, duration: 0.42, ease: "power3.out", immediateRender: false }, 0);
+        tl.fromTo("#card", { scale: 0.88 }, { scale: 1, duration: 0.42, ease: "back.out(1.2)", immediateRender: false }, 0);
+        tl.fromTo("#card", { rotationX: 16 }, { rotationX: 3, duration: 0.56, ease: "back.out(1.8)", immediateRender: false }, 0);
+        tl.fromTo("#card", { rotationY: -14 }, { rotationY: -5, duration: 0.5, ease: "power3.out", immediateRender: false }, 0);
+        tl.to("#card", { rotationY: -4, rotationX: 2.5, duration: D - 0.56, ease: "sine.inOut" }, 0.56);
+        tl.fromTo("#vid-wrap", { scale: 1.16 }, { scale: 1, duration: 0.6, ease: "power3.out" }, 0);
+        tl.to("#vid-wrap", { scale: 1.03, duration: D - 0.6, ease: "none" }, 0.6);
+        tl.fromTo("#sheen", { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "power1.out" }, 0.06);
+        tl.fromTo(
+          "#sheen",
+          { backgroundPosition: "100% 0" },
+          { backgroundPosition: "0% 0", duration: 0.66, ease: "power2.inOut", immediateRender: false },
+          0.06,
+        );
+        tl.to("#sheen", { opacity: 0, duration: 0.25, ease: "power1.in" }, 0.5);
+        tl.to("#card-float", { y: -3, duration: 1.05, ease: "sine.inOut", yoyo: true, repeat: 2 }, 0.45);
+
+        // ---- word entrances (contact frame on the spoken word) ----
+        for (const w of $$(".line .w")) {
+          const t = parseFloat(w.dataset.t);
+          if (w.dataset.hero) {
+            const s = Math.max(0, t - 0.2);
+            const peak = parseFloat(w.dataset.peak || "1.07");
+            gsap.set(w, { transformOrigin: w.dataset.origin || "50% 80%" });
+            tl.fromTo(
+              w,
+              { opacity: 0, y: 110, scale: 0.55, rotation: w.dataset.rot ? 0 : -7, filter: "blur(10px)" },
+              { opacity: 1, y: -10, scale: peak, rotation: w.dataset.rot ? 0 : 1.5, filter: "blur(0px)", duration: 0.2, ease: "power3.out" },
+              s,
+            );
+            tl.to(w, { y: 0, scale: 1, rotation: 0, duration: 0.32, ease: "back.out(1.6)" }, s + 0.2);
+          } else if (w.dataset.pop) {
+            const s = Math.max(0, t - 0.16);
+            gsap.set(w, { transformOrigin: w.dataset.origin || "50% 85%" });
+            tl.fromTo(
+              w,
+              { opacity: 0, y: parseFloat(w.dataset.rise || "84"), scale: 0.72, rotation: -5, filter: "blur(8px)" },
+              { opacity: 1, y: -6, scale: 1.05, rotation: 1, filter: "blur(0px)", duration: 0.16, ease: "power3.out" },
+              s,
+            );
+            tl.to(w, { y: 0, scale: 1, rotation: 0, duration: 0.28, ease: "back.out(1.5)" }, s + 0.16);
+          } else {
+            const s = Math.max(0, t - 0.13);
+            tl.fromTo(
+              w,
+              { opacity: 0, y: parseFloat(w.dataset.rise || "56"), filter: "blur(6px)" },
+              { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.38, ease: "power3.out" },
+              s,
+            );
+          }
+        }
+
+        function popPill(el, contact) {
+          const s = contact - 0.17;
+          tl.fromTo(el, { opacity: 0 }, { opacity: 1, duration: 0.08, ease: "none" }, s);
+          tl.fromTo(el, { scale: 0.7 }, { scale: 1.06, duration: 0.17, ease: "power3.out", immediateRender: false }, s);
+          tl.fromTo(el, { y: 30 }, { y: -4, duration: 0.17, ease: "power3.out", immediateRender: false }, s);
+          tl.to(el, { y: 0, scale: 1, duration: 0.28, ease: "power2.out" }, contact);
+        }
+
+        // ---- "no": ocean strike draws across "perfect?", pill pops ----
+        gsap.set(strike, { transformOrigin: "0% 50%", rotation: -3 });
+        tl.fromTo(strike, { scaleX: 0 }, { scaleX: 1, duration: 0.26, ease: "power3.out" }, 0.8);
+        gsap.set(pillNo, { transformOrigin: "50% 0%" });
+        popPill(pillNo, 0.91);
+        const xs = $$(".xs");
+        xs.forEach((p, i) => {
+          const L = p.getTotalLength();
+          p.setAttribute("stroke-dasharray", L + " " + (L + 4));
+          tl.fromTo(p, { attr: { "stroke-dashoffset": L } }, { attr: { "stroke-dashoffset": 0 }, duration: 0.12, ease: "power2.out" }, 0.84 + i * 3 * F);
+        });
+
+        // ---- "but": "are they" lifts out, "perfect?" + pill compact up under the card ----
+        tl.to("#rA", { y: -50, opacity: 0, filter: "blur(8px)", duration: 0.2, ease: "power2.in" }, 0.95);
+        tl.to(rP, { x: rPdx, duration: 0.28, ease: "power3.inOut" }, 0.98);
+        tl.to(rP, { y: rPdy, duration: 0.28, ease: "power2.inOut" }, 0.98);
+        tl.to(rP, { scale: CS, duration: 0.28, ease: "power3.inOut" }, 0.98);
+        // pill trails by 2 f, travels on an arc (x and y on different eases)
+        // x leads, y lags: the pill clears the "?" before it rises beside the word
+        // rides rigidly under the "?" while the row shrinks, then slides out right (x leads)
+        // and rises beside the word (y lags) once the row is small enough to stay in the zone
+        tl.to(pnMove, { x: pnDx, duration: 0.18, ease: "power2.out" }, 1.08);
+        tl.to(pnMove, { y: pnDy, duration: 0.15, ease: "power2.inOut" }, 1.13);
+        tl.to(pnMove, { scale: PS / CS, duration: 0.28, ease: "power3.inOut" }, 0.98);
+
+        // ---- "work?": hero lands (handled above). "definitely": pill pops with the ocean check ----
+        gsap.set(pillYes, { transformOrigin: "50% 50%" });
+        gsap.set(pyBg, { width: pyStage1 });
+        gsap.set(pyIn, { width: pyStage1 });
+        gsap.set(yesEl, { opacity: 0 });
+        popPill(pillYes, 2.11);
+        const okp = $("#ok-p");
+        const okL = okp.getTotalLength();
+        okp.setAttribute("stroke-dasharray", okL + " " + (okL + 4));
+        tl.fromTo(okp, { attr: { "stroke-dashoffset": okL } }, { attr: { "stroke-dashoffset": 0 }, duration: 0.16, ease: "power2.out" }, 2.04);
+        // "yes": pill grows, word lands
+        tl.to(pyBg, { width: pyFull, duration: 0.22, ease: "power3.out" }, 2.31);
+        tl.set(pyIn, { width: pyFull }, 2.31);
+        tl.fromTo(yesEl, { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.24, ease: "power3.out", immediateRender: false }, 2.33);
+
+        // ---- "yes": big ocean check draws beside "work?" + 1 % camera punch + word bump ----
+        gsap.set(bc, { transformOrigin: "35% 85%" });
+        tl.fromTo(bcp, { attr: { "stroke-dashoffset": bcL } }, { attr: { "stroke-dashoffset": 0 }, duration: 0.3, ease: "power2.inOut" }, 2.26);
+        tl.fromTo(bc, { scale: 0.8, rotation: -8 }, { scale: 1.08, rotation: 2, duration: 0.2, ease: "power3.out" }, 2.28);
+        tl.to(bc, { scale: 1, rotation: 0, duration: 0.3, ease: "back.out(1.8)" }, 2.48);
+        tl.fromTo("#punch", { scale: 1, transformOrigin: "500px 1180px" }, { scale: 1.01, duration: 0.4, ease: "power2.out" }, 2.36);
+        tl.to(work, { scale: 1.04, duration: 4 * F, ease: "power2.out" }, 2.4);
+        tl.to(work, { scale: 1, duration: 0.3, ease: "back.out(2)" }, 2.4 + 4 * F);
+
+        // ---- "which actually": the verdict row on "perfect?" steps back so "work? / yes" leads ----
+        tl.to(rP, { opacity: 0.5, duration: 0.4, ease: "power2.inOut" }, 2.66);
+
+        // ---- "wonder": dotted ? loop draws after the phrase, dot pops ----
+        tl.fromTo(qmp, { attr: { "stroke-dashoffset": qL } }, { attr: { "stroke-dashoffset": 0 }, duration: 0.3, ease: "power2.inOut" }, 3.44);
+        gsap.set("#q-dot", { transformOrigin: "42px 116px" });
+        tl.fromTo("#q-dot", { scale: 0, opacity: 0 }, { scale: 1.2, opacity: 1, duration: 0.1, ease: "power3.out" }, 3.66);
+        tl.to("#q-dot", { scale: 1, duration: 0.1, ease: "power2.out" }, 3.77);
+
+        // continuous life: pills + check float
+        tl.to("#pill-yes .pill-in, #pill-yes .pill-bg", { y: -4, duration: 0.7, ease: "sine.inOut", yoyo: true, repeat: 1 }, 2.4);
+        tl.to("#big-check-p", { attr: { "stroke-width": 31 }, duration: 0.8, ease: "sine.inOut", yoyo: true, repeat: 1 }, 2.6);
+
+        window.__timelines["main"] = tl;
+        if (window.__hfForceTimelineRebind) window.__hfForceTimelineRebind();
+      })();
+    </script>
+  </body>
+</html>

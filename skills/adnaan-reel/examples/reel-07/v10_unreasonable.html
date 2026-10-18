@@ -1,0 +1,202 @@
+<!doctype html>
+<!-- adnaan-reel scene v10_unreasonable — CHAPTER ② (bespoke): the circled ② lands top-left (chapter-number style shared
+     with v07 ① / v13 ③: Inter Tight 900 digit ~210 ink, centre ≈ (190,420), red marker loop ~260²) with "second," beside it;
+     "set goals" stamps in while a black-marker MOUNTAIN is drawn beside it and a tiny red flag is planted on the summit (wobbles);
+     "that sound" lands; the REAL article strip (art_unreasonable.png, 0.92) slides up, is taped, and the highlighter swipes
+     "Pick unreasonable goals and tell the model that they're"; HERO: "unreasonable" (red, 900) SLAMS down letter by letter
+     (anticipation lift → slam → per-letter shake that settles, a 1 px tremor to the cut) with red marker shake lines at both
+     ends, camera shake + punch, and the mountain shoots up to 1.35x so the flag sits ridiculously high. No speaker (2.8 s chapter beat). -->
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>v10_unreasonable</title>
+    <link rel="stylesheet" href="brand.css" />
+    <link rel="stylesheet" href="paper.css" />
+    <link rel="stylesheet" href="marker.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+    <script src="paper.js"></script>
+    <script src="marker.js"></script>
+    <style>
+      @font-face { font-family: "Inter Tight"; src: url("fonts/InterTight-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Inter"; src: url("fonts/Inter-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Caveat"; src: url("fonts/Caveat-Variable.ttf") format("truetype"); font-weight: 400 700; font-style: normal; font-display: block; }
+
+      /* ---------- bespoke: the real article strip in a white card (0.92 scale = 822 px wide strip) ---------- */
+      #strip { position: absolute; left: 79px; top: 1196px; width: 862px; height: 208px; border-radius: 24px;
+        background: var(--brand-card); box-shadow: var(--card-shadow); opacity: 0; overflow: hidden; }
+      #strip .s { position: absolute; left: 20px; top: 20px; width: 894px; height: 183px; transform: scale(0.92); transform-origin: 0 0; }
+      #strip .s img { position: absolute; left: 0; top: 0; width: 894px; height: 183px; display: block; }
+
+      /* ---------- bespoke: the hero word split into letters (each letter shakes on its own) ---------- */
+      #unr .lt { display: inline-block; will-change: transform, opacity, filter; }
+      /* runtime highlighter paths get a default black fill while drawing — keep them stroke-only */
+      .mk-hl path { fill: none !important; }
+    </style>
+  </head>
+  <body data-face="0.41">
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="2.7833">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+      <div id="cam" data-push="1.004"><div id="punch">
+
+        <!-- chapter number ② (the digit; its red loop is drawn by the marker layer) -->
+        <div class="line hero" id="num" data-cx="190" data-base="492" data-size="210">
+          <span class="w" data-t="0.22" data-pop data-rise="40">2</span>
+        </div>
+        <div class="line sup" id="lsec" data-x="352" data-base="452" data-size="90">
+          <span class="w" data-t="0.29">second,</span>
+        </div>
+
+        <div class="line hero" id="lset" data-x="78" data-base="772" data-size="150">
+          <span class="w" data-t="0.61" data-accent>set</span><span class="w gap-s" data-t="0.97" data-pop>goals</span>
+        </div>
+        <div class="line sup" id="lthat" data-right="944" data-base="922" data-size="96">
+          <span class="w" data-t="1.21">that</span><span class="w gap-s" data-t="1.59" data-pop>sound</span>
+        </div>
+
+        <!-- HERO: letters animated by the bespoke slam below (no data-t: the runtime leaves it to the scene) -->
+        <div class="line hero ocean" id="lun" data-x="70" data-base="1118" data-size="180" data-fit="933">
+          <span class="w" id="unr"><span class="lt">u</span><span class="lt">n</span><span class="lt">r</span><span class="lt">e</span><span class="lt">a</span><span class="lt">s</span><span class="lt">o</span><span class="lt">n</span><span class="lt">a</span><span class="lt">b</span><span class="lt">l</span><span class="lt">e</span></span>
+        </div>
+
+        <!-- the real article strip (taped) -->
+        <div id="strip"><div class="s"><img src="assets/art_unreasonable.png" alt="" /></div></div>
+
+      </div></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const P = await Paper.init({ extraFonts: ['700 60px "Caveat"'] });
+        const M = Marker.init(P);
+        const { tl, D, F, $, $$ } = P;
+        const NS = "http://www.w3.org/2000/svg";
+        const grp = (parent = M.layer) => { const g = document.createElementNS(NS, "g"); parent.appendChild(g); return g; };
+        const rng = (seed) => { let s = seed >>> 0 || 1; return () => { s ^= s << 13; s >>>= 0; s ^= s >> 17; s ^= s << 5; s >>>= 0; return (s % 100000) / 100000; }; };
+
+        // ================= ② chapter number — loop drawn from frame 1, digit pops on "Second" =================
+        const NX = 190, NY = 420;
+        const loopG = grp();
+        M.circle(NX, NY + 8, 110, 111, 0.04, { parent: loopG, seed: 1020, width: 12, dur: 0.42, tilt: -6 });
+        // the digit: a little settle wobble after the pop (secondary), then breathes with the loop
+        gsap.set("#num .w", { transformOrigin: "50% 60%" });
+        tl.to("#num .w", { rotation: -3, duration: 0.16, ease: "sine.inOut" }, 0.5)
+          .to("#num .w", { rotation: 0, duration: 0.3, ease: "back.out(2)" }, 0.66);
+
+        // ================= MOUNTAIN on "goals": black-marker outline draws left→right, a red flag is planted on the summit =================
+        const MB = 832, MH = 256, MX0 = 704, MX1 = 944, SX = 842, SY = MB - MH;     // base y, height, base x-range, summit
+        const mtn = grp();
+        gsap.set(mtn, { svgOrigin: `${(MX0 + MX1) / 2} ${MB}` });
+        const ridge = [[MX0, MB], [744, 752], [768, 770], [800, 690], [SX, SY], [872, 650], [892, 676], [912, 662], [MX1, MB]];
+        // pencil hatch on the shadow (right) face first, so the ink sits on top
+        M.hatch([[SX, SY], [872, 650], [892, 676], [912, 662], [MX1, MB], [SX + 6, MB]], 1.22, { parent: mtn, color: "pencil", spacing: 20, width: 7, dur: 0.22, opacity: 0.5, seed: 1501 });
+        M.line(ridge, 0.8, { parent: mtn, color: "ink", width: 11, dur: 0.34, amp: 2.6, seed: 1502 });
+        M.line([[MX0 - 14, MB + 2], [MX1 + 2, MB - 1]], 1.12, { parent: mtn, color: "ink", width: 9, dur: 0.12, amp: 1.6, seed: 1503 });       // ground
+        M.line([[812, 646], [826, 660], [838, 640], [852, 662], [866, 642]], 1.12 + 4 * F, { parent: mtn, color: "ink", width: 7, dur: 0.12, amp: 1.2, seed: 1504 }); // snow line
+        // strokes keep their width when the mountain stretches on the slam
+        mtn.querySelectorAll("path").forEach((p) => p.setAttribute("vector-effect", "non-scaling-stroke"));
+        // the flag: separate group (it rides the summit, never stretches)
+        const flagG = grp(), flagW = grp(flagG);
+        const fpoly = document.createElementNS(NS, "polygon");
+        fpoly.setAttribute("points", `${SX + 3},${SY - 74} ${SX + 52},${SY - 60} ${SX + 3},${SY - 44}`);
+        fpoly.setAttribute("fill", "var(--brand-primary)");
+        flagW.appendChild(fpoly);
+        M.line([[SX + 3, SY - 74], [SX + 52, SY - 60], [SX + 3, SY - 44]], 0, { parent: flagW, color: "marker", width: 7, amp: 1, seed: 1505 });
+        M.line([[SX, SY - 2], [SX + 2, SY - 80]], 0, { parent: flagW, color: "ink", width: 7, amp: 0.8, seed: 1506 });   // pole
+        gsap.set(flagW, { svgOrigin: `${SX} ${SY}` });
+        const PLANT = 1.32;
+        tl.set(flagG, { opacity: 0 }, 0);
+        // anticipation: appears raised and tilted, lifts a touch more, then STABS down into the summit
+        tl.fromTo(flagG, { opacity: 0, y: -40 }, { opacity: 1, y: -52, duration: 3 * F, ease: "power2.out", immediateRender: false }, PLANT - 6 * F);
+        tl.to(flagG, { y: 0, duration: 3 * F, ease: "power3.in" }, PLANT - 3 * F).to(flagG, { y: MH * 0.03, duration: 2 * F, ease: "power2.out" }, PLANT).to(flagG, { y: 0, duration: 8 * F, ease: "back.out(2)" }, PLANT + 2 * F);
+        tl.fromTo(flagW, { rotation: -14 }, { rotation: 8, duration: 6 * F, ease: "power2.in", immediateRender: false }, PLANT - 6 * F)
+          .to(flagW, { rotation: -6, duration: 4 * F, ease: "sine.inOut" }, PLANT)
+          .to(flagW, { rotation: 3, duration: 4 * F, ease: "sine.inOut" }, PLANT + 4 * F)
+          .to(flagW, { rotation: -1.5, duration: 4 * F, ease: "sine.inOut" }, PLANT + 8 * F)
+          .to(flagW, { rotation: 0, duration: 6 * F, ease: "sine.out" }, PLANT + 12 * F);
+        // the summit takes the stab (shape squash, tiny)
+        tl.to(mtn, { scaleY: 0.97, duration: 2 * F, ease: "power2.out" }, PLANT).to(mtn, { scaleY: 1, duration: 8 * F, ease: "back.out(2)" }, PLANT + 2 * F);
+
+        // ================= the real strip slides up on "sound", tape, highlighter =================
+        const strip = $("#strip");
+        gsap.set(strip, { transformOrigin: "50% 80%", transformPerspective: 1400 });
+        tl.fromTo(strip, { opacity: 0, y: 46, scale: 0.92, rotation: -4.5, rotationX: 28, filter: "blur(6px)" },
+          { opacity: 1, y: -5, scale: 1.01, rotation: -0.4, rotationX: 0, filter: "blur(0px)", duration: 0.26, ease: "power3.out", immediateRender: true }, 1.24);
+        tl.to(strip, { y: 0, scale: 1, rotation: -1.1, duration: 0.3, ease: "back.out(1.6)" }, 1.5);
+        const tapes = [M.tape(170, 1170, -7, 1.48), M.tape(706, 1166, 6, 1.56)];
+        M.highlight($("#strip .s"), [66, 9, 809, 75], 1.62, { dur: 0.38, seed: 1201 });
+        M.highlight($("#strip .s"), [66, 93, 796, 75], 2.0, { dur: 0.3, seed: 1202 });
+
+        // ================= HERO: "unreasonable" slams in letter by letter =================
+        const letters = $$("#unr .lt");
+        const lun = $("#lun");
+        const IMPACT = 2.33;                         // contact frame (word 2.47, 0.14 s early)
+        const r = rng(4747);
+        // landing order scrambled around the middle; all 12 land inside 4 frames
+        const order = [5, 6, 4, 7, 3, 8, 2, 9, 1, 10, 0, 11];
+        letters.forEach((lt, i) => gsap.set(lt, { transformOrigin: "50% 100%" }));
+        order.forEach((idx, k) => {
+          const lt = letters[idx];
+          const land = IMPACT - 2 * F + Math.floor(k / 3) * F;      // 4 waves of 3 letters, 1 f apart
+          const edge = idx === 0 || idx === 11, rv = (r() - 0.5) * 16, rot = edge ? 0 : rv, bl = edge ? 3 : 8;
+          tl.set(lt, { opacity: 0 }, 0);
+          // anticipation: appears high, lifts a touch more (2 f), then slams down (3 f, power3.in), overshoots below, settles
+          tl.fromTo(lt, { opacity: 0, y: -70, rotation: rot, filter: `blur(${bl}px)` },
+            { opacity: 1, y: -86, rotation: rot * 1.2, filter: `blur(${bl * 0.6}px)`, duration: 2 * F, ease: "power2.out", immediateRender: false }, land - 5 * F);
+          tl.to(lt, { y: 9, rotation: -rot * 0.25, filter: "blur(0px)", duration: 3 * F, ease: "power3.in" }, land - 3 * F);
+          tl.to(lt, { y: 0, duration: 3 * F, ease: "power2.out" }, land);
+        });
+        // per-letter shake: every frame for 10 f after the impact, 2–4 px decaying to 1 px, then a 1 px tremor on fours to the cut
+        const SH0 = IMPACT + 3 * F;
+        letters.forEach((lt, i) => {
+          for (let f = 0; f < 10; f++) {
+            const a = 4 - f * 0.3;
+            tl.set(lt, { x: (r() - 0.5) * 2 * a, y: (r() - 0.5) * 2 * a * 0.8, rotation: (r() - 0.5) * 2 * a * 0.7 }, SH0 + f * F);
+          }
+          for (let t = SH0 + 10 * F; t < D; t += 4 * F) tl.set(lt, { x: (r() - 0.5) * 2.2, y: (r() - 0.5) * 2, rotation: (r() - 0.5) * 1.2 }, t);
+        });
+        P.shake(IMPACT, 4);
+        P.punch(IMPACT, { scale: 1.005, origin: "510px 1060px", dur: 0.3 });
+
+        // red marker shake lines at both ends of the word (emanata above the x-height, whoosh dashes under the baseline)
+        const fs = parseFloat(lun.style.fontSize), L0 = lun.offsetLeft, L1 = lun.offsetLeft + lun.offsetWidth, B = 1118;
+        const xh = B - fs * 0.56;                    // x-height top of 'u' / 'e'
+        const shk = grp();
+        const o = (s, t) => ({ parent: shk, width: 10, dur: 0.07, seed: s, amp: 1.2 });
+        M.line([[L0 + 30, xh - 26], [L0 + 18, xh - 66]], IMPACT + 2 * F, o(1301));
+        M.line([[L0 + 2, xh - 8], [L0 - 4, xh - 46]].map(([x, y]) => [Math.max(x, 70), y]), IMPACT + 4 * F, o(1302));
+        M.line([[L0 + 62, xh - 30], [L0 + 66, xh - 70]], IMPACT + 6 * F, o(1303));
+        M.line([[L1 - 34, xh - 26], [L1 - 20, xh - 66]], IMPACT + 3 * F, o(1304));
+        M.line([[L1 - 6, xh - 10], [L1 + 2, xh - 46]].map(([x, y]) => [Math.min(x, 948), y]), IMPACT + 5 * F, o(1305));
+        M.line([[L1 - 66, xh - 32], [L1 - 72, xh - 70]], IMPACT + 7 * F, o(1306));
+        M.line([[L0 + 8, B + 24], [L0 + 96, B + 22]], IMPACT + 6 * F, o(1307));
+        M.line([[L0 + 30, B + 46], [L0 + 74, B + 45]], IMPACT + 8 * F, o(1308));
+        M.line([[L1 - 96, B + 22], [L1 - 8, B + 24]], IMPACT + 7 * F, o(1309));
+        M.line([[L1 - 74, B + 45], [L1 - 30, B + 46]], IMPACT + 9 * F, o(1310));
+        // the shake lines vibrate with the letters (on twos, decaying)
+        for (let f = 0; f < 12; f += 2) tl.set(shk, { x: (r() - 0.5) * (5 - f * 0.35), y: (r() - 0.5) * (4 - f * 0.3) }, IMPACT + 3 * F + f * F);
+        tl.set(shk, { x: 0, y: 0 }, IMPACT + 16 * F);
+
+        // the world reacts to the slam: the strip (and its tape) jolts down and settles, the line above flinches
+        tl.to([strip, ...tapes], { y: "+=7", duration: 2 * F, ease: "power2.out" }, IMPACT)
+          .to([strip, ...tapes], { y: "-=7", duration: 9 * F, ease: "back.out(2.2)" }, IMPACT + 2 * F);
+        tl.to("#lthat", { y: -5, duration: 2 * F, ease: "power2.out" }, IMPACT)
+          .to("#lthat", { y: 0, duration: 8 * F, ease: "back.out(2)" }, IMPACT + 2 * F);
+        // the 'unreasonable' goal: on the slam the mountain shoots up from its base (1 → 1.42 → 1.35), the flag rides the summit
+        const grow = (s) => -MH * (s - 1);
+        tl.to(mtn, { scaleY: 0.94, duration: 3 * F, ease: "power2.in" }, IMPACT - 3 * F);                    // anticipation crouch
+        tl.to(flagG, { y: grow(0.94), duration: 3 * F, ease: "power2.in" }, IMPACT - 3 * F);
+        tl.to(mtn, { scaleY: 1.42, duration: 5 * F, ease: "power3.out" }, IMPACT)
+          .to(mtn, { scaleY: 1.35, duration: 10 * F, ease: "back.out(2)" }, IMPACT + 5 * F);
+        tl.to(flagG, { y: grow(1.42), duration: 5 * F, ease: "power3.out" }, IMPACT)
+          .to(flagG, { y: grow(1.35), duration: 10 * F, ease: "back.out(2)" }, IMPACT + 5 * F);
+        // the flag whips in the rush, then flutters to the cut
+        tl.to(flagW, { rotation: 10, duration: 4 * F, ease: "power2.out" }, IMPACT)
+          .to(flagW, { rotation: -5, duration: 5 * F, ease: "sine.inOut" }, IMPACT + 4 * F)
+          .to(flagW, { rotation: 2, duration: 5 * F, ease: "sine.inOut" }, IMPACT + 9 * F)
+          .to(flagW, { rotation: -1, duration: 5 * F, ease: "sine.inOut" }, IMPACT + 14 * F);
+      })();
+    </script>
+  </body>
+</html>

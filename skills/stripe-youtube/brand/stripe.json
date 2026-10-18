@@ -1,0 +1,122 @@
+{
+  "name": "Stripe",
+  "platform": "youtube",
+  "source_docs": [
+    "https://stripe.com/newsroom/brand-assets (wordmark colours: slate and blurple on light, white on dark; no other wordmark colour)",
+    "Stripe_logo_kit.zip from that page (hex values read from the official wordmark SVGs)"
+  ],
+  "colors": {
+    "primary": {
+      "hex": "#533AFD",
+      "name": "Blurple",
+      "source": "logo kit",
+      "use": "the ONE accent: current disc, hero word, highlighter edge, bars"
+    },
+    "primary_dark": {
+      "hex": "#3B22E0",
+      "name": "Blurple deep",
+      "source": "derived (blurple −12 % lightness)",
+      "use": "highlighter underline, pressed states"
+    },
+    "primary_light": {
+      "hex": "#9D8CFF",
+      "name": "Blurple light",
+      "source": "derived",
+      "use": "hero word in talk captions over the camera (blurple is too dark on his wood wall)"
+    },
+    "soft": {
+      "hex": "#E4DFFF",
+      "name": "Blurple tint",
+      "source": "derived",
+      "use": "highlighter behind the spoken phrase"
+    },
+    "panel": {
+      "hex": "#B9ADFF",
+      "name": "Blurple panel",
+      "source": "derived",
+      "use": "rare full-bleed punctuation"
+    },
+    "deep": {
+      "hex": "#061B31",
+      "name": "Slate",
+      "source": "logo kit",
+      "use": "discs, dark cards, tags, links, ink"
+    },
+    "text": {
+      "hex": "#061B31",
+      "name": "Slate",
+      "source": "logo kit",
+      "use": "headings and labels"
+    },
+    "muted": {
+      "hex": "#6B7C93",
+      "name": "Slate muted",
+      "source": "derived",
+      "use": "small labels"
+    },
+    "background": {
+      "hex": "#EEF1F6",
+      "name": "Cool paper",
+      "source": "derived (slate at 6 % on white)",
+      "use": "board background with grid + vignette"
+    },
+    "card": {
+      "hex": "#FFFFFF",
+      "name": "White",
+      "source": "logo kit",
+      "use": "cards, page strips"
+    },
+    "data": {
+      "hex": "#E8435A",
+      "name": "Strawberry",
+      "source": "house data colour (kept)",
+      "use": "data only"
+    }
+  },
+  "fonts": {
+    "heading": {
+      "family": "Inter Tight",
+      "weight": 800,
+      "note": "Stripe's own typeface is not on the brand page and is not free to use; Inter Tight stands in"
+    },
+    "body": {
+      "family": "Inter",
+      "weight": 500
+    },
+    "captions": {
+      "family": "Inter Tight",
+      "weight": 800
+    },
+    "mono": {
+      "family": "Geist Mono",
+      "weight": 500
+    }
+  },
+  "logos": [
+    {
+      "file": "logos/stripe_wordmark_blurple.svg",
+      "use": "on light backgrounds"
+    },
+    {
+      "file": "logos/stripe_wordmark_slate.svg",
+      "use": "on light backgrounds"
+    },
+    {
+      "file": "logos/stripe_wordmark_white.svg",
+      "use": "on dark backgrounds"
+    }
+  ],
+  "captions": {
+    "color": "#FFFFFF",
+    "hero": "#9D8CFF"
+  },
+  "card": {
+    "ring": "#533AFD"
+  },
+  "rules": [
+    "blurple is the one accent; slate carries discs and ink",
+    "wordmark only in slate, blurple or white, never recoloured or redrawn",
+    "data colour for numbers only"
+  ],
+  "logos_note": "The wordmark SVGs are not vendored. Download Stripe's official logo kit from https://stripe.com/newsroom/brand-assets and put the three wordmarks at <edit>/logos/ under these names."
+}

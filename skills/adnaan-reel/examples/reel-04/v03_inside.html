@@ -1,0 +1,1291 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>v03 inside</title>
+    <link rel="stylesheet" href="brand.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: var(--brand-background);
+      }
+      #root {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: var(--brand-background);
+        font-family: var(--font-heading);
+        color: var(--brand-text);
+      }
+
+      /* ---------- shared v2 background: paper + 60px grid + vignette ---------- */
+      #bg {
+        position: absolute;
+        inset: 0;
+        background: var(--brand-background);
+        overflow: hidden;
+      }
+      #grid {
+        position: absolute;
+        left: -120px;
+        top: -120px;
+        width: 1320px;
+        height: 2160px;
+        background-image:
+          linear-gradient(to right, rgba(20, 20, 20, 0.055) 1.5px, transparent 1.5px),
+          linear-gradient(to bottom, rgba(20, 20, 20, 0.055) 1.5px, transparent 1.5px);
+        background-size: 60px 60px;
+      }
+      #vignette {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(ellipse at 50% 45%, transparent 45%, rgba(90, 80, 72, 0.22) 100%);
+      }
+      body.nobg #bg {
+        visibility: hidden;
+      }
+      body.nobg,
+      body.nobg #root {
+        background: #ff00ff;
+      }
+
+      /* ---------- camera ---------- */
+      #cam,
+      #punch,
+      #stackLayer {
+        position: absolute;
+        inset: 0;
+      }
+
+      /* ---------- small speaker card (top-right, whole scene) ---------- */
+      #sp-pos {
+        position: absolute;
+        left: 516px;
+        top: 304px;
+        width: 420px;
+        height: 290px;
+      }
+      #sp-float,
+      #sp-card {
+        position: absolute;
+        inset: 0;
+      }
+      #sp-card {
+        border-radius: 28px;
+        overflow: hidden;
+        background: #1b1b1b;
+        box-shadow:
+          0 12px 0 -2px var(--brand-primary),
+          0 40px 56px -10px rgba(40, 30, 20, 0.36);
+      }
+      #sp-vid-wrap {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        border-radius: 28px;
+      }
+      /* source 1080x1920 scaled to the card width (420x747); window = 25.7%–64.5% of the source height (face centred) */
+      #speaker {
+        position: absolute;
+        left: 0;
+        top: -192px;
+        width: 420px;
+        height: 747px;
+        object-fit: cover;
+      }
+      #sp-sheen {
+        position: absolute;
+        inset: 0;
+        border-radius: 28px;
+        background: linear-gradient(
+          105deg,
+          transparent 30%,
+          rgba(255, 255, 255, 0.22) 45%,
+          rgba(255, 255, 255, 0.05) 55%,
+          transparent 65%
+        );
+        background-size: 300% 100%;
+        background-position: 100% 0;
+        opacity: 0;
+      }
+
+      /* ---------- the sealed app card ---------- */
+      #app-pos {
+        position: absolute;
+        left: 96px;
+        top: 340px;
+        width: 540px;
+        height: 660px;
+      }
+      #app-float,
+      #app-tip,
+      #app-spin,
+      #app-bump,
+      #app {
+        position: absolute;
+        inset: 0;
+      }
+      #app {
+        border-radius: 28px;
+        overflow: hidden;
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.045) 0%, rgba(0, 0, 0, 0) 45%, rgba(0, 0, 0, 0.14) 100%),
+          var(--brand-deep);
+        box-shadow:
+          0 14px 0 -2px var(--brand-primary),
+          0 46px 64px -12px rgba(40, 30, 20, 0.42),
+          inset 0 2px 0 rgba(251, 250, 248, 0.07);
+      }
+      #app-ui {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 540px;
+        height: 660px;
+        overflow: visible;
+      }
+      #scan {
+        position: absolute;
+        left: 0;
+        top: -150px;
+        width: 540px;
+        height: 150px;
+        background: linear-gradient(180deg, rgba(46, 156, 203, 0) 0%, rgba(46, 156, 203, 0.32) 100%);
+        opacity: 0;
+      }
+      #scan::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -3px;
+        height: 6px;
+        border-radius: 3px;
+        background: var(--brand-primary);
+        box-shadow:
+          0 0 18px 4px rgba(46, 156, 203, 0.75),
+          0 0 2px rgba(255, 255, 255, 0.8);
+      }
+      /* the agent's visor seen from inside the app */
+      #visor {
+        position: absolute;
+        left: 166px;
+        top: 152px;
+        width: 208px;
+        height: 98px;
+        border-radius: 49px;
+        background: linear-gradient(180deg, #070707 0%, #1f1f1f 100%);
+        box-shadow:
+          inset 0 3px 8px rgba(0, 0, 0, 0.7),
+          0 0 0 7px rgba(20, 20, 20, 0.92),
+          0 16px 30px rgba(0, 0, 0, 0.35);
+        opacity: 0;
+      }
+      #visor-eyes {
+        position: absolute;
+        inset: 0;
+      }
+      .veye {
+        position: absolute;
+        top: 31px;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: var(--brand-primary);
+        box-shadow: 0 0 18px 5px rgba(46, 156, 203, 0.8);
+      }
+      #veye-l {
+        left: 48px;
+      }
+      #veye-r {
+        left: 124px;
+      }
+      /* padlock badge */
+      #lock {
+        position: absolute;
+        left: -18px;
+        top: -28px;
+        width: 108px;
+        height: 108px;
+        border-radius: 32px;
+        background: radial-gradient(circle at 35% 30%, #ffffff, #f1eeea 72%);
+        box-shadow:
+          0 18px 30px rgba(40, 30, 20, 0.3),
+          inset 0 -4px 8px rgba(60, 50, 40, 0.06);
+      }
+      #lock svg {
+        position: absolute;
+        left: 14px;
+        top: 12px;
+        width: 80px;
+        height: 80px;
+        overflow: visible;
+      }
+      #ripple {
+        position: absolute;
+        width: 60px;
+        height: 60px;
+        margin-left: -30px;
+        margin-top: -30px;
+        border-radius: 50%;
+        border: 5px solid var(--brand-primary);
+        opacity: 0;
+      }
+
+      /* ---------- agent puck (copied from v02_skills; 300px base, scaled) ---------- */
+      .puck-pos {
+        position: absolute;
+        width: 300px;
+        height: 300px;
+      }
+      .puck-scale,
+      .puck-bob,
+      .puck {
+        position: absolute;
+        inset: 0;
+      }
+      .puck-glow {
+        position: absolute;
+        left: -110px;
+        top: -110px;
+        width: 520px;
+        height: 520px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(46, 156, 203, 0.5) 0%, rgba(46, 156, 203, 0.2) 42%, rgba(46, 156, 203, 0) 70%);
+        opacity: 0;
+      }
+      .puck-ring {
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        box-shadow:
+          0 0 0 9px var(--brand-primary),
+          0 0 46px 14px rgba(46, 156, 203, 0.45);
+        opacity: 0;
+      }
+      .puck-disc {
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        background: radial-gradient(circle at 34% 26%, #3d3d3d 0%, #1d1d1d 42%, #141414 72%);
+        box-shadow:
+          0 34px 54px -10px rgba(40, 30, 20, 0.5),
+          inset 0 -8px 18px rgba(0, 0, 0, 0.45);
+      }
+      .p-visor {
+        position: absolute;
+        left: 58px;
+        top: 106px;
+        width: 184px;
+        height: 92px;
+        border-radius: 46px;
+        background: linear-gradient(180deg, #070707 0%, #1f1f1f 100%);
+        box-shadow:
+          inset 0 3px 8px rgba(0, 0, 0, 0.7),
+          0 1px 0 rgba(255, 255, 255, 0.09);
+      }
+      .eye {
+        position: absolute;
+        top: 30px;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: var(--brand-primary);
+        box-shadow: 0 0 18px 5px rgba(46, 156, 203, 0.85);
+      }
+      .eye.l {
+        left: 42px;
+      }
+      .eye.r {
+        left: 110px;
+      }
+      .puck-shadow {
+        position: absolute;
+        border-radius: 50%;
+        background: radial-gradient(ellipse at 50% 50%, rgba(40, 30, 20, 0.38), rgba(40, 30, 20, 0) 70%);
+      }
+
+      /* dotted path */
+      #paths {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1080px;
+        height: 1920px;
+        overflow: visible;
+      }
+
+      /* ---------- slabs (axonometric, built in JS; geometry from v06_layers) ---------- */
+      .slab,
+      .slab-bob,
+      .slab-body {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 0;
+        height: 0;
+      }
+      .slab-body {
+        filter: drop-shadow(0 14px 16px rgba(60, 50, 40, 0.22));
+      }
+      .slab svg {
+        position: absolute;
+        overflow: visible;
+      }
+      #ground {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 0;
+        height: 0;
+      }
+      #ground svg {
+        position: absolute;
+        overflow: visible;
+        filter: blur(18px);
+      }
+
+      /* ---------- feature rows ---------- */
+      .frow {
+        position: absolute;
+        left: 666px;
+        width: 268px;
+        height: 76px;
+        border-radius: 22px;
+        background: var(--brand-card);
+        box-shadow: 0 22px 36px -12px rgba(60, 50, 40, 0.34);
+        opacity: 0;
+      }
+      .frow svg {
+        position: absolute;
+        left: 18px;
+        top: 14px;
+        width: 48px;
+        height: 48px;
+        overflow: visible;
+      }
+      .frow .bar {
+        position: absolute;
+        left: 82px;
+        border-radius: 6px;
+        background: #e5e0da;
+      }
+
+      /* ---------- kinetic serif ---------- */
+      .line {
+        position: absolute;
+        display: flex;
+        align-items: baseline;
+        white-space: nowrap;
+        line-height: 0.88;
+      }
+      .bl {
+        display: block;
+        width: 0;
+        height: 0;
+        align-self: baseline;
+      }
+      .w {
+        display: inline-block;
+        will-change: transform, opacity, filter;
+      }
+      .serif {
+        font-family: "Inter Tight", var(--font-heading);
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        color: var(--brand-text);
+      }
+      .ital {
+        font-family: "Inter Tight", var(--font-accent);
+        font-weight: 900;
+        font-style: normal;
+        letter-spacing: -0.045em;
+      }
+      .ocean {
+        color: var(--brand-primary);
+      }
+      .ink {
+        color: var(--brand-text);
+      }
+      .gap-s {
+        margin-left: 0.24em;
+      }
+      .strike {
+        position: absolute;
+        border-radius: 8px;
+        background: linear-gradient(90deg, var(--brand-primary), var(--brand-primary-dark));
+        transform-origin: 0% 50%;
+      }
+      #a1 {
+        font-size: 100px;
+      }
+      #a2 {
+        font-size: 270px;
+        line-height: 0.88;
+      }
+      #b1 {
+        font-size: 112px;
+      }
+      #b2 {
+        font-size: 236px;
+        line-height: 0.88;
+      }
+      #b3 {
+        font-size: 90px;
+      }
+      #c1 {
+        font-size: 236px;
+        line-height: 0.88;
+      }
+      #c2 {
+        font-size: 112px;
+      }
+      #d1 {
+        font-size: 94px;
+      }
+      #d2 {
+        font-size: 214px;
+        line-height: 0.88;
+      }
+      #d3 {
+        font-size: 204px;
+        line-height: 0.88;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-width="1080" data-height="1920" data-start="0" data-duration="7.133">
+      <div id="bg">
+        <div id="grid"></div>
+        <div id="vignette"></div>
+      </div>
+
+      <div id="cam">
+        <div id="punch">
+          <!-- ===== exploded stack (beat B) ===== -->
+          <div id="stackLayer">
+            <div id="ground"></div>
+            <div id="slabs"></div>
+          </div>
+
+          <!-- ===== sealed app card (beat A) ===== -->
+          <div id="app-pos">
+            <div id="app-float">
+              <div id="app-tip">
+                <div id="app-spin">
+                  <div id="app-bump">
+                    <div id="app">
+                      <svg id="app-ui" viewBox="0 0 580 700" preserveAspectRatio="none"></svg>
+                      <div id="visor">
+                        <div id="visor-eyes">
+                          <div id="veye-l" class="veye"></div>
+                          <div id="veye-r" class="veye"></div>
+                        </div>
+                      </div>
+                      <div id="scan"></div>
+                    </div>
+                    <div id="lock">
+                      <svg viewBox="0 0 100 100">
+                        <path
+                          id="shackle"
+                          d="M33 50 V34 a17 17 0 0 1 34 0 V50"
+                          fill="none"
+                          stroke="#141414"
+                          stroke-width="9"
+                          stroke-linecap="round"
+                        />
+                        <rect x="22" y="44" width="56" height="44" rx="12" fill="#141414" />
+                        <circle id="keyhole" cx="50" cy="61" r="6.5" fill="#2E9CCB" />
+                        <rect x="46.8" y="62" width="6.4" height="14" rx="3.2" fill="#2E9CCB" />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="ripple"></div>
+
+          <!-- dotted path: puck -> inside the card -->
+          <svg id="paths" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <mask id="reveal" maskUnits="userSpaceOnUse" x="0" y="0" width="1080" height="1920">
+                <path id="travel-mask" fill="none" stroke="#fff" stroke-width="26" stroke-linecap="round" />
+              </mask>
+            </defs>
+            <path
+              id="travel"
+              fill="none"
+              stroke="#141414"
+              stroke-width="3"
+              stroke-linecap="round"
+              stroke-dasharray="2 12"
+              mask="url(#reveal)"
+            />
+          </svg>
+
+          <!-- agent puck A (from the previous scene) -->
+          <div id="pA-shadow" class="puck-shadow"></div>
+          <div id="pA-pos" class="puck-pos">
+            <div id="pA-scale" class="puck-scale">
+              <div id="pA-bob" class="puck-bob">
+                <div id="pA" class="puck">
+                  <div class="puck-glow"></div>
+                  <div class="puck-ring"></div>
+                  <div class="puck-disc">
+                    <div class="p-visor"><div class="eye l"></div><div class="eye r"></div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- feature rows (beat B) -->
+          <div id="rows"></div>
+
+          <!-- small speaker card -->
+          <div id="sp-pos">
+            <div id="sp-float">
+              <div id="sp-card">
+                <div id="sp-vid-wrap">
+                  <video
+                    id="speaker"
+                    class="clip"
+                    src="assets/speaker.mp4"
+                    muted
+                    playsinline
+                    data-start="0"
+                    data-duration="7.133"
+                    data-track-index="1"
+                  ></video>
+                </div>
+                <div id="sp-sheen"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ===== kinetic type ===== -->
+          <div id="a1" class="line serif" data-x="84" data-base="1206">
+            <span class="bl"></span>
+            <span class="w" data-t="0.05" data-kind="first">take</span>
+            <span class="w gap-s" data-t="0.19">a</span>
+            <span class="w gap-s" data-t="0.25">look</span>
+          </div>
+          <div id="a2" class="line ital ocean" data-right="934" data-base="1444" data-maxw="790">
+            <span class="bl"></span>
+            <span class="w" data-t="0.57" data-kind="hero" data-origin="88% 80%" data-peak="1.08" data-dy="34" data-rot="5">inside</span>
+          </div>
+
+          <div id="b1" class="line serif" data-x="84" data-base="1156">
+            <span class="bl"></span>
+            <span class="w" data-t="1.97">no</span>
+            <span class="w gap-s" data-t="2.29">source</span>
+          </div>
+          <div id="b2" class="line ital ink" data-right="920" data-base="1340" data-maxw="620">
+            <span class="bl"></span>
+            <span class="w" id="w-code" data-t="2.65" data-kind="hero" data-origin="40% 85%" data-peak="1.08" data-dy="70">code</span>
+          </div>
+          <div id="b3" class="line serif" data-x="84" data-base="1456" data-maxw="760">
+            <span class="bl"></span>
+            <span class="w" data-t="3.25" data-dy="20">no</span>
+            <span class="w gap-s" id="w-info" data-t="3.75" data-dy="20">information</span>
+          </div>
+
+          <div id="c1" class="line ital ink" data-x="84" data-base="1262" data-maxw="760">
+            <span class="bl"></span>
+            <span class="w" data-t="4.49" data-kind="hero" data-origin="30% 85%" data-peak="1.07" data-dy="70">figure</span>
+          </div>
+          <div id="c2" class="line serif" data-right="920" data-base="1432">
+            <span class="bl"></span>
+            <span class="w" data-t="4.81">out</span>
+            <span class="w gap-s" data-t="5.11">how</span>
+          </div>
+
+          <div id="d1" class="line serif" data-x="84" data-base="1128">
+            <span class="bl"></span>
+            <span class="w" data-t="5.71">every</span>
+            <span class="w gap-s" data-t="6.07">single</span>
+          </div>
+          <div id="d2" class="line ital ink" data-x="84" data-base="1310" data-maxw="790">
+            <span class="bl"></span>
+            <span class="w" data-t="6.39" data-kind="accent">feature</span>
+          </div>
+          <div id="d3" class="line ital ocean" data-right="932" data-base="1467" data-maxw="780">
+            <span class="bl"></span>
+            <span class="w" data-t="6.95" data-kind="hero" data-origin="90% 80%" data-peak="1.09" data-dy="24" data-rot="5">works.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const fontSpecs = ['900 100px "Inter Tight"', '800 100px "Inter Tight"', '700 100px "Inter Tight"', '500 40px "Inter"', '600 40px "Inter"'];
+        await Promise.all(fontSpecs.map((f) => document.fonts.load(f)));
+        await document.fonts.ready;
+        for (const f of fontSpecs) {
+          if (!document.fonts.check(f)) throw new Error("brand font missing: " + f);
+        }
+        gsap.registerPlugin(MotionPathPlugin);
+        if (/nobg/.test(location.search)) document.body.classList.add("nobg");
+
+        const D = 7.133;
+        const F = 1 / 30;
+        const $ = (s) => document.querySelector(s);
+        const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+        const NS = "http://www.w3.org/2000/svg";
+        const svgEl = (tag, attrs) => {
+          const e = document.createElementNS(NS, tag);
+          for (const k in attrs) e.setAttribute(k, attrs[k]);
+          return e;
+        };
+        // brand tokens (no hard-coded palette)
+        const css = getComputedStyle(document.documentElement);
+        const tok = (n) => css.getPropertyValue(n).trim();
+        const C = {
+          P: tok("--brand-primary"),
+          PD: tok("--brand-primary-dark"),
+          DEEP: tok("--brand-deep"),
+          BG: tok("--brand-background"),
+          CARD: tok("--brand-card"),
+          INK: tok("--brand-text"),
+          MUTED: tok("--brand-muted"),
+        };
+        const hex = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+        const mix = (a, b, t) => {
+          const A = hex(a),
+            B = hex(b);
+          return "#" + A.map((c, i) => Math.round(c + (B[i] - c) * t).toString(16).padStart(2, "0")).join("");
+        };
+        const rgba = (h, a) => "rgba(" + hex(h).join(",") + "," + a + ")";
+
+        // ---- place each kinetic line by its baseline (deterministic, measured once) ----
+        // v2: Inter Tight is wide — fit each line to its max width (measured once, deterministic)
+        for (const line of $$(".line[data-maxw]")) {
+          const maxw = parseFloat(line.dataset.maxw);
+          const fs = parseFloat(getComputedStyle(line).fontSize);
+          if (line.offsetWidth > maxw) line.style.fontSize = Math.floor((fs * maxw) / line.offsetWidth) + "px";
+        }
+        window.__lineSizes = $$(".line").map((l) => l.id + ":" + Math.round(parseFloat(getComputedStyle(l).fontSize)) + "/" + l.offsetWidth);
+        for (const line of $$(".line")) {
+          const bl = line.querySelector(".bl");
+          line.style.top = "0px";
+          line.style.left = "0px";
+          const baseOff = bl.offsetTop;
+          line.dataset.baseOff = baseOff;
+          line.style.top = parseFloat(line.dataset.base) - baseOff + "px";
+          if (line.dataset.right) {
+            line.style.left = parseFloat(line.dataset.right) - line.offsetWidth + "px";
+          } else {
+            line.style.left = line.dataset.x + "px";
+          }
+        }
+        // strike-throughs (children of their line, so they leave with it)
+        const addStrike = (line, word, id, h, lift, pad, rot) => {
+          const s = document.createElement("div");
+          s.className = "strike";
+          s.id = id;
+          const fs = parseFloat(getComputedStyle(word).fontSize);
+          const baseOff = parseFloat(line.dataset.baseOff);
+          Object.assign(s.style, {
+            left: word.offsetLeft - pad + "px",
+            width: word.offsetWidth + pad * 2 + "px",
+            top: baseOff - lift * fs - h / 2 + "px",
+            height: h + "px",
+            rotate: rot + "deg",
+          });
+          line.appendChild(s);
+          return s;
+        };
+        addStrike($("#b2"), $("#w-code"), "strike-code", 16, 0.27, 18, -4);
+        addStrike($("#b3"), $("#w-info"), "strike-info", 11, 0.25, 12, -2.5);
+
+        // ================= app card UI (card coords 580x700), reused on the top slab =================
+        const UIW = 580,
+          UIH = 700; // card UI drawing coords
+        const CARDW = 540,
+          CARDH = 660; // card size on screen
+        const CARDX = 96,
+          CARDY = 340;
+        function drawCardUI(g, pre) {
+          const W = (a) => rgba(C.CARD, a);
+          const add = (tag, a) => g.appendChild(svgEl(tag, a));
+          [44, 70, 96].forEach((x) => add("circle", { cx: x, cy: 46, r: 8, fill: W(0.24) }));
+          add("rect", { x: 130, y: 39, width: 180, height: 14, rx: 7, fill: W(0.14) });
+          add("rect", { x: 420, y: 34, width: 120, height: 24, rx: 12, fill: W(0.1) });
+          // hero image block
+          const cp = svgEl("clipPath", { id: pre + "hero" });
+          cp.appendChild(svgEl("rect", { x: 36, y: 84, width: 508, height: 262, rx: 22 }));
+          g.appendChild(cp);
+          add("rect", { x: 36, y: 84, width: 508, height: 262, rx: 22, fill: rgba(C.P, 0.16) });
+          const hg = svgEl("g", { "clip-path": `url(#${pre}hero)`, class: "hero-art" });
+          hg.appendChild(svgEl("circle", { cx: 452, cy: 146, r: 26, fill: rgba(C.P, 0.9) }));
+          hg.appendChild(svgEl("path", { d: "M20 360 L190 196 L300 300 L372 236 L560 360 Z", fill: rgba(C.P, 0.45) }));
+          hg.appendChild(svgEl("path", { d: "M20 360 L150 262 L260 360 Z", fill: rgba(C.PD, 0.85) }));
+          g.appendChild(hg);
+          add("rect", { x: 36, y: 382, width: 330, height: 18, rx: 9, fill: W(0.16) });
+          add("rect", { x: 36, y: 414, width: 230, height: 14, rx: 7, fill: W(0.1) });
+          add("rect", { x: 36, y: 454, width: 180, height: 52, rx: 26, fill: C.P });
+          add("rect", { x: 70, y: 476, width: 112, height: 9, rx: 4.5, fill: W(0.9) });
+          [36, 212, 388].forEach((x, i) => {
+            add("rect", { x, y: 542, width: 156, height: 124, rx: 18, fill: W(0.07) });
+            add("rect", { x: x + 18, y: 560, width: 36, height: 36, rx: 10, fill: i === 0 ? rgba(C.P, 0.85) : W(0.2) });
+            add("rect", { x: x + 18, y: 612, width: 108, height: 10, rx: 5, fill: W(0.16) });
+            add("rect", { x: x + 18, y: 632, width: 72, height: 8, rx: 4, fill: W(0.1) });
+          });
+        }
+        drawCardUI($("#app-ui"), "card-");
+
+        // ================= axonometric slab geometry (from v06_layers) =================
+        const ALPHA = (-22 * Math.PI) / 180;
+        const BETA = (30 * Math.PI) / 180;
+        const cA = Math.cos(ALPHA),
+          sA = Math.sin(ALPHA),
+          cB = Math.cos(BETA),
+          sB = Math.sin(BETA);
+        const SW = 480,
+          SD = 360,
+          ST = 60,
+          SR = 30;
+        const GAP = 14;
+        const PITCH = ST * cB + GAP;
+        const P = (u, v, h) => {
+          const x = u * cA - v * sA;
+          const z = u * sA + v * cA;
+          return [x, -h * cB + z * sB];
+        };
+        const L = (() => {
+          const v = [0.35, 0.75, 0.55];
+          const m = Math.hypot(...v);
+          return v.map((c) => c / m);
+        })();
+        const outline = (() => {
+          const N = 10,
+            hw = SW / 2 - SR,
+            hd = SD / 2 - SR,
+            pts = [];
+          for (const [cu, cv, a0] of [
+            [hw, hd, 0],
+            [-hw, hd, 90],
+            [-hw, -hd, 180],
+            [hw, -hd, 270],
+          ]) {
+            for (let i = 0; i <= N; i++) {
+              const a = ((a0 + (90 * i) / N) * Math.PI) / 180;
+              pts.push({ u: cu + SR * Math.cos(a), v: cv + SR * Math.sin(a), nu: Math.cos(a), nv: Math.sin(a) });
+            }
+          }
+          return pts;
+        })();
+        const poly = (pts) => "M" + pts.map((p) => p[0].toFixed(2) + " " + p[1].toFixed(2)).join(" L") + " Z";
+        const hull = (pts) => {
+          const s = pts.slice().sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+          const cross = (o, a, b) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
+          const lo = [],
+            up = [];
+          for (const p of s) {
+            while (lo.length >= 2 && cross(lo[lo.length - 2], lo[lo.length - 1], p) <= 0) lo.pop();
+            lo.push(p);
+          }
+          for (let i = s.length - 1; i >= 0; i--) {
+            const p = s[i];
+            while (up.length >= 2 && cross(up[up.length - 2], up[up.length - 1], p) <= 0) up.pop();
+            up.push(p);
+          }
+          up.pop();
+          lo.pop();
+          return lo.concat(up);
+        };
+
+        // REA's own step names (rea.tools)
+        const LAYERS = [
+          ["01", "Decode branches"],
+          ["02", "Trace calls"],
+          ["03", "Recover the rule"],
+        ];
+        const PAL = [
+          {
+            topF: mix(C.DEEP, C.P, 0.14),
+            topB: C.DEEP,
+            sideD: mix(C.DEEP, "#000000", 0.35),
+            sideL: mix(C.DEEP, C.P, 0.26),
+            hi: rgba(C.P, 0.6),
+            num: C.P,
+            name: C.CARD,
+          },
+          {
+            topF: mix(C.CARD, "#ffffff", 0.4),
+            topB: mix(C.CARD, C.BG, 0.45),
+            sideD: mix(C.BG, C.INK, 0.07),
+            sideL: mix(C.CARD, C.BG, 0.3),
+            hi: "rgba(255,255,255,0.95)",
+            num: C.MUTED,
+            name: C.INK,
+          },
+          {
+            topF: mix(C.P, "#ffffff", 0.32),
+            topB: C.P,
+            sideD: C.PD,
+            sideL: mix(C.P, "#ffffff", 0.07),
+            hi: "rgba(255,255,255,0.55)",
+            num: C.DEEP,
+            name: C.INK,
+          },
+        ];
+
+        const topPts = outline.map((p) => P(p.u, p.v, 0));
+        const botPts = outline.map((p) => P(p.u, p.v, -ST));
+        const allPts = topPts.concat(botPts);
+        const minX = Math.min(...allPts.map((p) => p[0])) - 6,
+          maxX = Math.max(...allPts.map((p) => p[0])) + 6,
+          minY = Math.min(...allPts.map((p) => p[1])) - 6,
+          maxY = Math.max(...allPts.map((p) => p[1])) + 6;
+
+        function buildSlabSVG(k, pal) {
+          const svg = svgEl("svg", {
+            viewBox: `${minX} ${minY} ${maxX - minX} ${maxY - minY}`,
+            width: maxX - minX,
+            height: maxY - minY,
+          });
+          svg.style.left = minX + "px";
+          svg.style.top = minY + "px";
+          const defs = svgEl("defs", {});
+          const g0 = P(0, -SD / 2, 0),
+            g1 = P(0, SD / 2, 0);
+          const grad = svgEl("linearGradient", { id: "topg" + k, gradientUnits: "userSpaceOnUse", x1: g0[0], y1: g0[1], x2: g1[0], y2: g1[1] });
+          grad.appendChild(svgEl("stop", { offset: "0", "stop-color": pal.topB }));
+          grad.appendChild(svgEl("stop", { offset: "1", "stop-color": pal.topF }));
+          defs.appendChild(grad);
+          svg.appendChild(defs);
+          svg.appendChild(svgEl("path", { d: poly(hull(allPts)), fill: mix(pal.sideD, pal.sideL, 0.55) }));
+          const n = outline.length;
+          const hiEdges = [];
+          for (let i = 0; i < n; i++) {
+            const a = outline[i],
+              b = outline[(i + 1) % n];
+            let nu = (a.nu + b.nu) / 2,
+              nv = (a.nv + b.nv) / 2;
+            const m = Math.hypot(nu, nv) || 1;
+            nu /= m;
+            nv /= m;
+            const nx = nu * cA - nv * sA;
+            const nz = nu * sA + nv * cA;
+            if (nz <= 0.001) continue;
+            const dot = nx * L[0] + nz * L[2];
+            const shade = Math.max(0, Math.min(1, 0.18 + 0.95 * dot));
+            const col = mix(pal.sideD, pal.sideL, shade);
+            const q = [topPts[i], topPts[(i + 1) % n], botPts[(i + 1) % n], botPts[i]];
+            svg.appendChild(svgEl("path", { d: poly(q), fill: col, stroke: col, "stroke-width": 1, "stroke-linejoin": "round" }));
+            hiEdges.push(i);
+          }
+          svg.appendChild(svgEl("path", { d: poly(topPts), fill: `url(#topg${k})` }));
+          // the top slab carries the app's own UI on its top face (continuity with the card)
+          if (k === 0) {
+            const g = svgEl("g", {
+              transform: `matrix(${cA} ${sA * sB} ${-sA} ${cA * sB} 0 0) scale(${SW / UIW} ${SD / UIH}) translate(${-UIW / 2} ${-UIH / 2})`,
+            });
+            drawCardUI(g, "slab-");
+            svg.appendChild(g);
+          }
+          let hd = "";
+          let prev = -2;
+          for (const i of hiEdges) {
+            const a = topPts[i],
+              b = topPts[(i + 1) % n];
+            hd += (i === prev + 1 ? " L" : " M") + a[0].toFixed(2) + " " + a[1].toFixed(2) + " L" + b[0].toFixed(2) + " " + b[1].toFixed(2);
+            prev = i;
+          }
+          svg.appendChild(svgEl("path", { d: hd, fill: "none", stroke: pal.hi, "stroke-width": 2.2, "stroke-linecap": "round", "stroke-linejoin": "round" }));
+          // label on the front face
+          const u0 = -(SW / 2 - SR) + 14;
+          const o = P(u0, SD / 2, 0);
+          const lg = svgEl("g", { class: "label" });
+          let fsz = 38;
+          const txt = svgEl("text", {
+            transform: `matrix(${cA} ${sA * sB} 0 ${cB} ${o[0]} ${o[1]})`,
+            x: 0,
+            y: ST / 2 + 13,
+            "font-family": "Inter",
+            "font-size": fsz,
+            "letter-spacing": "-0.01em",
+          });
+          const t1 = svgEl("tspan", { "font-weight": 600, fill: pal.num });
+          t1.textContent = LAYERS[k][0];
+          const t2 = svgEl("tspan", { "font-weight": 600, fill: pal.name, dx: 12 });
+          t2.textContent = LAYERS[k][1];
+          txt.appendChild(t1);
+          txt.appendChild(t2);
+          lg.appendChild(txt);
+          svg.appendChild(lg);
+          return { svg, txt };
+        }
+
+        // exploded stack: slab k (0 = top "01") top-face centre
+        const SCX = 354;
+        const C1 = 742;
+        const slabC = (k) => [SCX, C1 + k * PITCH];
+        const slabs = [];
+        const slabsEl = $("#slabs");
+        const maxLabel = SW - 2 * SR - 24;
+        for (let k = 2; k >= 0; k--) {
+          const [x, y] = slabC(k);
+          const s = document.createElement("div");
+          s.className = "slab";
+          s.style.left = x + "px";
+          s.style.top = y + "px";
+          const bob = document.createElement("div");
+          bob.className = "slab-bob";
+          const body = document.createElement("div");
+          body.className = "slab-body";
+          const { svg, txt } = buildSlabSVG(k, PAL[k]);
+          body.appendChild(svg);
+          bob.appendChild(body);
+          s.appendChild(bob);
+          slabsEl.appendChild(s);
+          // fit the label on the face (never below 36)
+          let fsz = 38;
+          while (txt.getComputedTextLength() > maxLabel && fsz > 32) {
+            fsz -= 1;
+            txt.setAttribute("font-size", fsz);
+          }
+          slabs[k] = { el: s, bob, body, label: body.querySelector(".label"), fsz };
+        }
+        window.__labelSizes = slabs.map((s) => s.fsz);
+
+        // ground contact shadow under the bottom slab
+        {
+          const [x, y] = slabC(2);
+          const gEl = $("#ground");
+          gEl.style.left = x + "px";
+          gEl.style.top = y + 24 + "px";
+          const svg = svgEl("svg", { viewBox: `${minX - 40} ${minY - 40} ${maxX - minX + 80} ${maxY - minY + 80}`, width: maxX - minX + 80, height: maxY - minY + 80 });
+          svg.style.left = minX - 40 + "px";
+          svg.style.top = minY - 40 + "px";
+          svg.appendChild(svgEl("path", { d: poly(hull(allPts)), fill: "rgba(60,50,40,0.32)" }));
+          gEl.appendChild(svg);
+        }
+
+        // puck B stands on the top slab (child of its bob, so it rides the split)
+        {
+          const pb = document.createElement("div");
+          pb.innerHTML = `
+            <div id="pB-shadow" class="puck-shadow" style="left:-80px;top:10px;width:160px;height:40px;background:radial-gradient(ellipse at 50% 50%, rgba(0,0,0,.55), rgba(0,0,0,0) 70%)"></div>
+            <div id="pB-pos" class="puck-pos" style="left:-150px;top:-270px">
+              <div id="pB-scale" class="puck-scale">
+                <div id="pB-bob" class="puck-bob">
+                  <div id="pB" class="puck">
+                    <div class="puck-glow"></div>
+                    <div class="puck-ring"></div>
+                    <div class="puck-disc"><div class="p-visor"><div class="eye l"></div><div class="eye r"></div></div></div>
+                  </div>
+                </div>
+              </div>
+            </div>`;
+          while (pb.firstElementChild) slabs[0].bob.appendChild(pb.firstElementChild);
+        }
+
+        // feature rows
+        const ROWS = [
+          { top: 640, w1: 140, w2: 92, t: 5.71 },
+          { top: 728, w1: 118, w2: 146, t: 6.07 },
+          { top: 816, w1: 154, w2: 84, t: 6.39 },
+          { top: 904, w1: 128, w2: 110, t: 6.95 },
+        ];
+        const rowEls = ROWS.map((r, i) => {
+          const d = document.createElement("div");
+          d.className = "frow";
+          d.style.top = r.top + "px";
+          d.innerHTML = `<svg viewBox="0 0 48 48"><circle class="ck-c" cx="24" cy="24" r="22" fill="${C.P}"/><path class="ck-p" d="M14 24.5 L21 31.5 L34.5 17" fill="none" stroke="${C.CARD}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div class="bar" style="top:23px;height:13px;width:${r.w1}px"></div>
+            <div class="bar" style="top:45px;height:10px;width:${r.w2}px;opacity:.7"></div>`;
+          $("#rows").appendChild(d);
+          return d;
+        });
+
+        // ================= puck A + dotted path geometry =================
+        const PA = [842, 836]; // puck A centre
+        const PA_S = 0.56;
+        Object.assign($("#pA-pos").style, { left: PA[0] - 150 + "px", top: PA[1] - 150 + "px" });
+        Object.assign($("#pA-shadow").style, { left: PA[0] - 90 + "px", top: PA[1] + 70 + "px", width: "180px", height: "44px" });
+        const ENTRY = [366, 542]; // where the puck dives into the card (hero block)
+        const pathAbs = `M ${PA[0]} ${PA[1]} C ${PA[0] - 20} ${PA[1] + 170}, ${ENTRY[0] + 130} ${ENTRY[1] + 400}, ${ENTRY[0]} ${ENTRY[1]}`;
+        const pathRel = `M 0 0 C -20 170, ${ENTRY[0] + 130 - PA[0]} ${ENTRY[1] + 400 - PA[1]}, ${ENTRY[0] - PA[0]} ${ENTRY[1] - PA[1]}`;
+        $("#travel").setAttribute("d", pathAbs);
+        $("#travel-mask").setAttribute("d", pathAbs);
+        Object.assign($("#ripple").style, { left: ENTRY[0] + "px", top: ENTRY[1] + "px" });
+
+        // ================= timeline =================
+        const tl = gsap.timeline({ paused: true });
+
+        // continuous life
+        tl.fromTo("#grid", { x: 0, y: 0 }, { x: -20, y: -12, duration: D, ease: "none" }, 0);
+        tl.fromTo("#cam", { scale: 1, transformOrigin: "540px 820px" }, { scale: 1.012, duration: D, ease: "none" }, 0);
+
+        // ---------- word entrances (contact frame on the spoken word) ----------
+        for (const w of $$(".line .w")) {
+          const t = parseFloat(w.dataset.t);
+          const kind = w.dataset.kind;
+          if (kind === "first") {
+            tl.fromTo(w, { opacity: 0.55, y: 22, filter: "blur(3px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.28, ease: "power3.out" }, 0);
+          } else if (kind === "hero") {
+            const s = Math.max(0, t - 0.2);
+            const peak = parseFloat(w.dataset.peak || "1.07");
+            gsap.set(w, { transformOrigin: w.dataset.origin || "50% 85%" });
+            tl.fromTo(
+              w,
+              { opacity: 0, y: parseFloat(w.dataset.dy || 90), scale: 0.55, rotation: parseFloat(w.dataset.rot || -7), filter: "blur(10px)" },
+              { opacity: 1, y: -8, scale: peak, rotation: w.dataset.rot ? -1 : 1.5, filter: "blur(0px)", duration: 0.2, ease: "power3.out" },
+              s,
+            );
+            tl.to(w, { y: 0, scale: 1, rotation: 0, duration: 0.32, ease: "back.out(1.6)" }, s + 0.2);
+          } else if (kind === "accent") {
+            const s = Math.max(0, t - 0.16);
+            gsap.set(w, { transformOrigin: "30% 85%" });
+            tl.fromTo(
+              w,
+              { opacity: 0, y: 70, scale: 0.78, rotation: -6, filter: "blur(8px)" },
+              { opacity: 1, y: 0, scale: 1, rotation: 0, filter: "blur(0px)", duration: 0.46, ease: "back.out(2.2)" },
+              s,
+            );
+          } else {
+            const s = Math.max(0, t - 0.13);
+            tl.fromTo(w, { opacity: 0, y: parseFloat(w.dataset.dy || 50), filter: "blur(6px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.36, ease: "power3.out" }, s);
+          }
+        }
+        // strikes draw on the spoken word
+        tl.fromTo("#strike-code", { scaleX: 0 }, { scaleX: 1, duration: 0.24, ease: "power3.out" }, 2.6);
+        tl.fromTo("#strike-info", { scaleX: 0 }, { scaleX: 1, duration: 0.24, ease: "power3.out" }, 3.82);
+        // "code" dims a touch once struck
+        tl.to("#w-code", { opacity: 0.86, duration: 0.3, ease: "power1.out" }, 2.84);
+
+        // phrase exits (fast blur-up, 2 f staggers)
+        tl.to("#a1", { y: -56, opacity: 0, filter: "blur(8px)", duration: 0.2, ease: "power2.in" }, 1.66);
+        tl.to("#a2", { y: -56, opacity: 0, filter: "blur(8px)", duration: 0.2, ease: "power2.in" }, 1.66 + 2 * F);
+        tl.to("#b3", { y: -50, opacity: 0, filter: "blur(8px)", duration: 0.2, ease: "power2.in" }, 4.06);
+        tl.to("#b2", { y: -50, opacity: 0, filter: "blur(8px)", duration: 0.2, ease: "power2.in" }, 4.06 + 2 * F);
+        tl.to("#b1", { y: -50, opacity: 0, filter: "blur(8px)", duration: 0.2, ease: "power2.in" }, 4.06 + 4 * F);
+        tl.to("#c2", { y: -50, opacity: 0, filter: "blur(8px)", duration: 0.2, ease: "power2.in" }, 5.34);
+        tl.to("#c1", { y: -50, opacity: 0, filter: "blur(8px)", duration: 0.2, ease: "power2.in" }, 5.34 + 2 * F);
+
+        // ---------- speaker card: rises in, holds alive all scene ----------
+        gsap.set("#sp-card", { transformPerspective: 1600, transformOrigin: "50% 50%" });
+        tl.fromTo("#sp-card", { opacity: 0.7 }, { opacity: 1, duration: 0.08, ease: "power1.out" }, 0);
+        tl.fromTo("#sp-card", { y: 80 }, { y: 0, duration: 0.45, ease: "power3.out", immediateRender: false }, 0);
+        tl.fromTo("#sp-card", { scale: 0.88 }, { scale: 1, duration: 0.44, ease: "back.out(1.5)", immediateRender: false }, 0);
+        tl.fromTo("#sp-card", { rotationX: 22 }, { rotationX: 5, duration: 0.56, ease: "back.out(1.8)", immediateRender: false }, 0);
+        tl.fromTo("#sp-card", { rotationY: -20 }, { rotationY: -9, duration: 0.5, ease: "power3.out", immediateRender: false }, 0);
+        tl.to("#sp-card", { rotationY: -6, rotationX: 3.5, duration: D - 0.56, ease: "sine.inOut" }, 0.56);
+        tl.fromTo("#sp-vid-wrap", { scale: 1.14 }, { scale: 1, duration: 0.6, ease: "power3.out" }, 0);
+        tl.to("#sp-vid-wrap", { scale: 1.04, duration: D - 0.6, ease: "none" }, 0.6);
+        tl.fromTo("#sp-sheen", { opacity: 0 }, { opacity: 1, duration: 0.1, ease: "power1.out" }, 0.04);
+        tl.fromTo("#sp-sheen", { backgroundPosition: "100% 0" }, { backgroundPosition: "0% 0", duration: 0.6, ease: "power2.inOut", immediateRender: false }, 0.04);
+        tl.to("#sp-sheen", { opacity: 0, duration: 0.2, ease: "power1.in" }, 0.46);
+        tl.fromTo("#sp-float", { y: 0 }, { y: -5, duration: 1.15, ease: "sine.inOut", yoyo: true, repeat: 5 }, 0.45);
+        // second light catch on the payoff
+        tl.fromTo("#sp-sheen", { opacity: 0, backgroundPosition: "100% 0" }, { opacity: 1, duration: 0.1, ease: "power1.out", immediateRender: false }, 6.8);
+        tl.to("#sp-sheen", { backgroundPosition: "0% 0", duration: 0.5, ease: "power2.inOut" }, 6.8);
+
+        // ================= BEAT A: sealed app card rises =================
+        gsap.set("#app-tip", { transformPerspective: 2200, transformOrigin: "50% 50%" });
+        gsap.set("#app-spin", { transformOrigin: "50% 50%" });
+        gsap.set("#app-bump", { transformOrigin: "50% 100%" });
+        tl.fromTo("#app-tip", { opacity: 0.9 }, { opacity: 1, duration: 0.08, ease: "power1.out" }, 0);
+        tl.fromTo("#app-tip", { y: 90 }, { y: 0, duration: 0.5, ease: "power3.out", immediateRender: false }, 0);
+        tl.fromTo("#app-tip", { scale: 0.86 }, { scale: 1, duration: 0.48, ease: "back.out(1.4)", immediateRender: false }, 0);
+        tl.fromTo("#app-tip", { rotationX: 24 }, { rotationX: 5, duration: 0.6, ease: "back.out(1.8)", immediateRender: false }, 0);
+        tl.fromTo("#app-tip", { rotationY: 20 }, { rotationY: 8, duration: 0.55, ease: "power3.out", immediateRender: false }, 0);
+        tl.to("#app-tip", { rotationY: 5, rotationX: 3.5, duration: 3.7, ease: "sine.inOut" }, 0.6);
+        tl.fromTo("#app-float", { y: 0 }, { y: -7, duration: 0.9, ease: "sine.inOut", yoyo: true, repeat: 3 }, 0.6);
+        // padlock lands a beat after the card (parts lag the whole)
+        gsap.set("#lock", { transformOrigin: "50% 50%" });
+        tl.fromTo("#lock", { opacity: 0, scale: 0.3, rotation: -25 }, { opacity: 1, scale: 1, rotation: -6, duration: 0.42, ease: "back.out(2.4)" }, 0.16);
+
+        // ---- puck A: sits beside the card, anticipates, rides the dotted path INTO the card on "inside" ----
+        gsap.set("#pA-scale", { scale: PA_S, transformOrigin: "50% 50%" });
+        gsap.set("#pA", { transformOrigin: "50% 50%" });
+        tl.fromTo("#pA-bob", { y: -10 }, { y: 0, duration: 0.2, ease: "sine.inOut" }, 0);
+        tl.to("#pA", { scaleX: 1.08, scaleY: 0.9, duration: 0.1, ease: "power2.in" }, 0.26);
+        tl.to("#pA", { scaleX: 0.94, scaleY: 1.06, duration: 0.1, ease: "power2.out" }, 0.36);
+        tl.to("#pA", { scaleX: 1, scaleY: 1, duration: 0.12, ease: "sine.out" }, 0.46);
+        tl.fromTo("#pA .puck-ring", { opacity: 0 }, { opacity: 1, duration: 0.1, ease: "power2.out" }, 0.22);
+        tl.fromTo("#pA .eye", { opacity: 0.5 }, { opacity: 1, duration: 0.1, ease: "power2.out" }, 0.22);
+        const mask = $("#travel-mask");
+        const PL = mask.getTotalLength();
+        gsap.set(mask, { attr: { "stroke-dasharray": `${PL} ${PL}`, "stroke-dashoffset": PL } });
+        tl.to(mask, { attr: { "stroke-dashoffset": 0 }, duration: 0.3, ease: "power2.inOut" }, 0.14);
+        tl.fromTo("#travel", { attr: { "stroke-dashoffset": 0 } }, { attr: { "stroke-dashoffset": -84 }, duration: 1.5, ease: "none" }, 0.14);
+        tl.to("#travel", { opacity: 0, duration: 0.24, ease: "power1.in" }, 1.4);
+        tl.to("#pA-pos", { motionPath: { path: pathRel }, duration: 0.24, ease: "power2.inOut" }, 0.36);
+        tl.to("#pA-scale", { scale: 0.26, duration: 0.24, ease: "power2.in" }, 0.36);
+        tl.to("#pA-shadow", { opacity: 0, scale: 0.5, duration: 0.16, ease: "power2.in" }, 0.36);
+        // dives in: puck vanishes into the card, ripple, card takes the weight
+        tl.to("#pA-scale", { scale: 0.05, opacity: 0, duration: 0.07, ease: "power2.in" }, 0.6);
+        tl.fromTo("#ripple", { opacity: 0.9, scale: 0.6 }, { opacity: 0, scale: 3.6, duration: 0.42, ease: "power2.out", immediateRender: false }, 0.6);
+        tl.to("#app-bump", { scaleY: 0.975, scaleX: 1.01, duration: 0.06, ease: "power2.out" }, 0.6);
+        tl.to("#app-bump", { scaleY: 1, scaleX: 1, duration: 0.34, ease: "back.out(2.4)" }, 0.66);
+        // the agent's visor lights up INSIDE the app
+        gsap.set("#visor", { transformOrigin: "50% 50%" });
+        tl.to(".hero-art", { opacity: 0.35, duration: 0.2, ease: "power1.out" }, 0.62);
+        tl.fromTo("#visor", { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1.08, duration: 0.14, ease: "power3.out" }, 0.62);
+        tl.to("#visor", { scale: 1, duration: 0.24, ease: "back.out(2)" }, 0.76);
+        // looking around inside (secondary action through the hold)
+        gsap.set(".veye", { transformOrigin: "50% 50%" });
+        tl.to("#visor-eyes", { x: -16, duration: 0.24, ease: "power2.inOut" }, 1.06);
+        tl.to("#visor-eyes", { x: 18, duration: 0.3, ease: "power2.inOut" }, 1.5);
+        tl.to(".veye", { scaleY: 0.12, duration: 0.05, ease: "power2.in" }, 1.94);
+        tl.to(".veye", { scaleY: 1, duration: 0.08, ease: "power2.out" }, 1.99);
+        tl.to("#visor-eyes", { x: -22, y: -10, duration: 0.24, ease: "power2.inOut" }, 2.4); // glance at the padlock
+        tl.to("#visor-eyes", { x: 0, y: 0, duration: 0.3, ease: "power2.inOut" }, 3.0);
+        tl.to(".veye", { scaleY: 0.12, duration: 0.05, ease: "power2.in" }, 3.3);
+        tl.to(".veye", { scaleY: 1, duration: 0.08, ease: "power2.out" }, 3.35);
+        tl.to("#visor-eyes", { x: -22, y: -10, duration: 0.22, ease: "power2.inOut" }, 3.62);
+        tl.to("#visor-eyes", { x: 0, y: 0, duration: 0.24, ease: "power2.inOut" }, 4.06);
+
+        // the padlock rattles on "code" and again on "information"
+        gsap.set("#shackle", { svgOrigin: "67 50" });
+        tl.to("#lock", {
+          keyframes: [
+            { rotation: -16, duration: 0.05, ease: "power2.out" },
+            { rotation: 6, duration: 0.07, ease: "sine.inOut" },
+            { rotation: -12, duration: 0.07, ease: "sine.inOut" },
+            { rotation: 2, duration: 0.07, ease: "sine.inOut" },
+            { rotation: -6, duration: 0.12, ease: "sine.out" },
+          ],
+        }, 2.62);
+        tl.to("#lock", { scale: 1.08, duration: 0.06, ease: "power2.out" }, 2.62);
+        tl.to("#lock", { scale: 1, duration: 0.24, ease: "back.out(2)" }, 2.68);
+        tl.to("#lock", {
+          keyframes: [
+            { rotation: -13, duration: 0.05, ease: "power2.out" },
+            { rotation: 2, duration: 0.07, ease: "sine.inOut" },
+            { rotation: -9, duration: 0.07, ease: "sine.inOut" },
+            { rotation: -6, duration: 0.1, ease: "sine.out" },
+          ],
+        }, 3.78);
+
+        // ================= BEAT B: scan, unlock, tip back, split =================
+        // eyes widen, scan line sweeps the card ("figure out")
+        tl.to(".veye", { scale: 1.25, duration: 0.1, ease: "power2.out" }, 4.24);
+        tl.fromTo("#scan", { opacity: 0, y: 0 }, { opacity: 1, duration: 0.05, ease: "none" }, 4.26);
+        tl.fromTo("#scan", { y: 0 }, { y: CARDH + 150, duration: 0.26, ease: "power1.inOut", immediateRender: false }, 4.26);
+        tl.to(".hero-art", { opacity: 1, duration: 0.15, ease: "power1.out" }, 4.3);
+        // padlock unlocks and pops off
+        tl.to("#shackle", { y: -12, rotation: 34, duration: 0.12, ease: "back.out(2)" }, 4.32);
+        tl.to("#lock", { scale: 1.14, rotation: 4, duration: 0.08, ease: "power2.out" }, 4.34);
+        tl.to("#lock", { x: 40, y: -10, scale: 0.35, rotation: 20, opacity: 0, duration: 0.16, ease: "power2.in" }, 4.44);
+        // visor leaves the card (the agent climbs out on top)
+        tl.to("#visor", { opacity: 0, scale: 0.6, duration: 0.1, ease: "power2.in" }, 4.44);
+
+        // card tips back into the axonometric pose of the top slab
+        const TIP0 = 4.42,
+          TIP = 0.26;
+        const appC = [CARDX + CARDW / 2, CARDY + CARDH / 2];
+        const [s0x, s0y] = slabC(0);
+        tl.to("#app-tip", { rotationX: 60, rotationY: 0, y: 0, transformPerspective: 30000, duration: TIP, ease: "power2.inOut" }, TIP0);
+        tl.to("#app-spin", { rotation: (ALPHA * 180) / Math.PI, scaleX: SW / CARDW, scaleY: SD / CARDH, duration: TIP, ease: "power2.inOut" }, TIP0);
+        // x arcs right first so the swinging corner stays inside the zone
+        tl.to("#app-pos", {
+          keyframes: [
+            { x: 10, duration: TIP * 0.55, ease: "sine.out" },
+            { x: s0x - appC[0], duration: TIP * 0.45, ease: "sine.inOut" },
+          ],
+        }, TIP0);
+        tl.to("#app-pos", { y: s0y - appC[1], duration: TIP, ease: "power3.inOut" }, TIP0);
+        tl.to("#app-float", { y: 0, duration: 0.2, ease: "sine.out" }, TIP0);
+        // crossfade into slab 01 (deep, with the same UI on its top face)
+        const T01 = TIP0 + TIP; // 4.68 contact
+        tl.fromTo(slabs[0].el, { opacity: 0 }, { opacity: 1, duration: 0.06, ease: "none" }, T01 - 0.06);
+        tl.to("#app-pos", { opacity: 0, duration: 0.06, ease: "none" }, T01 - 0.03);
+        // contact: squash + settle
+        gsap.set(slabs.map((s) => s.body), { transformOrigin: "0px 60px" });
+        tl.fromTo(slabs[0].body, { scaleY: 1 }, { scaleY: 0.95, scaleX: 1.02, duration: 2 * F, ease: "power2.out", immediateRender: false }, T01);
+        tl.to(slabs[0].body, { scaleY: 1, scaleX: 1, duration: 8 * F, ease: "back.out(2.2)" }, T01 + 2 * F);
+        // label slides in along the face, 2 f after contact
+        const labelIn = (k, t) =>
+          tl.fromTo(slabs[k].label, { opacity: 0, x: -34 * cA, y: -34 * sA * sB }, { opacity: 1, x: 0, y: 0, duration: 0.3, ease: "power3.out" }, t);
+        labelIn(0, T01 + 2 * F);
+
+        // puck B pops out of the top slab and lands on it
+        gsap.set("#pB-scale", { scale: 0.44, transformOrigin: "50% 100%" });
+        gsap.set("#pB", { transformOrigin: "50% 100%" });
+        tl.fromTo("#pB-pos", { opacity: 0 }, { opacity: 1, duration: 0.05, ease: "none" }, T01);
+        tl.fromTo("#pB-pos", { y: 30 }, { y: -70, duration: 0.14, ease: "power2.out", immediateRender: false }, T01);
+        tl.to("#pB-pos", { y: 0, duration: 0.13, ease: "power2.in" }, T01 + 0.14);
+        tl.fromTo("#pB", { scale: 0.3 }, { scale: 1, duration: 0.18, ease: "back.out(2)", immediateRender: false }, T01);
+        const PB_LAND = T01 + 0.27;
+        tl.fromTo("#pB-shadow", { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.27, ease: "power2.in" }, T01);
+        tl.to("#pB", { scaleX: 1.1, scaleY: 0.88, duration: 2 * F, ease: "power2.out" }, PB_LAND);
+        tl.to("#pB", { scaleX: 1, scaleY: 1, duration: 0.3, ease: "back.out(2.6)" }, PB_LAND + 2 * F);
+        tl.fromTo("#pB .eye", { opacity: 0.4 }, { opacity: 1, duration: 0.1, ease: "power2.out" }, PB_LAND);
+
+        // slabs 02 and 03 split out from under the stack, one per step
+        const split = (k, tc) => {
+          const sl = slabs[k];
+          tl.fromTo(sl.el, { opacity: 0 }, { opacity: 1, duration: 0.05, ease: "none" }, tc - 0.2);
+          tl.fromTo(sl.el, { y: -PITCH }, { y: 0, duration: 0.2, ease: "power2.in", immediateRender: true }, tc - 0.2);
+          tl.to(sl.el, { y: k === 2 ? 9 : 7, duration: 3 * F, ease: "power2.out" }, tc);
+          tl.to(sl.el, { y: 0, duration: 8 * F, ease: "sine.inOut" }, tc + 3 * F);
+          // the slabs above lift a touch as it separates (they spring apart)
+          for (let j = k - 1; j >= 0; j--) {
+            const d = (k - 1 - j) * F;
+            tl.fromTo(slabs[j].bob, { y: 0 }, { y: -8 * Math.pow(0.75, k - 1 - j), duration: 3 * F, ease: "power2.out", immediateRender: false }, tc + d);
+            tl.fromTo(slabs[j].bob, { y: -8 * Math.pow(0.75, k - 1 - j) }, { y: 0, duration: 8 * F, ease: "sine.inOut", immediateRender: false }, tc + d + 3 * F);
+          }
+          labelIn(k, tc + 2 * F);
+        };
+        split(1, 5.1);
+        split(2, 5.6);
+        tl.fromTo("#ground", { opacity: 0, scale: 0.8, transformOrigin: "0px 0px" }, { opacity: 1, scale: 1, duration: 0.3, ease: "power2.out" }, 5.4);
+        // hold life: the stack breathes, the puck floats and blinks
+        tl.to("#slabs", { y: -5, duration: 0.6, ease: "sine.inOut", yoyo: true, repeat: 1 }, 5.85);
+        tl.to("#pB-bob", { y: -6, duration: 0.42, ease: "sine.inOut", yoyo: true, repeat: 3 }, 5.0);
+        gsap.set("#pB .eye", { transformOrigin: "50% 50%" });
+        tl.to("#pB .eye", { scaleY: 0.12, duration: 0.05, ease: "power2.in" }, 5.95);
+        tl.to("#pB .eye", { scaleY: 1, duration: 0.08, ease: "power2.out" }, 6.0);
+
+        // ---------- feature rows tick in (check contact on each word) ----------
+        rowEls.forEach((el, i) => {
+          const t = ROWS[i].t;
+          const s = t - 0.24;
+          gsap.set(el, { transformOrigin: "0% 50%" });
+          tl.fromTo(el, { opacity: 0 }, { opacity: 1, duration: 0.08, ease: "power1.out" }, s);
+          tl.fromTo(el, { x: 22 }, { x: 0, duration: 0.34, ease: "power3.out", immediateRender: false }, s);
+          tl.fromTo(el, { y: 24 }, { y: 0, duration: 0.34, ease: "power1.out", immediateRender: false }, s);
+          tl.fromTo(el, { scale: 0.86, rotation: 4 }, { scale: 1, rotation: 0, duration: 0.38, ease: "back.out(1.7)", immediateRender: false }, s);
+          const c = el.querySelector(".ck-c");
+          const p = el.querySelector(".ck-p");
+          const pl = p.getTotalLength();
+          gsap.set(c, { svgOrigin: "24 24" });
+          gsap.set(p, { attr: { "stroke-dasharray": `${pl} ${pl}` } });
+          tl.fromTo(c, { scale: 0 }, { scale: 1, duration: 0.2, ease: "back.out(2.6)" }, t - 0.14);
+          tl.fromTo(p, { attr: { "stroke-dashoffset": pl } }, { attr: { "stroke-dashoffset": 0 }, duration: 0.16, ease: "power2.out" }, t - 0.06);
+          tl.fromTo(el.querySelectorAll(".bar"), { scaleX: 0, transformOrigin: "0% 50%" }, { scaleX: 1, duration: 0.3, ease: "power3.out", stagger: 2 * F }, s + 0.08);
+        });
+
+        // ---------- payoff on "works." ----------
+        tl.fromTo("#punch", { scale: 1, transformOrigin: "580px 1380px" }, { scale: 1.008, duration: 0.4, ease: "power2.out" }, 6.8);
+        tl.fromTo("#pB .puck-ring", { opacity: 0 }, { opacity: 1, duration: 0.1, ease: "power2.out" }, 6.86);
+        tl.fromTo("#pB .puck-glow", { opacity: 0, scale: 0.6 }, { opacity: 0.9, scale: 1.05, duration: 0.24, ease: "power3.out" }, 6.86);
+        tl.to("#pB-bob", { y: -14, duration: 0.1, ease: "power2.out" }, 6.86);
+        tl.to("#pB-bob", { y: 0, duration: 0.24, ease: "back.out(2.2)" }, 6.96);
+
+        window.__timelines["main"] = tl;
+        if (window.__hfForceTimelineRebind) window.__hfForceTimelineRebind();
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,119 @@
+<!doctype html>
+<!-- adnaan-reel scene starter: FULL-SCREEN SPEAKER — HE fills the frame edge to edge (no card, no tilt), kinetic
+     words land low on his chest / the bottom third with the paper glow. The minimal beat: nothing else on screen
+     unless the brief names ONE object. Use for the hook, verdict/opinion lines, the wrap-up, the CTA — 2–4 per reel,
+     alternating with paper-world scenes. (flashcheck knows this window is not paper: type "fullscreen" in slots.json.)
+     Optional: add <div class="paper-strip"></div> before the words if the background behind the words is busy.
+     Optional mid-scene version: start as a portrait card and call P.growFull("#spk", t) on the hero word. -->
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>v14_lockin</title>
+    <link rel="stylesheet" href="brand.css" />
+    <link rel="stylesheet" href="paper.css" />
+    <link rel="stylesheet" href="marker.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+    <script src="paper.js"></script>
+    <script src="marker.js"></script>
+  </head>
+  <body data-face="0.42">
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="3.4833">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+
+      <!-- full-screen speaker: the whole frame, slow push only -->
+      <div id="spk" class="spk full" data-push="1.03">
+        <div class="spk-card">
+          <div class="spk-vid"><video id="speaker" class="clip" src="assets/speaker.mp4" muted playsinline data-start="0" data-duration="3.4833" data-track-index="1"></video></div>
+        </div>
+      </div>
+      <div class="paper-strip" id="strip" style="height:800px;background:linear-gradient(180deg,rgba(228,222,217,0) 0%,rgba(228,222,217,.78) 13%,rgba(228,222,217,.9) 30%,rgba(228,222,217,.92) 100%)"></div>
+
+      <div id="cam"><div id="punch">
+        <div id="spot"></div>
+        <!-- words sit low, on the paper strip, never over the face -->
+        <div class="line hero ocean kin" id="lockin" data-x="76" data-base="1322" data-size="230" data-fit="690">
+          <span class="w" data-t="0.64" data-hero data-peak="1.1">lock</span><span class="w gap-s" data-t="1.12" data-hero data-peak="1.1">in</span>
+        </div>
+        <div class="line sup ink kin" id="myfriend" data-right="934" data-base="1446" data-size="110">
+          <span class="w" data-t="1.34" data-pop data-rise="22">my</span><span class="w gap-s" data-t="1.66" data-pop data-rise="22">friend</span>
+        </div>
+      </div></div>
+    </div>
+    <style>
+      #spot { position: absolute; left: 640px; top: 1040px; width: 420px; height: 420px; border-radius: 50%; opacity: 0; pointer-events: none;
+        background: radial-gradient(circle at 50% 50%, rgba(228,222,217,.78) 0%, rgba(228,222,217,.66) 38%, rgba(228,222,217,0) 70%); }
+    </style>
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const P = await Paper.init({ extraFonts: ['700 60px "Caveat"'] });
+        const M = Marker.init(P);
+        const { tl, D, F } = P;
+        const NS = "http://www.w3.org/2000/svg";
+
+        // ---- the padlock (one object): red marker, drawn beside "lock in", never over his face
+        const CX = 850, BX0 = 774, BX1 = 926, BY0 = 1215, BY1 = 1352;       // body box
+        const SX0 = 804, SX1 = 896, SY = BY0, SR = (SX1 - SX0) / 2, SYT = SY - 92; // shackle legs + arch top
+        const pl = document.createElementNS(NS, "g");                      // wrapper: swings as one
+        M.layer.appendChild(pl);
+        function rrect(x0, y0, x1, y1, r) {
+          const pts = [];
+          const arc = (cx, cy, a0) => { for (let k = 0; k <= 4; k++) { const a = a0 + (k / 4) * Math.PI / 2; pts.push([cx + Math.cos(a) * r, cy + Math.sin(a) * r]); } };
+          arc(x0 + r, y0 + r, Math.PI); arc(x1 - r, y0 + r, Math.PI * 1.5); arc(x1 - r, y1 - r, 0); arc(x0 + r, y1 - r, Math.PI * 0.5);
+          pts.push([x0, y0 + r + 10], [x0, y0 + r - 14]);                  // the loop closes with a small overshoot
+          return pts;
+        }
+        const shacklePts = [];
+        shacklePts.push([SX0, SY + 8], [SX0, SY - 40], [SX0 + 1, SYT + SR]);
+        for (let k = 1; k <= 8; k++) { const a = Math.PI + (k / 8) * Math.PI; shacklePts.push([CX + Math.cos(a) * SR, SYT + SR + Math.sin(a) * SR]); }
+        shacklePts.push([SX1, SYT + SR + 4], [SX1, SY - 30], [SX1, SY + 4]);
+
+        const body = M.line(rrect(BX0, BY0, BX1, BY1, 26), 0.05, { width: 12, dur: 0.30, parent: pl, amp: 2.6 });
+        const shackle = M.line(shacklePts, 0.20, { width: 12, dur: 0.22, parent: pl, amp: 2.2 });
+        const keyC = M.circle(CX, BY0 + 52, 13, 13, 0.36, { width: 10, dur: 0.14, parent: pl, turns: 1.05 });
+        const keyL = M.line([[CX, BY0 + 66], [CX + 1, BY0 + 98]], 0.46, { width: 10, dur: 0.08, parent: pl, amp: 1 });
+
+        // shackle OPEN from the start (right leg lifted clear), pivoting on its left leg
+        const PIV = SX0 + " " + SY;
+        gsap.set(shackle.g, { svgOrigin: PIV });
+        tl.set(shackle.g, { rotation: -23, y: -14 }, 0);
+        tl.to(shackle.g, { rotation: -26, y: -16, duration: 0.2, ease: "sine.inOut" }, 0.4);         // open + a nervous wobble
+        // anticipation: lift higher (wind-up), then SNAP shut on "lock" (contact 0.64)
+        tl.to(shackle.g, { rotation: -36, y: -30, duration: 0.1, ease: "power2.out" }, 0.5);
+        tl.to(shackle.g, { rotation: 0, y: 0, duration: 0.06, ease: "power4.in" }, 0.58);
+        // thunk: body squashes on contact, springs back; whole lock swings off the impact
+        gsap.set(body.g, { svgOrigin: CX + " " + BY1 });
+        tl.to(body.g, { scaleX: 1.06, scaleY: 0.93, duration: 2 * F, ease: "power2.out" }, 0.64)
+          .to(body.g, { scaleX: 1, scaleY: 1, duration: 0.28, ease: "back.out(3)" }, 0.64 + 2 * F);
+        gsap.set(pl, { svgOrigin: CX + " " + (SYT + 30) });
+        tl.to(pl, { rotation: 5, duration: 0.1, ease: "power2.out" }, 0.64)
+          .to(pl, { rotation: -3.2, duration: 0.18, ease: "sine.inOut" }, 0.74)
+          .to(pl, { rotation: 1.6, duration: 0.2, ease: "sine.inOut" }, 0.92)
+          .to(pl, { rotation: 0, duration: 0.24, ease: "sine.inOut" }, 1.12);
+        P.shake(0.64, 4);                                                // the one exaggerated beat: tiny camera shake
+        P.punch(0.64, { scale: 1.012, origin: "850px 1280px" });
+
+        // click burst: three marker ticks radiate off the shackle at the snap (secondary action)
+        const ticks = [
+          [[CX - 78, SYT + 6], [CX - 104, SYT - 12]], [[CX, SYT - 22], [CX, SYT - 52]], [[CX + 78, SYT + 6], [CX + 104, SYT - 12]],
+        ];
+        ticks.forEach((pts, i) => M.line(pts, 0.66 + i * 0.03, { width: 9, dur: 0.1, amp: 0.8, parent: pl }));
+
+        // staging: a soft paper spot behind the lock so red reads over the dark polo
+        tl.to("#spot", { opacity: 1, duration: 0.3, ease: "power2.out" }, 0.0);
+
+        // double underline scribbles under "lock in" on "in" (1.2)
+        const U0 = 82, U1 = 700, UY = 1322 + 28;
+        M.underline(U0, U1, UY, 1.2, { double: true, width: 12, dur: 0.46 });
+
+        // end hold (1.9 → end): the drawing keeps boiling, "lock in" breathes 1 %, the lock sways a hair
+        const reps = Math.max(1, Math.floor((D - 1.9) / 0.8));
+        gsap.set("#lockin", { transformOrigin: "0% 80%" });
+        tl.fromTo("#lockin", { scale: 1 }, { scale: 1.012, duration: 0.8, ease: "sine.inOut", yoyo: true, repeat: reps, immediateRender: false }, 1.9);
+        tl.fromTo(pl, { rotation: 0 }, { rotation: 1.2, duration: 0.8, ease: "sine.inOut", yoyo: true, repeat: reps, immediateRender: false }, 1.9);
+      })();
+    </script>
+  </body>
+</html>

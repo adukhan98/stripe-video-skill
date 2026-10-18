@@ -1,0 +1,175 @@
+<!doctype html>
+<!-- adnaan-reel scene: EXPLAINER (bespoke) — v15_gauge. THE GAUGE (reel-07 recurring drawing 2, first draw):
+     a tall hand-drawn ink bar draws itself bottom→top with its ticks ticking on ("AI can do"), "so much more" is
+     written at its top + a red spark pops ("more", hero), a tiny red hatch fills the bottom ("what most of us
+     ask it for") and a red curly brace measures the huge gap up the right side. v16 opens with the final state.
+     Keep data-duration (160 f). -->
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>v15_gauge</title>
+    <link rel="stylesheet" href="brand.css" />
+    <link rel="stylesheet" href="paper.css" />
+    <link rel="stylesheet" href="marker.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+    <script src="paper.js"></script>
+    <script src="marker.js"></script>
+    <style>
+      @font-face { font-family: "Inter Tight"; src: url("fonts/InterTight-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Inter"; src: url("fonts/Inter-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Caveat"; src: url("fonts/Caveat-Variable.ttf") format("truetype"); font-weight: 400 700; font-style: normal; font-display: block; }
+    </style>
+  </head>
+  <body data-face="0.41">
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="5.3167">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+      <div id="cam"><div id="punch">
+
+        <!-- MODE A (0–1.40): HE edge to edge in the top half; "the biggest takeaway" on the paper below.
+             1.40 P.splitOut → MODE B: the gauge + the left-column words own the whole canvas. -->
+        <div id="spk" class="spk split" data-h="960">
+          <div class="spk-card">
+            <div class="spk-vid"><video id="speaker" class="clip" src="assets/speaker.mp4" muted playsinline data-start="0" data-duration="5.3167" data-track-index="1"></video></div>
+            <div class="spk-sheen"></div>
+          </div>
+        </div>
+
+        <!-- BEAT A (Mode A, bottom band y 1000–1480) -->
+        <div class="line sup" data-x="96" data-base="1078" data-size="96" data-exit="1.3">
+          <span class="w" data-t="0.25">the</span>
+        </div>
+        <div id="bigLine" class="line" data-x="150" data-base="1236" data-size="200" data-exit="1.3" data-exit-lag="1">
+          <span id="biggest" class="w hero ocean" data-t="0.49" data-hero>biggest</span>
+        </div>
+        <div class="line" data-x="80" data-base="1432" data-size="160" data-exit="1.3" data-exit-lag="2">
+          <span class="w hero ink" data-t="0.91" data-pop data-rise="36">takeaway</span>
+        </div>
+
+        <!-- HERO (Mode B): the words sit at the TOP of the left column, next to the top of the gauge -->
+        <div class="line sup" data-x="92" data-base="562" data-size="126" data-exit="3.45">
+          <span class="w" data-t="1.77" data-pop>AI</span><span class="w gap-s" data-t="2.07">can</span><span class="w gap-s" data-t="2.25">do</span>
+        </div>
+        <div class="line sup" data-x="84" data-base="724" data-size="130" data-exit="3.56" data-exit-lag="2">
+          <span class="w" data-t="2.61">so</span><span class="w gap-s" data-t="2.87">much</span>
+        </div>
+        <div id="moreLine" class="line" data-x="92" data-base="910" data-size="230" data-exit="3.56">
+          <span id="more" class="w hero ocean" data-t="3.19" data-hero>more</span>
+        </div>
+
+        <!-- BEAT C (Mode B): the words sit at the BOTTOM of the left column, next to the tiny hatch -->
+        <div class="line sup" data-x="92" data-base="1062" data-size="110">
+          <span class="w" data-t="3.75">what</span><span class="w gap-s" data-t="4.03" data-accent>most</span>
+        </div>
+        <div class="line sup" data-x="220" data-base="1176" data-size="110">
+          <span class="w" data-t="4.17">of</span><span class="w gap-s" data-t="4.35" data-pop>us</span>
+        </div>
+        <div class="line sup" data-x="84" data-base="1296" data-size="120">
+          <span class="w" data-t="4.69" data-pop>ask</span><span class="w gap-s" data-t="4.89">it</span><span class="w gap-s" data-t="5.19">for</span>
+        </div>
+
+      </div></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+
+      // ================================================================================================
+      // THE GAUGE — reel-07 recurring drawing 2 (geometry + seeds fixed in SHARED.md). v16: copy this
+      // function VERBATIM and call   gauge(M, P, { outline: 0, notes: 0, spark: 0, hatch1: 0, hatch2: 0, askNote: 0, brace: 0 })
+      // to open with the final state already drawn (every part at <= 0 = drawn at frame 0, boiling).
+      // ================================================================================================
+      function gauge(M, P, T) {
+        const { tl, F } = P;
+        const X0 = 680, X1 = 840, Y0 = 340, Y1 = 1420, R = 70, CX = 760;
+        const arc = (cx, cy, a0, a1, n = 6) => Array.from({ length: n + 1 }, (_, k) => {
+          const a = ((a0 + (a1 - a0) * (k / n)) * Math.PI) / 180;
+          return [cx + Math.cos(a) * R, cy + Math.sin(a) * R];
+        });
+        const out = {};
+        // 1. outline: two halves from the bottom centre UP to the top centre, drawn at the same time (seed 901 / 903)
+        const LEFT = [[CX, Y1], ...arc(X0 + R, Y1 - R, 90, 180), [X0, Y0 + R + 470], ...arc(X0 + R, Y0 + R, 180, 270), [CX, Y0]];
+        const RIGHT = [[CX, Y1], ...arc(X1 - R, Y1 - R, 90, 0), [X1, Y0 + R + 470], ...arc(X1 - R, Y0 + R, 0, -90), [CX, Y0]];
+        const OUT_DUR = 0.52;
+        out.left = M.line(LEFT, T.outline, { color: "ink", width: 11, amp: 2.4, dur: OUT_DUR, seed: 901 });
+        out.right = M.line(RIGHT, T.outline, { color: "ink", width: 11, amp: 2.4, dur: OUT_DUR, seed: 903 });
+        if (T.outline > 0) {
+          // the hand accelerates up the long straight and eases into the top (sine.inOut overrides the default power2.out)
+          [...out.left.paths, ...out.right.paths].forEach((p) => {
+            const len = p.getTotalLength() + 2;
+            tl.fromTo(p, { strokeDashoffset: len }, { strokeDashoffset: 0, duration: OUT_DUR, ease: "sine.inOut", immediateRender: false }, T.outline);
+          });
+        }
+        // 2. ticks on the LEFT edge (x 650→680), each ticking on 1 f after the pen passes its height (seeds 931–935)
+        const HALF = 10 + (Math.PI / 2) * R + (Y1 - Y0 - 2 * R) + (Math.PI / 2) * R + 10;
+        out.ticks = [1240, 1060, 880, 700, 520].map((y, i) => {
+          const p = (10 + (Math.PI / 2) * R + (Y1 - R - y)) / HALF;              // fraction of the half-stroke at height y
+          const u = Math.acos(1 - 2 * p) / Math.PI;                                   // invert sine.inOut
+          const at = T.outline > 0 ? T.outline + u * OUT_DUR + F : T.outline;
+          return M.line([[650, y + 1], [681, y]], at, { color: "ink", width: 9, amp: 0.8, dur: 0.07, seed: 931 + i });
+        });
+        out.tickTimes = out.ticks.map((_, i) => T.outline + (Math.acos(1 - 2 * ((10 + (Math.PI / 2) * R + (Y1 - R - [1240, 1060, 880, 700, 520][i])) / HALF)) / Math.PI) * OUT_DUR + F);
+        // 3. TOP label: "so much more" (Caveat ink 92 px), right end at x 646, centred y ~380
+        out.top = M.note("so much more", 0, 340, T.notes, { size: 92, rot: -4, color: "ink", cps: 19 });
+        out.top.style.left = 646 - out.top.offsetWidth + "px";
+        // 4. spark above the bar top (seeds 905–907): three red flicks fanning up, top ≥ y 300
+        const SP = [[[CX, 330], [CX + 1, 303]], [[CX - 24, 333], [CX - 44, 312]], [[CX + 24, 333], [CX + 44, 312]]];
+        out.spark = SP.map((pts, i) => M.line(pts, T.spark > 0 ? T.spark + i * 2 * F : T.spark, { width: 9, amp: 0.8, dur: 0.07, seed: 905 + i }));
+        // 5. BOTTOM fill: red marker hatch of the bar polygon y 1340–1420 = "what most of us ask it for"
+        //    two quick passes: seed 911 (−32°) then seed 910 (+38°, cross-hatch). v16 floods with 912–919.
+        out.hatchPoly = [[X0, 1340], ...arc(X0 + R, Y1 - R, 180, 90), ...arc(X1 - R, Y1 - R, 90, 0), [X1, 1340]];
+        out.hatch1 = M.hatch(out.hatchPoly, T.hatch1, { seed: 911, spacing: 19, angle: -32, dur: 0.2 });
+        out.hatch2 = M.hatch(out.hatchPoly, T.hatch2, { seed: 910, spacing: 24, angle: 38, dur: 0.18, width: 11 });
+        // 6. red-dark note "ask it for" left of the hatch (84 px), right end at x 650, centred y ~1380
+        out.ask = M.note("ask it for", 0, 1338, T.askNote, { size: 84, rot: -4, cps: 20 });
+        out.ask.style.left = 650 - out.ask.offsetWidth + "px";
+        // 7. GAP brace: red curly brace on the RIGHT of the bar, x 860–920, drawn UP from y 1330 to y 360 (seeds 921 / 923)
+        const NX = 920, NY = 845, SX = 889;
+        const BR_LO = [[860, 1330], [877, 1325], [886, 1310], [SX, 1286], [SX, 1080], [SX, 905], [893, 872], [905, 854], [NX, NY]];
+        const BR_HI = [[NX, NY], [905, 836], [893, 818], [SX, 786], [SX, 600], [SX, 404], [886, 380], [877, 365], [860, 360]];
+        out.braceLo = M.line(BR_LO, T.brace, { width: 11, amp: 1.6, dur: 0.24, seed: 921 });
+        out.braceHi = M.line(BR_HI, T.brace > 0 ? T.brace + 0.24 + F : T.brace, { width: 11, amp: 1.6, dur: 0.24, seed: 923 });
+        return out;
+      }
+
+      (async () => {
+        const P = await Paper.init({ extraFonts: ['700 60px "Caveat"'] });
+        const M = Marker.init(P);
+        const { tl, D, F, $, $$ } = P;
+
+        // ---------------------------------------------------------------- BEAT A
+        // red underline under "biggest" (below the gg descenders), erased with the word
+        const bw = $("#biggest"), bl = $("#bigLine");
+        const bx0 = bl.offsetLeft + bw.offsetLeft, bx1 = bx0 + bw.offsetWidth;
+        const ul = M.underline(bx0 + 14, bx1 - 18, 1304, 0.6, { width: 11, dur: 0.24, seed: 1501 });
+        M.erase(ul, 1.3, 0.12);
+
+        // ---------------------------------------------------------------- THE GAUGE (hero)
+        const T = { outline: 1.66, notes: 2.5, spark: 3.08, hatch1: 3.9, hatch2: 4.2, askNote: 4.52, brace: 4.72 };
+        const G = gauge(M, P, T);
+        window.__gauge = { T, tickTimes: G.tickTimes };
+
+        // MODE A → MODE B: the footage band dips 3 f, then shoots up out of the frame (gone by 1.70, before "AI")
+        P.splitOut("#spk", 1.4);
+
+        // spark pop on "more": the three flicks spring out from the bar top (scale from the bar top, overshoot, settle)
+        const sparkG = G.spark.map((s) => s.g);
+        sparkG.forEach((g) => gsap.set(g, { svgOrigin: "760 336" }));
+        tl.fromTo(sparkG, { scale: 0.3 }, { scale: 1.18, duration: 0.14, ease: "power3.out", immediateRender: false }, T.spark);
+        tl.to(sparkG, { scale: 1, duration: 0.34, ease: "back.out(2.4)" }, T.spark + 0.14);
+
+        // HERO beat on "more": punch + 3 px shake; then "more" keeps growing a little (type that performs)
+        P.punch(3.19, { scale: 1.008, origin: "510px 900px", dur: 0.3 });
+        P.shake(3.19, 3);
+        gsap.set("#moreLine", { transformOrigin: "0% 100%" });
+        tl.to("#moreLine", { scale: 1.04, duration: 0.4, ease: "sine.out" }, 3.3);
+
+        // the hatch is "almost nothing": after its passes it gives one tiny squash (shape, from its bottom)
+        const hg = [G.hatch1.g, G.hatch2.g];
+        hg.forEach((g) => gsap.set(g, { svgOrigin: "760 1420" }));
+        tl.to(hg, { scaleY: 0.86, scaleX: 1.04, duration: 3 * F, ease: "power2.in" }, 4.42);
+        tl.to(hg, { scaleY: 1, scaleX: 1, duration: 9 * F, ease: "back.out(2.2)" }, 4.42 + 3 * F);
+      })();
+    </script>
+  </body>
+</html>

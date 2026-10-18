@@ -1,0 +1,55 @@
+<!doctype html>
+<!-- adnaan-reel scene starter: FULL-BLEED DEMO — a user screen recording (hf/assets/demo.mp4) fills the frame
+     (the only non-paper scene: flashcheck --allow its window); small speaker card top-right; kinetic phrase at the bottom
+     over a paper strip. Replace the recording name, data-start offset, words. -->
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>demo</title>
+    <link rel="stylesheet" href="brand.css" />
+    <link rel="stylesheet" href="paper.css" />
+    <link rel="stylesheet" href="marker.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+    <script src="paper.js"></script>
+    <script src="marker.js"></script>
+    <style>
+      #demo { position: absolute; inset: 0; width: 1080px; height: 1920px; object-fit: cover; background: #000; }
+      #strip { position: absolute; left: 0; right: 0; bottom: 0; height: 520px; background: linear-gradient(180deg, rgba(228,222,217,0) 0%, rgba(228,222,217,.96) 30%, var(--brand-background) 100%); }
+    </style>
+  </head>
+  <body data-face="0.43">
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="6.000">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+      <video id="demo" class="clip" src="assets/demo.mp4" muted playsinline data-start="0" data-duration="6.000" data-track-index="2"></video>
+      <div id="strip"></div>
+      <div id="cam"><div id="punch">
+        <div class="spk small" data-x="620" data-y="320" data-w="400" data-h="278" data-ry="-8">
+          <div class="spk-card">
+            <div class="spk-vid"><video id="speaker" class="clip" src="assets/speaker.mp4" muted playsinline data-start="0" data-duration="6.000" data-track-index="1"></video></div>
+            <div class="spk-sheen"></div>
+          </div>
+        </div>
+        <div class="line sup" data-x="76" data-base="1580" data-size="90">
+          <span class="w" data-t="0.4">watch</span><span class="w gap-s" data-t="0.6">it</span>
+          <span class="w hero ocean gap-s" style="font-size: 170px" data-t="1.0" data-hero data-punch="1.0">build</span>
+        </div>
+        <div class="line sup" data-x="76" data-base="1740" data-size="84">
+          <span class="w" data-t="1.4">the</span><span class="w gap-s" data-t="1.6">whole</span><span class="w hero ink gap-s" style="font-size: 120px" data-t="2.0" data-pop>thing</span>
+        </div>
+      </div></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const P = await Paper.init({ extraFonts: ['700 60px "Caveat"'] });
+        const M = Marker.init(P);   // hand-drawn marker layer (hf/marker.js header): loops, underlines, arrows, highlighter, notes
+        const { tl, D } = P;
+        // the recording pushes in slowly (secondary action) — keep it inside the frame
+        gsap.set("#demo", { transformOrigin: "50% 40%" });
+        tl.fromTo("#demo", { scale: 1.0 }, { scale: 1.04, duration: D, ease: "none" }, 0);
+      })();
+    </script>
+  </body>
+</html>

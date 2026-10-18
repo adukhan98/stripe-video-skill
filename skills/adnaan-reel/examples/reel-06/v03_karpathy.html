@@ -1,0 +1,275 @@
+<!doctype html>
+<!-- v03_karpathy: CHAPTER + REAL POST (bespoke). Beat A: Karpathy's real avatar as a taped polaroid, his name, OpenAI → Anthropic
+     with a red marker arrow between the official logo chips. Beat B: the REAL X post (header + "sharp funnel" strip) taped on,
+     the real stats strip slides out from under it, "6.2m Views" is underlined and rolls out as a kinetic number, a hand-drawn
+     spectrum line sets up the funnel. Runtime (paper.js) + marker layer (marker.js) untouched. -->
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>v03_karpathy</title>
+    <link rel="stylesheet" href="brand.css" />
+    <link rel="stylesheet" href="paper.css" />
+    <link rel="stylesheet" href="marker.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+    <script src="paper.js"></script>
+    <script src="marker.js"></script>
+    <style>
+      @font-face { font-family: "Inter Tight"; src: url("fonts/InterTight-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Inter"; src: url("fonts/Inter-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Caveat"; src: url("fonts/Caveat-Variable.ttf") format("truetype"); font-weight: 400 700; font-style: normal; font-display: block; }
+
+      /* polaroid of the real avatar (move wrapper > tilted frame) */
+      #polaW { position: absolute; left: 96px; top: 322px; width: 360px; height: 420px; }
+      #pola { position: absolute; inset: 0; background: var(--brand-card); border-radius: 6px;
+        box-shadow: 0 30px 46px -14px rgba(60, 50, 40, 0.34), 0 3px 6px rgba(60, 50, 40, 0.14); }
+      #pola .ph { position: absolute; left: 20px; top: 20px; width: 320px; height: 320px; overflow: hidden; border-radius: 2px;
+        box-shadow: inset 0 0 0 1px rgba(20, 20, 20, 0.06); }
+      #pola .ph img { display: block; width: 100%; height: 100%; }
+
+      #spkW { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+
+      /* official logo chips (bigger than the runtime default so the names read) */
+      .chip.big { height: 120px; padding: 0 38px 0 22px; border-radius: 60px; gap: 18px; font-size: 56px; }
+      .chip.big img { width: 72px; height: 72px; border-radius: 18px; }
+      #chipAF { position: absolute; left: 486px; top: 1300px; width: 0; height: 0; }
+      #chipAW { position: absolute; left: 0; top: 0; opacity: 0; }
+
+      /* the REAL post: header + funnel strips as ONE white card, stats strip under it (840 wide = 0.877 of the 958 px capture) */
+      #postG { position: absolute; left: 90px; top: 535px; width: 840px; height: 600px; }
+      #postF, #postIn { position: absolute; left: 0; top: 0; width: 840px; height: 600px; }
+      #postCard { position: absolute; left: 0; top: 0; width: 840px; border-radius: 24px; overflow: hidden; background: white;
+        box-shadow: var(--shadow-card); z-index: 2; }
+      #postCard img, #statsCard img { display: block; width: 840px; }
+      #statsCard { position: absolute; left: 0; top: 368px; width: 840px; height: 224px; border-radius: 22px; overflow: hidden; background: white;
+        box-shadow: var(--shadow-card); z-index: 1; }
+      #statsCard svg.ov { position: absolute; left: 0; top: 0; width: 840px; height: 224px; overflow: visible; }
+      #xchip { position: absolute; left: 774px; top: -30px; width: 84px; height: 84px; border-radius: 22px; overflow: hidden; z-index: 4;
+        box-shadow: 0 16px 26px -10px rgba(20, 20, 20, 0.5); opacity: 0; }
+      #xchip img { display: block; width: 100%; height: 100%; }
+
+      .rl { display: inline-block; }
+      #bd .lt { display: inline-block; }
+    </style>
+  </head>
+  <body data-face="0.42">
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="6.7833">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+      <div id="cam"><div id="punch">
+
+        <!-- ===================== BEAT A — WHO ===================== -->
+
+        <!-- SMALL speaker card, top-right, on screen from frame 0 (whole head in: face-at .56 of a 440x370 card) -->
+        <div id="spkW">
+          <div class="spk small" data-x="500" data-y="336" data-w="440" data-h="370" data-face-at="0.56" data-at="0" data-ry="-6" data-float="3">
+            <div class="spk-card">
+              <div class="spk-vid"><video id="speaker" class="clip" src="assets/speaker.mp4" muted playsinline data-start="0" data-duration="6.7833" data-track-index="1"></video></div>
+              <div class="spk-sheen"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- the polaroid sits above the speaker card so it flies over it into the corner -->
+        <div id="polaW"><div id="pola"><div class="ph"><img src="assets/karpathy_avatar.jpg" alt="Andrej Karpathy" /></div></div></div>
+
+        <div id="nm1" class="line hero" data-x="76" data-base="885" data-size="130" data-exit="2.76">
+          <span class="w" data-t="0.15" data-hero data-peak="1.07">Andrej</span>
+        </div>
+        <div id="nm2" class="line hero" data-right="922" data-base="1015" data-size="150" data-fit="900" data-exit="2.74">
+          <span class="w" data-t="0.39" data-hero data-peak="1.07">Karpathy</span>
+        </div>
+        <div id="cof" class="line sup" data-x="76" data-base="1128" data-size="84" data-exit="2.72">
+          <span class="w" data-t="1.21" data-pop>co-founder</span><span class="w gap-s" data-t="1.59">of</span>
+        </div>
+        <div id="chipO" class="chip big" style="left: 76px; top: 1150px"><img src="assets/openai.png" alt="OpenAI" />OpenAI</div>
+
+        <!-- ===================== BEAT B — THE POST ===================== -->
+        <div id="pa" class="line sup" data-x="76" data-base="352" data-size="72">
+          <span class="w" data-t="3.14" data-accent>posted</span><span class="w gap-s" data-t="3.34">a</span>
+        </div>
+        <div id="bd" class="line hero" data-x="92" data-base="495" data-size="150" data-fit="680">
+          <span class="w" data-t="3.70" data-hero data-peak="1.04"><span class="lt">b</span><span class="lt">r</span><span class="lt">e</span><span class="lt">a</span><span class="lt">k</span><span class="lt">d</span><span class="lt">o</span><span class="lt">w</span><span class="lt">n</span></span>
+        </div>
+
+        <div id="postG"><div id="postF"><div id="postIn">
+          <div id="postCard">
+            <img src="assets/post_header.png" alt="Andrej Karpathy @karpathy" />
+            <img src="assets/post_funnel.png" alt="capability is widening... and more a sharp funnel." />
+          </div>
+          <div id="statsCard">
+            <img src="assets/post_stats.png" alt="6.2m Views, 1.9k replies, 5.6k reposts, 42k likes, 29k bookmarks" />
+            <svg class="ov" viewBox="0 0 840 224"></svg>
+          </div>
+          <div id="xchip"><img src="assets/x.png" alt="X" /></div>
+        </div></div></div>
+
+        <!-- Anthropic chip: lands lower-right in beat A, then flies up and sticks to the polaroid's corner for beat B (above the post card) -->
+        <div id="chipAF"><div id="chipAW"><div id="chipA" class="chip big" style="position: relative; opacity: 1"><img src="assets/anthropic.png" alt="Anthropic" />Anthropic</div></div></div>
+
+        <!-- the real stat as a kinetic number: flies out of "6.2m Views", odometer 0.0 → 6.2 -->
+        <div id="n62" class="line hero ocean" data-right="926" data-base="1262" data-size="120" style="opacity: 0">
+          <span id="n62w" class="w"><span class="rl">6</span><span>.</span><span class="rl">2</span><span>m</span></span><span class="w" style="font-size: 0.66em; margin-left: 0.22em; letter-spacing: -0.03em">views</span>
+        </div>
+
+        <div id="sp" class="line hero" data-x="76" data-base="1392" data-size="124">
+          <span class="w" data-t="6.12" style="font-size: 0.56em; font-weight: 800; letter-spacing: -0.03em">across</span><span class="w gap-s" data-t="6.34" style="font-size: 0.56em; font-weight: 800; letter-spacing: -0.03em">the</span><span class="w gap-s" data-t="6.62" data-hero data-peak="1.04">spectrum</span>
+        </div>
+
+      </div></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const P = await Paper.init({ extraFonts: ['700 60px "Caveat"'] });
+        const M = Marker.init(P);
+        const { tl, D, F, $, $$ } = P;
+
+        // =============================== BEAT A — WHO ===============================
+        // POLAROID: arcs in from lower-right inside the zone (x/y on different eases), overshoots, tape pressed on, photo develops
+        const polaW = $("#polaW"), pola = $("#pola"), phImg = $("#pola img");
+        gsap.set(polaW, { transformOrigin: "50% 50%" });
+        gsap.set(pola, { rotation: -5, transformOrigin: "50% 50%" });
+        tl.fromTo(polaW, { opacity: 0 }, { opacity: 1, duration: 3 * F, ease: "power1.out", immediateRender: true }, 0);
+        tl.fromTo(polaW, { x: 70 }, { x: 0, duration: 0.17, ease: "power2.out", immediateRender: true }, 0);
+        tl.fromTo(polaW, { y: 120 }, { y: -10, duration: 0.17, ease: "power3.out", immediateRender: true }, 0);
+        tl.to(polaW, { y: 0, duration: 0.3, ease: "back.out(1.8)" }, 0.17);
+        tl.fromTo(polaW, { scale: 0.6, rotation: -12 }, { scale: 1.05, rotation: 1.5, duration: 0.17, ease: "power3.out", immediateRender: true }, 0);
+        tl.to(polaW, { scale: 1, rotation: 0, duration: 0.32, ease: "back.out(1.8)" }, 0.17);
+        const tpP = M.tape(105, -24, -3, 0.22);       // masking tape at the polaroid's top (lives inside the frame, moves with it)
+        pola.appendChild(tpP);
+        tl.to(pola, { scale: 0.975, duration: 2 * F, ease: "power2.in" }, 0.22);       // pressed onto the paper
+        tl.to(pola, { scale: 1, duration: 0.24, ease: "back.out(2.2)" }, 0.22 + 2 * F);
+        tl.fromTo(phImg, { filter: "sepia(0.55) saturate(0.15) brightness(1.5) contrast(0.55) blur(2px)" },
+          { filter: "sepia(0) saturate(1) brightness(1) contrast(1) blur(0px)", duration: 1.3, ease: "power1.inOut", immediateRender: true }, 0.12);
+        P.floatY(pola, 3, 1.3);
+
+        // OpenAI chip pops on "OpenAI"
+        P.pop("#chipO", 1.77, { peak: 1.08, from: 0.5 });
+
+        // "now at": RED marker arrow (shaft, then head) from OpenAI toward where Anthropic lands; handwritten note beside it
+        const arr = M.arrow(286, 1286, 470, 1362, 1.98, { bend: 0.3, width: 11, dur: 0.36 });
+        const nNow = M.note("now at", 446, 1162, 2.12, { size: 72, rot: -6 });
+
+        // Anthropic chip swings in like a hung sign (pendulum about a point above it), squash-lands on "Anthropic"
+        const chipA = $("#chipAW");
+        tl.fromTo(chipA, { opacity: 0 }, { opacity: 1, duration: 4 * F, ease: "power1.out", immediateRender: false }, 2.12);
+        tl.fromTo(chipA, { y: -50 }, { y: 0, duration: 0.37, ease: "power2.in", immediateRender: false }, 2.12);
+        gsap.set(chipA, { transformOrigin: "50% -60%" });
+        tl.fromTo(chipA, { rotation: -14 }, { rotation: 5, duration: 0.37, ease: "sine.inOut", immediateRender: false }, 2.12);
+        tl.to(chipA, { rotation: -2, duration: 0.18, ease: "sine.inOut" }, 2.49);
+        tl.to(chipA, { rotation: 0, duration: 0.2, ease: "sine.out" }, 2.67);
+        P.squash("#chipA", 2.49, 0.08);
+
+        // staging: once the chips take over, the name + polaroid step back
+        P.recede("#nm1, #nm2", 1.62, { opacity: 0.6, blur: 2, scale: 0.985 });
+        tl.to(pola, { opacity: 0.75, duration: 0.3, ease: "power2.inOut" }, 1.62);
+
+        // =============================== BEAT A → B ===============================
+        // clears bottom-up, exits faster than entrances (6 f); the speaker card shrinks out in place
+        tl.to(arr.g, { opacity: 0, duration: 5 * F, ease: "power2.in" }, 2.84);
+        tl.to(nNow, { opacity: 0, y: -40, filter: "blur(6px)", duration: 6 * F, ease: "power2.in" }, 2.86);
+        P.exitUp("#chipO", 2.86);
+        gsap.set("#spkW", { transformOrigin: "720px 520px" });
+        tl.to("#spkW", { scale: 0.8, opacity: 0, filter: "blur(8px)", y: -30, duration: 7 * F, ease: "power2.in" }, 2.84);
+
+        // polaroid compacts into the top-right corner on an arc (y leads, x follows), tilts the other way, wakes up again
+        tl.to(polaW, { y: 8, scale: 1.015, duration: 3 * F, ease: "power2.in" }, 2.76);              // anticipation
+        tl.to(polaW, { y: -137, duration: 0.5, ease: "power2.inOut" }, 2.86);
+        tl.to(polaW, { x: 582, duration: 0.46, ease: "power2.out" }, 2.86);
+        tl.to(polaW, { scale: 0.42, duration: 0.5, ease: "power2.inOut" }, 2.86);
+        tl.to(pola, { rotation: 7, opacity: 1, duration: 0.42, ease: "power2.inOut" }, 2.86);
+        tl.to(pola, { rotation: 5, duration: 0.3, ease: "back.out(2)" }, 3.28);
+
+        // the Anthropic chip is kept: it shrinks and flies up (y leads, x trails → arc) to stick on the polaroid's top-left corner
+        {
+          const af = $("#chipAF"), cw = $("#chipA").offsetWidth, ch = $("#chipA").offsetHeight;
+          gsap.set(af, { transformOrigin: `${cw / 2}px ${ch / 2}px` });
+          const dx = 740 - (486 + cw / 2), dy = 342 - (1300 + ch / 2);
+          tl.to(af, { y: 10, scale: 1.03, duration: 3 * F, ease: "power2.in" }, 2.68);          // anticipation
+          tl.to(af, { y: dy, duration: 0.42, ease: "power2.inOut" }, 2.78);
+          tl.to(af, { x: dx, duration: 0.42, ease: "power2.in" }, 2.78);
+          tl.to(af, { scale: 0.6, duration: 0.42, ease: "power2.inOut" }, 2.78);
+          tl.to(af, { rotation: -8, duration: 0.36, ease: "power2.inOut" }, 2.78);
+          tl.to(af, { rotation: -4, duration: 0.3, ease: "back.out(2.2)" }, 3.14);
+          P.squash("#chipA", 3.22, 0.07);                                                     // sticks on
+        }
+
+        // =============================== BEAT B — THE POST ===============================
+        const postG = $("#postG"), postF = $("#postF"), postIn = $("#postIn"), stats = $("#statsCard");
+        // B1: the card first lands in the lower-middle (fills the lower zone), B2 (4.22) it glides up to the top
+        gsap.set(postG, { y: 425 });
+        gsap.set(postIn, { transformOrigin: "50% 60%", transformPerspective: 1400 });
+        tl.set(postIn, { opacity: 0 }, 0);
+        tl.fromTo(postIn, { opacity: 0, y: 110, scale: 0.9, rotation: -4, rotationX: 10, filter: "blur(8px)" },
+          { opacity: 1, y: -10, scale: 1.02, rotation: -0.4, rotationX: 0, filter: "blur(0px)", duration: 0.16, ease: "power3.out", immediateRender: false }, 2.98);
+        tl.to(postIn, { y: 0, scale: 1, rotation: -1, duration: 0.32, ease: "back.out(1.6)" }, 3.14);
+        P.punch(3.14, { scale: 1.008, origin: "510px 990px" });                                   // HERO beat
+        // two strips of masking tape pressed onto the top corners (inside the card group so they travel with it)
+        const tp1 = M.tape(40, -22, -9, 3.22), tp2 = M.tape(600, -22, 7, 3.30);
+        postIn.appendChild(tp1); postIn.appendChild(tp2);
+        tl.to("#postCard", { scale: 0.992, duration: 2 * F, ease: "power2.in", transformOrigin: "50% 0%" }, 3.22);
+        tl.to("#postCard", { scale: 1, duration: 0.2, ease: "back.out(2)" }, 3.22 + 2 * F);
+        // X logo chip pops on the card's corner
+        P.pop("#xchip", 3.42, { peak: 1.1, from: 0.4 });
+        P.floatY(postF, 3, 1.4);
+
+        // "breakdown": after landing, the letters of "down" sag one by one and bounce back
+        $$("#bd .lt").slice(5).forEach((lt, i) => {
+          tl.to(lt, { y: 14, duration: 4 * F, ease: "power2.in" }, 4.0 + i * 3 * F);
+          tl.to(lt, { y: 0, duration: 0.3, ease: "back.out(3)" }, 4.0 + i * 3 * F + 4 * F);
+        });
+
+        // B2: the card glides up, the REAL stats strip slides out from under it
+        tl.fromTo(postG, { y: 425 }, { y: 0, duration: 0.44, ease: "power3.inOut", immediateRender: false }, 4.20);
+        tl.set(stats, { opacity: 0 }, 0);
+        tl.set(stats, { opacity: 1 }, 4.28);
+        tl.fromTo(stats, { y: -250, rotation: 0 }, { y: 10, rotation: 0.6, duration: 0.3, ease: "power3.out", immediateRender: false }, 4.28);
+        tl.to(stats, { y: 0, duration: 0.24, ease: "back.out(1.8)" }, 4.58);
+
+        // "differently": black marker underlines the real "6.2m Views", then the number flies out of it and rolls 0.0 → 6.2
+        const k = 840 / 958, ov = $("#statsCard svg.ov");
+        M.underline(683 * k, 918 * k, 72 * k, 4.48, { color: "ink", width: 8, parent: ov, dur: 0.24, texture: false });
+        const n62 = $("#n62"), rls = $$(".rl", n62);
+        rls.forEach((el) => { el.style.width = el.offsetWidth + "px"; el.style.textAlign = "center"; });
+        const roll = (el, fin, t0, t1, steps) => {
+          const fs = parseFloat(getComputedStyle(n62).fontSize), p = { v: fin - steps };
+          const draw = () => {
+            const n = Math.round(p.v), d = ((n % 10) + 10) % 10, fr = p.v - n;
+            el.textContent = d;
+            el.style.transform = `translateY(${(-fr * 0.24 * fs).toFixed(1)}px)`;
+            el.style.opacity = (1 - Math.abs(fr) * 0.9).toFixed(2);
+          };
+          tl.fromTo(p, { v: fin - steps }, { v: fin, duration: t1 - t0, ease: "power2.out", onUpdate: draw, immediateRender: false }, t0);
+        };
+        {
+          const fx = n62.offsetLeft + n62.offsetWidth / 2, fy = n62.offsetTop + n62.offsetHeight / 2;
+          const ox = 90 + 739 * k, oy = 535 + 368 + 47 * k;                    // the stat on the strip (frame px)
+          const t0 = 4.50, t = 4.80;
+          gsap.set(n62, { transformOrigin: "50% 60%" });
+          tl.fromTo(n62, { opacity: 0 }, { opacity: 1, duration: 3 * F, ease: "none", immediateRender: false }, t0);
+          tl.fromTo(n62, { x: ox - fx }, { x: 0, duration: t - t0, ease: "power2.out", immediateRender: false }, t0);
+          tl.fromTo(n62, { y: oy - fy }, { y: 0, duration: t - t0, ease: "power3.out", immediateRender: false }, t0);
+          tl.fromTo(n62, { scale: 0.3, rotation: -6 }, { scale: 1.05, rotation: 1, duration: t - t0, ease: "power2.in", immediateRender: false }, t0);
+          tl.to(n62, { scale: 1, rotation: 0, duration: 0.32, ease: "back.out(1.8)" }, t);
+          roll(rls[0], 6, t0, 4.80, 16);
+          roll(rls[1], 2, t0, 4.90, 22);
+          P.pulse(n62, 5.9, 1.03);
+        }
+
+        // "people are using AI": black ticks under the other real stats, one per word
+        const ST = [[118, 196], [318, 396], [514, 584], [712, 784]];
+        [5.06, 5.24, 5.50, 5.80].forEach((tw, i) => M.underline(ST[i][0] * k, ST[i][1] * k, 232 * k, tw - 0.13, { color: "ink", width: 7, parent: ov, dur: 0.15, texture: false }));
+
+        // "across the spectrum": a red hand-drawn spectrum wave draws left → right under everything, 4 ink ticks (sets up the 4-tier funnel)
+        const wave = [];
+        for (let x = 92; x <= 928; x += 22) wave.push([x, 1446 + 8 * Math.sin(((x - 92) / 836) * Math.PI * 3)]);
+        M.line(wave, 6.0, { color: "marker", width: 10, dur: 0.55, amp: 1.4 });
+        [[205, 6.18], [415, 6.29], [640, 6.40], [850, 6.51]].forEach(([x, t]) => {
+          const y = 1446 + 8 * Math.sin(((x - 92) / 836) * Math.PI * 3);
+          M.line([[x - 2, y - 17], [x + 2, y + 17]], t, { color: "ink", width: 8, dur: 0.08, amp: 0.8, texture: false });
+        });
+      })();
+    </script>
+  </body>
+</html>

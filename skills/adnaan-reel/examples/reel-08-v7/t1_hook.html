@@ -1,0 +1,200 @@
+<!doctype html>
+<!-- t1_hook — v7 "MINT" style test, TALK mode, VARIANT A (depth, Ref 1).
+     Layer order: full footage (speaker.mp4) → CEO photo cards (#behind) → his matte (speaker_cut.webm, same timing, same push,
+     exactly over the footage) → name tags (#tags) → text hook + kinetic words (#cam).
+     The cards start hidden BEHIND his head and slide out on "top → 0.1%"; the matte occludes them as they travel.
+     No red, no marker layer, no Caveat: clean vector bar under the hook's 0.1%. -->
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>t1_hook</title>
+    <link rel="stylesheet" href="brand.css" />
+    <link rel="stylesheet" href="paper.css" />
+    <link rel="stylesheet" href="marker.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+    <script src="paper.js"></script>
+    <script src="marker.js"></script>
+    <style>
+      @font-face { font-family: "Inter Tight"; src: url("fonts/InterTight-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Inter"; src: url("fonts/Inter-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+
+      /* v7 TALK: charcoal ink words with a soft light glow (no paper strip) */
+      :root { --v7-glow: 0 0 22px rgba(240, 236, 230, 0.95), 0 0 8px rgba(240, 236, 230, 0.9); }
+      .glow { text-shadow: var(--v7-glow); }
+      /* over his dark hair the hook needs a tighter, brighter halo so the charcoal reads as clean ink, not haze */
+      .hook.glow { text-shadow: 0 0 3px rgba(240, 236, 230, 0.95), 0 0 10px rgba(240, 236, 230, 0.92), 0 0 20px rgba(240, 236, 230, 0.85); }
+      /* mint on a light halo (or on his light-grey sweater) loses contrast: mint words get a soft dark shadow instead */
+      .glow .ocean, .ocean.glow { text-shadow: 0 4px 16px rgba(20, 20, 20, 0.42), 0 1px 3px rgba(20, 20, 20, 0.35); }
+      .hook { color: var(--brand-text); }
+
+      /* the matte: the same full-screen footage with the background removed, laid exactly over speaker.mp4 */
+      #spkcut .spk-card { background: transparent; }
+      #behind, #tags { position: absolute; inset: 0; pointer-events: none; }
+
+      /* clean solid mint underline bar under the hook's 0.1% (vector, even width, round caps) */
+      #bar { position: absolute; height: 13px; border-radius: 7px; background: var(--brand-primary); transform-origin: 0 50%;
+        box-shadow: 0 4px 14px rgba(20, 20, 20, 0.38), 0 1px 3px rgba(20, 20, 20, 0.3); }
+
+      /* CEO photo cards: radius 22, white 8 px border, soft shadow, tiny tilt */
+      .ceo { position: absolute; }
+      .ceo .card { position: absolute; inset: 0; border-radius: 22px; background: #fff; padding: 8px;
+        box-shadow: 0 26px 40px -14px rgba(30, 26, 22, 0.45), 0 8px 14px -6px rgba(30, 26, 22, 0.28); }
+      .ceo .ph { position: relative; width: 100%; height: 100%; border-radius: 15px; overflow: hidden; background: #ddd; }
+      .ceo .ph img { position: absolute; display: block; }
+      /* name label: small white tag under each card, Inter 600 charcoal */
+      .tag { position: absolute; background: #fff; border-radius: 14px; padding: 9px 13px 10px;
+        font-family: var(--font-body); font-weight: 600; font-size: 38px; line-height: 1.02; letter-spacing: -0.012em;
+        color: var(--brand-text); white-space: nowrap;
+        box-shadow: 0 14px 24px -10px rgba(30, 26, 22, 0.4), 0 3px 6px -2px rgba(30, 26, 22, 0.18); }
+      .tag span { display: block; }
+      .tag.r { text-align: right; }
+    </style>
+  </head>
+  <body data-face="0.40">
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="3.1833">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+
+      <!-- full-screen speaker: the whole frame, slow push only -->
+      <div id="spk" class="spk full" data-push="1.02">
+        <div class="spk-card">
+          <div class="spk-vid"><video id="speaker" class="clip" src="assets/speaker.mp4" muted playsinline data-start="0" data-duration="3.1833" data-track-index="1"></video></div>
+        </div>
+      </div>
+
+      <!-- BEHIND HIM: the four CEO photo cards (they live between the footage and his matte) -->
+      <div id="behind">
+        <div class="ceo" id="cSatya"><div class="card"><div class="ph"><img src="assets/satya_crop.jpg" alt="Satya Nadella" /></div></div></div>
+        <div class="ceo" id="cJensen"><div class="card"><div class="ph"><img src="assets/jensen_crop.jpg" alt="Jensen Huang" /></div></div></div>
+        <div class="ceo" id="cSam"><div class="card"><div class="ph"><img src="assets/sam_crop.jpg" alt="Sam Altman" /></div></div></div>
+        <div class="ceo" id="cElon"><div class="card"><div class="ph"><img src="assets/elon_crop.jpg" alt="Elon Musk" /></div></div></div>
+      </div>
+
+      <!-- HIS MATTE: background-removed footage, same timing + same push as #spk, so the cards sit behind his head -->
+      <div id="spkcut" class="spk full" data-push="1.02">
+        <div class="spk-card">
+          <div class="spk-vid"><video id="speakercut" class="clip" src="assets/speaker_cut.webm" muted playsinline data-start="0" data-duration="3.1833" data-track-index="2"></video></div>
+        </div>
+      </div>
+
+      <!-- name tags (in front, so they stay fully readable; they pop on after their card lands) -->
+      <div id="tags">
+        <div class="tag" id="tSatya"><span>Satya</span><span>Nadella</span></div>
+        <div class="tag" id="tJensen"><span>Jensen</span><span>Huang</span></div>
+        <div class="tag r" id="tSam"><span>Sam</span><span>Altman</span></div>
+        <div class="tag r" id="tElon"><span>Elon</span><span>Musk</span></div>
+      </div>
+
+      <div id="cam"><div id="punch">
+        <!-- TEXT HOOK (frame 0 = thumbnail; no entrance; stays the whole scene) — over his hair/forehead, above the brows -->
+        <div class="line hero hook glow" id="h1" data-cx="521" data-base="350" data-size="80"><span>How</span><span class="gap-s">to</span><span class="gap-s">use</span><span class="gap-s" id="hAI">AI</span></div>
+        <div class="line hero hook glow" id="h2" data-cx="558" data-base="424" data-size="80"><span>like</span><span class="gap-s">the</span><span class="gap-s">top</span></div>
+        <div class="line hero ocean glow" id="h3" data-cx="512" data-base="518" data-size="126"><span id="h01">0.1%</span></div>
+        <div id="bar"></div>
+
+        <!-- KINETIC WORDS (= words.txt): "the way" + "you are." land low on his chest, charcoal with the light glow -->
+        <div class="line sup glow" id="kWay" data-x="104" data-base="1264" data-size="100">
+          <span class="w" data-t="2.45">the</span><span class="w gap-s" data-t="2.61">way</span>
+        </div>
+        <div class="line hero glow" id="kYou" data-x="80" data-base="1424" data-size="180">
+          <span class="w ocean" id="wYou" data-t="2.73" data-hero data-peak="1.08" data-origin="40% 85%">you</span><span class="w gap-s" id="wAre" data-t="2.91" data-pop data-origin="30% 85%">are.</span>
+        </div>
+      </div></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const VARIANT = "A";                 // A = cards behind his head (depth) · B = cards in front (flat)
+        const P = await Paper.init();
+        const { tl, D, F, $, $$ } = P;
+
+        // ------------------------------------------------------------------ hook bar under the hook's 0.1% (drawn on frame 0)
+        const h3 = $("#h3"), h01 = $("#h01");
+        const barX = h3.offsetLeft + h01.offsetLeft + 8, barW = h01.offsetWidth - 22, barY = 518 + 10;
+        Object.assign($("#bar").style, { left: barX + "px", top: barY + "px", width: barW + "px" });
+
+        // ------------------------------------------------------------------ CEO cards: geometry
+        // x,y,w,h = card box (incl. 8 px border); rot = tilt; f = face centre in the source photo (fractions),
+        // fh = head height in the source (fraction of photo height), at = where the face sits in the card window,
+        // hs = head size in the window (fraction of window height); from = where it starts (hidden behind his head) for A.
+        const CARDS = VARIANT === "A" ? [
+          { id: "Satya",  x: 80,  y: 300, w: 188, h: 232, rot: -5, f: [0.50, 0.37], fh: 0.51, at: [0.40, 0.40], hs: 0.56, from: [240, 90],  tag: [84, 520],  side: "l", t: 0.30 },
+          { id: "Sam",    x: 770, y: 302, w: 178, h: 222, rot: 5,  f: [0.32, 0.31], fh: 0.45, at: [0.58, 0.36], hs: 0.56, from: [-230, 90], tag: [950, 514], side: "r", t: 0.37 },
+          { id: "Jensen", x: 80,  y: 622, w: 188, h: 232, rot: 4,  f: [0.52, 0.35], fh: 0.48, at: [0.36, 0.38], hs: 0.56, from: [220, 20],  tag: [84, 842],  side: "l", t: 0.44 },
+          { id: "Elon",   x: 778, y: 630, w: 172, h: 214, rot: -4, f: [0.50, 0.31], fh: 0.44, at: [0.64, 0.36], hs: 0.56, from: [-210, 20], tag: [950, 840], side: "r", t: 0.51 },
+        ] : [
+          // B (flat): smaller cards in FRONT of him, two top-left + two top-right under/beside the hook, over hair/ears only — never the face
+          { id: "Satya",  x: 84,  y: 308, w: 160, h: 198, rot: -5, f: [0.50, 0.37], fh: 0.51, at: [0.50, 0.40], hs: 0.56, from: [40, 10],  tag: [84, 488],  side: "l", t: 0.30 },
+          { id: "Sam",    x: 782, y: 308, w: 156, h: 194, rot: 5,  f: [0.32, 0.31], fh: 0.45, at: [0.52, 0.38], hs: 0.56, from: [-40, 10], tag: [944, 486], side: "r", t: 0.37 },
+          { id: "Jensen", x: 84,  y: 608, w: 160, h: 198, rot: 4,  f: [0.52, 0.35], fh: 0.48, at: [0.50, 0.38], hs: 0.56, from: [40, 0],   tag: [84, 798],  side: "l", t: 0.44 },
+          { id: "Elon",   x: 790, y: 626, w: 152, h: 190, rot: -4, f: [0.50, 0.31], fh: 0.44, at: [0.52, 0.38], hs: 0.56, from: [-40, 0],  tag: [944, 808], side: "r", t: 0.51 },
+        ];
+        const B = 8;
+        for (const c of CARDS) {
+          const el = $("#c" + c.id), img = $("img", el), tag = $("#t" + c.id);
+          Object.assign(el.style, { left: c.x + "px", top: c.y + "px", width: c.w + "px", height: c.h + "px" });
+          // headshot crop: scale the 1200x1500 source so the head fills hs of the window, face centre at `at` (clamped to cover)
+          const ww = c.w - 2 * B, wh = c.h - 2 * B;
+          const sh = Math.max((wh * c.hs) / c.fh, wh, ww * 1.25), sw = sh / 1.25;
+          let ix = c.at[0] * ww - c.f[0] * sw, iy = c.at[1] * wh - c.f[1] * sh;
+          ix = Math.min(0, Math.max(ww - sw, ix)); iy = Math.min(0, Math.max(wh - sh, iy));
+          Object.assign(img.style, { width: sw + "px", height: sh + "px", left: ix + "px", top: iy + "px" });
+          gsap.set(el, { rotation: c.rot, transformOrigin: "50% 50%" });
+          // tag: under the card, aligned to the card's outer edge (left cards: left edge; right cards: right edge)
+          if (c.side === "l") Object.assign(tag.style, { left: c.tag[0] + "px", top: c.tag[1] + "px" });
+          else Object.assign(tag.style, { left: c.tag[0] - tag.offsetWidth + "px", top: c.tag[1] + "px" });
+          gsap.set(tag, { rotation: c.rot * 0.5, transformOrigin: c.side === "l" ? "0% 0%" : "100% 0%" });
+        }
+
+        // ------------------------------------------------------------------ the cards slide OUT from behind his head ("top" → "0.1%")
+        // anticipation (a 3-frame tuck further in) → arc out (x power3.out, y power2.out) → tilt overshoots → settles; tag pops 3 f after
+        for (const c of CARDS) {
+          const el = $("#c" + c.id), tag = $("#t" + c.id);
+          const t = c.t, dur = 0.42;
+          tl.set(el, { opacity: 0 }, 0);
+          if (VARIANT === "A") {
+            tl.set(el, { opacity: 1 }, t - 3 * F);                     // switched on while still fully hidden behind his head
+            tl.fromTo(el, { x: c.from[0] * 0.93, y: c.from[1] * 0.93 }, { x: c.from[0], y: c.from[1], duration: 3 * F, ease: "power2.in", immediateRender: false }, t - 3 * F);
+            tl.to(el, { x: 0, duration: dur, ease: "power3.out" }, t);
+            tl.to(el, { y: 0, duration: dur, ease: "power2.out" }, t);
+            tl.fromTo(el, { rotation: 0, scale: 0.94 }, { rotation: c.rot * 1.7, scale: 1.03, duration: dur * 0.6, ease: "power2.out", immediateRender: false }, t);
+            tl.to(el, { rotation: c.rot, scale: 1, duration: 0.34, ease: "back.out(2)" }, t + dur * 0.6);
+          } else {
+            // B: in front, so it pops from just beside his head — small dip, arc out, overshoot, settle
+            tl.fromTo(el, { opacity: 0, x: c.from[0], y: c.from[1] + 20, scale: 0.42, rotation: 0 },
+              { opacity: 1, x: 0, y: -4, scale: 1.07, rotation: c.rot * 1.6, duration: dur * 0.55, ease: "power3.out", immediateRender: false }, t);
+            tl.to(el, { y: 0, scale: 1, rotation: c.rot, duration: 0.34, ease: "back.out(2)" }, t + dur * 0.55);
+          }
+          // tag: pop with overshoot once the card has landed (parts lag the whole)
+          const tt = t + dur * 0.62;
+          tl.fromTo(tag, { opacity: 0, scale: 0.5, y: -18 }, { opacity: 1, scale: 1.08, y: 2, duration: 5 * F, ease: "power3.out", immediateRender: false }, tt);
+          tl.to(tag, { scale: 1, y: 0, duration: 8 * F, ease: "back.out(1.8)" }, tt + 5 * F);
+          tl.set(tag, { opacity: 0 }, 0);
+        }
+        // photos breathe 2–3 px (each its own period / phase) once they have settled
+        CARDS.forEach((c, i) => {
+          const el = $("#c" + c.id).querySelector(".card"), tag = $("#t" + c.id);
+          const s = c.t + 0.8, per = 0.95 + i * 0.12;
+          const reps = Math.max(1, Math.floor((D - s) / per));
+          tl.fromTo([el, tag], { y: 0 }, { y: -(2 + (i % 2)), duration: per, ease: "sine.inOut", yoyo: true, repeat: reps, immediateRender: false }, s);
+        });
+
+        // ------------------------------------------------------------------ hook: 0.1% punches on "0.1%" (0.59) — the one hero beat
+        gsap.set(h01, { transformOrigin: "50% 80%" });
+        tl.to(h01, { scale: 0.96, duration: 3 * F, ease: "power2.in" }, 0.59 - 4 * F);           // anticipation
+        tl.to(h01, { scale: 1.09, duration: 4 * F, ease: "power3.out" }, 0.59 - F);              // contact on the word
+        tl.to(h01, { scale: 1, duration: 0.36, ease: "back.out(2.4)" }, 0.59 + 3 * F);          // overshoot + settle
+        gsap.set("#bar", { transformOrigin: "0% 50%" });
+        tl.to("#bar", { scaleX: 1.06, duration: 4 * F, ease: "power3.out" }, 0.59);              // the bar flexes with it (lags 1 f)
+        tl.to("#bar", { scaleX: 1, duration: 0.4, ease: "back.out(2)" }, 0.59 + 4 * F);
+        P.punch(0.59, { scale: 1.01, origin: "540px 420px", dur: 0.3 });                         // 1 % camera punch on the hook
+
+        // "AI" in the hook nods (dips 7 px, back with overshoot) when he says it (2.17)
+        gsap.set("#hAI", { transformOrigin: "50% 100%" });
+        tl.to("#hAI", { y: 7, scaleX: 1.04, scaleY: 0.96, duration: 4 * F, ease: "power3.out" }, 2.17 - 2 * F);   // a nod down (stays inside the zone)
+        tl.to("#hAI", { y: 0, scaleX: 1, scaleY: 1, duration: 0.32, ease: "back.out(2)" }, 2.17 + 2 * F);
+      })();
+    </script>
+  </body>
+</html>

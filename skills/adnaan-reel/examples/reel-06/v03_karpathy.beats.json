@@ -1,0 +1,178 @@
+[
+ {
+  "t": 0.15,
+  "sfx": "whoosh",
+  "what": "polaroid arcs in + Andrej lands",
+  "gain_db": -4
+ },
+ {
+  "t": 0.24,
+  "sfx": "tick",
+  "what": "tape pressed onto the polaroid"
+ },
+ {
+  "t": 0.39,
+  "sfx": "pop",
+  "what": "Karpathy lands",
+  "gain_db": -3
+ },
+ {
+  "t": 1.21,
+  "sfx": "tick",
+  "what": "co-founder pops"
+ },
+ {
+  "t": 1.77,
+  "sfx": "pop",
+  "what": "OpenAI chip pops"
+ },
+ {
+  "t": 1.98,
+  "sfx": "scribble",
+  "dur": 0.43,
+  "what": "red arrow OpenAI -> Anthropic (shaft + head)"
+ },
+ {
+  "t": 2.12,
+  "sfx": "scribble",
+  "dur": 0.38,
+  "what": "Caveat note 'now at' written"
+ },
+ {
+  "t": 2.49,
+  "sfx": "ping",
+  "what": "Anthropic chip squash-lands at the arrow head"
+ },
+ {
+  "t": 2.78,
+  "sfx": "whoosh",
+  "what": "Anthropic chip + polaroid fly up into the top-right cluster, beat A clears",
+  "gain_db": -4
+ },
+ {
+  "t": 3.14,
+  "sfx": "impact",
+  "what": "REAL post card lands + camera punch (hero)"
+ },
+ {
+  "t": 3.22,
+  "sfx": "tick",
+  "what": "Anthropic chip sticks onto the polaroid corner + tape 1"
+ },
+ {
+  "t": 3.32,
+  "sfx": "tick",
+  "what": "tape 2 pressed on"
+ },
+ {
+  "t": 3.42,
+  "sfx": "pop",
+  "what": "X logo chip pops"
+ },
+ {
+  "t": 3.7,
+  "sfx": "pop",
+  "what": "breakdown lands"
+ },
+ {
+  "t": 4.22,
+  "sfx": "whoosh",
+  "what": "card glides up, stats strip slides out",
+  "gain_db": -4
+ },
+ {
+  "t": 4.48,
+  "sfx": "scribble",
+  "dur": 0.24,
+  "what": "black underline under 6.2m Views"
+ },
+ {
+  "t": 4.8,
+  "sfx": "ding",
+  "what": "6.2m views odometer locks 6"
+ },
+ {
+  "t": 4.9,
+  "sfx": "tick",
+  "what": "odometer locks 2"
+ },
+ {
+  "t": 4.93,
+  "sfx": "scribble",
+  "dur": 0.15,
+  "what": "tick under 1.9k"
+ },
+ {
+  "t": 5.06,
+  "sfx": "tick",
+  "what": "1.9k ticked"
+ },
+ {
+  "t": 5.11,
+  "sfx": "scribble",
+  "dur": 0.15,
+  "what": "tick under 5.6k"
+ },
+ {
+  "t": 5.24,
+  "sfx": "tick",
+  "what": "5.6k ticked"
+ },
+ {
+  "t": 5.37,
+  "sfx": "scribble",
+  "dur": 0.15,
+  "what": "tick under 42k"
+ },
+ {
+  "t": 5.5,
+  "sfx": "tick",
+  "what": "42k ticked"
+ },
+ {
+  "t": 5.67,
+  "sfx": "scribble",
+  "dur": 0.15,
+  "what": "tick under 29k"
+ },
+ {
+  "t": 5.8,
+  "sfx": "tick",
+  "what": "29k ticked"
+ },
+ {
+  "t": 6.0,
+  "sfx": "scribble",
+  "dur": 0.55,
+  "what": "red spectrum wave drawn left to right"
+ },
+ {
+  "t": 6.18,
+  "sfx": "scribble",
+  "dur": 0.08,
+  "what": "spectrum tick 1"
+ },
+ {
+  "t": 6.29,
+  "sfx": "scribble",
+  "dur": 0.08,
+  "what": "spectrum tick 2"
+ },
+ {
+  "t": 6.4,
+  "sfx": "scribble",
+  "dur": 0.08,
+  "what": "spectrum tick 3"
+ },
+ {
+  "t": 6.51,
+  "sfx": "scribble",
+  "dur": 0.08,
+  "what": "spectrum tick 4"
+ },
+ {
+  "t": 6.62,
+  "sfx": "pop",
+  "what": "spectrum lands on the wave"
+ }
+]

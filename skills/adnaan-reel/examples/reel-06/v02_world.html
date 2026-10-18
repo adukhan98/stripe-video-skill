@@ -1,0 +1,89 @@
+<!doctype html>
+<!-- adnaan-reel scene starter: FULL-SCREEN SPEAKER — HE fills the frame edge to edge (no card, no tilt), kinetic
+     words land low on his chest / the bottom third with the paper glow. The minimal beat: nothing else on screen
+     unless the brief names ONE object. Use for the hook, verdict/opinion lines, the wrap-up, the CTA — 2–4 per reel,
+     alternating with paper-world scenes. (flashcheck knows this window is not paper: type "fullscreen" in slots.json.)
+     Optional: add a paper-strip div before the words if the background behind the words is busy.
+     Optional mid-scene version: start as a portrait card and call P.growFull("#spk", t) on the hero word. -->
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>v02_world</title>
+    <link rel="stylesheet" href="brand.css" />
+    <link rel="stylesheet" href="paper.css" />
+    <link rel="stylesheet" href="marker.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+    <script src="paper.js"></script>
+    <script src="marker.js"></script>
+  </head>
+  <body data-face="0.42">
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="3.9500">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+
+      <!-- full-screen speaker: the whole frame, slow push only -->
+      <div id="spk" class="spk full" data-push="1.03">
+        <div class="spk-card">
+          <div class="spk-vid"><video id="speaker" class="clip" src="assets/speaker.mp4" muted playsinline data-start="0" data-duration="3.9500" data-track-index="1"></video></div>
+        </div>
+      </div>
+
+      <!-- soft paper strip under the words (the polo is dark green); rises in with the first words -->
+      <div class="paper-strip" id="strip" style="top:1115px; height:805px; bottom:auto; background:linear-gradient(180deg, rgba(228,222,217,0) 0px, rgba(228,222,217,1) 36px, rgba(228,222,217,1) 100%);"></div>
+
+      <div id="cam" data-push="1"><div id="punch">
+        <!-- A: "people in the entire world." -->
+        <div class="line sup kin" data-x="84" data-base="1262" data-size="100" data-exit="1.28">
+          <span class="w" data-t="0.04">people</span><span class="w gap-s" data-t="0.22">in</span><span class="w gap-s" data-t="0.40">the</span>
+        </div>
+        <div class="line sup ink kin" id="lnWorld" data-right="944" data-base="1430" data-size="132" data-fit="880" data-exit="1.28" data-exit-lag="2">
+          <span class="w" data-t="0.78" data-pop data-rise="40">entire</span><span class="w gap-s" data-t="1.18" data-pop data-rise="40">world.</span>
+        </div>
+
+        <!-- B: "and yet you still haven't seen" -->
+        <div class="line sup kin" data-x="84" data-base="1262" data-size="100" data-exit="2.58">
+          <span class="w" data-t="1.44">and</span><span class="w gap-s" data-t="1.74">yet</span><span class="w gap-s" data-t="2.00">you</span><span class="w gap-s" data-t="2.22">still</span>
+        </div>
+        <div class="line sup ink kin" id="lnSeen" data-x="120" data-base="1430" data-size="118" data-fit="840" data-exit="2.78" data-exit-lag="0" data-exit-dy="-24">
+          <span class="w" data-t="2.40" data-pop>haven't</span><span class="w gap-s" data-t="2.66" data-pop>seen</span>
+        </div>
+
+        <!-- C: "the real power of AI." -->
+        <div class="line sup kin" data-x="84" data-base="1240" data-size="104">
+          <span class="w" data-t="2.86">the</span>
+        </div>
+        <div class="line hero ocean kin" id="lnHero" data-cx="510" data-base="1398" data-size="200" data-fit="800">
+          <span class="w" data-t="3.08" data-hero data-peak="1.1">real</span><span class="w gap-s" data-t="3.34" data-hero data-peak="1.1">power</span>
+        </div>
+        <div class="line sup kin" data-right="944" data-base="1240" data-size="108">
+          <span class="w" data-t="3.52">of</span><span class="w gap-s" data-t="3.80" data-pop>AI.</span>
+        </div>
+      </div></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const P = await Paper.init({ extraFonts: ['700 60px "Caveat"'] });
+        const M = Marker.init(P);
+        const { tl, D, F, $ } = P;
+
+        // the paper strip rises under the first words (footage is untouched on frame 0)
+        tl.fromTo("#strip", { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.42, ease: "power3.out" }, 0);
+
+        // B: quick RED double underline under "haven't seen", drawn as the words are said; wiped as the line exits
+        const R = M.rectOf($("#lnSeen"));
+        const UL = M.underline(R[0] + 4, R[0] + R[2] - 2, R[1] + R[3] * 0.97, 2.42, { double: true, width: 10, dur: 0.46, until: 2.9 });
+        M.erase(UL, 2.76, 0.16);
+
+        // C: hero "real power" — ONE exaggerated beat: a 1 % camera punch on "power", RED marker loop around the words
+        P.punch(3.34, { scale: 1.01, origin: "510px 1300px", dur: 0.4 });
+        const H = M.rectOf($("#lnHero"));
+        const fs = parseFloat(getComputedStyle($("#lnHero")).fontSize);
+        const base = 1398, top = base - 0.74 * fs, bot = base + 0.21 * fs;
+        window.__hero = { fs, H, top, bot };
+        M.circle(H[0] + H[2] / 2, (top + bot) / 2, H[2] / 2 + 24, (bot - top) / 2 + 10, 3.28, { width: 11, dur: 0.42, tilt: -3 });
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,12 @@
+[
+  {"t": 0.05, "sfx": "pop", "what": "'Here' lands low on his chest"},
+  {"t": 0.42, "sfx": "whoosh", "what": "anticipation push before the shrink"},
+  {"t": 0.49, "sfx": "pop", "what": "'six' (mint) peaks top-right"},
+  {"t": 0.75, "sfx": "pop", "what": "'habits' lands as the footage circles down"},
+  {"t": 0.88, "sfx": "pop", "what": "face circle lands on disc 1, mint ring closes, 1.06 landing pop"},
+  {"t": 1.02, "sfx": "pop", "role": "structural", "what": "the habit chain pops in: discs 2-6 along the connector (1.02-1.28)"},
+  {"t": 1.17, "sfx": "pop", "what": "'I'd' lands"},
+  {"t": 1.43, "sfx": "pop", "what": "'steal' peaks; the chain tugs toward disc 1"},
+  {"t": 1.63, "sfx": "tick", "what": "'from' lands"},
+  {"t": 1.83, "sfx": "pop", "what": "'them.' lands; mint ripple off disc 1"}
+]

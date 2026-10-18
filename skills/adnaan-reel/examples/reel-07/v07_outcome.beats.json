@@ -1,0 +1,78 @@
+[
+ {
+  "t": 0.087,
+  "sfx": "scribble",
+  "dur": 0.32,
+  "what": "red marker loop round the chapter 1"
+ },
+ {
+  "t": 0.187,
+  "sfx": "pop",
+  "what": "1 pops top-left, first lands beside it"
+ },
+ {
+  "t": 0.497,
+  "sfx": "pop",
+  "what": "ask pops",
+  "gain_db": -4
+ },
+ {
+  "t": 0.747,
+  "sfx": "scribble",
+  "dur": 0.15,
+  "what": "target outer ring (black marker)"
+ },
+ {
+  "t": 0.887,
+  "sfx": "scribble",
+  "dur": 0.2,
+  "what": "middle + inner rings, red arrow shaft and fletching"
+ },
+ {
+  "t": 1.097,
+  "sfx": "whoosh",
+  "what": "arrow snaps toward the bullseye (speed lines)",
+  "gain_db": -5
+ },
+ {
+  "t": 1.157,
+  "sfx": "impact",
+  "what": "arrow thunks into the bullseye, outcome (red hero) lands, shake + punch"
+ },
+ {
+  "t": 1.187,
+  "sfx": "scribble",
+  "dur": 0.14,
+  "what": "bullseye floods with red hatch",
+  "gain_db": -6
+ },
+ {
+  "t": 1.387,
+  "sfx": "tick",
+  "what": "arrow shiver settles",
+  "gain_db": -9
+ },
+ {
+  "t": 1.517,
+  "sfx": "pop",
+  "what": "instead rises",
+  "gain_db": -7
+ },
+ {
+  "t": 2.097,
+  "sfx": "pop",
+  "what": "task pops low-right"
+ },
+ {
+  "t": 2.107,
+  "sfx": "scribble",
+  "dur": 0.09,
+  "what": "red strike through task, first pass"
+ },
+ {
+  "t": 2.2,
+  "sfx": "scribble",
+  "dur": 0.05,
+  "what": "strike return pass (task crossed out by 2.25)"
+ }
+]

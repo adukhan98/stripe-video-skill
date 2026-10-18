@@ -1,0 +1,189 @@
+<!doctype html>
+<!-- adnaan-reel scene starter: HOOK — text hook on frame 0 + PORTRAIT speaker card + kinetic phrases on his chest
+     + one bespoke object (here: an isometric app-tile stack that explodes on the payoff word).
+     Runtime: paper.css/paper.js do the world, card, words, exits, floats. You write: the copy (from words.txt),
+     positions/sizes, and the hero object's timeline. Keep data-duration (preset = exact frame count). -->
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>v01_hook</title>
+    <link rel="stylesheet" href="brand.css" />
+    <link rel="stylesheet" href="paper.css" />
+    <link rel="stylesheet" href="marker.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+    <script src="paper.js"></script>
+    <script src="marker.js"></script>
+    <style>
+      @font-face { font-family: "Inter Tight"; src: url("fonts/InterTight-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Inter"; src: url("fonts/Inter-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Caveat"; src: url("fonts/Caveat-Variable.ttf") format("truetype"); font-weight: 400 700; font-style: normal; font-display: block; }
+      /* Mode A: the paper strip straddles the split line so the hook sits on solid paper (never over his face) */
+      #hookstrip { position: absolute; left: 0; top: 872px; width: 1080px; height: 100px; z-index: 6; pointer-events: none;
+        background: linear-gradient(180deg, transparent 0%, var(--brand-background) 30%, var(--brand-background) 100%); }
+      #hookL { z-index: 8; }
+      /* split-flap digits: every digit is a flap cell with stacked faces; one face visible at a time */
+      .fd { position: relative; display: inline-block; font-style: normal; isolation: isolate; }
+      .fd .tile { position: absolute; left: -1%; right: -1%; top: -4%; bottom: -2%; z-index: -1; border-radius: 12px; background: var(--brand-card);
+        box-shadow: 0 5px 8px rgba(60, 50, 40, 0.18), inset 0 -3px 6px rgba(60, 50, 40, 0.06); }
+      .fd .s { display: inline-block; font-style: normal; }
+      .fd .s.x { position: absolute; left: 0; top: 0; z-index: 1; }
+      .fd .cut { position: absolute; left: 3%; right: 3%; top: 53%; height: 4px; z-index: 2; background: var(--brand-background); }
+      /* clock disc (soft tactile backing for the black-marker alarm clock) */
+      #clockdisc { position: absolute; left: 585px; top: 1153px; width: 150px; height: 150px; border-radius: 50%;
+        background: radial-gradient(circle at 35% 30%, #fff, var(--brand-card) 70%);
+        box-shadow: 0 18px 30px rgba(60, 50, 40, 0.22), inset 0 -4px 8px rgba(60, 50, 40, 0.06); }
+    </style>
+  </head>
+  <body data-face="0.41">
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="2.5500" data-strength="subtle">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+      <div id="cam"><div id="punch">
+
+        <!-- MODE A: his footage edge to edge in the top half (face centred high), grid + words + doodles own the bottom half -->
+        <div class="spk split" data-h="960" data-face-at="0.44">
+          <div class="spk-card"><div class="spk-vid"><video id="speaker" class="clip" src="assets/speaker.mp4" muted playsinline data-start="0" data-duration="2.5500" data-track-index="1"></video></div></div>
+        </div>
+        <div id="hookstrip"></div>
+
+        <!-- TEXT HOOK (user-written; readable on frame 0, stays the whole scene, no entrance) on the paper strip at the top of the bottom half -->
+        <div class="layer" id="hookL">
+          <div class="line hero" id="h1" data-x="150" data-base="984" data-size="112"><span>How</span><span class="gap-s">to</span><span class="gap-s">be</span><span class="gap-s">more</span></div>
+          <div class="line hero ocean" id="h2" data-x="72" data-base="1106" data-size="156" data-fit="800"><span id="amb">ambitious</span></div>
+          <div class="line hero" id="h3" data-x="120" data-base="1232" data-size="112"><span>with</span><span class="gap-s">AI</span></div>
+        </div>
+
+        <!-- clock backing -->
+        <div id="clockdisc"></div>
+
+        <!-- KINETIC WORDS = words.txt. HERO 1939 = split-flap (right lane); then late and class follow left to right in the same row. -->
+        <div class="line hero ocean kin" id="k1939" data-right="868" data-base="1458" data-size="230">
+          <span class="fd"><i class="s f">1</i></span><span class="fd"><i class="s f">9</i></span><span class="fd"><i class="s f">3</i></span><span class="fd"><i class="s f">9</i></span>
+        </div>
+        <div class="line hero ink kin" id="kLate" data-x="365" data-base="1460" data-size="126">
+          <span class="w" id="wLate" data-t="1.87" data-pop data-rise="30" data-origin="40% 85%">late</span>
+        </div>
+        <div class="line hero ink kin" id="kClass" data-right="868" data-base="1460" data-size="126">
+          <span class="w" id="wClass" data-t="2.31" data-hero data-rise="8" data-origin="40% 85%" data-peak="1.1">class</span>
+        </div>
+
+      </div></div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const P = await Paper.init({ extraFonts: ['700 60px "Caveat"'] });
+        const M = Marker.init(P);
+        const { tl, D, F, $, $$ } = P;
+        const NS = "http://www.w3.org/2000/svg";
+        const geo = (el) => { const l = el.closest(".line"); return { x: l.offsetLeft + el.offsetLeft, y: l.offsetTop + el.offsetTop, w: el.offsetWidth, h: el.offsetHeight }; };
+        const mkg = (parent) => { const g = document.createElementNS(NS, "g"); parent.appendChild(g); return g; };
+
+        // ================================================================ TEXT HOOK (frame 0): red double underline already drawn, boils
+        const amb = geo($("#amb"));
+        M.underline(amb.x + 8, amb.x + amb.w - 10, 1106 + 14, 0, { double: true, width: 11, seed: 31 });
+
+        // ================================================================ HERO: "1939" split-flap (contact 0.83, impact)
+        const finals = ["1", "9", "3", "9"];
+        const flick = [["7", "4"], ["2", "6"], ["5", "1"], ["4", "8"]];
+        const lock = [0.65, 0.71, 0.77, 0.83];
+        $$("#k1939 .fd").forEach((d, i) => {
+          d.insertAdjacentHTML("beforeend", `<i class="s x a">${flick[i][0]}</i><i class="s x b">${flick[i][1]}</i><i class="tile"></i><i class="cut"></i>`);
+          const f = $(".f", d), a = $(".a", d), b = $(".b", d), cut = $(".cut", d);
+          gsap.set(d, { transformOrigin: "50% 56%" });
+          gsap.set([a, b, f], { opacity: 0 });                 // blank flap tiles on frame 0: no digits until ~0.4
+          const ta = 0.40 + i * 0.03, tf = lock[i] - 4 * F;
+          tl.set(a, { opacity: 1 }, ta);                       // one flicker digit flips in (3 f), then the real digit flips on and locks
+          tl.fromTo(d, { scaleY: 0.04 }, { scaleY: 1, duration: 3 * F, ease: "power2.out", immediateRender: false }, ta);
+          tl.to(d, { scaleY: 0.04, duration: 2 * F, ease: "power2.in" }, tf);
+          tl.set(a, { opacity: 0 }, tf + 2 * F); tl.set(f, { opacity: 1 }, tf + 2 * F);
+          tl.to(d, { scaleY: 1.07, y: -4, duration: 2 * F, ease: "power3.out" }, tf + 2 * F);       // locks with overshoot
+          tl.to(d, { scaleY: 1, y: 0, duration: 7 * F, ease: "back.out(2.6)" }, tf + 4 * F);
+        });
+        P.punch(0.83, { scale: 1.008, origin: "510px 1100px" });
+        P.exitDown("#k1939", 1.55, 36);                       // the hero clears the lane before late / class
+        P.shake(0.83, 3);
+
+        // ================================================================ MICRO 2: black-marker alarm clock in the right column beside the card (jiggles + spins on "late")
+        const CX = 660, CY = 1228;
+        const clk = mkg(M.layer);                        // jiggle group (outline, ears, ticks)
+        const hands = mkg(clk);                          // minute hand spin group
+        P.pop("#clockdisc", 0.95, { peak: 1.06, from: 0.5 });
+        M.circle(CX, CY, 62, 62, 1.0, { color: "ink", width: 9, dur: 0.4, parent: clk, seed: 1301, tilt: -6 });
+        M.circle(CX - 47, CY - 55, 13, 13, 1.30, { color: "ink", width: 9, dur: 0.12, parent: clk, seed: 1302 });
+        M.circle(CX + 47, CY - 55, 13, 13, 1.38, { color: "ink", width: 9, dur: 0.12, parent: clk, seed: 1303 });
+        [[0, -52, 0, -40], [52, 0, 40, 0], [0, 52, 0, 40], [-52, 0, -40, 0]].forEach(([x0, y0, x1, y1], i) =>
+          M.line([[CX + x0, CY + y0], [CX + x1, CY + y1]], 1.46 + i * 0.05, { color: "ink", width: 9, dur: 0.06, amp: 0.8, parent: clk, seed: 1310 + i }));
+        M.line([[CX, CY], [CX, CY - 44]], 1.62, { color: "ink", width: 9, dur: 0.14, amp: 0.8, parent: hands, seed: 1320 });            // minute hand (long)
+        M.line([[CX, CY], [CX + 24, CY + 13]], 1.72, { color: "ink", width: 11, dur: 0.12, amp: 0.8, parent: hands, seed: 1321 });      // hour hand (short)
+        const hourG = hands.lastChild; hands.removeChild(hourG); clk.appendChild(hourG);
+        // anticipation: both wind back, then spin past the hour on "late" (1.87), the clock jiggles
+        tl.to(hands, { rotation: -26, svgOrigin: CX + " " + CY, duration: 0.14, ease: "power2.out" }, 1.76);
+        tl.to(hourG, { rotation: -10, svgOrigin: CX + " " + CY, duration: 0.14, ease: "power2.out" }, 1.76);
+        tl.to(hands, { rotation: 760, svgOrigin: CX + " " + CY, duration: 0.7, ease: "power3.inOut" }, 1.9);
+        tl.to(hourG, { rotation: 70, svgOrigin: CX + " " + CY, duration: 0.7, ease: "power3.inOut" }, 1.9);
+        [[7, 0], [-6, 1], [5, 2], [-4, 3], [3, 4], [-2, 5], [0, 6]].forEach(([r, k]) => {
+          tl.to(clk, { rotation: r, svgOrigin: CX + " " + CY, duration: 3 * F, ease: "sine.inOut" }, 1.87 + k * 3 * F);
+          tl.to("#clockdisc", { rotation: r, duration: 3 * F, ease: "sine.inOut" }, 1.87 + k * 3 * F);
+        });
+        // ringing ticks (red marker) fan out above and to the right of the clock on "late"
+        [[733, 1206, 752, 1198], [738, 1230, 760, 1230], [733, 1254, 752, 1262]].forEach(([x0, y0, x1, y1], i) =>
+          M.line([[x0, y0], [x1, y1]], 1.9 + i * 0.03, { width: 10, dur: 0.1, amp: 0.8, seed: 1330 + i }));
+        // red underline scribbled under "late" as it lands
+        const late = geo($("#wLate"));
+        M.underline(late.x + 6, late.x + late.w - 6, 1460 + 12, 1.78, { width: 11, dur: 0.26, seed: 1340 });
+
+        // ================================================================ MICRO 1: black-marker stick-figure student with a backpack, ~172 px tall, runs along the bottom lane (contact 1.33)
+        const SC = 1.7, FX = 250, FY = 1462;                      // figure is ~101 units tall -> ~172 px on screen
+        const defs = M.layer.querySelector("defs");
+        const cp = document.createElementNS(NS, "clipPath"); cp.setAttribute("id", "studclip");
+        const cr = document.createElementNS(NS, "rect");
+        cr.setAttribute("x", 68); cr.setAttribute("y", 1100); cr.setAttribute("width", 840); cr.setAttribute("height", 400);
+        cp.appendChild(cr); defs.appendChild(cp);
+        const clipG = mkg(M.layer); clipG.setAttribute("clip-path", "url(#studclip)");
+        const moveG = mkg(clipG), scaleG = mkg(moveG), bobG = mkg(scaleG);
+        gsap.set(scaleG, { scale: SC, svgOrigin: "0 0" });
+        const o = { color: "ink", width: 6, amp: 1.2, parent: bobG };                          // 6 x 1.7 = ~10 px felt-tip
+        M.circle(4, -86, 15, 15, 0, { ...o, turns: 1.05, seed: 1401 });                                    // head
+        M.line([[8, -70], [-4, -38]], 0, { ...o, seed: 1402 });                                              // torso, leaning forward
+        M.line([[-4, -68], [-26, -66], [-28, -40], [-8, -38]], 0, { ...o, seed: 1403 });                     // backpack
+        const poseA = mkg(bobG), poseB = mkg(bobG), poseC = mkg(bobG);
+        const oa = { ...o, parent: poseA }, ob = { ...o, parent: poseB }, oc = { ...o, parent: poseC };
+        M.line([[-4, -38], [16, -20], [13, 0]], 0, { ...oa, seed: 1411 }); M.line([[-4, -38], [-20, -18], [-36, -8]], 0, { ...oa, seed: 1412 });
+        M.line([[8, -66], [28, -58], [40, -70]], 0, { ...oa, seed: 1413 }); M.line([[-34, -50], [-44, -42]], 0, { ...oa, seed: 1414 });
+        M.line([[-4, -38], [-2, -18], [-8, 0]], 0, { ...ob, seed: 1421 }); M.line([[-4, -38], [-24, -24], [-42, -30]], 0, { ...ob, seed: 1422 });
+        M.line([[8, -66], [26, -52], [22, -36]], 0, { ...ob, seed: 1423 }); M.line([[-34, -50], [-46, -54]], 0, { ...ob, seed: 1424 });
+        M.line([[-4, -38], [-10, 0]], 0, { ...oc, seed: 1431 }); M.line([[-4, -38], [8, 0]], 0, { ...oc, seed: 1432 });
+        M.line([[8, -66], [14, -42], [10, -26]], 0, { ...oc, seed: 1433 });
+        const spd = mkg(bobG);                                                                                // speed lines behind him while running
+        M.line([[-52, -62], [-78, -62]], 0, { ...o, parent: spd, width: 5, seed: 1441 }); M.line([[-56, -30], [-86, -30]], 0, { ...o, parent: spd, width: 5, seed: 1442 });
+        gsap.set(moveG, { x: FX - 260, y: FY });
+        tl.set([clipG], { opacity: 0 }, 0);
+        tl.set([poseA, poseB, poseC, spd], { opacity: 0 }, 0);
+        const RUN0 = 1.2, RUN1 = 1.96;
+        tl.set(clipG, { opacity: 1 }, RUN0);
+        tl.to(moveG, { x: FX, duration: RUN1 - RUN0, ease: "power2.out" }, RUN0);           // arrives as "late" lands
+        let k = 0;
+        for (let t = RUN0; t < RUN1 - 4 * F; t += 4 * F, k++) {                              // legs and arms cycle on fours
+          const A = k % 2 === 0;
+          tl.set(poseA, { opacity: A ? 1 : 0 }, t); tl.set(poseB, { opacity: A ? 0 : 1 }, t);
+          tl.set(spd, { opacity: 1 }, t);
+          tl.set(bobG, { y: A ? 0 : -6 }, t);
+        }
+        tl.set([poseA, poseB, spd], { opacity: 0 }, RUN1 - 4 * F); tl.set(poseC, { opacity: 1 }, RUN1 - 4 * F);
+        tl.set(bobG, { y: 0 }, RUN1 - 4 * F);
+        // skid-in: leans back as he brakes, then settles; idle bob while he waits
+        gsap.set(bobG, { svgOrigin: "0 0" });
+        tl.to(bobG, { rotation: -9, duration: 3 * F, ease: "power2.out" }, RUN1 - 6 * F).to(bobG, { rotation: 0, duration: 0.3, ease: "back.out(2.4)" }, RUN1 - 3 * F);
+        // "class" (2.31): he hops with joy (squash on landing)
+        tl.to(bobG, { y: -13, duration: 0.14, ease: "power2.out" }, 2.22).to(bobG, { y: 0, duration: 0.12, ease: "power2.in" }, 2.36);
+        tl.to(bobG, { scaleY: 0.88, scaleX: 1.08, duration: 2 * F, ease: "power2.out" }, 2.48).to(bobG, { scaleY: 1, scaleX: 1, duration: 0.3, ease: "back.out(2.4)" }, 2.48 + 2 * F);
+        tl.to(bobG, { y: -4, duration: 0.3, ease: "sine.inOut", yoyo: true, repeat: 1 }, 2.62);
+
+        window.__geo = { amb, late, h1: geo($("#h1").firstElementChild) };
+      })();
+    </script>
+  </body>
+</html>

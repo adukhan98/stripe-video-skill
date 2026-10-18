@@ -1,0 +1,12 @@
+[
+  {"t": 0.00, "sfx": "pop", "what": "frame 0: text hook 'How to use AI / like the top / 0.1%' already on screen (thumbnail)"},
+  {"t": 0.30, "sfx": "whoosh", "what": "Satya card starts sliding out from behind his head (A) / pops (B) — on 'top'"},
+  {"t": 0.56, "sfx": "pop", "what": "Satya card lands (overshoot), tag pops"},
+  {"t": 0.59, "sfx": "stamp", "role": "hook", "what": "'0.1%' — the hook's 0.1% punches (1 % camera punch + bar flex)"},
+  {"t": 0.70, "sfx": "pop", "what": "Jensen card lands, tag pops"},
+  {"t": 0.80, "sfx": "pop", "what": "Elon card lands (last), tag pops"},
+  {"t": 2.17, "sfx": "tick", "what": "'AI' in the hook nods"},
+  {"t": 2.45, "sfx": "pop", "what": "'the way' rises on his chest"},
+  {"t": 2.73, "sfx": "pop", "what": "'you' (mint hero) lands with overshoot"},
+  {"t": 2.91, "sfx": "pop", "what": "'are.' pops"}
+]

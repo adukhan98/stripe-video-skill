@@ -1,0 +1,298 @@
+<!doctype html>
+<!-- adnaan-reel scene v11_200ms — MECHANISM (mechanism starter on the shared runtime + marker layer).
+     Hero object: a browser card (your-site.com, wireframe page) with a sluggish loading bar + spinner + skeleton shimmer,
+     a black-ink stopwatch doodle on its right edge and an odometer readout pill.
+     Beat A: the readout rolls 00 → 10 s on "10 seconds"; a "5 s" pill bumps in on "five" and gets scribbled out.
+     Beat B (hero, "200"): digits lock left→right to 200 ms, the pill slams red, the bar zips full with a glint,
+     the stopwatch hand whips to 0.2 s, punch + shake; the page loads. The real article strip rises with the
+     highlighter on "Ask for 200ms"; a red curling arrow on "keep going". Keep data-duration. -->
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>v11_200ms</title>
+    <link rel="stylesheet" href="brand.css" />
+    <link rel="stylesheet" href="paper.css" />
+    <link rel="stylesheet" href="marker.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+    <script src="paper.js"></script>
+    <script src="marker.js"></script>
+    <style>
+      @font-face { font-family: "Inter Tight"; src: url("fonts/InterTight-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Inter"; src: url("fonts/Inter-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Geist Mono"; src: url("fonts/GeistMono-Medium.ttf") format("truetype"); font-weight: 500; font-style: normal; font-display: block; }
+      @font-face { font-family: "Caveat"; src: url("fonts/Caveat-Variable.ttf") format("truetype"); font-weight: 400 700; font-style: normal; font-display: block; }
+
+      /* ---- the browser card (hero object) ---- */
+      #web { left: 100px; top: 300px; width: 800px; height: 430px; }
+      #web .url { width: 300px; margin-left: -150px; }
+      #bar { position: absolute; left: 0; top: 0; width: 100%; height: 14px; background: var(--wire); overflow: hidden; }
+      #barFill { position: absolute; inset: 0; background: var(--brand-primary); transform-origin: 0 50%; transform: scaleX(0); }
+      #glint { position: absolute; top: 0; left: 0; width: 140px; height: 100%; opacity: 0;
+        background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.95) 50%, rgba(255,255,255,0) 100%); }
+      #hero { position: absolute; left: 28px; top: 92px; width: 440px; height: 128px; border-radius: 18px; background: var(--wire); overflow: hidden; }
+      #heroDeep { position: absolute; inset: 0; border-radius: 18px; background: var(--brand-deep); opacity: 0; }
+      #heroDeep .g { background: rgba(255,255,255,.22); }
+      #heroDeep .g.acc { background: var(--brand-primary); }
+      #shim { position: absolute; top: 0; left: 0; width: 200px; height: 100%;
+        background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.6) 50%, rgba(255,255,255,0) 100%); }
+      #spin { position: absolute; left: 213px; top: 29px; width: 70px; height: 70px; opacity: 0; }
+      #navDot { left: 28px; top: 34px; width: 38px; height: 38px; }
+
+      /* the stopwatch readout: an odometer in a black pill (Inter 600, tabular digits) */
+      .ro { position: absolute; display: flex; align-items: center; height: 100px; padding: 0 34px; border-radius: 50px;
+        background: var(--brand-text); color: #fff; white-space: nowrap; font-family: var(--font-body); font-weight: 600;
+        font-size: 64px; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; box-shadow: 0 20px 34px -12px rgba(20,20,20,.4); }
+      #ro { left: 28px; top: 244px; }
+      .col { position: relative; display: block; height: 76px; overflow: hidden; flex: none; }
+      .stk { position: absolute; left: 0; top: 0; width: 100%; }
+      .stk i { display: block; height: 76px; line-height: 76px; font-style: normal; text-align: center; }
+      #cu .stk i { text-align: left; }
+      #cu { margin-left: 0.24em; }
+      #five { left: 250px; top: 244px; opacity: 0; }
+      #five svg { position: absolute; left: 0; top: 0; width: 100%; height: 100%; overflow: visible; }
+
+      /* the real article strip, taped (≥ 0.9 scale: 806 px of the 894 px capture) */
+      #strip { position: absolute; left: 90px; top: 1222px; width: 830px; height: 189px; padding: 12px; border-radius: 18px;
+        background: var(--brand-card); box-shadow: 0 22px 34px -16px rgba(60,50,40,.32); opacity: 0; }
+      #stripClip { position: relative; width: 806px; height: 165px; overflow: hidden; border-radius: 8px; z-index: 1; }
+      #strip img { position: absolute; left: 0; top: -75.7px; display: block; width: 806px; height: 241px; }   /* crop to lines 2–3 (84 strip px × 0.9016) */
+      #strip .mk-hl { z-index: 2 !important; }
+      .mk-hl path { fill: none !important; }   /* runtime M.highlight fill bug (coordinator fix) */
+    </style>
+  </head>
+  <body data-face="0.41" data-mode="B">
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="5.7500">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+      <div id="cam" data-push="1.006"><div id="punch">
+
+        <!-- ===== hero object: the browser card ===== -->
+        <div id="webF" style="position:absolute;inset:0"><div id="web" class="browser">
+          <div class="chrome"><i class="dot"></i><i class="dot"></i><i class="dot"></i><div class="url">your-site.com</div></div>
+          <div class="viewport">
+            <div id="bar"><div id="barFill"></div><div id="glint"></div></div>
+            <i id="navDot" class="g round"></i>
+            <i id="nav1" class="g" style="left: 84px; top: 46px; width: 150px; height: 16px"></i>
+            <i id="nav2" class="g" style="left: 256px; top: 46px; width: 96px; height: 16px"></i>
+            <i id="nav3" class="g" style="left: 374px; top: 46px; width: 96px; height: 16px"></i>
+            <div id="hero">
+              <div id="shim"></div>
+              <svg id="spin" viewBox="0 0 70 70"><circle cx="35" cy="35" r="25" fill="none" stroke="var(--brand-muted)" stroke-width="8" stroke-linecap="round" stroke-dasharray="118 200"/></svg>
+              <div id="heroDeep">
+                <i class="g acc hp" style="left: 30px; top: 30px; width: 150px; height: 18px"></i>
+                <i class="g hp" style="left: 30px; top: 62px; width: 260px; height: 14px"></i>
+                <i class="g hp" style="left: 30px; top: 88px; width: 200px; height: 14px"></i>
+                <i class="g round hp" style="left: 340px; top: 30px; width: 70px; height: 70px"></i>
+              </div>
+            </div>
+            <div id="ro" class="ro">
+              <span id="c0" class="col"><span class="stk"></span></span><span id="c1" class="col"><span class="stk"></span></span><span id="c2" class="col"><span class="stk"></span></span><span id="cu" class="col"><span class="stk"><i>s</i><i>ms</i></span></span>
+            </div>
+            <div id="five" class="ro">5 s<svg id="fiveSvg"></svg></div>
+          </div>
+        </div></div>
+
+        <!-- the real article strip (light-mode capture of Felix's page) -->
+        <div id="strip"><div id="stripClip"><img src="assets/art_200ms.png" alt="Ask for 200ms" /></div></div>
+
+        <!-- ===== BEAT A words ===== -->
+        <div class="line small" data-x="80" data-base="822" data-size="86" data-exit="2.76">
+          <span class="w" data-t="0.51">if</span><span class="w gap-s" data-t="0.67">your</span><span class="w gap-s" data-t="0.83">site</span><span class="w gap-s" data-t="1.05">loads</span><span class="w gap-s" data-t="1.23">in</span>
+        </div>
+        <div id="l10" class="line hero pA" data-x="78" data-base="1062" data-size="300">
+          <span class="w ink" data-t="1.41" data-hero>10</span>
+        </div>
+        <div id="lsec" class="line hero pA" data-x="80" data-base="1222" data-size="190" data-fit="880">
+          <span class="w ink" data-t="1.77" data-hero>seconds</span>
+        </div>
+        <div class="line sup pA" data-x="80" data-base="1350" data-size="110">
+          <span class="w" data-t="2.15" data-accent>don't</span><span class="w gap-s" data-t="2.43">ask</span><span class="w gap-s" data-t="2.61">for</span>
+        </div>
+        <div class="line hero pA" data-right="930" data-base="1466" data-size="160">
+          <span class="w ink" data-t="2.87" data-pop data-rise="10">five</span>
+        </div>
+
+        <!-- ===== BEAT B words ===== -->
+        <div class="line sup" data-x="80" data-base="824" data-size="100" data-exit="4.92">
+          <span class="w" data-t="3.33" data-pop>Ask</span><span class="w gap-s" data-t="3.48">for</span>
+        </div>
+        <div id="l200" class="line hero" data-x="86" data-base="1020" data-size="240">
+          <span class="w ocean" data-t="4.06" data-hero data-peak="1.1">200</span>
+        </div>
+        <div id="lms" class="line hero" data-x="76" data-base="1160" data-size="150" data-fit="880">
+          <span class="w ocean" data-t="4.48" data-accent>milliseconds</span>
+        </div>
+        <div id="lkeep" class="line sup" data-x="80" data-base="812" data-size="104">
+          <span class="w" data-t="5.24" data-accent>keep</span><span class="w gap-s" data-t="5.56" data-pop>going</span>
+        </div>
+
+      </div></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      // odometer stacks (built before layout; deterministic)
+      ["c0", "c1", "c2"].forEach((id) => {
+        document.getElementById(id).querySelector(".stk").innerHTML = Array.from({ length: 40 }, (_, i) => `<i>${i % 10}</i>`).join("");
+      });
+
+      (async () => {
+        const P = await Paper.init({ extraFonts: ['700 60px "Caveat"'] });
+        const M = Marker.init(P);   // hand-drawn marker layer
+        const { tl, D, F, $, $$ } = P;
+        const NS = "http://www.w3.org/2000/svg";
+        const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+        const grp = (id, parent = M.layer) => { const g = document.createElementNS(NS, "g"); g.setAttribute("id", id); parent.appendChild(g); return g; };
+        // seek-safe SVG transform about a fixed frame-px origin (proxy → transform attribute)
+        function xf(g, [cx, cy]) {
+          const o = { s: 1, r: 0, x: 0 };
+          const apply = () => g.setAttribute("transform", `translate(${o.x} 0) translate(${cx} ${cy}) rotate(${o.r}) scale(${o.s}) translate(${-cx} ${-cy})`);
+          apply();
+          return { o, apply };
+        }
+
+        // ================= the browser card: on screen from frame 0 (~90 % settled), heavy settle with sheen =================
+        gsap.set("#web", { transformPerspective: 1400, transformOrigin: "50% 60%" });
+        tl.fromTo("#web", { opacity: 1, y: 40, scale: 0.96, rotation: -1.5, rotationY: -6 },
+          { y: -4, scale: 1.005, rotation: 0, rotationY: 0, duration: 0.3, ease: "power3.out", immediateRender: true }, 0);
+        tl.to("#web", { y: 0, scale: 1, duration: 0.3, ease: "back.out(1.6)" }, 0.3);
+        P.floatY("#webF", 3, 1.4);
+
+        // skeleton shimmer while the page "loads" (continuous mechanical → linear)
+        tl.fromTo("#shim", { x: -220 }, { x: 460, duration: 0.8, ease: "none", repeat: 4 }, 0);
+        // spinner pops in on "loads" and turns (linear, mechanical) until the page loads
+        gsap.set("#spin", { transformOrigin: "50% 50%" });
+        P.pop("#spin", 1.05, { from: 0.3 });
+        tl.fromTo("#spin", { rotation: 0 }, { rotation: 360 * 4, duration: 3.1, ease: "none", immediateRender: false }, 1.0);
+
+        // loading bar: sluggish ease-in crawl from "loads", stalls, then ZIPS full on "200" with a glint
+        tl.to("#barFill", { scaleX: 0.2, duration: 2.0, ease: "power2.in" }, 0.95);
+        tl.to("#barFill", { scaleX: 0.27, duration: 0.95, ease: "power1.out" }, 2.95);
+        tl.to("#barFill", { scaleX: 0.25, duration: 3 * F, ease: "power2.in" }, 3.92);          // anticipation: it even slips back
+        tl.to("#barFill", { scaleX: 1, duration: 0.14, ease: "expo.out" }, 4.02);
+        tl.fromTo("#glint", { x: -150, opacity: 1 }, { x: 820, duration: 0.32, ease: "power2.inOut", immediateRender: false }, 4.08);
+        tl.fromTo("#glint", { x: -150 }, { x: 820, duration: 0.4, ease: "power2.inOut", immediateRender: false }, 5.3);
+
+        // ================= odometer readout =================
+        const H = 76;
+        const digitW = (() => { const s = document.createElement("i"); s.textContent = "0"; s.style.cssText = "position:absolute;visibility:hidden;font-style:normal"; $("#ro").appendChild(s); const w = s.getBoundingClientRect().width; s.remove(); return Math.ceil(w); })();
+        const unitW = (txt) => { const s = document.createElement("i"); s.textContent = txt; s.style.cssText = "position:absolute;visibility:hidden;font-style:normal"; $("#ro").appendChild(s); const w = s.getBoundingClientRect().width; s.remove(); return Math.ceil(w) + 2; };
+        const stk = (id) => document.getElementById(id).querySelector(".stk");
+        gsap.set(["#c1", "#c2"], { width: digitW });
+        gsap.set("#c0", { width: 0 });
+        gsap.set("#cu", { width: unitW("s") });
+        const setCol = (id, p) => gsap.set(stk(id), { y: -p * H });
+        // state proxies: c0/c1/c2 positions in their 0-9 x4 stacks, cu = unit row
+        const od = { c0: 0, c1: 0, c2: 0, cu: 0 };
+        const drawOd = () => { setCol("c0", od.c0); setCol("c1", od.c1); setCol("c2", od.c2); gsap.set(stk("cu"), { y: -od.cu * H }); };
+        drawOd();
+        // beat A: count 00 → 10 s, sluggish, the ones wheel turning, the tens wheel only on the 9 → 10 carry; lands on "10"
+        const cnt = { v: 0 };
+        tl.to(cnt, { v: 10, duration: 0.5, ease: "power2.in", onUpdate: () => { od.c2 = cnt.v; od.c1 = Math.max(0, cnt.v - 9); drawOd(); } }, 0.93);
+        P.pulse("#ro", 1.43, 1.06);
+
+        // the "5 s" pill tries to take over on "five": arcs up from below, bumps the readout, gets scribbled out, falls off
+        gsap.set("#five", { transformOrigin: "50% 100%" });
+        tl.fromTo("#five", { opacity: 0, y: 120, x: 60, rotation: 14 }, { opacity: 1, y: -6, x: 0, rotation: -5, duration: 0.18, ease: "power3.out", immediateRender: false }, 2.71);
+        tl.to("#five", { y: 0, rotation: -3, duration: 0.24, ease: "back.out(2)" }, 2.89);
+        tl.to("#ro", { x: -8, duration: 3 * F, ease: "power2.out" }, 2.87);
+        tl.to("#ro", { x: 0, duration: 0.3, ease: "back.out(2.4)" }, 2.87 + 3 * F);
+        // scribble-strike inside the pill's own svg (rides the pill as it falls)
+        const fiveSvg = $("#fiveSvg");
+        const fw = $("#five").offsetWidth, fh = $("#five").offsetHeight;
+        fiveSvg.setAttribute("viewBox", `0 0 ${fw} ${fh}`);
+        const zz = [[-10, fh * 0.62], [fw * 0.3, fh * 0.36], [fw * 0.18, fh * 0.66], [fw * 0.62, fh * 0.34], [fw * 0.5, fh * 0.68], [fw + 10, fh * 0.4]];
+        M.line(zz, 2.95, { color: "marker", width: 13, dur: 0.2, amp: 2.2, parent: fiveSvg, seed: 1101 });
+        tl.to("#five", { rotation: 6, duration: 2 * F, ease: "power2.out" }, 3.14);
+        tl.to("#five", { y: 230, rotation: 28, duration: 0.24, ease: "power2.in" }, 3.18);   // clipped by the card viewport
+
+        // ================= the stopwatch (black felt-tip) on the card's right edge =================
+        const OX = 812, OY = 560, R = 104;
+        const pol = (a, r) => [OX + Math.cos((a * Math.PI) / 180) * r, OY + Math.sin((a * Math.PI) / 180) * r];
+        const swG = grp("swG"), handG = grp("handG", swG);
+        const ink = { color: "ink", parent: swG };
+        M.circle(OX, OY, R, R, 0.42, { ...ink, width: 12, dur: 0.26, turns: 1.07, tilt: 0, start: -1.75, seed: 1201 });
+        M.line([[OX - 2, OY - R - 2], [OX, OY - R - 30]], 0.66, { ...ink, texture: false, width: 12, dur: 0.05, amp: 0.6, seed: 1202 });
+        M.line([[OX - 26, OY - R - 30], [OX - 24, OY - R - 52], [OX + 26, OY - R - 52], [OX + 26, OY - R - 30], [OX - 26, OY - R - 30]], 0.70, { ...ink, width: 11, dur: 0.1, amp: 0.8, seed: 1203 });
+        M.line([pol(-42, R + 4), pol(-42, R + 26)], 0.76, { ...ink, texture: false, width: 13, dur: 0.05, amp: 0.5, seed: 1204 });
+        for (let k = 0; k < 12; k++) {
+          const a = k * 30 - 90, big = k % 3 === 0;
+          M.line([pol(a, R - (big ? 34 : 24)), pol(a, R - 12)], 0.78 + k * F * 0.5, { ...ink, texture: false, width: big ? 10 : 7, dur: 0.03, amp: 0.4, seed: 1210 + k });
+        }
+        M.line([[OX, OY + 6], pol(-90, R - 20)], 0.86, { color: "marker", texture: false, width: 14, dur: 0.06, amp: 0.8, parent: handG, seed: 1230 });
+        M.circle(OX, OY, 8, 8, 0.9, { color: "ink", width: 14, dur: 0.05, parent: swG, seed: 1231 });
+        const hand = xf(handG, [OX, OY]);
+        // one sluggish turn while the readout counts to 10, then slow ticks (time drags on)
+        tl.to(hand.o, { r: 360, duration: 0.5, ease: "power2.in", onUpdate: hand.apply }, 0.93);
+        let ang = 360;
+        for (let t = 1.75; t < 3.86; t += 0.33) { ang += 12; tl.to(hand.o, { r: ang, duration: 3 * F, ease: "back.out(3)", onUpdate: hand.apply }, t); }
+        const sw = xf(swG, [OX, OY]);
+
+        // ================= HERO BEAT on "200" (4.06): slam =================
+        // anticipation: readout dips, hand pulls back
+        gsap.set("#ro", { transformOrigin: "30% 50%" });
+        tl.to("#ro", { scale: 0.93, duration: 4 * F, ease: "power2.in" }, 3.86);
+        tl.to(hand.o, { r: ang - 14, duration: 4 * F, ease: "power2.in", onUpdate: hand.apply }, 3.86);
+        // hundreds wheel opens (pill grows), digits roll and lock left → right: 2 · 0 · 0, unit s → ms
+        tl.to("#c0", { width: digitW, duration: 0.12, ease: "power3.out" }, 3.9);
+        tl.to("#cu", { width: unitW("ms"), duration: 0.12, ease: "power3.out" }, 4.0);
+        tl.to(od, { c0: 22, duration: 0.1, ease: "power2.out", onUpdate: drawOd }, 3.9);
+        tl.to(od, { c1: 20, duration: 0.15, ease: "power2.out", onUpdate: drawOd }, 3.9);
+        tl.to(od, { c2: 30, duration: 0.2, ease: "power2.out", onUpdate: drawOd }, 3.9);
+        tl.to(od, { cu: 1, duration: 0.12, ease: "back.out(2)", onUpdate: drawOd }, 3.98);
+        // SLAM: the pill flips red, overshoots and squashes
+        tl.to("#ro", { backgroundColor: css("--brand-primary"), duration: 2 * F, ease: "none" }, 4.03);
+        tl.to("#ro", { scale: 1.14, duration: 3 * F, ease: "power3.out" }, 4.0);
+        tl.to("#ro", { scale: 1, duration: 0.34, ease: "back.out(2.6)" }, 4.1);
+        P.squash("#ro", 4.12, 0.06);
+        // the stopwatch hand whips round and snaps on 0.2 s (72°), the body jolts
+        const snap = 720 + 72;
+        tl.to(hand.o, { r: snap + 10, duration: 0.12, ease: "power3.out", onUpdate: hand.apply }, 3.99);
+        tl.to(hand.o, { r: snap, duration: 0.22, ease: "back.out(3)", onUpdate: hand.apply }, 4.11);
+        tl.to(sw.o, { s: 1.08, r: -4, duration: 3 * F, ease: "power3.out", onUpdate: sw.apply }, 4.03);
+        tl.to(sw.o, { s: 1, r: 0, duration: 0.36, ease: "back.out(2.4)", onUpdate: sw.apply }, 4.03 + 3 * F);
+        // red speed ticks trailing the hand outside the rim (drawn on, wiped fast)
+        [[R + 20, -78, -22], [R + 34, -66, -30]].forEach(([rr, a0, a1], i) => {
+          const pts = []; for (let k = 0; k <= 8; k++) pts.push(pol(a0 + ((a1 - a0) * k) / 8, rr));
+          const s = M.line(pts, 4.03 + i * 2 * F, { color: "marker", width: 9, dur: 0.08, amp: 0.6, seed: 1240 + i });
+          M.erase(s, 4.36 + i * F, 0.12);
+        });
+        P.punch(4.06, { scale: 1.012, origin: "510px 760px" });
+        P.shake(4.06, 4);
+
+        // the page loads: spinner pops out, skeleton turns into content (parts lag 2 f)
+        tl.to("#spin", { scale: 0, opacity: 0, duration: 4 * F, ease: "back.in(2)" }, 4.1);
+        tl.to("#shim", { opacity: 0, duration: 3 * F, ease: "power1.out" }, 4.1);
+        tl.fromTo("#heroDeep", { opacity: 0, scale: 0.94 }, { opacity: 1, scale: 1, duration: 0.24, ease: "back.out(1.8)", immediateRender: false }, 4.12);
+        $$(".hp").forEach((el, i) => tl.fromTo(el, { opacity: 0, x: -16 }, { opacity: 1, x: 0, duration: 0.2, ease: "power3.out", immediateRender: false }, 4.18 + i * 2 * F));
+        tl.to("#navDot", { backgroundColor: css("--brand-primary"), duration: 3 * F }, 4.16);
+        ["#nav1", "#nav2", "#nav3"].forEach((s, i) => P.pulse(s, 4.16 + i * 2 * F, 1.08));
+
+
+        // ================= the real article strip, taped, highlighter on "Ask for 200ms" =================
+        P.cardIn("#strip", 4.52, { fromY: 14, rot: -2.5 });
+        M.tape(70, 1201, -10, 4.86);
+        M.tape(800, 1199, 9, 4.9);
+        const k = 806 / 894, o = 12;
+        const box = ([x, y, w, h]) => [o + x * k, o + (y - 84) * k, w * k, h * k];   // strip cropped 84 px from the top
+        M.highlight($("#strip"), box([660, 93, 174, 75]), 4.82, { dur: 0.18, seed: 1301 });
+        M.highlight($("#strip"), box([66, 177, 157, 75]), 5.02, { dur: 0.18, seed: 1302 });
+
+        // phrase 1 clears completely in 5 f (3.00–3.17) before "Ask" starts entering (3.17) — never reads "Ask 10 seconds"
+        tl.to(".pA", { y: -60, opacity: 0, filter: "blur(8px)", duration: 5 * F, ease: "power2.in" }, 3.0);
+
+        // ================= "keep going": a red curling arrow loops on to the right of "200" =================
+        const curl = [[548, 1000], [610, 1004], [668, 996], [716, 974], [746, 944], [740, 912], [714, 898], [688, 912], [684, 942], [706, 968], [752, 980], [812, 968], [866, 940], [908, 908], [934, 884]];
+        const arG = grp("arG");
+        M.line(curl, 5.12, { color: "marker", width: 12, dur: 0.38, amp: 1.6, ease: "power1.inOut", parent: arG, seed: 1401 });
+        const ex = 934, ey = 884, ux = 26 / 36, uy = -24 / 36, hd = 36;
+        const h1 = [ex - ux * hd - uy * hd * 0.62, ey - uy * hd + ux * hd * 0.62], h2 = [ex - ux * hd + uy * hd * 0.62, ey - uy * hd - ux * hd * 0.62];
+        M.line([h1, [ex, ey], h2], 5.52, { color: "marker", width: 12, dur: 0.12, amp: 0.8, ease: "power3.out", parent: arG, seed: 1402 });
+        // it keeps nudging forward (secondary action to the cut)
+        const arX = xf(arG, [740, 940]);
+        tl.to(arX.o, { x: 8, duration: 0.08, ease: "sine.inOut", yoyo: true, repeat: 1, onUpdate: arX.apply }, 5.58);
+        // "keep going" lands where "Ask for" was
+      })();
+    </script>
+  </body>
+</html>

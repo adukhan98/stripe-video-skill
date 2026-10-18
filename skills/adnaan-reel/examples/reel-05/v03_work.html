@@ -1,0 +1,290 @@
+<!doctype html>
+<!-- adnaan-reel scene: v03_work — EXPLAINER. Beat A: small speaker card + "AI … reliably getting good".
+     Beat B: two work cards ("business work", "knowledge work") deal in on arcs, their task rows tick one by one,
+     then the deep "enterprise window" grows behind and around both on "enterprises". Built on paper.js. -->
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>v03_work</title>
+    <link rel="stylesheet" href="brand.css" />
+    <link rel="stylesheet" href="paper.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+    <script src="paper.js"></script>
+    <style>
+      @font-face { font-family: "Inter Tight"; src: url("fonts/InterTight-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Inter"; src: url("fonts/Inter-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+
+      /* ---- hero object: enterprise window (browser primitive, deep body) ---- */
+      #ewin { left: 80px; top: 676px; width: 860px; height: 616px; }
+      #ewin .viewport { background: var(--brand-deep); }
+      #ewin .chrome .g { top: 24px; height: 18px; background: #e2ddd7; }
+
+      /* ---- work cards: positioned wrapper (arc) > float wrapper > ui card ---- */
+      .wc { position: absolute; top: 768px; width: 384px; height: 498px; }
+      #wc1 { left: 106px; }
+      #wc2 { left: 530px; }
+      .wc-f { position: absolute; inset: 0; }
+      .wcard { inset: 0; }
+      .wcard .line { color: var(--brand-text); }
+      .row { position: absolute; left: 26px; width: 332px; height: 56px; }
+      .row svg { position: absolute; left: 0; top: 4px; width: 48px; height: 48px; overflow: visible; }
+      .row .bar { position: absolute; left: 70px; border-radius: 6px; background: var(--wire); }
+      .row .bar.acc { background: var(--brand-primary); }
+
+      /* ---- AI: light glint sweeps through the letters (--sx tweened), ping ring, dotted trail ---- */
+      #wAI { position: relative; --sx: 100%; }
+      #wAI::after {
+        content: "AI"; position: absolute; left: 0; top: 0; right: 0; bottom: 0; pointer-events: none;
+        background: linear-gradient(100deg, transparent 40%, rgba(255, 255, 255, 0.8) 50%, transparent 60%);
+        background-size: 300% 100%; background-position: var(--sx) 0;
+        -webkit-background-clip: text; background-clip: text; color: transparent;
+      }
+      #ping { position: absolute; border-radius: 50%; border: 7px solid var(--brand-primary); opacity: 0; }
+
+      /* ---- "getting good" meter (no numbers) ---- */
+      #meter { position: absolute; height: 22px; border-radius: 11px; background: var(--brand-card); opacity: 0;
+        box-shadow: 0 14px 24px -10px rgba(60, 50, 40, 0.34); }
+      #meter .fill { position: absolute; left: 4px; top: 4px; bottom: 4px; right: 4px; border-radius: 7px; transform-origin: 0% 50%;
+        background: linear-gradient(90deg, var(--brand-primary-dark), var(--brand-primary)); }
+      #meter .glint { position: absolute; inset: 0; border-radius: 11px; opacity: 0;
+        background: linear-gradient(100deg, transparent 30%, rgba(255, 255, 255, 0.7) 50%, transparent 70%); background-size: 300% 100%; }
+
+      /* ---- enterprise window lights (building grid) ---- */
+      #ewin .lt { position: absolute; width: 16px; height: 10px; border-radius: 3px; background: rgba(255, 255, 255, 0.9); opacity: 0; }
+      #ewin .lt.on { background: var(--brand-primary); box-shadow: 0 0 10px 2px rgba(46, 156, 203, 0.55); }
+    </style>
+  </head>
+  <body data-face="0.47">
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="5.5500">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+      <div id="cam"><div id="punch">
+
+        <!-- small speaker card, top-right (face window ≈ 24–69 % of the source: hair + chin in) -->
+        <div class="spk small" data-x="496" data-y="302" data-w="440" data-h="344" data-face-at="0.522" data-ry="-7">
+          <div class="spk-card">
+            <div class="spk-vid"><video id="speaker" class="clip" src="assets/speaker.mp4" muted playsinline data-start="0" data-duration="5.5500" data-track-index="1"></video></div>
+            <div class="spk-sheen"></div>
+          </div>
+        </div>
+
+        <!-- ===== BEAT A ===== -->
+        <div class="line sup" data-right="936" data-base="736" data-size="84" data-exit="1.56" data-exit-dy="-30">
+          <span class="w small" style="font-size: 66px" data-t="0.00">It’s</span><span class="w gap-s" data-t="0.49">because</span>
+        </div>
+        <svg class="paths"><path id="trail" class="dotted accent" d="M 0 0" /></svg>
+        <div id="ping"></div>
+        <div id="lAI" class="line" data-x="84" data-base="1064" data-size="340">
+          <span id="wAI" class="w hero ocean" data-t="0.91" data-hero>AI</span>
+        </div>
+        <div class="line sup" data-right="944" data-base="1196" data-size="130" data-exit="2.48">
+          <span class="w small" style="font-size: 80px" data-t="1.29">is</span><span class="w gap-s" data-t="1.77">reliably</span>
+        </div>
+        <div class="line sup" data-x="76" data-base="1318" data-size="120" data-exit="2.52">
+          <span class="w" data-t="2.11">getting</span>
+        </div>
+        <div class="line" data-right="944" data-base="1396" data-size="190" data-exit="2.62">
+          <span class="w hero ink" data-t="2.47" data-pop data-rise="24">good</span>
+        </div>
+
+        <div id="meter"><div class="fill"></div><div class="glint"></div></div>
+
+        <!-- ===== BEAT B: enterprise window (behind) + two work cards ===== -->
+        <div id="ewin" class="browser">
+          <div class="chrome"><i class="dot"></i><i class="dot"></i><i class="dot"></i><i class="g" style="left: 338px; width: 200px"></i></div>
+          <div class="viewport"></div>
+          <div class="sheen"></div>
+        </div>
+
+        <div id="wc1" class="wc"><div class="wc-f"><div class="uicard wcard">
+          <div class="line hero" data-x="28" data-base="86" data-size="68"><span class="w" data-t="3.19" data-hero>business</span></div>
+          <div class="line sup" data-x="28" data-base="152" data-size="68"><span class="w ocean" data-t="3.57" data-accent>work</span></div>
+        </div></div></div>
+
+        <div id="wc2" class="wc"><div class="wc-f"><div class="uicard wcard">
+          <div class="line hero" data-x="28" data-base="86" data-size="68"><span class="w" data-t="4.15" data-hero>knowledge</span></div>
+          <div class="line sup" data-x="28" data-base="152" data-size="68"><span class="w ocean" data-t="4.47" data-accent>work</span></div>
+        </div></div></div>
+
+        <!-- lower zone -->
+        <div class="line small" data-x="76" data-base="1440" data-size="84" data-exit="4.40">
+          <span class="w" data-t="3.85">and</span>
+        </div>
+        <div class="line small" data-x="76" data-base="1440" data-size="84" data-exit="4.92">
+          <span class="w" data-t="4.69">in</span>
+        </div>
+        <div class="line" data-cx="510" data-base="1432" data-size="172" data-fit="900">
+          <span id="wEnt" class="w hero ink" data-t="5.33" data-hero data-peak="1.03" data-rise="44">enterprises</span>
+        </div>
+        <div id="cur" class="cursor"></div>
+      </div></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const P = await Paper.init();
+        const { tl, D, F, $, $$ } = P;
+
+        // ---------- build the task rows (4 per card: drawn checkbox + wireframe bars) ----------
+        const ROWS = [
+          [[176, 130], [148, 196], [208, 104], [160, 150]],
+          [[192, 118], [140, 172], [184, 126], [150, 200]],
+        ];
+        const cards = [$("#wc1 .wcard"), $("#wc2 .wcard")];
+        cards.forEach((card, ci) => {
+          ROWS[ci].forEach(([a, b], ri) => {
+            const r = document.createElement("div");
+            r.className = "row";
+            r.style.top = 204 + ri * 70 + "px";
+            r.innerHTML = `<svg viewBox="0 0 48 48"><rect class="bx" x="1" y="1" width="46" height="46" rx="13" fill="var(--wire)"/>
+              <rect class="fl" x="1" y="1" width="46" height="46" rx="13" fill="var(--brand-primary)" opacity="0"/>
+              <path class="ck" d="M13 24.5 L21 32 L35.5 16.5" fill="none" stroke="var(--brand-card)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <i class="bar b1" style="top:9px;height:15px;width:${a}px"></i><i class="bar b2" style="top:33px;height:11px;width:${b}px;opacity:.7"></i><i class="bar acc" style="top:9px;height:15px;width:${a}px;transform:scaleX(0)"></i>`;
+            card.appendChild(r);
+          });
+        });
+
+        // ---------- a card deals in on an arc: fade, scale overshoot, tilt into travel; bars draw after (parts lag) ----------
+        function deal(sel, t, fromX, fromY, tilt) {
+          const wrap = $(sel), card = $(".wcard", wrap);
+          gsap.set(wrap, { transformOrigin: "50% 60%" });
+          tl.fromTo(card, { opacity: 0 }, { opacity: 1, duration: 4 * F, ease: "power1.out" }, t);
+          P.arc(wrap, t, { fromX, fromY, dur: 14 * F, tilt });
+          tl.fromTo(wrap, { scale: 0.84 }, { scale: 1.025, duration: 10 * F, ease: "power3.out" }, t);
+          tl.to(wrap, { scale: 1, duration: 9 * F, ease: "back.out(1.8)" }, t + 10 * F);
+          const rows = $$(".row", card);
+          rows.forEach((r, i) => {
+            const s = t + 10 * F + i * 3 * F;
+            tl.fromTo($("svg", r), { scale: 0.4, opacity: 0, transformOrigin: "50% 50%" }, { scale: 1, opacity: 1, duration: 8 * F, ease: "back.out(2)" }, s);
+            tl.fromTo($$(".bar.b1, .bar.b2", r), { scaleX: 0, transformOrigin: "0% 50%" }, { scaleX: 1, duration: 9 * F, ease: "power3.out", stagger: 2 * F }, s + 2 * F);
+          });
+        }
+        // ---------- tick: box flips to accent (pop), white check draws, squash on contact, bars dim (done) ----------
+        function tick(row, t) {
+          const svg = $("svg", row), fl = $(".fl", row), ck = $(".ck", row);
+          const L = ck.getTotalLength();
+          gsap.set(ck, { attr: { "stroke-dasharray": `${L} ${L}`, "stroke-dashoffset": L } });
+          gsap.set(fl, { svgOrigin: "24 24" });
+          tl.fromTo(fl, { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1.08, duration: 4 * F, ease: "power3.out" }, t - 4 * F);
+          tl.to(fl, { scale: 1, duration: 7 * F, ease: "back.out(2)" }, t);
+          tl.fromTo(ck, { attr: { "stroke-dashoffset": L } }, { attr: { "stroke-dashoffset": 0 }, duration: 5 * F, ease: "power2.out", immediateRender: false }, t - 2 * F);
+          P.squash(svg, t, 0.12);
+          tl.fromTo($(".bar.acc", row), { scaleX: 0, transformOrigin: "0% 50%" }, { scaleX: 1, duration: 7 * F, ease: "power2.out", immediateRender: false }, t + 1 * F);
+          tl.to($(".bar.b2", row), { opacity: 0.35, duration: 8 * F, ease: "power2.out" }, t + 3 * F);
+        }
+
+        const card1 = cards[0], card2 = cards[1];
+
+        // ================= BEAT A extras =================
+        // AI geometry (layout values, untransformed)
+        const lAI = $("#lAI"), wAI = $("#wAI");
+        const c0x = lAI.offsetLeft + wAI.offsetLeft + wAI.offsetWidth / 2;
+        const c0y = lAI.offsetTop + wAI.offsetTop + wAI.offsetHeight * 0.56;
+        // glint: a soft light band sweeps through the letters as AI lands (pop 0.91)
+        tl.fromTo(wAI, { "--sx": "100%" }, { "--sx": "0%", duration: 0.42, ease: "power2.inOut" }, 0.84);
+        // ping ring from the word's centre (kept inside the zone at its largest)
+        const ringD = Math.min(270, Math.round((2 * (c0x - 70)) / 1.3));
+        Object.assign($("#ping").style, { left: c0x - ringD / 2 + "px", top: c0y - ringD / 2 + "px", width: ringD + "px", height: ringD + "px" });
+        gsap.set("#ping", { transformOrigin: "50% 50%" });
+        tl.fromTo("#ping", { opacity: 1, scale: 0.55 }, { opacity: 0, scale: 1.3, duration: 0.5, ease: "power2.out", immediateRender: false }, 0.91);
+        tl.set("#ping", { opacity: 0 }, 0);
+
+        // "getting good" meter under "good": appears on "reliably", fills smoothly, snaps full on "good" (2.47)
+        const goodLine = [...$$(".line")].find((l) => l.textContent.trim() === "good");
+        const mW = Math.round(goodLine.offsetWidth * 0.94);
+        const mX = 944 - mW - 6, mY = 1448;
+        Object.assign($("#meter").style, { left: mX + "px", top: mY + "px", width: mW + "px" });
+        gsap.set("#meter", { transformOrigin: "100% 50%" });
+        tl.fromTo("#meter", { opacity: 0, scaleX: 0.6, y: 14 }, { opacity: 1, scaleX: 1, y: 0, duration: 10 * F, ease: "back.out(1.8)" }, 1.62);
+        tl.fromTo("#meter .fill", { scaleX: 0.04 }, { scaleX: 0.92, duration: 0.74, ease: "power1.inOut" }, 1.70);
+        tl.to("#meter .fill", { scaleX: 1, duration: 2 * F, ease: "power3.out" }, 2.44);                       // the snap
+        tl.to("#meter", { scaleX: 1.05, scaleY: 1.25, duration: 2 * F, ease: "power2.out" }, 2.45);
+        tl.to("#meter", { scaleX: 1, scaleY: 1, duration: 8 * F, ease: "back.out(2.4)" }, 2.45 + 2 * F);
+        tl.fromTo("#meter .glint", { opacity: 1, backgroundPosition: "100% 0" }, { opacity: 0, backgroundPosition: "0% 0", duration: 0.3, ease: "power2.out", immediateRender: false }, 2.47);
+        tl.set("#meter .glint", { opacity: 0 }, 0);
+        P.exitUp("#meter", 2.60);
+
+        // AI's dotted trail as it arcs up to the corner (2.50–2.96), then it fades
+        const s1 = 250 / 340, ox = lAI.offsetLeft, oy = lAI.offsetTop + lAI.offsetHeight;
+        const c1x = ox + (c0x - ox) * s1, c1y = oy - 452 + (c0y - oy) * s1;
+        $("#trail").setAttribute("d", `M ${c0x.toFixed(1)} ${c0y.toFixed(1)} C ${(c0x + 80).toFixed(1)} ${(c0y - 130).toFixed(1)}, ${(c1x + 80).toFixed(1)} ${(c1y + 140).toFixed(1)}, ${c1x.toFixed(1)} ${c1y.toFixed(1)}`);
+        P.drawPath("#trail", 2.52, 0.44);
+        P.marchPath("#trail", 2.52, 0.7, 120);
+        tl.to("#trail", { opacity: 0, duration: 6 * F, ease: "power2.in" }, 3.0);
+
+        // ---- beat A: AI recedes once the cards take the stage ----
+        // AI travels up on an arc to the top-left (250 px equivalent) to make room, then recedes (staging)
+        gsap.set("#lAI", { transformOrigin: "0% 100%" });
+        tl.to("#lAI", { scale: 0.97, duration: 3 * F, ease: "power2.in" }, 2.40);                   // anticipation
+        tl.to("#lAI", { y: -452, scale: 250 / 340, duration: 0.46, ease: "power3.inOut" }, 2.50);
+        tl.to("#lAI", { x: 26, duration: 0.23, ease: "power2.out" }, 2.50);
+        tl.to("#lAI", { x: 0, duration: 0.23, ease: "sine.inOut" }, 2.73);
+        tl.to("#lAI", { opacity: 0.55, filter: "blur(2px)", duration: 0.35, ease: "power2.inOut" }, 3.0);
+
+        // ---- card 1: business work — lands ~3.07 (business 3.19), rows tick on "work" (3.57), 3 f stagger ----
+        deal("#wc1", 2.84, 250, -170, -8);
+        $$(".row", card1).forEach((r, i) => tick(r, 3.50 + i * 3 * F));
+        P.floatY($("#wc1 .wc-f"), 3, 1.3);
+        P.breathe($("#wc1 .wc-f"), 1.008, 1.4);
+
+        // ---- card 2: knowledge work — lands ~4.03 (knowledge 4.15), rows tick on "work" (4.47) ----
+        P.recede(card1, 3.72, { opacity: 0.72, blur: 2, scale: 0.97, dur: 0.3 });   // staging: card 2 is the focal point
+        deal("#wc2", 3.70, 70, 180, 7);
+        $$(".row", card2).forEach((r, i) => tick(r, 4.40 + i * 3 * F));
+        P.floatY($("#wc2 .wc-f"), 3, 1.5);
+        P.breathe($("#wc2 .wc-f"), 1.008, 1.6);
+
+        // ---- cursor ticks the boxes in rhythm (clicks land on the tick contacts, every 0.1 s) ----
+        const boxXY = (ci, ri) => [[106, 530][ci] + 26 + 24 + 4, 768 + 204 + ri * 70 + 28 + 6];
+        const csvg = $("#cur svg");
+        tl.set("#cur", { x: 640, y: 1330, opacity: 0 }, 0);
+        const clickAt = (t) => {
+          tl.to(csvg, { scale: 0.8, duration: 1.5 * F, ease: "power2.in" }, t - 1.5 * F);
+          tl.to(csvg, { scale: 1, duration: 1.5 * F, ease: "power2.out" }, t);
+        };
+        [[0, 3.50, 3.18, 0.29], [1, 4.40, 3.96, 0.42]].forEach(([ci, t0, tIn, dIn]) => {
+          const [x0, y0] = boxXY(ci, 0);
+          P.cursorTo("#cur", tIn, x0, y0, { dur: dIn });                      // arcs in (x/y eased differently)
+          for (let ri = 0; ri < 4; ri++) {
+            const t = t0 + ri * 3 * F;
+            if (ri > 0) tl.to("#cur", { y: boxXY(ci, ri)[1], duration: 2 * F, ease: "power2.inOut" }, t - 2.4 * F);
+            clickAt(t);
+          }
+        });
+        P.cursorOut("#cur", 4.84);
+
+        // ---- enterprise window on "enterprises" (5.33): cards gather (anticipation), window grows behind + around ----
+        P.restore(card1, 4.80, 0.25);
+        const gather = 4.98;
+        tl.to("#wc1 .wcard", { scale: 0.965, x: 6, duration: 4 * F, ease: "power2.in" }, gather);
+        tl.to("#wc2 .wcard", { scale: 0.965, x: -6, duration: 4 * F, ease: "power2.in" }, gather);
+        const W = 5.17;                                   // contact frame of the window (0.16 s before the word)
+        gsap.set("#ewin", { transformOrigin: "50% 50%", transformPerspective: 1400 });
+        tl.fromTo("#ewin", { opacity: 0, scale: 0.78, rotationX: 8 }, { opacity: 1, scale: 1.02, rotationX: 0, duration: 6 * F, ease: "power3.out" }, W - 6 * F);
+        tl.to("#ewin", { scale: 1, duration: 10 * F, ease: "back.out(1.8)" }, W);
+        P.sheenSweep($("#ewin .sheen"), W - 2 * F);
+        // cards pop back out as the frame lands behind them (follow-through, 2 f apart)
+        ["#wc1 .wcard", "#wc2 .wcard"].forEach((s, i) => {
+          tl.to(s, { scale: 1.015, x: 0, y: -8, duration: 5 * F, ease: "power3.out" }, W - 1 * F + i * 2 * F);
+          tl.to(s, { scale: 0.93, y: 6, duration: 10 * F, ease: "back.out(1.6)" }, W + 4 * F + i * 2 * F);   // sink into the frame
+        });
+        // building lights in the deep frame switch on in a quick cascade, bottom-left → top-right
+        const vp = $("#ewin .viewport"), COLS = 28, ROWS_L = 21, lights = [], vals = [];
+        for (let r = 0; r < ROWS_L; r++) for (let c = 0; c < COLS; c++) {
+          const i = r * COLS + c, h = ((i * 2654435761) >>> 0) % 100;
+          const el = document.createElement("i");
+          el.className = "lt" + (h < 9 ? " on" : "");
+          el.style.left = 8 + c * 30.4 + "px"; el.style.top = 10 + r * 25.8 + "px";
+          vp.appendChild(el); lights.push(el); vals.push(h < 9 ? 1 : h < 42 ? 0.42 : 0.12);
+        }
+        tl.fromTo(lights, { opacity: 0 }, { opacity: (i) => vals[i], duration: 3 * F, ease: "power1.out", immediateRender: true,
+          stagger: { grid: [ROWS_L, COLS], from: [0, 1], amount: 0.3 } }, W - 1 * F);
+        // parallax depth: the frame drifts back while the cards (nearer) drift forward
+        tl.to("#ewin", { scale: 0.994, duration: 0.3, ease: "sine.inOut" }, W + 10 * F);
+        P.punch(W, { scale: 1.006, origin: "510px 1000px", dur: 0.3 });   // the one hero beat
+        tl.to("#ewin .chrome .dot", { scale: 1.25, duration: 3 * F, ease: "power2.out", stagger: 2 * F, yoyo: true, repeat: 1 }, W + 3 * F);
+      })();
+    </script>
+  </body>
+</html>

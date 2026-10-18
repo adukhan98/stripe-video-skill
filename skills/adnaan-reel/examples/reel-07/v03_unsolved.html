@@ -1,0 +1,268 @@
+<!doctype html>
+<!-- adnaan-reel scene v03_unsolved — THE BOARD continues (bespoke): v02's final board (frame, ledge, two squiggle
+     problems, "1." "2.", two red ✓) is already drawn on frame 0. On "famous" a red marker star + ink sparkle ticks pop
+     around problem 1; on "unsolved" a red rubber STAMP slams over the board's lower half (anticipation in the air →
+     slam → settle), the board jolts, red dust bursts and the ✓✓ wobble; then the real article strip flips up into
+     the lower zone, gets taped, and the highlighter swipes "They were two unsolved / problems in statistics." -->
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>v03_unsolved</title>
+    <link rel="stylesheet" href="brand.css" />
+    <link rel="stylesheet" href="paper.css" />
+    <link rel="stylesheet" href="marker.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+    <script src="paper.js"></script>
+    <script src="marker.js"></script>
+    <style>
+      @font-face { font-family: "Inter Tight"; src: url("fonts/InterTight-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Inter"; src: url("fonts/Inter-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Caveat"; src: url("fonts/Caveat-Variable.ttf") format("truetype"); font-weight: 400 700; font-style: normal; font-display: block; }
+
+      /* ---------- the rubber stamp: red Inter Tight 900 inside a rough red marker double rectangle ---------- */
+      #stamp { position: absolute; left: 0; top: 0; opacity: 0; }
+      #stamp .st-air { position: absolute; inset: 6px; border-radius: 18px; box-shadow: 0 70px 80px -20px rgba(40, 30, 20, 0.38); }
+      #stamp .st-fill { position: absolute; inset: 10px; border-radius: 10px; background: var(--brand-background); }
+      #stamp svg { position: absolute; left: 0; top: 0; width: 100%; height: 100%; overflow: visible; }
+      #stamp svg path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+      #stamp .st-word { position: relative; display: block; padding: 26px 24px 30px; font-family: var(--font-heading); font-weight: 900;
+        font-size: calc(156px * var(--type-scale)); line-height: 0.86; letter-spacing: -0.055em; color: var(--brand-primary); white-space: nowrap; }
+
+      /* red ink dust thrown out by the slam (objects, not words — they may fade) */
+      /* runtime highlighter draws with a default fill mid-swipe (thin dark line through the text) — scene-level fix */
+      .mk-hl path { fill: none !important; }
+
+      .dust { position: absolute; left: 0; top: 0; border-radius: 50%; background: var(--brand-primary); opacity: 0; }
+
+      /* ---------- the real article strip on a white card ---------- */
+      #art { position: absolute; left: 100px; top: 1196px; width: 840px; height: 200px; border-radius: 22px;
+        background: var(--brand-card); box-shadow: var(--card-shadow); opacity: 0; overflow: hidden; }
+      #art .strip { position: absolute; left: 17px; top: 18px; width: 894px; height: 183px; transform: scale(0.9); transform-origin: 0 0; }
+      #art .strip img { position: absolute; left: 0; top: 0; width: 894px; height: 183px; display: block; }
+      /* hide "work." (the tail of the previous sentence) on line 1 — filled with the captured page's own colour (real asset, not a palette colour) */
+      #art .strip .hide-work { position: absolute; left: 56px; top: 18px; width: 158px; height: 64px; background: rgb(247, 245, 239); }
+    </style>
+  </head>
+  <body data-face="0.41">
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="2.8833">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+      <div id="cam" data-push="1"><div id="punch">
+
+        <!-- the stamp -->
+        <div id="stamp"><div class="st-air"></div><div class="st-fill"></div><svg></svg><div class="st-word">unsolved</div></div>
+
+        <!-- the real article strip (art_unsolved.png 894×183 at 0.9) -->
+        <div id="art"><div class="strip"><img src="assets/art_unsolved.png" alt="" /><div class="hide-work"></div></div></div>
+
+        <!-- phrase 1 (exits bottom-up as the strip arrives) -->
+        <div class="line sup" id="p1a" data-x="92" data-base="958" data-size="84" data-exit="1.42" data-exit-lag="1">
+          <span class="w" data-t="0.03">They</span><span class="w gap-s" data-t="0.23">were</span>
+        </div>
+        <div class="line sup" id="p1b" data-right="940" data-base="1128" data-size="130" data-exit="1.42">
+          <span class="w" data-t="0.41" data-pop>two</span><span class="w gap-s" data-t="0.87" data-accent>famous</span>
+        </div>
+
+        <!-- phrase 2 -->
+        <div class="line sup" id="p2a" data-x="84" data-base="1000" data-size="130">
+          <span class="w" data-t="1.81" data-pop data-rise="44">problems</span>
+        </div>
+        <div class="line sup" id="p2b" data-right="940" data-base="1150" data-size="130">
+          <span class="w" data-t="2.09" data-rise="36" style="font-size: 0.62em">in</span><span class="w gap-s" data-t="2.49" data-accent data-rise="36">statistics.</span>
+        </div>
+
+      </div></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+
+      // ================================================================ THE BOARD (shared with v03 — copy verbatim)
+      // Geometry + seeds fixed in SHARED.md "RECURRING DRAWING 1". board(M, T): T = timing table (v02 draws it on);
+      // T = null → everything drawn at t = 0 (v03's opening state = v02's final state).
+      // Right edge centre-line sits at x 950 (not 960) so the 11 px ink + jitter + the hero punch stay inside x ≤ 960.
+      function boardRng(seed) {
+        let s = (seed >>> 0) || 1;
+        return () => { s ^= s << 13; s >>>= 0; s ^= s >> 17; s ^= s << 5; s >>>= 0; return (s % 100000) / 100000; };
+      }
+      // cursive "handwriting" loops along a baseline (illustrative squiggle maths, not readable)
+      function cursive(x0, x1, base, h, r, period = 30) {
+        const pts = [], n = Math.max(1, Math.round((x1 - x0) / period)), s = (x1 - x0) / (n * 2 * Math.PI), rx = period * 0.3;
+        const amps = Array.from({ length: n }, () => (r() < 0.22 ? h * 1.7 : h * (0.75 + r() * 0.45)));
+        for (let k = 0; k <= n * 16; k++) {
+          const th = (k / 16) * 2 * Math.PI, i = Math.min(n - 1, Math.floor(k / 16));
+          pts.push([x0 + s * th + rx * Math.sin(th), base - (amps[i] * (1 - Math.cos(th))) / 2]);
+        }
+        return pts;
+      }
+      function boardProblems() {
+        const r1 = boardRng(711), r2 = boardRng(712);
+        const p1 = [   // problem 1: y ≈ 450, x 240 → 820
+          cursive(240, 398, 466, 30, r1),
+          [[414, 436], [446, 434]], [[430, 420], [431, 452]],          // +
+          cursive(464, 604, 466, 30, r1),
+          cursive(612, 652, 422, 16, r1, 20),                          // superscript
+          [[672, 432], [710, 431]], [[672, 450], [711, 449]],          // =
+          cursive(730, 808, 466, 30, r1),
+        ];
+        const p2 = [   // problem 2: y ≈ 620, x 240 → 760 (a fraction, then = …)
+          cursive(248, 352, 598, 24, r2),
+          [[240, 614], [362, 612]],                                    // fraction bar
+          cursive(256, 344, 654, 22, r2),
+          cursive(390, 532, 636, 30, r2),
+          [[556, 612], [596, 611]], [[556, 630], [597, 629]],          // =
+          cursive(622, 760, 636, 30, r2),
+        ];
+        return { p1, p2 };
+      }
+      function board(M, T) {
+        const t = (k) => (T ? T[k] : 0);
+        const ink = { color: "ink", width: 11, amp: 1.8, texture: false };   // straight strokes: no felt-tip filter (its bbox region would clip a straight line thin)
+        // frame: 4 strokes like a hand (top, right, bottom, left), corners overshoot a little; then the chalk ledge
+        M.line([[114, 331], [950, 329]], t("top"), { ...ink, seed: 701, dur: 0.12 });
+        M.line([[948, 324], [950, 772]], t("right"), { ...ink, seed: 702, dur: 0.1 });
+        M.line([[952, 770], [116, 772]], t("bottom"), { ...ink, seed: 703, dur: 0.12 });
+        M.line([[120, 777], [121, 326]], t("left"), { ...ink, seed: 704, dur: 0.1 });
+        M.line([[140, 800], [940, 800]], t("ledge"), { ...ink, width: 10, seed: 705, dur: 0.09 });
+        // labels "1." / "2." (Caveat ink 64), vertically centred on y 450 / 620
+        M.note("1.", 166, 413, t("l1"), { size: 64, rot: -3, color: "ink", cps: 10 });
+        M.note("2.", 166, 583, t("l2"), { size: 64, rot: -3, color: "ink", cps: 10 });
+        // the two squiggle problems (seeds 7110+k / 7120+k per stroke; loop shapes from rng 711 / 712)
+        const { p1, p2 } = boardProblems();
+        const sq = { color: "ink", width: 7, amp: 1.1 };
+        const write = (lines, at, seed, durs) => {
+          let tt = at;
+          lines.forEach((pts, k) => { M.line(pts, tt, { ...sq, seed: seed + k, dur: durs[k], texture: pts.length > 2 }); tt += T ? durs[k] + 0.006 : 0; });
+        };
+        write(p1, t("p1"), 7110, [0.07, 0.02, 0.02, 0.06, 0.025, 0.018, 0.018, 0.045]);
+        write(p2, t("p2"), 7120, [0.045, 0.025, 0.04, 0.06, 0.018, 0.018, 0.05]);
+        // the two red ✓ (final state)
+        const c1 = M.check(870, 450, 84, t("c1"), { seed: 721, width: 12, dur: 0.2 });
+        const c2 = M.check(820, 620, 84, t("c2"), { seed: 722, width: 12, dur: 0.18 });
+        return { p1, p2, c1, c2 };
+      }
+      // ================================================================ /THE BOARD
+
+      (async () => {
+        const P = await Paper.init({ extraFonts: ['700 60px "Caveat"'] });
+        const M = Marker.init(P);
+        const { tl, D, F, $, $$ } = P;
+        const NS = "http://www.w3.org/2000/svg";
+
+        // =============== THE BOARD — v02's code verbatim (above), board(M, null) = v02's FINAL state on frame 0 ===============
+        const B = board(M, null);
+        const notes = $$("#punch > .mk-note");          // the board's "1." / "2." labels (the only notes in this scene)
+        const BRD = { n1: notes[0], n2: notes[1], ck1: B.c1, ck2: B.c2 };
+        const BOARD = { wrap: [M.layer, ...notes] };    // the marker layer holds only the board (+ its star/ticks): it jolts as one
+        $("#punch").appendChild($("#stamp"));         // the stamp prints ON TOP of the board ink and its labels
+
+                // ================= "two" (0.41): the board's labels count off "1." "2." =================
+        [BRD.n1, BRD.n2].forEach((n, i) => {
+          const t = 0.38 + i * 4 * F;
+          gsap.set(n, { transformOrigin: "30% 70%" });
+          tl.to(n, { scale: 1.2, y: -7, duration: 3 * F, ease: "power2.out" }, t)
+            .to(n, { scale: 1, y: 0, duration: 8 * F, ease: "back.out(2.4)" }, t + 3 * F);
+        });
+
+        // ================= "famous" (0.87): red star + ink sparkle ticks pop around problem 1 =================
+        const star = (cx, cy, R, r0) => Array.from({ length: 11 }, (_, i) => {
+          const a = -Math.PI / 2 + (i * Math.PI) / 5, rr = i % 2 ? r0 : R;
+          return [cx + Math.cos(a) * rr, cy + Math.sin(a) * rr];
+        });
+        const STAR = M.line(star(306, 376, 28, 12), 0.70, { width: 8, dur: 0.26, amp: 1.0, seed: 731 });
+        gsap.set(STAR.g, { svgOrigin: "306 376" });
+        tl.fromTo(STAR.g, { scale: 0.7 }, { scale: 1.18, duration: 0.2, ease: "power2.out", immediateRender: false }, 0.84)
+          .to(STAR.g, { scale: 1, duration: 0.24, ease: "back.out(2.6)" }, 1.04);
+        const TICKS = [
+          [[344, 364], [362, 350]], [[350, 390], [372, 377]], [[344, 402], [360, 414]],     // right of the star
+          [[268, 362], [252, 350]],                                                           // left of the star
+          [[764, 380], [752, 362]], [[786, 374], [790, 354]], [[806, 384], [822, 370]],       // a second sparkle over the end of problem 1
+        ];
+        TICKS.forEach((pts, i) => M.line(pts, 0.80 + i * F, { color: "ink", width: 7, dur: 0.07, amp: 0.6, seed: 741 + i, texture: false }));
+
+        // ================= HERO — "unsolved" (1.41): the rubber stamp slams over the board's lower half =================
+        const st = $("#stamp"), W = st.offsetWidth, H = st.offsetHeight;
+        // the stamp's own rough double rectangle (red marker), already inked — it is printed in one go
+        const ss = $("#stamp svg");
+        ss.setAttribute("viewBox", `0 0 ${W} ${H}`);
+        const rect = (i) => [[i, i], [W - i, i + 2], [W - i - 1, H - i], [i + 1, H - i - 1], [i, i]];
+        M.line(rect(4), 0, { parent: ss, width: 11, amp: 2.2, seed: 751 });
+        M.line(rect(15), 0, { parent: ss, width: 5, amp: 1.4, seed: 752 });
+        // rest pose: −8°, left corner just inside x 66, right edge clear of v02's ✓ at (820,620), over problem 2
+        const ROT = -8, a = W / 2, b = H / 2, cs = Math.cos((8 * Math.PI) / 180), sn = Math.sin((8 * Math.PI) / 180);
+        const CX = 86 + a * cs + b * sn, CY = 622;
+        gsap.set(st, { left: CX - a, top: CY - b, transformOrigin: "50% 50%" });
+        window.__stamp = { W, H, CX, CY };
+        const T = 1.41;
+        // in the air: appears big + tilted, soft shadow far below, then winds up (anticipation) ...
+        tl.set(st, { opacity: 0 }, 0);
+        tl.fromTo(st, { opacity: 0, scale: 1.14, x: 70, y: -70, rotation: -14, filter: "blur(6px)" },
+          { opacity: 1, scale: 1.17, x: 80, y: -86, rotation: -13, filter: "blur(0px)", duration: 0.12, ease: "power2.out", immediateRender: false }, T - 0.3);
+        tl.to(st, { scale: 1.2, x: 86, y: -96, rotation: -12.5, duration: 0.07, ease: "sine.inOut" }, T - 0.18);
+        // ... SLAM (accelerates in, contact on the word) ...
+        tl.to(st, { scale: 0.94, x: 0, y: 0, rotation: ROT, duration: 0.11, ease: "power3.in" }, T - 0.11);
+        tl.fromTo(st, { filter: "blur(0px)" }, { filter: "blur(3px)", duration: 0.08, ease: "power1.in", immediateRender: false }, T - 0.08);
+        tl.set(st, { filter: "blur(0px)" }, T);
+        // ... overshoot + settle
+        tl.to(st, { scale: 1.015, duration: 0.1, ease: "power2.out" }, T)
+          .to(st, { scale: 1, duration: 0.2, ease: "sine.inOut" }, T + 0.1);
+        // the air shadow tightens as it falls and vanishes on contact (ink on paper has no shadow)
+        tl.fromTo("#stamp .st-air", { opacity: 0.9 }, { opacity: 0, duration: 0.3, ease: "power2.in", immediateRender: false }, T - 0.3);
+        tl.set("#stamp .st-air", { opacity: 0 }, T);
+
+        // exaggeration: the board jolts 6 px (vertical — the slam is a downward hit), a small camera punch
+        tl.to(BOARD.wrap, { y: 6, x: -2, duration: F, ease: "none" }, T)
+          .to(BOARD.wrap, { y: -3, x: 1, duration: 2 * F, ease: "power1.out" })
+          .to(BOARD.wrap, { y: 1.5, x: 0, duration: 2 * F, ease: "power1.inOut" })
+          .to(BOARD.wrap, { y: 0, duration: 3 * F, ease: "power1.out" });
+        P.punch(T, { scale: 1.006, origin: "960px 650px", dur: 0.26 });
+
+        // MICRO 3: the two red ✓ wobble on the hit (parts lag: 2 f apart)
+        [[BRD.ck1, 870, 450], [BRD.ck2, 820, 620]].forEach(([ck, x, y], i) => {
+          const t = T + (1 + i * 2) * F;
+          gsap.set(ck.g, { svgOrigin: `${x} ${y}` });
+          tl.to(ck.g, { rotation: -14, scale: 1.12, duration: 2 * F, ease: "power2.out" }, t)
+            .to(ck.g, { rotation: 9, scale: 1, duration: 4 * F, ease: "sine.inOut" })
+            .to(ck.g, { rotation: -4, duration: 4 * F, ease: "sine.inOut" })
+            .to(ck.g, { rotation: 0, duration: 5 * F, ease: "sine.out" });
+        });
+
+        // red ink dust thrown out from under the stamp's edges (seeded)
+        const rnd = (() => { let s = 90321; return () => { s = (s * 1103515245 + 12345) & 0x7fffffff; return s / 0x7fffffff; }; })();
+        const toW = (lx, ly) => {   // stamp-local (from centre) → frame, at the rest pose
+          const r = (ROT * Math.PI) / 180;
+          return [CX + lx * Math.cos(r) - ly * Math.sin(r), CY + lx * Math.sin(r) + ly * Math.cos(r)];
+        };
+        const host = $("#punch");
+        for (let i = 0; i < 18; i++) {
+          // spawn along the bottom edge (most), the ends and the top edge; fly outward from the stamp
+          const side = i < 8 ? "b" : i < 12 ? "t" : i < 15 ? "l" : "r";
+          let lx, ly, dx, dy;
+          if (side === "b") { lx = -a + 40 + rnd() * (W - 80); ly = b; dx = (lx / a) * 30; dy = 46 + rnd() * 50; }
+          else if (side === "t") { lx = -a + 40 + rnd() * (W - 260); ly = -b; dx = (lx / a) * 26; dy = -30 - rnd() * 34; }
+          else if (side === "l") { lx = -a; ly = -b + 30 + rnd() * (H - 60); dx = 4 + rnd() * 6; dy = 30 + rnd() * 30; }
+          else { lx = a; ly = 10 + rnd() * (b - 20); dx = 24 + rnd() * 40; dy = 30 + rnd() * 36; }
+          const [x, y] = toW(lx, ly), sz = 7 + Math.round(rnd() * 9);
+          const d = document.createElement("div");
+          d.className = "dust";
+          Object.assign(d.style, { width: sz + "px", height: sz + "px" });
+          host.appendChild(d);
+          const t0 = T + (i % 3) * F;
+          tl.set(d, { x: x - sz / 2, y: y - sz / 2, scale: 0.3, opacity: 1 }, t0);
+          tl.to(d, { x: x - sz / 2 + dx, y: y - sz / 2 + dy, scale: 1, duration: 0.3 + rnd() * 0.12, ease: "power3.out" }, t0);
+          tl.to(d, { scale: 0.2, opacity: 0, duration: 0.2, ease: "power2.in" }, t0 + 0.26 + rnd() * 0.12);
+        }
+
+        // ================= MICRO 2: the real article strip flips up, tape, highlighter =================
+        gsap.set("#art", { transformOrigin: "50% 100%", rotation: -1.2 });
+        tl.fromTo("#art", { opacity: 0 }, { opacity: 1, duration: 4 * F, ease: "power1.out" }, 1.52);
+        tl.fromTo("#art", { y: 50, rotationX: 64, scale: 0.94, transformPerspective: 1400 },
+          { y: 0, rotationX: 0, scale: 1, duration: 0.4, ease: "back.out(1.3)" }, 1.52);
+        M.tape(92, 1172, -9, 1.9);
+        M.tape(786, 1168, 8, 1.96);
+        M.highlight($("#art .strip"), [220, 9, 578, 75], 1.98, { dur: 0.28 });   // "They were two unsolved"
+        M.highlight($("#art .strip"), [66, 93, 513, 75], 2.3, { dur: 0.3 });     // "problems in statistics." — ends ~2.6
+      })();
+    </script>
+  </body>
+</html>

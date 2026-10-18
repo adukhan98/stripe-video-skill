@@ -1,0 +1,273 @@
+<!doctype html>
+<!-- adnaan-reel scene: t3_six — v7 "MINT" style test.
+     TALK (him full-screen, charcoal kinetic captions with a light glow) → THE SIGNATURE SHRINK: his footage's clip-path
+     morphs rect → rounded card → circle while it scales/arcs into disc 1 of THE HABIT CHAIN; the grey board (+grid,
+     strong vignette) is revealed as the camera pulls out; discs 2–6 pop along a clean 4 px charcoal connector.
+     No marker layer, no red, no Caveat (v7). The chain is ONE self-contained block (CSS + JS, marked HABIT CHAIN)
+     that t4 copies to open on this scene's exact end state. -->
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>t3_six</title>
+    <link rel="stylesheet" href="brand.css" />
+    <link rel="stylesheet" href="paper.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+    <script src="paper.js"></script>
+    <style>
+      @font-face { font-family: "Inter Tight"; src: url("fonts/InterTight-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Inter"; src: url("fonts/Inter-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+
+      /* v7 TALK captions: charcoal ink (hero in mint) with a soft light glow, no paper strip */
+      :root { --glow-v7: 0 0 22px rgba(240, 236, 230, .95), 0 0 8px rgba(240, 236, 230, .9); }
+      .g7 { text-shadow: var(--glow-v7); }
+      /* v7 VISUAL board: the camera-scaled grid wrapper + the strong vignette over the paper */
+      #board { position: absolute; inset: 0; }
+      #vig7 { position: absolute; inset: 0; background: var(--vignette-strong); opacity: 0; }
+
+      /* ===================== HABIT CHAIN (v7) — CSS — BEGIN (t4: copy verbatim) ===================== */
+      .hc-world { position: absolute; inset: 0; }
+      .hc-link { position: absolute; left: 0; top: 0; overflow: visible; }
+      .hc-link path { fill: none; stroke: var(--brand-deep); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+      .hc-disc {
+        position: absolute; width: 180px; height: 180px; margin: -90px 0 0 -90px; border-radius: 50%;
+        background: var(--brand-deep); box-shadow: var(--disc-shadow); color: white;
+        display: flex; align-items: center; justify-content: center;
+      }
+      .hc-disc.mint { background: var(--brand-primary); }
+      .hc-disc.face { background: var(--brand-primary); }      /* backing under his face circle: shadow + mint rim fringe */
+      .hc-disc svg { width: 46%; height: 46%; display: block; }
+      .hc-ring { position: absolute; left: 0; top: 0; overflow: visible; pointer-events: none; }
+      .hc-ring circle { fill: none; stroke: var(--brand-primary); }
+      .hc-ripple {
+        position: absolute; width: 180px; height: 180px; margin: -90px 0 0 -90px; border-radius: 50%;
+        border: 6px solid var(--brand-primary); opacity: 0;
+      }
+      /* ===================== HABIT CHAIN (v7) — CSS — END ===================== */
+    </style>
+  </head>
+  <body data-face="0.40">
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="2.2500">
+      <div id="bg"><div id="board"><div id="grid"></div></div><div id="vignette"></div><div id="vig7"></div></div>
+
+      <!-- the board's world layer: connector + discs 2–6 + disc-1 backing (built by buildHabitChain) -->
+      <div id="world" class="hc-world"></div>
+
+      <!-- full-screen speaker (TALK) → shrinks into disc 1. data-push 1: no runtime push, the shrink owns its transform -->
+      <div id="spk" class="spk full" data-push="1">
+        <div class="spk-card">
+          <div class="spk-vid"><video id="speaker" class="clip" src="assets/speaker.mp4" muted playsinline data-start="0" data-duration="2.2500" data-track-index="1"></video></div>
+        </div>
+      </div>
+
+      <div id="cam"><div id="punch">
+        <!-- TALK: low on his chest, never over the face -->
+        <div class="line sup ink g7" data-x="80" data-base="1430" data-size="100" data-exit="0.36">
+          <span class="w" data-t="0.05">Here</span><span class="w gap-s" data-t="0.35">are</span>
+        </div>
+        <!-- board: top-right free space (the chain owns the left-centre zigzag) -->
+        <div class="line hero ocean g7" data-right="922" data-base="460" data-size="200" data-fit="400" data-exit="0.93" data-exit-dy="-10">
+          <span class="w" data-t="0.49" data-hero>six</span>
+        </div>
+        <div class="line hero ink g7" data-right="926" data-base="584" data-size="165" data-fit="480" data-exit="0.93" data-exit-lag="2" data-exit-dy="-12">
+          <span class="w" data-t="0.75" data-accent>habits</span>
+        </div>
+        <div class="line sup ink g7" data-x="404" data-base="380" data-size="110">
+          <span class="w" data-t="1.17" data-pop>I'd</span>
+        </div>
+        <div class="line hero ocean g7" data-right="924" data-base="495" data-size="200" data-fit="420">
+          <span class="w" data-t="1.43" data-hero>steal</span>
+        </div>
+        <div class="line sup ink g7" data-right="930" data-base="578" data-size="90">
+          <span class="w" data-t="1.63">from</span><span class="w gap-s" data-t="1.81">them.</span>
+        </div>
+      </div></div>
+    </div>
+    <script>
+      /* ============================================================================================================
+         HABIT CHAIN (v7) — JS — BEGIN.  Self-contained: t4 copies this block verbatim (plus the CSS block above).
+         Geometry (SHARED.md v7): six discs, diameter 180, centres in frame px (world = frame at the end of t3).
+         Disc 1 = HIS FACE: the full-frame #spk (1080x1920 speaker.mp4) clipped to a circle of radius FACE.R around
+         source point (FACE.cx, FACE.cy) and transformed (origin = that point) so it lands on C[0] at diameter 180,
+         with a mint ring (RING px on screen) drawn inside the clip. Connector: 4 px charcoal, centre→centre 1→6,
+         behind the discs. Discs 2–6 charcoal with white Phosphor-fill glyphs at 46 % of the disc.
+           buildHabitChain(world, spk)  → { link, len, cum, discs[6], glyphs[6], ring, ringLen, ripple }
+           HC.faceEnd                   → exact end transform/clip of #spk
+           setHabitChainEnd(chain, spk) → puts everything in the END STATE (= t4 frame 0)
+         ============================================================================================================ */
+      const HC = {
+        D: 180, RING: 8,
+        C: [[300, 560], [620, 700], [330, 880], [640, 1030], [330, 1190], [600, 1360]],
+        ICONS: ["microphone", "eye", "chat-circle-dots", "magnifying-glass", "folder-open", "watch"],
+        FACE: { cx: 550, cy: 735, R: 380 },          // face circle in speaker.mp4 source px (face centre ≈ 0.37–0.40 of height)
+        GLYPH: {                                       // Phosphor "fill" 256-box paths (hf/assets/<name>.svg)
+          "microphone": "M80,128V64a48,48,0,0,1,96,0v64a48,48,0,0,1-96,0Zm128,0a8,8,0,0,0-16,0,64,64,0,0,1-128,0,8,8,0,0,0-16,0,80.11,80.11,0,0,0,72,79.6V240a8,8,0,0,0,16,0V207.6A80.11,80.11,0,0,0,208,128Z",
+          "eye": "M247.31,124.76c-.35-.79-8.82-19.58-27.65-38.41C194.57,61.26,162.88,48,128,48S61.43,61.26,36.34,86.35C17.51,105.18,9,124,8.69,124.76a8,8,0,0,0,0,6.5c.35.79,8.82,19.57,27.65,38.4C61.43,194.74,93.12,208,128,208s66.57-13.26,91.66-38.34c18.83-18.83,27.3-37.61,27.65-38.4A8,8,0,0,0,247.31,124.76ZM128,168a40,40,0,1,1,40-40A40,40,0,0,1,128,168Z",
+          "chat-circle-dots": "M128,24A104,104,0,0,0,36.18,176.88L24.83,210.93a16,16,0,0,0,20.24,20.24l34.05-11.35A104,104,0,1,0,128,24ZM84,140a12,12,0,1,1,12-12A12,12,0,0,1,84,140Zm44,0a12,12,0,1,1,12-12A12,12,0,0,1,128,140Zm44,0a12,12,0,1,1,12-12A12,12,0,0,1,172,140Z",
+          "magnifying-glass": "M168,112a56,56,0,1,1-56-56A56,56,0,0,1,168,112Zm61.66,117.66a8,8,0,0,1-11.32,0l-50.06-50.07a88,88,0,1,1,11.32-11.31l50.06,50.06A8,8,0,0,1,229.66,229.66ZM112,184a72,72,0,1,0-72-72A72.08,72.08,0,0,0,112,184Z",
+          "folder-open": "M245,110.64A16,16,0,0,0,232,104H216V88a16,16,0,0,0-16-16H130.67L102.94,51.2a16.14,16.14,0,0,0-9.6-3.2H40A16,16,0,0,0,24,64V208h0a8,8,0,0,0,8,8H211.1a8,8,0,0,0,7.59-5.47l28.49-85.47A16.05,16.05,0,0,0,245,110.64ZM93.34,64,123.2,86.4A8,8,0,0,0,128,88h72v16H69.77a16,16,0,0,0-15.18,10.94L40,158.7V64Z",
+          "watch": "M175.3,63.53l-6.24-34.38A16,16,0,0,0,153.32,16H102.68A16,16,0,0,0,86.94,29.15L80.7,63.53a79.9,79.9,0,0,0,0,128.94l6.24,34.38A16,16,0,0,0,102.68,240h50.64a16,16,0,0,0,15.74-13.15l6.24-34.38a79.9,79.9,0,0,0,0-128.94ZM102.68,32h50.64l3.91,21.55a79.75,79.75,0,0,0-58.46,0Zm50.64,192H102.68l-3.91-21.55a79.75,79.75,0,0,0,58.46,0ZM168,136H128a8,8,0,0,1-8-8V88a8,8,0,0,1,16,0v32h32a8,8,0,0,1,0,16Z",
+        },
+      };
+      HC.faceEnd = (() => {
+        const { cx, cy, R } = HC.FACE, s = HC.D / 2 / R;
+        return {
+          scale: s, x: HC.C[0][0] - cx, y: HC.C[0][1] - cy, transformOrigin: `${cx}px ${cy}px`,
+          inset: [cy - R, 1080 - (cx + R), 1920 - (cy + R), cx - R], round: R,
+          clip: `inset(${cy - R}px ${1080 - (cx + R)}px ${1920 - (cy + R)}px ${cx - R}px round ${R}px)`,
+        };
+      })();
+      function buildHabitChain(world, spk) {
+        const NS = "http://www.w3.org/2000/svg";
+        // connector (behind the discs)
+        const svg = document.createElementNS(NS, "svg");
+        svg.setAttribute("class", "hc-link"); svg.setAttribute("width", "1080"); svg.setAttribute("height", "1920");
+        svg.setAttribute("viewBox", "0 0 1080 1920");
+        const link = document.createElementNS(NS, "path");
+        link.setAttribute("d", "M " + HC.C.map((p) => p.join(" ")).join(" L "));
+        svg.appendChild(link); world.appendChild(svg);
+        const cum = [0];
+        for (let i = 1; i < HC.C.length; i++) cum.push(cum[i - 1] + Math.hypot(HC.C[i][0] - HC.C[i - 1][0], HC.C[i][1] - HC.C[i - 1][1]));
+        const len = cum[cum.length - 1];
+        // discs (disc 1 = mint backing under the face circle: carries the disc shadow; glyph kept for t4's flip)
+        const discs = [], glyphs = [];
+        HC.C.forEach(([x, y], i) => {
+          const d = document.createElement("div");
+          d.className = "hc-disc" + (i === 0 ? " face" : "");
+          d.id = "hc-d" + (i + 1);
+          d.style.left = x + "px"; d.style.top = y + "px";
+          d.dataset.origin = "50% 50%";
+          d.innerHTML = `<svg viewBox="0 0 256 256" fill="currentColor"><path d="${HC.GLYPH[HC.ICONS[i]]}"/></svg>`;
+          const g = d.querySelector("svg");
+          g.dataset.origin = "50% 50%";
+          if (i === 0) g.style.visibility = "hidden";   // t3: his face covers disc 1; t4 reveals the mic on its flip
+          world.appendChild(d); discs.push(d); glyphs.push(g);
+        });
+        // ripple (secondary action off disc 1), lives under the face circle
+        const ripple = document.createElement("div");
+        ripple.className = "hc-ripple"; ripple.style.left = HC.C[0][0] + "px"; ripple.style.top = HC.C[0][1] + "px";
+        world.insertBefore(ripple, discs[0]);
+        // mint ring: drawn in SOURCE px inside #spk so it rides the shrink exactly; RING px wide on screen, outer edge
+        // 1 screen px beyond the clip so the clip edge is always ring-coloured (no footage fringe)
+        const { cx, cy, R } = HC.FACE, fe = HC.faceEnd, w = HC.RING / fe.scale;
+        const rs = document.createElementNS(NS, "svg");
+        rs.setAttribute("class", "hc-ring"); rs.setAttribute("width", "1080"); rs.setAttribute("height", "1920");
+        rs.setAttribute("viewBox", "0 0 1080 1920");
+        const ring = document.createElementNS(NS, "circle");
+        const r = R - w / 2 + 1 / fe.scale;
+        ring.setAttribute("cx", cx); ring.setAttribute("cy", cy); ring.setAttribute("r", r);
+        ring.setAttribute("stroke-width", w + 1 / fe.scale);
+        ring.setAttribute("transform", `rotate(-120 ${cx} ${cy})`);   // draws from the upper-left, clockwise
+        rs.appendChild(ring); spk.appendChild(rs);
+        const ringLen = 2 * Math.PI * r;
+        return { link, len, cum, discs, glyphs, ring, ringLen, ripple };
+      }
+      function setHabitChainEnd(ch, spk) {
+        const fe = HC.faceEnd;
+        gsap.set(spk, { transformOrigin: fe.transformOrigin, x: fe.x, y: fe.y, scale: fe.scale, clipPath: fe.clip });
+        gsap.set(ch.link, { strokeDasharray: ch.len + " " + 3 * ch.len, strokeDashoffset: 0 });
+        gsap.set(ch.ring, { strokeDasharray: ch.ringLen + " " + 3 * ch.ringLen, strokeDashoffset: 0, opacity: 1 });
+        gsap.set(ch.discs, { opacity: 1, scale: 1, rotation: 0, x: 0, y: 0 });
+        gsap.set(ch.glyphs, { opacity: 1, scale: 1, rotation: 0 });
+        gsap.set(ch.ripple, { opacity: 0 });
+      }
+      /* ===================== HABIT CHAIN (v7) — JS — END ===================== */
+
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const P = await Paper.init();
+        const { tl, D, F } = P;
+        const spk = document.getElementById("spk");
+        const ch = buildHabitChain(document.getElementById("world"), spk);
+        const fe = HC.faceEnd;
+        const E = (n) => gsap.parseEase(n);
+        const e2o = E("power2.out"), e3o = E("power3.out"), e2io = E("power2.inOut"), e3io = E("power3.inOut");
+        const clamp = (v) => Math.max(0, Math.min(1, v));
+
+        // ---------------- key times (scene s) ----------------
+        const T = { dip: 0.38, shrink: 0.48, land: 0.88, peak: 0.95, settle: 1.10, tug: 1.43 };
+        const LINE0 = 0.86, ARR2 = 0.95;                         // connector leaves disc 1 / reaches disc 2
+        const arr = [LINE0, ARR2, ARR2 + 2 * F, ARR2 + 4 * F, ARR2 + 6 * F, ARR2 + 8 * F];   // tip reaches disc k (2 f stagger)
+
+        // ---------------- THE SHRINK: one pure function of time drives #spk (seek-safe) ----------------
+        // dip 1 → 1.015 (3 f) · zoom in log-space (power2.out) 1.015 → s · arc (x power3.out, y power2.out) ·
+        // clip rect → rounded card → circle (power3.out, leads the zoom) · landing pop 1.06 → settle · tug yank on 'steal'
+        const L0 = Math.log(1.015), L1 = Math.log(fe.scale);
+        function spkState(t) {
+          let zoom = 1, pop = 1, x = 0, y = 0, c = 0;
+          if (t >= T.dip && t < T.shrink) zoom = 1 + 0.015 * e2o((t - T.dip) / (T.shrink - T.dip));
+          if (t >= T.shrink) {
+            const u = clamp((t - T.shrink) / (T.land - T.shrink));
+            zoom = Math.exp(L0 + (L1 - L0) * e2o(u));             // log-space zoom: a fast snap that decelerates into the slot
+            x = fe.x * e3o(u); y = fe.y * e2o(u);                // x leads y → the circle travels on an arc
+            c = e3o(clamp((t - T.shrink) / (T.land - 0.05 - T.shrink)));
+          }
+          if (t > T.land) {
+            pop = t < T.peak ? 1 + 0.06 * e2o((t - T.land) / (T.peak - T.land))
+                             : 1 + 0.06 * (1 - e2io(clamp((t - T.peak) / (T.settle - T.peak))));
+          }
+          // greedy tug on 'steal': the face disc yanks 4 px up-left (away from the chain), then settles back
+          let tx = 0, ty = 0;
+          const k0 = T.tug - 3 * F, k1 = T.tug + 2 * F, k2 = T.tug + 14 * F;
+          if (t > k0 && t < k2) {
+            const a = t < k1 ? e2o((t - k0) / (k1 - k0)) : 1 - e2io((t - k1) / (k2 - k1));
+            tx = -4 * a; ty = -2 * a;
+          }
+          return { zoom, pop, x: x + tx, y: y + ty, c };
+        }
+        function apply(t) {
+          const s = spkState(t);
+          const [it, ir, ib, il] = fe.inset;
+          spk.style.transformOrigin = fe.transformOrigin;
+          spk.style.transform = `translate(${s.x}px, ${s.y}px) scale(${s.zoom * s.pop})`;
+          spk.style.clipPath = s.c <= 0 ? "none"
+            : `inset(${it * s.c}px ${ir * s.c}px ${ib * s.c}px ${il * s.c}px round ${fe.round * s.c}px)`;
+          // camera pull-out: the grid board zooms 2× → 1× toward disc 1 with the footage (sqrt of the footage zoom)
+          const bz = Math.max(1, Math.sqrt(s.zoom / fe.scale));
+          board.style.transform = `scale(${bz})`;
+          vig.style.opacity = s.c;
+        }
+        const board = document.getElementById("board"), vig = document.getElementById("vig7");
+        board.style.transformOrigin = `${HC.C[0][0]}px ${HC.C[0][1]}px`;
+        const clock = { t: 0 };
+        apply(0);
+        tl.fromTo(clock, { t: 0 }, { t: D, duration: D, ease: "none", onUpdate: () => apply(clock.t) }, 0);   // a clock, not an ease
+
+        // grid drift ends at (0,0) so t4's frame 0 grid matches (overrides the runtime's 0 → -20,-12 drift; same speed)
+        tl.fromTo("#grid", { x: 20, y: 12 }, { x: 0, y: 0, duration: D, ease: "none" }, 0);
+
+        // ---------------- mint ring draws round the face as it lands ----------------
+        tl.set(ch.ring, { strokeDasharray: ch.ringLen + " " + 3 * ch.ringLen, strokeDashoffset: ch.ringLen, opacity: 0 }, 0);
+        tl.set(ch.ring, { opacity: 1 }, 0.72);
+        tl.to(ch.ring, { strokeDashoffset: 0, duration: 0.24, ease: "power2.inOut" }, 0.72);
+
+        // disc-1 backing (shadow) appears under the face as it lands
+        tl.fromTo(ch.discs[0], { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 4 * F, ease: "power2.out" }, T.land - 2 * F);
+
+        // ---------------- connector draws 1 → 6; discs 2–6 pop as it arrives (2 f stagger), glyphs 2 f later -----
+        tl.set(ch.link, { strokeDasharray: ch.len + " " + 3 * ch.len, strokeDashoffset: ch.len, opacity: 0 }, 0);
+        tl.set(ch.link, { opacity: 1 }, LINE0);
+        for (let k = 1; k < HC.C.length; k++) {
+          // segment k: from disc k to disc k+1 — first one eases out of disc 1, the rest run at constant speed (a draw)
+          tl.fromTo(ch.link, { strokeDashoffset: ch.len - ch.cum[k - 1] }, { strokeDashoffset: ch.len - ch.cum[k],
+            duration: arr[k] - arr[k - 1], ease: k === 1 ? "power2.in" : "none", immediateRender: false }, arr[k - 1]);
+          P.pop(ch.discs[k], arr[k] + 2 * F, { peak: k === 5 ? 1.06 : 1.12, from: 0 });   // disc 6 sits on the zone floor: smaller overshoot keeps its shadow ≤ y 1480
+          P.pop(ch.glyphs[k], arr[k] + 4 * F, { peak: 1.15, from: 0.3 });
+        }
+
+        // ---------------- greedy tug on 'steal': discs 2–6 lean 6 px toward disc 1, 1 f lag down the chain ------
+        for (let k = 1; k < HC.C.length; k++) {
+          const dx = HC.C[0][0] - HC.C[k][0], dy = HC.C[0][1] - HC.C[k][1], n = Math.hypot(dx, dy);
+          const s = T.tug - 1 * F + (k - 1) * F;
+          tl.to(ch.discs[k], { x: (6 * dx) / n, y: (6 * dy) / n, duration: 4 * F, ease: "power2.out" }, s);
+          tl.to(ch.discs[k], { x: 0, y: 0, duration: 12 * F, ease: "back.out(2)" }, s + 4 * F);
+        }
+
+        // ---------------- secondary: a mint ripple breathes out of disc 1 on 'them' (gone before the cut) -------
+        tl.fromTo(ch.ripple, { opacity: 0, scale: 1 }, { opacity: 0.85, scale: 1.08, duration: 3 * F, ease: "power2.out" }, 1.83);
+        tl.to(ch.ripple, { opacity: 0, scale: 1.5, duration: 0.3, ease: "power2.out" }, 1.83 + 3 * F);
+      })();
+    </script>
+  </body>
+</html>

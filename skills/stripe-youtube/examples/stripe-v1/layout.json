@@ -1,0 +1,70 @@
+{
+  "theme": "light",
+  "card": {
+    "face_x": 0.52,
+    "face_y": 0.52,
+    "zoom": 0.92
+  },
+  "windows": [],
+  "chapters": [
+    {
+      "t": 0.0,
+      "title": "The part after talking",
+      "start": 0.0
+    },
+    {
+      "t": 74.2,
+      "title": "A process, not a person",
+      "start": 74.2
+    },
+    {
+      "t": 107.03,
+      "title": "Nine stages",
+      "start": 107.03
+    },
+    {
+      "t": 219.43,
+      "title": "The list of mistakes",
+      "start": 219.43
+    },
+    {
+      "t": 293.07,
+      "title": "One brand file",
+      "start": 293.07
+    },
+    {
+      "t": 325.6,
+      "title": "One more thing",
+      "start": 325.6
+    }
+  ],
+  "captions": {
+    "y": 330,
+    "x": 96,
+    "heroes": [
+      "videos",
+      "2020",
+      "hated",
+      "dread",
+      "editing.",
+      "care.",
+      "process.",
+      "agent.",
+      "runs.",
+      "mine.",
+      "anyone",
+      "looked",
+      "after",
+      "easier",
+      "team?",
+      "how.",
+      "edit",
+      "sitting,",
+      "plan",
+      "repo",
+      "watching"
+    ]
+  },
+  "music_under_voice_db": 5,
+  "music": "music/bed.mp3"
+}

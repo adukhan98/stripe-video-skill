@@ -1,0 +1,940 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>v09 dead</title>
+    <link rel="stylesheet" href="brand.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: var(--brand-background);
+      }
+      #root {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: var(--brand-background);
+        font-family: var(--font-heading);
+        color: var(--brand-text);
+      }
+
+      /* ---------- shared v2 background: paper + 60px grid + vignette ---------- */
+      #bg {
+        position: absolute;
+        inset: 0;
+        background: var(--brand-background);
+        overflow: hidden;
+      }
+      #grid {
+        position: absolute;
+        left: -120px;
+        top: -120px;
+        width: 1320px;
+        height: 2160px;
+        background-image:
+          linear-gradient(to right, rgba(20, 20, 20, 0.055) 1.5px, transparent 1.5px),
+          linear-gradient(to bottom, rgba(20, 20, 20, 0.055) 1.5px, transparent 1.5px);
+        background-size: 60px 60px;
+      }
+      #vignette {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(ellipse at 50% 45%, transparent 45%, rgba(90, 80, 72, 0.22) 100%);
+      }
+
+      /* ---------- camera ---------- */
+      #cam,
+      #punch,
+      #beatA,
+      #deadwrap,
+      #beatB,
+      #targets {
+        position: absolute;
+        inset: 0;
+      }
+      #targets {
+        visibility: hidden;
+      }
+
+      /* ---------- kinetic type ---------- */
+      .line {
+        position: absolute;
+        display: flex;
+        align-items: baseline;
+        white-space: nowrap;
+        line-height: 0.88;
+        letter-spacing: -0.03em;
+      }
+      .bl {
+        display: block;
+        width: 0;
+        height: 0;
+        align-self: baseline;
+      }
+      .fw,
+      .w {
+        display: inline-block;
+      }
+      .w {
+        will-change: transform, opacity, filter;
+      }
+      /* v2 type: Inter Tight — supporting words 800 / -0.03em, hero words 900 / -0.045em, accent = colour (no italics) */
+      .serif {
+        font-family: "Inter Tight", var(--font-heading);
+        font-weight: 800;
+        color: var(--brand-text);
+      }
+      .ital,
+      .hero {
+        font-family: "Inter Tight", var(--font-accent);
+        font-weight: 900;
+        font-style: normal;
+        letter-spacing: -0.045em;
+      }
+      .ocean {
+        color: var(--brand-primary);
+      }
+      .ink {
+        color: var(--brand-text);
+      }
+      .gap-s {
+        margin-left: 0.24em;
+      }
+      #loop {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1080px;
+        height: 1920px;
+        overflow: visible;
+        pointer-events: none;
+      }
+
+      /* ---------- deep app card (same family as v03 / v2_07) ---------- */
+      #app-pos {
+        position: absolute;
+        left: 84px;
+        top: 656px;
+        width: 588px;
+        height: 400px;
+      }
+      #app-pop,
+      #app-float {
+        position: absolute;
+        inset: 0;
+      }
+      #app {
+        position: absolute;
+        inset: 0;
+        border-radius: 28px;
+        overflow: hidden;
+        background: var(--brand-deep);
+        box-shadow:
+          0 14px 0 -2px var(--brand-primary),
+          0 44px 64px -12px rgba(30, 30, 30, 0.38);
+      }
+      #app .r {
+        position: absolute;
+      }
+      .wb {
+        background: rgba(251, 250, 248, 0.94);
+        border-radius: 8px;
+      }
+      .wg {
+        background: rgba(251, 250, 248, 0.2);
+        border-radius: 5px;
+      }
+      .oc {
+        background: linear-gradient(180deg, #5bb7de, var(--brand-primary) 55%, var(--brand-primary-dark));
+      }
+      .tile {
+        background: var(--brand-card);
+        border-radius: 14px;
+        box-shadow: 0 10px 18px -8px rgba(0, 0, 0, 0.45);
+      }
+      .tile i {
+        position: absolute;
+        display: block;
+      }
+
+      /* ---------- shield ---------- */
+      #sh-pos {
+        position: absolute;
+        left: 190px;
+        top: 628px;
+        width: 360px;
+        height: 424px;
+      }
+      #sh-pop,
+      #sh-shake,
+      #sh-float {
+        position: absolute;
+        inset: 0;
+      }
+      #sh-shadow {
+        position: absolute;
+        left: 30px;
+        top: 70px;
+        width: 300px;
+        height: 340px;
+        border-radius: 50% 50% 46% 46%;
+        background: radial-gradient(ellipse at 50% 50%, rgba(10, 20, 26, 0.55), rgba(10, 20, 26, 0) 70%);
+      }
+      .shsvg {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 360px;
+        height: 424px;
+        overflow: visible;
+        filter: drop-shadow(0 28px 30px rgba(40, 32, 26, 0.32)) drop-shadow(0 4px 6px rgba(40, 32, 26, 0.12));
+      }
+
+      /* ---------- padlock ---------- */
+      #lock-pos {
+        position: absolute;
+        left: 270px;
+        top: 742px;
+        width: 200px;
+        height: 230px;
+      }
+      #lock-pop,
+      #lock-float {
+        position: absolute;
+        inset: 0;
+      }
+      #lock-glow {
+        position: absolute;
+        left: -150px;
+        top: -130px;
+        width: 500px;
+        height: 500px;
+        border-radius: 50%;
+        background: radial-gradient(circle closest-side, rgba(46, 156, 203, 0.5) 0%, rgba(46, 156, 203, 0.18) 45%, rgba(46, 156, 203, 0) 70%);
+        opacity: 0;
+      }
+      #lock {
+        position: absolute;
+        inset: 0;
+        width: 200px;
+        height: 230px;
+        overflow: visible;
+        filter: drop-shadow(0 18px 20px rgba(30, 24, 20, 0.36));
+      }
+      #lock-ring {
+        position: absolute;
+        left: -60px;
+        top: -40px;
+        width: 320px;
+        height: 320px;
+        overflow: visible;
+      }
+      #glint {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 200px;
+        height: 230px;
+        overflow: visible;
+      }
+
+      /* ---------- speaker card (small, lower right) ---------- */
+      #spk-pos {
+        position: absolute;
+        left: 520px;
+        top: 832px;
+        width: 424px;
+        height: 336px;
+      }
+      #card-float {
+        position: absolute;
+        inset: 0;
+      }
+      #card {
+        position: absolute;
+        inset: 0;
+        border-radius: 26px;
+        overflow: hidden;
+        background: #1b1b1b;
+        box-shadow:
+          0 11px 0 -2px var(--brand-primary),
+          0 36px 50px -10px rgba(40, 30, 20, 0.38);
+      }
+      #vid-wrap {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        border-radius: 26px;
+      }
+      /* source 1080x1920 scaled to the card width (424 → 754 tall); window = 22.5 %–67.1 % of the source height
+         (this clip: forehead ~27 %, eyes ~42 %, beard ~64 %, face centre x ~46 %) */
+      #speaker {
+        position: absolute;
+        left: 0;
+        top: -170px;
+        width: 424px;
+        height: 754px;
+        object-fit: cover;
+      }
+      #sheen {
+        position: absolute;
+        inset: 0;
+        border-radius: 26px;
+        background: linear-gradient(
+          105deg,
+          transparent 30%,
+          rgba(255, 255, 255, 0.24) 45%,
+          rgba(255, 255, 255, 0.05) 55%,
+          transparent 65%
+        );
+        background-size: 300% 100%;
+        background-position: 100% 0;
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="5.233">
+      <div id="bg">
+        <div id="grid"></div>
+        <div id="vignette"></div>
+      </div>
+
+      <div id="cam">
+        <div id="punch">
+          <!-- ================= BEAT B objects ================= -->
+          <div id="app-pos">
+            <div id="app-pop">
+              <div id="app-float">
+                <div id="app">
+                  <!-- nav -->
+                  <div class="r oc" style="left: 34px; top: 30px; width: 34px; height: 34px; border-radius: 50%"></div>
+                  <div class="r wb" style="left: 82px; top: 40px; width: 128px; height: 14px; border-radius: 7px"></div>
+                  <div class="r wg" style="left: 286px; top: 42px; width: 50px; height: 10px"></div>
+                  <div class="r wg" style="left: 348px; top: 42px; width: 50px; height: 10px"></div>
+                  <div class="r wg" style="left: 410px; top: 42px; width: 50px; height: 10px"></div>
+                  <div class="r oc" style="left: 478px; top: 30px; width: 90px; height: 34px; border-radius: 17px"></div>
+                  <!-- hero copy -->
+                  <div class="r wb" style="left: 34px; top: 96px; width: 252px; height: 30px"></div>
+                  <div class="r wb" style="left: 34px; top: 138px; width: 190px; height: 30px"></div>
+                  <div class="r wg" style="left: 34px; top: 188px; width: 236px; height: 10px"></div>
+                  <div class="r wg" style="left: 34px; top: 208px; width: 196px; height: 10px"></div>
+                  <div class="r oc" style="left: 34px; top: 240px; width: 150px; height: 46px; border-radius: 23px; box-shadow: 0 0 0 9px rgba(46, 156, 203, 0.18)"></div>
+                  <div class="r" style="left: 70px; top: 260px; width: 78px; height: 7px; border-radius: 4px; background: rgba(251, 250, 248, 0.95)"></div>
+                  <!-- image tile -->
+                  <div class="r oc" style="left: 318px; top: 94px; width: 248px; height: 196px; border-radius: 18px; overflow: hidden">
+                    <div style="position: absolute; left: 172px; top: 26px; width: 42px; height: 42px; border-radius: 50%; background: rgba(251, 250, 248, 0.85)"></div>
+                    <svg width="248" height="196" viewBox="0 0 248 196" style="position: absolute; left: 0; top: 0">
+                      <path d="M-10 196 L80 88 Q92 74 104 88 L190 196 Z" fill="rgba(13,39,49,0.32)" />
+                      <path d="M90 196 L170 112 Q182 100 194 112 L262 196 Z" fill="rgba(13,39,49,0.42)" />
+                    </svg>
+                  </div>
+                  <!-- feature tiles -->
+                  <div class="r tile" style="left: 34px; top: 314px; width: 172px; height: 62px">
+                    <i class="oc" style="left: 14px; top: 16px; width: 30px; height: 30px; border-radius: 8px"></i>
+                    <i style="left: 56px; top: 20px; width: 96px; height: 9px; border-radius: 5px; background: #e5e0da"></i>
+                    <i style="left: 56px; top: 36px; width: 62px; height: 8px; border-radius: 4px; background: #e5e0da"></i>
+                  </div>
+                  <div class="r tile" style="left: 214px; top: 314px; width: 172px; height: 62px">
+                    <i class="oc" style="left: 14px; top: 16px; width: 30px; height: 30px; border-radius: 8px"></i>
+                    <i style="left: 56px; top: 20px; width: 96px; height: 9px; border-radius: 5px; background: #e5e0da"></i>
+                    <i style="left: 56px; top: 36px; width: 62px; height: 8px; border-radius: 4px; background: #e5e0da"></i>
+                  </div>
+                  <div class="r tile" style="left: 394px; top: 314px; width: 172px; height: 62px">
+                    <i class="oc" style="left: 14px; top: 16px; width: 30px; height: 30px; border-radius: 8px"></i>
+                    <i style="left: 56px; top: 20px; width: 96px; height: 9px; border-radius: 5px; background: #e5e0da"></i>
+                    <i style="left: 56px; top: 36px; width: 62px; height: 8px; border-radius: 4px; background: #e5e0da"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="sh-pos">
+            <div id="sh-pop">
+              <div id="sh-float">
+                <div id="sh-shake">
+                  <div id="sh-shadow"></div>
+                  <div id="sh-holder"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="lock-pos">
+            <div id="lock-pop">
+              <div id="lock-float">
+                <div id="lock-glow"></div>
+                <svg id="lock-ring" viewBox="-160 -160 320 320">
+                  <circle id="lock-ring-c" cx="0" cy="0" r="128" fill="none" style="stroke: var(--brand-primary)" stroke-width="7" />
+                </svg>
+                <svg id="lock" viewBox="0 0 200 230">
+                  <defs>
+                    <linearGradient id="lk-body" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0" stop-color="#27495a" />
+                      <stop offset="0.5" style="stop-color: var(--brand-deep)" />
+                      <stop offset="1" stop-color="#091c24" />
+                    </linearGradient>
+                    <linearGradient id="lk-shk" x1="0" y1="0" x2="1" y2="0">
+                      <stop offset="0" stop-color="#d9d3cc" />
+                      <stop offset="0.38" stop-color="#ffffff" />
+                      <stop offset="1" stop-color="#c9c2ba" />
+                    </linearGradient>
+                    <radialGradient id="lk-key" cx="0.38" cy="0.32" r="0.8">
+                      <stop offset="0" stop-color="#7cc9ea" />
+                      <stop offset="0.55" style="stop-color: var(--brand-primary)" />
+                      <stop offset="1" style="stop-color: var(--brand-primary-dark)" />
+                    </radialGradient>
+                  </defs>
+                  <g id="shackle">
+                    <path d="M58 132 L58 76 A42 42 0 0 1 142 76 L142 132" fill="none" stroke="url(#lk-shk)" stroke-width="24" stroke-linecap="round" />
+                  </g>
+                  <g id="lk-bodyg">
+                    <rect x="20" y="112" width="160" height="112" rx="30" fill="url(#lk-body)" />
+                    <rect x="34" y="119" width="132" height="9" rx="4.5" fill="rgba(255,255,255,0.10)" />
+                    <circle cx="100" cy="158" r="15" fill="url(#lk-key)" />
+                    <rect x="93" y="160" width="14" height="32" rx="7" fill="url(#lk-key)" />
+                  </g>
+                </svg>
+                <svg id="glint" viewBox="0 0 200 230">
+                  <g id="glint-a" transform="translate(30 66)">
+                    <path d="M0 -46 C5 -9 9 -5 46 0 C9 5 5 9 0 46 C-5 9 -9 5 -46 0 C-9 -5 -5 -9 0 -46 Z" style="fill: var(--brand-primary)" />
+                    <path d="M0 -24 C3 -5 5 -3 24 0 C5 3 3 5 0 24 C-3 5 -5 3 -24 0 C-5 -3 -3 -5 0 -24 Z" fill="#ffffff" />
+                  </g>
+                  <g id="glint-b" transform="translate(178 116)">
+                    <path d="M0 -24 C3 -5 5 -3 24 0 C5 3 3 5 0 24 C-3 5 -5 3 -24 0 C-5 -3 -3 -5 0 -24 Z" style="fill: var(--brand-primary)" />
+                  </g>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- speaker card -->
+          <div id="spk-pos">
+            <div id="card-float">
+              <div id="card">
+                <div id="vid-wrap">
+                  <video id="speaker" class="clip" src="assets/speaker.mp4" muted playsinline data-start="0" data-duration="5.233" data-track-index="1"></video>
+                </div>
+                <div id="sheen"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ================= BEAT A: "is software really dead?" ================= -->
+          <div id="beatA">
+            <div id="a1" class="line serif" data-x="92" data-base="468" style="font-size: 116px">
+              <span class="bl"></span>
+              <span class="fw" id="fw-is"><span class="w" data-t="0.07" data-first="1">is</span></span>
+            </div>
+            <div id="a2" class="line serif hero" data-x="72" data-base="782" style="font-size: 206px">
+              <span class="bl"></span>
+              <span class="fw" id="fw-software"><span class="w" id="w-software" data-t="0.55" data-pop="1" data-rise="70">software</span></span>
+            </div>
+            <div id="a3" class="line serif" data-right="926" data-base="950" style="font-size: 116px">
+              <span class="bl"></span>
+              <span class="fw" id="fw-really"><span class="w" data-t="0.99">really</span></span>
+            </div>
+            <div id="deadwrap">
+              <div id="a4" class="line ital ocean" data-center="510" data-base="1312" style="font-size: 250px">
+                <span class="bl"></span>
+                <span class="fw" id="fw-dead"><span class="w" id="w-dead" data-t="1.35" data-hero="1">dead?</span></span>
+              </div>
+              <svg id="loop" viewBox="0 0 1080 1920">
+                <defs>
+                  <mask id="loop-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="1080" height="1920">
+                    <path id="loop-reveal" fill="none" stroke="#fff" stroke-width="34" stroke-linecap="round" />
+                  </mask>
+                </defs>
+                <path id="loop-dots" fill="none" style="stroke: var(--brand-text)" stroke-width="7" stroke-linecap="round" stroke-dasharray="0.1 17" mask="url(#loop-mask)" />
+              </svg>
+            </div>
+          </div>
+
+          <!-- ================= BEAT B kinetic ================= -->
+          <div id="beatB">
+            <div id="k1" class="line serif" data-x="80" data-base="1252" style="font-size: 100px">
+              <span class="bl"></span>
+              <span class="w hero" data-t="2.65" data-pop="1" data-rise="50">software</span>
+              <span class="w gap-s" style="font-size: 80px" data-t="2.93">is</span>
+            </div>
+            <div id="k2" class="line serif" data-right="912" data-base="1366" style="font-size: 84px">
+              <span class="bl"></span>
+              <span class="w" data-t="3.19">going</span>
+              <span class="w gap-s" data-t="3.37">to</span>
+              <span class="w gap-s" data-t="3.59">get</span>
+            </div>
+            <div id="r1" class="line serif" data-x="80" data-base="1252" style="font-size: 94px">
+              <span class="bl"></span>
+              <span class="w" data-t="4.15">really</span>
+              <span class="w gap-s hero" id="w-hard" data-t="4.51" data-pop="1" data-rise="44">hard</span>
+              <span class="w gap-s" data-t="4.73">to</span>
+            </div>
+            <div id="p1" class="line ital ink" data-right="928" data-base="1424" style="font-size: 214px">
+              <span class="bl"></span>
+              <span class="w" id="w-protect" data-t="5.02" data-hero="1" data-lead="0.17" data-rise="0" data-peak="1.06" data-origin="75% 75%">protect</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- hidden target layout for the compacted header (measured, never shown) -->
+      <div id="targets">
+        <div id="t1" class="line serif" data-x="80" data-base="392" style="font-size: 72px">
+          <span class="bl"></span>
+          <span class="fw" id="tg-is">is</span>
+          <span class="fw gap-s hero" id="tg-software" style="font-size: 108px">software</span>
+        </div>
+        <div id="t2" class="line serif" data-x="164" data-base="574" style="font-size: 72px">
+          <span class="bl"></span>
+          <span class="fw" id="tg-really">really</span>
+        </div>
+        <div id="t3" class="line ital ocean" data-right="896" data-base="574" style="font-size: 140px">
+          <span class="bl"></span>
+          <span class="fw" id="tg-dead">dead?</span>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (async () => {
+        const fontSpecs = ['900 100px "Inter Tight"', '700 100px "Inter Tight"', '800 100px "Inter Tight"', '500 40px Inter', '600 40px Inter'];
+        await Promise.all(fontSpecs.map((f) => document.fonts.load(f)));
+        await document.fonts.ready;
+        for (const f of fontSpecs) {
+          if (!document.fonts.check(f)) throw new Error("brand font missing: " + f);
+        }
+
+        const D = 5.233;
+        const F = 1 / 30;
+        const $ = (s) => document.querySelector(s);
+        const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+        const tok = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+        const INK = tok("--brand-text");
+        const MUTED = tok("--brand-muted");
+
+        // ---------------- layout: kinetic lines placed by baseline ----------------
+        for (const line of $$(".line")) {
+          const bl = line.querySelector(".bl");
+          line.style.top = "0px";
+          line.style.left = "0px";
+          const baseOff = bl.offsetTop;
+          line.style.top = parseFloat(line.dataset.base) - baseOff + "px";
+          if (line.dataset.right) {
+            line.style.left = parseFloat(line.dataset.right) - line.offsetWidth + "px";
+          } else if (line.dataset.center) {
+            line.style.left = parseFloat(line.dataset.center) - line.offsetWidth / 2 + "px";
+          } else {
+            line.style.left = line.dataset.x + "px";
+          }
+        }
+
+        // ---------------- shield + 3 crack pieces (built from one drawing) ----------------
+        const SHIELD = "M170 10 C214 34 268 44 314 44 Q330 44 330 60 L330 168 C330 276 262 346 170 390 C78 346 10 276 10 168 L10 60 Q10 44 26 44 C72 44 126 34 170 10 Z";
+        const CRACK = "M170 10 L182 70 L156 128 L178 176 L160 250 L184 320 L170 390";
+        const BRANCH = "M178 176 L230 196 L262 180 L330 214";
+        const PIECES = {
+          L: "-20,-20 170,-20 170,10 182,70 156,128 178,176 160,250 184,320 170,390 170,420 -20,420",
+          RT: "170,-20 360,-20 360,214 330,214 262,180 230,196 178,176 156,128 182,70 170,10",
+          RB: "178,176 230,196 262,180 330,214 360,214 360,420 170,420 170,390 184,320 160,250",
+        };
+        const shieldBody = (id) => `
+          <defs>
+            <radialGradient id="shg-${id}" cx="0.36" cy="0.24" r="0.85">
+              <stop offset="0" stop-color="#ffffff"/>
+              <stop offset="0.55" stop-color="#f5f2ee"/>
+              <stop offset="1" stop-color="#e4ded7"/>
+            </radialGradient>
+            <linearGradient id="shi-${id}" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#ece7e1"/>
+              <stop offset="1" stop-color="#ffffff"/>
+            </linearGradient>
+            <clipPath id="shc-${id}"><path d="${SHIELD}"/></clipPath>
+            ${PIECES[id] ? `<clipPath id="pc-${id}"><polygon points="${PIECES[id]}"/></clipPath>` : ""}
+            <linearGradient id="shs-${id}" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="#ffffff" stop-opacity="0"/>
+              <stop offset="0.5" stop-color="#ffffff" stop-opacity="0.95"/>
+              <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <g ${PIECES[id] ? `clip-path="url(#pc-${id})"` : ""}>
+            <path d="${SHIELD}" fill="url(#shg-${id})"/>
+            <path d="${SHIELD}" fill="url(#shi-${id})" transform="translate(170 196) scale(0.82) translate(-170 -196)"/>
+            <path d="${SHIELD}" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="3" transform="translate(170 196) scale(0.82) translate(-170 -196)" opacity="0.7"/>
+          </g>`;
+        const holder = $("#sh-holder");
+        holder.innerHTML = `
+          <svg id="sh-whole" class="shsvg" viewBox="0 0 340 400">
+            ${shieldBody("W")}
+            <g clip-path="url(#shc-W)">
+              <rect id="sh-sheen" x="-160" y="-20" width="120" height="460" fill="url(#shs-W)" transform="rotate(14 170 200)" opacity="0.75"/>
+            </g>
+            <g id="crack">
+              <path class="ck" d="${CRACK}" fill="none" stroke="#b9b0a6" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1" stroke-dashoffset="1"/>
+              <path class="ck" d="${BRANCH}" fill="none" stroke="#b9b0a6" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1 1" stroke-dashoffset="1"/>
+            </g>
+          </svg>
+          ${["L", "RT", "RB"].map((k) => `<svg id="pc-${k}-svg" class="shsvg piece" viewBox="0 0 340 400">${shieldBody(k)}</svg>`).join("")}`;
+        const pieceL = $("#pc-L-svg");
+        const pieceRT = $("#pc-RT-svg");
+        const pieceRB = $("#pc-RB-svg");
+        const SC = 360 / 340;
+        gsap.set(pieceL, { transformOrigin: `${95 * SC}px ${210 * SC}px` });
+        gsap.set(pieceRT, { transformOrigin: `${250 * SC}px ${110 * SC}px` });
+        gsap.set(pieceRB, { transformOrigin: `${255 * SC}px ${290 * SC}px` });
+
+        // ---------------- hand-drawn dotted loop around "dead?" (fitted to the real glyphs) ----------------
+        const a4 = $("#a4");
+        const dBase = parseFloat(a4.dataset.base);
+        const glyphPts = (lineEl, wordEls, every) => {
+          const cv = document.createElement("canvas");
+          cv.width = 1080;
+          cv.height = 1920;
+          const ctx = cv.getContext("2d");
+          ctx.fillStyle = "#000";
+          for (const w of wordEls) {
+            const cs = getComputedStyle(w);
+            ctx.font = `${cs.fontStyle} ${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
+            ctx.letterSpacing = cs.letterSpacing === "normal" ? "0px" : cs.letterSpacing;
+            ctx.textBaseline = "alphabetic";
+            const fw = w.closest(".fw");
+            ctx.fillText(w.textContent, lineEl.offsetLeft + fw.offsetLeft, parseFloat(lineEl.dataset.base));
+          }
+          const img = ctx.getImageData(0, 0, 1080, 1920).data;
+          const on = (x, y) => img[(y * 1080 + x) * 4 + 3] > 100;
+          const pts = [];
+          for (let y = 560; y < 1500; y += every) {
+            for (let x = 40; x < 1040; x += every) {
+              if (!on(x, y)) continue;
+              if (on(x - every, y) && on(x + every, y) && on(x, y - every) && on(x, y + every)) continue;
+              pts.push([x, y]);
+            }
+          }
+          return pts;
+        };
+        const inPts = glyphPts(a4, [$("#w-dead")], 3);
+        const outPts = [...glyphPts($("#a3"), $$("#a3 .w"), 3), ...glyphPts($("#a2"), $$("#a2 .w"), 3)];
+        const gCx = a4.offsetLeft + a4.offsetWidth / 2;
+        let LOOP = null;
+        for (let rot = -9; rot <= 5; rot += 1) {
+          const cr = Math.cos((rot * Math.PI) / 180);
+          const sr = Math.sin((rot * Math.PI) / 180);
+          for (let cyo = -150; cyo <= -30; cyo += 3) {
+            const cy = dBase + cyo;
+            for (let cxo = -16; cxo <= 16; cxo += 4) {
+              const cx = gCx + cxo;
+              for (let rx = 372; rx <= 436; rx += 4) {
+                const rIn = rx - 18;
+                const rOut = rx + 10;
+                let ryMin = 0;
+                for (const [x, y] of inPts) {
+                  const dx = x - cx;
+                  const dy = y - cy;
+                  const u = dx * cr + dy * sr;
+                  const v = -dx * sr + dy * cr;
+                  if (Math.abs(u) >= rIn) {
+                    ryMin = 1e9;
+                    break;
+                  }
+                  ryMin = Math.max(ryMin, Math.abs(v) / Math.sqrt(1 - (u / rIn) ** 2) + 16);
+                }
+                if (ryMin > 260) continue;
+                let ryMax = 1e9;
+                for (const [x, y] of outPts) {
+                  const dx = x - cx;
+                  const dy = y - cy;
+                  const u = dx * cr + dy * sr;
+                  const v = -dx * sr + dy * cr;
+                  if (Math.abs(u) >= rOut) continue;
+                  ryMax = Math.min(ryMax, Math.abs(v) / Math.sqrt(1 - (u / rOut) ** 2) - 12);
+                }
+                if (ryMin > ryMax) continue;
+                const ry = Math.min(ryMax, Math.max(ryMin + 2, (ryMin + ryMax) / 2), ryMin + 26);
+                const hx = Math.sqrt((rx * cr) ** 2 + (ry * sr) ** 2) * 1.03;
+                if (cx - hx < 68 || cx + hx > 950) continue;
+                const vy = Math.sqrt((rx * sr) ** 2 + (ry * cr) ** 2) * 1.03;
+                if (cy + vy > 1440) continue;
+                const score = Math.min(ryMax - ryMin, 40) - Math.abs(rot) * 0.25 - ry * 0.05;
+                if (!LOOP || score > LOOP.score) LOOP = { cx, cy, rx, ry, rot, score, ryMin, ryMax };
+              }
+            }
+          }
+        }
+        if (!LOOP) LOOP = { cx: gCx, cy: dBase - 92, rx: 430, ry: 190, rot: -5, fallback: true };
+        window.__loopFit = LOOP;
+        function loopPath({ cx, cy, rx, ry, rot }) {
+          const pts = [];
+          const N = 40;
+          const a0 = (-28 * Math.PI) / 180;
+          const sweep = (-392 * Math.PI) / 180;
+          const cr = Math.cos((rot * Math.PI) / 180);
+          const sr = Math.sin((rot * Math.PI) / 180);
+          for (let i = 0; i <= N; i++) {
+            const k = i / N;
+            const a = a0 + sweep * k;
+            const wob = 1 + 0.007 * Math.sin(3 * a + 0.9) + 0.005 * Math.sin(5 * a + 2.3) - 0.02 * Math.max(0, k - 0.8) * 5;
+            const x = rx * wob * Math.cos(a);
+            const y = ry * wob * Math.sin(a);
+            pts.push([cx + x * cr - y * sr, cy + x * sr + y * cr]);
+          }
+          let d = `M${pts[0][0].toFixed(1)} ${pts[0][1].toFixed(1)}`;
+          for (let i = 0; i < pts.length - 1; i++) {
+            const p0 = pts[Math.max(0, i - 1)];
+            const p1 = pts[i];
+            const p2 = pts[i + 1];
+            const p3 = pts[Math.min(pts.length - 1, i + 2)];
+            const c1 = [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6];
+            const c2 = [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6];
+            d += ` C${c1[0].toFixed(1)} ${c1[1].toFixed(1)} ${c2[0].toFixed(1)} ${c2[1].toFixed(1)} ${p2[0].toFixed(1)} ${p2[1].toFixed(1)}`;
+          }
+          return d;
+        }
+        const loopD = loopPath(LOOP);
+        $("#loop-dots").setAttribute("d", loopD);
+        const reveal = $("#loop-reveal");
+        reveal.setAttribute("d", loopD);
+        const loopLen = reveal.getTotalLength();
+        reveal.setAttribute("stroke-dasharray", `${loopLen} ${loopLen}`);
+        reveal.setAttribute("stroke-dashoffset", `${loopLen}`);
+
+        // ---------------- FLIP targets for the compacted header ----------------
+        const rectOf = (el) => {
+          const r = el.getBoundingClientRect();
+          return { l: r.left, t: r.top, w: r.width, h: r.height };
+        };
+        const flip = {};
+        for (const k of ["is", "software", "really", "dead"]) {
+          const src = rectOf($("#fw-" + k));
+          const dst = rectOf($("#tg-" + k));
+          flip[k] = { x: dst.l - src.l, y: dst.t - src.t, s: dst.h / src.h, ox: src.l, oy: src.t };
+        }
+        window.__flip = flip;
+
+        // ======================= timeline =======================
+        const tl = gsap.timeline({ paused: true });
+
+        // background drift + slow camera push (continuous, linear on purpose)
+        tl.fromTo("#grid", { x: 0, y: 0 }, { x: -20, y: -12, duration: D, ease: "none" }, 0);
+        tl.fromTo("#cam", { scale: 1, transformOrigin: "540px 880px" }, { scale: 1.012, duration: D, ease: "none" }, 0);
+
+        // ---------- BEAT A word entrances (contact frame on the spoken word) ----------
+        const entrance = (w) => {
+          const t = parseFloat(w.dataset.t);
+          if (w.dataset.hero) {
+            const lead = parseFloat(w.dataset.lead || "0.24");
+            const s = t - lead;
+            gsap.set(w, { transformOrigin: w.dataset.origin || "50% 80%" });
+            const peak = parseFloat(w.dataset.peak || "1.1");
+            tl.fromTo(
+              w,
+              { opacity: 0, y: parseFloat(w.dataset.rise || "100"), scale: peak > 1.08 ? 0.5 : 0.6, rotation: -8, filter: "blur(10px)" },
+              { opacity: 1, y: -8, scale: peak, rotation: peak > 1.08 ? 1.5 : 0.8, filter: "blur(0px)", duration: lead, ease: "power3.out" },
+              s,
+            );
+            tl.to(w, { y: 0, scale: 1, rotation: 0, duration: 0.36, ease: "back.out(1.7)" }, t);
+          } else if (w.dataset.pop) {
+            const s = t - 0.16;
+            gsap.set(w, { transformOrigin: "50% 85%" });
+            tl.fromTo(
+              w,
+              { opacity: 0, y: parseFloat(w.dataset.rise || "60"), scale: 0.72, rotation: -5, filter: "blur(8px)" },
+              { opacity: 1, y: -6, scale: 1.06, rotation: 1, filter: "blur(0px)", duration: 0.16, ease: "power3.out" },
+              s,
+            );
+            tl.to(w, { y: 0, scale: 1, rotation: 0, duration: 0.3, ease: "back.out(1.6)" }, t);
+          } else if (w.dataset.first) {
+            tl.fromTo(
+              w,
+              { opacity: 0.25, y: 34, filter: "blur(4px)" },
+              { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.3, ease: "power3.out" },
+              0,
+            );
+          } else {
+            const s = Math.max(0, t - 0.13);
+            tl.fromTo(
+              w,
+              { opacity: 0, y: 46, filter: "blur(6px)" },
+              { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.36, ease: "power3.out" },
+              s,
+            );
+          }
+        };
+        $$("#beatA .w").forEach(entrance);
+        $$("#beatB .w").forEach(entrance);
+
+        // "dead?" lands: camera punch, dotted loop draws round it, "software" greys + droops
+        tl.fromTo("#punch", { scale: 1, transformOrigin: "512px 1220px" }, { scale: 1.01, duration: 0.4, ease: "power2.out" }, 1.32);
+        tl.to("#punch", { scale: 1, duration: 0.42, ease: "power2.inOut" }, 2.1);
+        tl.fromTo(reveal, { attr: { "stroke-dashoffset": loopLen } }, { attr: { "stroke-dashoffset": 0 }, duration: 0.5, ease: "power2.inOut" }, 1.42);
+        tl.fromTo("#loop-dots", { attr: { "stroke-dashoffset": 0 } }, { attr: { "stroke-dashoffset": -70 }, duration: D - 1.42, ease: "none" }, 1.42);
+        gsap.set("#w-software", { transformOrigin: "0% 100%" });
+        tl.to("#w-software", { rotation: 2.2, y: 6, duration: 0.5, ease: "back.out(1.3)" }, 1.42);
+        // alive during "and also that"
+        tl.to("#w-dead", { scale: 1.015, duration: 0.3, ease: "sine.inOut", yoyo: true, repeat: 1 }, 1.72);
+
+        // ---------- compaction: words fly on arcs into the header (2 f stagger, bottom-up) ----------
+        const order = [
+          ["is", "#fw-is", 1.96],
+          ["software", "#fw-software", 1.96 + 1.5 * F],
+          ["really", "#fw-really", 1.96 + 3 * F],
+          ["dead", "#deadwrap", 2.14],
+        ];
+        for (const [k, sel, s] of order) {
+          const f = flip[k];
+          const el = $(sel);
+          if (k === "dead") gsap.set(el, { transformOrigin: `${f.ox}px ${f.oy}px` });
+          else gsap.set(el, { transformOrigin: "0% 0%" });
+          // "dead?" leads with x (swings right, then rises up the right side, clear of the rising card)
+          // "dead?" shrinks first (scale leads), so the big loop never sweeps across the other words
+          const dur = k === "dead" ? 0.4 : 0.46;
+          tl.to(el, { x: f.x, duration: dur, ease: k === "software" ? "power3.out" : "power2.inOut" }, s);
+          tl.to(el, { y: f.y, duration: dur, ease: "power2.inOut" }, s);
+          tl.to(el, { scale: f.s, duration: k === "dead" ? 0.34 : 0.42, ease: k === "dead" ? "power3.out" : "power2.inOut" }, s);
+        }
+        tl.to("#w-software", { rotation: 0, y: 0, duration: 0.36, ease: "power2.inOut" }, 1.96);
+
+        // ---------- BEAT B: app card rises ----------
+        gsap.set("#app-pop", { transformPerspective: 1600, transformOrigin: "50% 60%" });
+        tl.fromTo("#app-pop", { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "power1.out" }, 2.42);
+        tl.fromTo("#app-pop", { y: 120 }, { y: 0, duration: 0.4, ease: "power3.out", immediateRender: false }, 2.42);
+        tl.fromTo("#app-pop", { scale: 0.88 }, { scale: 1, duration: 0.4, ease: "back.out(1.4)", immediateRender: false }, 2.42);
+        tl.fromTo("#app-pop", { rotationX: 22 }, { rotationX: 4, duration: 0.46, ease: "back.out(1.6)", immediateRender: false }, 2.42);
+        tl.fromTo("#app-pop", { rotationY: 8 }, { rotationY: 3, duration: 0.46, ease: "power3.out", immediateRender: false }, 2.42);
+        tl.to("#app-pop", { rotationY: 1.5, rotationX: 3, duration: D - 2.88, ease: "sine.inOut" }, 2.88);
+
+        // ---------- shield slams down over the card on "software" (2.65) ----------
+        const SLAM = 2.65;
+        gsap.set("#sh-pop", { transformOrigin: "50% 15%" });
+        tl.fromTo("#sh-pop", { opacity: 0 }, { opacity: 1, duration: 0.1, ease: "power1.out" }, SLAM - 0.2);
+        tl.fromTo(
+          "#sh-pop",
+          { scale: 1.3, y: -12, rotation: -6, filter: "blur(9px)" },
+          { scale: 0.95, y: 6, rotation: 0.6, filter: "blur(0px)", duration: 0.2, ease: "power2.in", immediateRender: false },
+          SLAM - 0.2,
+        );
+        tl.to("#sh-pop", { scale: 1, y: 0, rotation: 0, duration: 0.34, ease: "back.out(2.2)" }, SLAM);
+        tl.fromTo("#sh-shadow", { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 0.2, ease: "power2.in" }, SLAM - 0.2);
+        // impact: the card takes the hit
+        gsap.set("#app-float", { transformOrigin: "50% 100%" });
+        tl.to("#app-float", { scaleY: 0.975, scaleX: 1.012, y: 5, duration: 2 * F, ease: "power2.out" }, SLAM);
+        tl.to("#app-float", { scaleY: 1, scaleX: 1, y: 0, duration: 0.3, ease: "back.out(2)" }, SLAM + 2 * F);
+        tl.fromTo("#sh-float", { y: 0 }, { y: -4, duration: 0.8, ease: "sine.inOut", yoyo: true, repeat: 1 }, 3.0);
+
+        // ---------- padlock drops in open, snaps shut on "is" (2.93) ----------
+        const SHUT = 2.93;
+        gsap.set("#lock-pop", { transformOrigin: "50% 80%" });
+        gsap.set("#shackle", { svgOrigin: "142 132" });
+        gsap.set("#lk-bodyg", { svgOrigin: "100 224" });
+        tl.fromTo("#lock-pop", { opacity: 0 }, { opacity: 1, duration: 0.08, ease: "power1.out" }, 2.68);
+        tl.fromTo(
+          "#lock-pop",
+          { y: -60, scale: 0.6, rotation: 8 },
+          { y: 4, scale: 1.06, rotation: -1, duration: 0.16, ease: "power3.out", immediateRender: false },
+          2.68,
+        );
+        tl.to("#lock-pop", { y: 0, scale: 1, rotation: 0, duration: 0.24, ease: "back.out(1.8)" }, 2.84);
+        gsap.set("#shackle", { y: -26, rotation: 26 });
+        tl.to("#shackle", { rotation: 0, duration: 3 * F, ease: "power2.in" }, SHUT - 5 * F);
+        tl.to("#shackle", { y: 2, duration: 2 * F, ease: "power3.in" }, SHUT - 2 * F);
+        tl.to("#shackle", { y: 0, duration: 0.16, ease: "back.out(3)" }, SHUT);
+        tl.to("#lk-bodyg", { scaleY: 0.95, scaleX: 1.03, duration: 2 * F, ease: "power2.out" }, SHUT);
+        tl.to("#lk-bodyg", { scaleY: 1, scaleX: 1, duration: 0.24, ease: "back.out(2.4)" }, SHUT + 2 * F);
+        gsap.set("#lock-ring", { transformOrigin: "50% 50%" });
+        tl.fromTo("#lock-ring", { opacity: 0, scale: 0.7 }, { opacity: 0.9, scale: 1, duration: 0.12, ease: "power2.out" }, SHUT);
+        tl.to("#lock-ring", { opacity: 0, scale: 1.28, duration: 0.42, ease: "power2.out" }, SHUT + 0.12);
+        tl.fromTo("#lock-float", { y: 0 }, { y: -5, duration: 0.7, ease: "sine.inOut", yoyo: true, repeat: 1 }, 3.1);
+
+        // ---------- small speaker card pops in lower right on "going" ----------
+        const SPK = 3.03;
+        gsap.set("#card", { transformPerspective: 1600, transformOrigin: "50% 50%" });
+        tl.fromTo("#card", { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "power1.out" }, SPK);
+        tl.fromTo("#card", { y: 80 }, { y: 0, duration: 0.46, ease: "power3.out", immediateRender: false }, SPK);
+        tl.fromTo("#card", { scale: 0.82 }, { scale: 1, duration: 0.42, ease: "back.out(1.6)", immediateRender: false }, SPK);
+        tl.fromTo("#card", { rotationX: 26 }, { rotationX: 4.5, duration: 0.56, ease: "back.out(1.8)", immediateRender: false }, SPK);
+        tl.fromTo("#card", { rotationY: -22 }, { rotationY: -8, duration: 0.5, ease: "power3.out", immediateRender: false }, SPK);
+        tl.to("#card", { rotationY: -6, rotationX: 3.5, duration: D - SPK - 0.56, ease: "sine.inOut" }, SPK + 0.56);
+        tl.fromTo("#vid-wrap", { scale: 1.14 }, { scale: 1, duration: 0.6, ease: "power3.out" }, SPK);
+        tl.to("#vid-wrap", { scale: 1.03, duration: D - SPK - 0.6, ease: "none" }, SPK + 0.6);
+        tl.fromTo("#sheen", { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "power1.out" }, SPK + 0.06);
+        tl.fromTo(
+          "#sheen",
+          { backgroundPosition: "100% 0" },
+          { backgroundPosition: "0% 0", duration: 0.6, ease: "power2.inOut", immediateRender: false },
+          SPK + 0.06,
+        );
+        tl.to("#sheen", { opacity: 0, duration: 0.2, ease: "power1.in" }, SPK + 0.46);
+        tl.fromTo("#card-float", { y: 0 }, { y: -4, duration: 0.7, ease: "sine.inOut", yoyo: true, repeat: 2 }, SPK + 0.5);
+
+        // ---------- "get": light sweeps across the sealed shield ----------
+        tl.fromTo("#sh-sheen", { attr: { x: -160 } }, { attr: { x: 400 }, duration: 0.6, ease: "power2.inOut" }, 3.48);
+
+        // ---------- "software is going to get" lifts away (bottom-up) ----------
+        tl.to("#k2", { y: -40, opacity: 0, filter: "blur(8px)", duration: 0.2, ease: "power2.in" }, 3.86);
+        tl.to("#k1", { y: -40, opacity: 0, filter: "blur(8px)", duration: 0.2, ease: "power2.in" }, 3.86 + 2 * F);
+
+        // ---------- "hard": the shield cracks ----------
+        const CRK = 4.38;
+        const cks = $$("#crack .ck");
+        tl.fromTo(cks[0], { attr: { "stroke-dashoffset": 1 } }, { attr: { "stroke-dashoffset": 0 }, duration: 0.14, ease: "power2.out" }, CRK);
+        tl.fromTo(cks[1], { attr: { "stroke-dashoffset": 1 } }, { attr: { "stroke-dashoffset": 0 }, duration: 0.12, ease: "power2.out" }, CRK + 0.08);
+        const shake = [7, -6, 4, -2, 0];
+        shake.forEach((v, i) => tl.to("#sh-shake", { x: v, duration: F, ease: "none" }, CRK + 0.02 + i * F));
+        tl.to("#lock-float", { x: 5, duration: F, ease: "none" }, CRK + 0.03);
+        tl.to("#lock-float", { x: -4, duration: F, ease: "none" }, CRK + 0.03 + F);
+        tl.to("#lock-float", { x: 0, duration: 2 * F, ease: "power1.out" }, CRK + 0.03 + 2 * F);
+
+        // ---------- split on "to" (4.62): pieces separate with a little rotation ----------
+        const SPLIT = 4.62;
+        gsap.set(".piece", { opacity: 0 });
+        tl.set("#sh-whole", { opacity: 0 }, SPLIT);
+        tl.set(".piece", { opacity: 1 }, SPLIT);
+        tl.to("#sh-shadow", { opacity: 0.35, scale: 1.08, duration: 0.4, ease: "power2.out" }, SPLIT);
+        const moves = [
+          [pieceL, { x: -48, y: 12, rotation: -9 }, { x: -58, y: 18, rotation: -11 }],
+          [pieceRT, { x: 40, y: 2, rotation: 6 }, { x: 46, y: 3, rotation: 7 }],
+          [pieceRB, { x: 6, y: 36, rotation: 3 }, { x: 8, y: 44, rotation: 4 }],
+        ];
+        moves.forEach(([el, a, b], i) => {
+          tl.to(el, { ...a, duration: 0.36, ease: "power3.out" }, SPLIT + i * F);
+          tl.to(el, { ...b, duration: D - SPLIT - 0.36 - i * F, ease: "sine.out" }, SPLIT + 0.36 + i * F);
+        });
+
+        // ---------- padlock pops open + ocean glint ----------
+        const OPEN = SPLIT + 2 * F;
+        tl.to("#shackle", { y: -30, duration: 0.14, ease: "power3.out" }, OPEN);
+        tl.to("#shackle", { rotation: 30, duration: 0.34, ease: "back.out(2.6)" }, OPEN + 0.04);
+        tl.to("#lock-pop", { y: 10, rotation: -5, duration: 0.12, ease: "power2.out" }, OPEN);
+        tl.to("#lock-pop", { y: 4, rotation: -3, duration: 0.4, ease: "back.out(1.8)" }, OPEN + 0.12);
+        tl.fromTo("#lock-glow", { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.18, ease: "power2.out" }, OPEN + 0.02);
+        tl.to("#lock-glow", { opacity: 0.6, scale: 0.94, duration: 5.0 - (OPEN + 0.2), ease: "sine.inOut" }, OPEN + 0.2);
+        gsap.set(["#glint-a", "#glint-b"], { scale: 0, transformOrigin: "50% 50%" });
+        tl.fromTo("#glint-a", { scale: 0, rotation: -30 }, { scale: 1.15, rotation: 15, duration: 0.16, ease: "power3.out" }, OPEN + 0.06);
+        tl.to("#glint-a", { scale: 0.7, rotation: 40, duration: 5.0 - (OPEN + 0.22), ease: "power2.inOut" }, OPEN + 0.22);
+        tl.fromTo("#glint-b", { scale: 0, rotation: 0 }, { scale: 1, rotation: 45, duration: 0.2, ease: "back.out(2.5)" }, OPEN + 0.14);
+        tl.to("#glint-b", { scale: 0.5, rotation: 80, duration: 0.4, ease: "power2.inOut" }, OPEN + 0.34);
+
+        // "protect" lands (5.02): second glint flare, glow pulse
+        tl.to("#glint-a", { scale: 1.05, rotation: 70, duration: 0.12, ease: "power2.out" }, 5.0);
+        tl.to("#glint-a", { scale: 0.8, rotation: 85, duration: 0.2, ease: "sine.inOut" }, 5.12);
+        tl.to("#lock-glow", { opacity: 0.85, scale: 1.04, duration: 0.14, ease: "power2.out" }, 5.0);
+        tl.to("#lock-glow", { opacity: 0.6, scale: 1, duration: 0.2, ease: "sine.inOut" }, 5.14);
+
+        window.__timelines = window.__timelines || {};
+        window.__timelines["main"] = tl;
+        if (window.__hfForceTimelineRebind) window.__hfForceTimelineRebind();
+      })();
+    </script>
+  </body>
+</html>

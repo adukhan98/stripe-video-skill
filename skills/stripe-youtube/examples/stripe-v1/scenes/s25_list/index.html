@@ -1,0 +1,73 @@
+<!doctype html>
+<!-- s25_list — v7 PROOF (Stripe tokens), chapter 4 card: THE ANTI-PATTERNS PAGE. The hero is a tall white page card with
+     anti_patterns.md typeset VERBATIM (shared listpage.js, byte-identical in s26_list2 / s29_rule). Frame 0: the page
+     rises in from below (lands ~0.45 s = 'paper' beat), heading on top. 'here' → the camera pushes in to 1.12 and the page
+     scrolls slowly upward from 'part' to the end (3–4 bullets readable at a time). 'favorite' → a slate warning disc pops on
+     the card's top-right corner; kinetic 'the favorite part' (accent hero) beside the page, then 'a list of / mistakes /
+     we have made / together.' End state = LP.s25End (bullet 2 centred) — s26 opens on it. Card zone kept clear. -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>s25_list</title>
+    <link rel="stylesheet" href="board.css" />
+    <link rel="stylesheet" href="v7yt.css" />
+    <link rel="stylesheet" href="brand.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="board.js"></script>
+    <script src="v7yt.js"></script>
+    <script src="listpage.js"></script>
+    <style>
+      #hud { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; pointer-events: none; }
+    </style>
+  </head>
+  <body data-theme="light">
+    <div id="root" class="mint" data-composition-id="main" data-start="0" data-width="1920" data-height="1080" data-duration="7.765">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+      <div id="cam"><div id="punch"></div></div>
+      <div id="hud">
+        <div id="a1" class="k" style="left:1290px;top:236px;font-size:70px"><span class="w" data-t="1.95">the</span></div>
+        <div id="a2" class="k k900" style="left:1262px;top:312px;font-size:118px"><span class="w mint" data-t="2.47" data-hero>favorite</span></div>
+        <div id="a3" class="k" style="left:1330px;top:438px;font-size:86px"><span class="w" data-t="2.85">part</span></div>
+        <div id="b1" class="k" style="left:1282px;top:226px;font-size:66px"><span class="w" data-t="4.55">a</span><span class="w gap" data-t="4.73">list</span><span class="w gap" data-t="4.95">of</span></div>
+        <div id="b2" class="k k900" style="left:1262px;top:300px;font-size:118px"><span class="w mint" data-t="5.73" data-hero>mistakes</span></div>
+        <div id="b3" class="k" style="left:1300px;top:432px;font-size:66px"><span class="w" data-t="6.41">we</span><span class="w gap" data-t="6.57">have</span><span class="w gap" data-t="6.79">made</span></div>
+        <div id="b4" class="k k700" style="left:1282px;top:506px;font-size:66px"><span class="w" data-t="7.21">together.</span></div>
+      </div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const B = await Board.init();
+        const V = V7Y.init(B);
+        const { tl, D, F } = B;
+
+        // ------------------------------------------------ the page (built + measured before any transform)
+        const lp = LP.build("#punch");
+        const end = LP.s25End(lp);
+        B.camSet(960, 540, 1.0);
+        // frame 0 already shows the page (opaque, low and tilted); it rises and lands ~14 f ('paper'), overshoot + settle
+        tl.fromTo(lp.page, { y: 230, rotation: LP.ROT * 4, opacity: 1 }, { y: -8, rotation: LP.ROT * 0.5, duration: 14 * F, ease: "power3.out" }, 0);
+        tl.to(lp.page, { y: 0, rotation: LP.ROT, duration: 8 * F, ease: "power2.inOut" }, 14 * F);
+
+        // ------------------------------------------------ camera: 'here' → push in; the page scrolls slowly upward
+        V.cam(1.2, end.cam[0], end.cam[1], end.cam[2], { dur: 1.1 });
+        tl.fromTo(lp.wrap, { y: 0 }, { y: -end.S, duration: D - 3.1, ease: "power1.inOut" }, 3.1);   // after the corner disc lands
+
+        // ------------------------------------------------ 'favorite' → a slate warning disc pops on the card corner, then wobbles
+        const [cx, cy] = LP.corner(lp);
+        const warn = V.disc(lp.wrap, { x: cx, y: cy, d: 104, icon: "warning", id: "warn" });
+        V.discIn(warn, 2.62);
+        tl.to(warn, { rotation: -10, duration: 4 * F, ease: "power2.out" }, 3.05);
+        tl.to(warn, { rotation: 7, duration: 5 * F, ease: "sine.inOut" }, 3.05 + 4 * F);
+        tl.to(warn, { rotation: 0, duration: 8 * F, ease: "back.out(2)" }, 3.05 + 9 * F);
+
+        // ------------------------------------------------ kinetic column: 'the favorite part' out (faster) before 'a list of'
+        B.out(["#a1", "#a2", "#a3"], 4.30, { dur: 6 * F, to: "up" });
+        // solid accent bar under 'mistakes'
+        const m = document.querySelector("#b2");
+        V.bar("#hud", 1270, 300 + m.offsetHeight - 4, m.offsetWidth - 20, 6.10, { h: 12 });
+      })();
+    </script>
+  </body>
+</html>

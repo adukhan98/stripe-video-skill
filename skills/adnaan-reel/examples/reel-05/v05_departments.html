@@ -1,0 +1,358 @@
+<!doctype html>
+<!-- adnaan-reel scene: MECHANISM — v05_departments. "every single department" over a 3x3 grid of department tiles
+     dealt out of a deck; on "same time" ALL tiles flip to deep at the same frame (hero beat: 1 % punch + light ripple);
+     then the grid shrinks up and "time" / "money" / "effort" black pills stack in the lower zone. No speaker card. -->
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>v05_departments</title>
+    <link rel="stylesheet" href="brand.css" />
+    <link rel="stylesheet" href="paper.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+    <script src="paper.js"></script>
+    <style>
+      @font-face { font-family: "Inter Tight"; src: url("fonts/InterTight-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Inter"; src: url("fonts/Inter-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+
+      /* ---- bespoke hero object: the department grid ---- */
+      #gwrap { position: absolute; left: 134px; top: 618px; width: 752px; height: 596px; }
+      #gdim { position: absolute; inset: 0; }
+      .tile { position: absolute; width: 236px; height: 184px; opacity: 0; }
+      .tin { position: absolute; inset: 0; }
+      .face { position: absolute; inset: 0; border-radius: 26px; overflow: hidden; }
+      .front { background: var(--brand-card); box-shadow: var(--shadow-card); }
+      .back { background: var(--brand-deep); box-shadow: var(--shadow-deep); opacity: 0; }
+      .ico { position: absolute; left: 76px; top: 30px; width: 84px; height: 84px; fill: none; stroke-width: 3.4; stroke-linecap: round; stroke-linejoin: round; }
+      .front .ico { stroke: var(--brand-text); }
+      .back .ico { stroke: var(--brand-card); }
+      .front .ico .bgfill { fill: var(--brand-card); }
+      .back .ico .bgfill { fill: var(--brand-deep); }
+      .dot { position: absolute; right: 20px; top: 20px; width: 18px; height: 18px; border-radius: 50%; background: var(--brand-muted); opacity: 0.55; }
+      .back .dot { background: var(--brand-primary); opacity: 1; box-shadow: 0 0 14px 3px color-mix(in srgb, var(--brand-primary) 60%, transparent); }
+      .bar { position: absolute; left: 30px; right: 30px; bottom: 26px; height: 12px; border-radius: 6px; background: var(--wire); overflow: hidden; }
+      .back .bar { background: rgba(255, 255, 255, 0.14); }
+      .fill { position: absolute; inset: 0; border-radius: 6px; background: var(--brand-primary); transform-origin: 0 50%; transform: scaleX(0.06); }
+      .tsheen { position: absolute; inset: 0; border-radius: 26px; opacity: 0;
+        background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.34) 46%, rgba(255, 255, 255, 0.08) 56%, transparent 66%);
+        background-size: 300% 100%; background-position: 100% 0; }
+
+      /* ---- the three black notification pills (runtime .pill, scaled up) ---- */
+      .pslot { position: absolute; left: 0; top: 1256px; width: 1080px; height: 176px; }
+      .pill.big { height: 176px; padding: 0 74px 0 54px; border-radius: 88px; gap: 28px; font-size: 96px; letter-spacing: -0.02em; }
+      .pill.big svg { width: 92px; height: 92px; }
+      .pico { fill: none; stroke: var(--brand-primary); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+      .pico .solid { fill: var(--brand-primary); stroke: none; }
+      .pico { overflow: visible; }
+
+      /* ---- creative pass: live icons, network connectors, ripples, feed dots, focus brackets ---- */
+      .ico { overflow: visible; }
+      .back .ico .acc { stroke: var(--brand-primary); }
+      .link { position: absolute; border-radius: 4px; background: var(--brand-primary); opacity: 0;
+        box-shadow: 0 0 12px 2px color-mix(in srgb, var(--brand-primary) 55%, transparent); }
+      .link.h { width: 30px; height: 7px; margin-left: -4px; margin-top: -3.5px; }
+      .link.v { width: 7px; height: 30px; margin-left: -3.5px; margin-top: -4px; }
+      .ripple { position: absolute; top: 0; height: 176px; border-radius: 88px; opacity: 0; }
+      .fdot { position: absolute; left: 0; top: 0; width: 22px; height: 22px; border-radius: 50%; opacity: 0;
+        background: radial-gradient(circle at 40% 35%, var(--brand-card), var(--brand-primary) 55%);
+        box-shadow: 0 0 18px 6px color-mix(in srgb, var(--brand-primary) 55%, transparent); }
+      #focus { position: absolute; left: 0; top: 0; overflow: visible; opacity: 0; }
+      #focus path { fill: none; stroke: var(--brand-primary); stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; }
+      #glint { position: absolute; width: 56px; height: 56px; margin-left: -28px; margin-top: -28px; opacity: 0; }
+      #glint svg { width: 56px; height: 56px; display: block; overflow: visible; }
+      #glint .star { fill: var(--brand-primary); }
+      #glint .halo { fill: color-mix(in srgb, var(--brand-primary) 22%, transparent); }
+    </style>
+  </head>
+  <body data-face="0.47">
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="6.7167">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+      <div id="cam"><div id="punch">
+
+        <!-- dotted feeds from the (shrunk) grid down into the pill stack -->
+        <svg class="paths" viewBox="0 0 1080 1920">
+          <path id="p1" class="dotted" d="M 314 766 C 314 920, 500 980, 505 1256" />
+          <path id="p2" class="dotted accent" d="M 510 766 L 510 1256" />
+          <path id="p3" class="dotted" d="M 706 766 C 706 920, 520 980, 515 1256" />
+        </svg>
+
+        <!-- bespoke hero object: 3x3 department tiles (built by the script below, icon-only, no labels) -->
+        <div id="gwrap"><div id="gdim"></div></div>
+
+        <!-- phrase 1: every single department (top) -->
+        <div class="line hero" data-x="78" data-base="392" data-size="134" data-exit="2.86" data-exit-lag="2" data-exit-dy="-22">
+          <span class="w" data-t="0.31" data-hero>every</span><span class="w sup gap-s" style="font-size: 0.776em" data-t="0.73" data-accent>single</span>
+        </div>
+        <div class="line hero ocean" data-right="928" data-base="566" data-size="182" data-fit="900" data-exit="2.86" data-exit-lag="1">
+          <span class="w" data-t="1.23" data-hero>department</span>
+        </div>
+        <!-- phrase 2: at the same time (lower zone, under the grid) -->
+        <div class="line sup" data-x="84" data-base="1294" data-size="84" data-exit="2.82">
+          <span class="w" data-t="1.63">at</span><span class="w gap-s" data-t="1.81">the</span>
+        </div>
+        <div class="line hero ocean" data-right="932" data-base="1446" data-size="204" data-fit="900" data-exit="2.82">
+          <span class="w" data-t="2.03" data-hero data-rise="56">same</span><span class="w gap-s" data-t="2.33" data-hero data-rise="56">time</span>
+        </div>
+
+        <!-- phrase 3: where they see (middle/lower zone, as the grid rises; clears before the "time" pill) -->
+        <div class="line sup" data-x="84" data-base="1170" data-size="112" data-exit="4.56" data-exit-lag="2">
+          <span class="w" data-t="3.28">where</span><span class="w gap-s" data-t="3.38">they</span>
+        </div>
+        <div class="line hero ocean" data-right="930" data-base="1392" data-size="224" data-fit="900" data-exit="4.56">
+          <span id="seeW" class="w" data-t="3.50" data-hero data-rise="60">see</span>
+        </div>
+
+        <!-- "see": camera focus brackets + glint -->
+        <svg id="focus"><path id="fb" d="" /></svg>
+        <div id="glint"><svg viewBox="-28 -28 56 56"><circle class="halo" r="24" /><path class="star" d="M0-26 C2 -6, 6 -2, 26 0 C6 2, 2 6, 0 26 C-2 6, -6 2, -26 0 C-6 -2, -2 -6, 0 -26Z" /></svg></div>
+
+        <!-- glowing feed dots: one rides each dotted feed into its pill -->
+        <div id="fd1" class="fdot"></div><div id="fd2" class="fdot"></div><div id="fd3" class="fdot"></div>
+
+        <!-- beat B: notification pills, newest rises into the bottom slot and pushes the stack up -->
+        <div id="s1" class="pslot"><div class="ripple"></div><div id="pTime" class="pill big"><svg class="pico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" /><path class="mh" d="M12 12V6.6" /><path class="hh" d="M12 12l3.2 2" /></svg>time</div></div>
+        <div id="s2" class="pslot"><div class="ripple"></div><div id="pMoney" class="pill big"><svg class="pico" viewBox="0 0 24 24"><g class="pc"><circle cx="12" cy="12" r="9" /><path d="M14.6 9.2c-.5-.9-1.5-1.4-2.6-1.4-1.5 0-2.6.8-2.6 2 0 2.8 5.3 1.5 5.3 4.4 0 1.2-1.2 2.1-2.8 2.1-1.2 0-2.3-.6-2.8-1.5M12 6.2v1.6M12 16.3v1.5" /></g></svg>money</div></div>
+        <div id="s3" class="pslot"><div class="ripple"></div><div id="pEffort" class="pill big"><svg class="pico" viewBox="0 0 24 24"><path class="solid bolt" d="M13.6 2.2 4.8 13.4h6.1l-1.3 8.4 8.9-11.3h-6.2z" /></svg>effort</div></div>
+
+      </div></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      // --- build the 3x3 department tiles (deterministic DOM, before the runtime lays out) ---
+      const ICONS = [
+        // briefcase
+        '<rect x="6" y="15" width="36" height="25" rx="4"/><path d="M17 15v-3.5a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3V15M6 26h36M21 26v3h6v-3"/>',
+        // chart
+        '<path d="M8 40h32M14 35V27M24 35V15M34 35V21"/>',
+        // people
+        '<circle cx="18" cy="17" r="6"/><path d="M7 38c0-6.5 4.8-10.5 11-10.5S29 31.5 29 38"/><circle cx="33" cy="19" r="4.8"/><path d="M32 27.6c5.4 0 9 3.8 9 9.4"/>',
+        // gear
+        '<circle cx="24" cy="24" r="10.5"/><circle cx="24" cy="24" r="4"/><path d="M24 6.5v5M24 36.5v5M6.5 24h5M36.5 24h5M11.6 11.6l3.5 3.5M32.9 32.9l3.5 3.5M36.4 11.6l-3.5 3.5M15.1 32.9l-3.5 3.5"/>',
+        // chat bubble
+        '<path d="M8 12a4 4 0 0 1 4-4h24a4 4 0 0 1 4 4v16a4 4 0 0 1-4 4H20l-8 7v-7a4 4 0 0 1-4-4z"/><path d="M17 20h.01M24 20h.01M31 20h.01" stroke-width="4.6"/>',
+        // document
+        '<path d="M13 6h15l9 9v24a3 3 0 0 1-3 3H13a3 3 0 0 1-3-3V9a3 3 0 0 1 3-3z"/><path d="M28 6v9h9M17 25h14M17 32h10"/>',
+        // shield
+        '<path d="M24 6l15 5v11c0 10-6.5 17-15 20-8.5-3-15-10-15-20V11z"/><path d="M17.5 24l4.8 4.8 8.7-9.6"/>',
+        // truck
+        '<path d="M5 12h22v20H5zM27 18h8l7 7v7H27"/><circle class="bgfill" cx="13" cy="34" r="4.2"/><circle class="bgfill" cx="34" cy="34" r="4.2"/>',
+        // dollar coin
+        '<circle cx="24" cy="24" r="17"/><path d="M29 18c-1-2-3-3-5-3-3 0-5 1.6-5 4 0 5.6 10.4 3.1 10.4 9.1 0 2.5-2.4 4.3-5.4 4.3-2.4 0-4.5-1.1-5.5-3.1M24 11.8v3.2M24 33v3.2"/>',
+      ];
+      // deep ("live") faces: same drawings, with the parts that come alive split out (accent = .acc)
+      const BACK = [
+        '<rect x="6" y="15" width="36" height="25" rx="4"/><path class="bh" d="M17 15v-3.5a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3V15"/><path d="M6 26h36"/><path class="acc" d="M21 26v3h6v-3"/>',
+        '<path d="M8 40h32"/><path class="cb" d="M14 35V27"/><path class="cb acc" d="M24 35V15"/><path class="cb" d="M34 35V21"/>',
+        '<circle cx="18" cy="17" r="6"/><path d="M7 38c0-6.5 4.8-10.5 11-10.5S29 31.5 29 38"/><g class="pr acc"><circle cx="33" cy="19" r="4.8"/><path d="M32 27.6c5.4 0 9 3.8 9 9.4"/></g>',
+        '<g class="gr"><circle cx="24" cy="24" r="10.5"/><path d="M24 6.5v5M24 36.5v5M6.5 24h5M36.5 24h5M11.6 11.6l3.5 3.5M32.9 32.9l3.5 3.5M36.4 11.6l-3.5 3.5M15.1 32.9l-3.5 3.5"/></g><circle class="acc" cx="24" cy="24" r="4"/>',
+        '<path d="M8 12a4 4 0 0 1 4-4h24a4 4 0 0 1 4 4v16a4 4 0 0 1-4 4H20l-8 7v-7a4 4 0 0 1-4-4z"/><path class="td acc" d="M17 20h.01" stroke-width="4.6"/><path class="td acc" d="M24 20h.01" stroke-width="4.6"/><path class="td acc" d="M31 20h.01" stroke-width="4.6"/>',
+        '<path d="M13 6h15l9 9v24a3 3 0 0 1-3 3H13a3 3 0 0 1-3-3V9a3 3 0 0 1 3-3z"/><path d="M28 6v9h9"/><path class="dl acc" d="M17 25h14"/><path class="dl acc" d="M17 32h10"/>',
+        '<path d="M24 6l15 5v11c0 10-6.5 17-15 20-8.5-3-15-10-15-20V11z"/><path class="ck acc" d="M17.5 24l4.8 4.8 8.7-9.6"/>',
+        '<g class="tk"><path d="M5 12h22v20H5zM27 18h8l7 7v7H27"/><circle class="bgfill" cx="13" cy="34" r="4.2"/><circle class="bgfill" cx="34" cy="34" r="4.2"/></g><path class="sl acc" d="M-3 17h5M-6 23h6M-3 29h5"/>',
+        '<g class="cn"><circle cx="24" cy="24" r="17"/><path class="acc" d="M29 18c-1-2-3-3-5-3-3 0-5 1.6-5 4 0 5.6 10.4 3.1 10.4 9.1 0 2.5-2.4 4.3-5.4 4.3-2.4 0-4.5-1.1-5.5-3.1M24 11.8v3.2M24 33v3.2"/></g>',
+      ];
+      const FILLS = [0.82, 0.58, 0.95, 0.7, 1.0, 0.62, 0.88, 0.66, 0.92];
+      const gdim = document.getElementById("gdim");
+      // DOM order: centre tile first (the deck), then the ring clockwise from top-left (dealt later = on top)
+      const ORDER = [4, 0, 1, 2, 5, 8, 7, 6, 3];
+      for (const i of ORDER) {
+        const r = Math.floor(i / 3), c = i % 3;
+        const svg = `<svg class="ico" viewBox="0 0 48 48">${ICONS[i]}</svg>`;
+        const svgB = `<svg class="ico" viewBox="0 0 48 48">${BACK[i]}</svg>`;
+        const t = document.createElement("div");
+        t.className = "tile"; t.id = "t" + i; t.dataset.r = r; t.dataset.c = c;
+        t.style.left = c * 258 + "px"; t.style.top = r * 206 + "px";
+        t.innerHTML = `<div class="tin"><div class="face front">${svg}<i class="dot"></i><i class="bar"></i></div>` +
+          `<div class="face back">${svgB}<i class="dot"></i><i class="bar"><i class="fill"></i></i><i class="tsheen"></i></div></div>`;
+        gdim.appendChild(t);
+      }
+      for (let r = 0; r < 3; r++) for (let c = 0; c < 3; c++) {
+        if (c < 2) { const l = document.createElement("i"); l.className = "link h"; l.dataset.d = Math.min(Math.abs(r - 1) + Math.abs(c - 1), Math.abs(r - 1) + Math.abs(c)); l.dataset.r = r;
+          l.style.left = c * 258 + 236 + "px"; l.style.top = r * 206 + 92 + "px"; gdim.appendChild(l); }
+        if (r < 2) { const l = document.createElement("i"); l.className = "link v"; l.dataset.d = Math.min(Math.abs(r - 1) + Math.abs(c - 1), Math.abs(r) + Math.abs(c - 1)); l.dataset.r = r + 0.5;
+          l.style.left = c * 258 + 118 + "px"; l.style.top = r * 206 + 184 + "px"; gdim.appendChild(l); }
+      }
+
+      (async () => {
+        const P = await Paper.init();
+        const { tl, F, D, $, $$ } = P;
+
+        // ---------- pill layout: centred on the feed (x 510) with a staggered collage offset ----------
+        [["#pTime", -60, -1], ["#pMoney", 50, 0.8], ["#pEffort", -20, -0.6]].forEach(([s, dx, rot]) => {
+          const el = $(s);
+          el.style.left = Math.round(510 + dx - el.offsetWidth / 2) + "px";
+          gsap.set(el.parentElement, { rotation: rot, transformOrigin: "50% 50%" });
+        });
+
+        const tiles = $$(".tile"), tins = $$(".tin"), fronts = $$(".front"), backs = $$(".back");
+
+        // ---------- BEAT A: deal out of a centre deck (wave, 2 f apart, arcs, overshoot) ----------
+        tiles.forEach((tile, k) => {
+          const r = +tile.dataset.r, c = +tile.dataset.c;
+          const fromX = (1 - c) * 258, fromY = (1 - r) * 206;
+          const t = k === 0 ? 0.36 : 0.44 + (k - 1) * 2 * F;
+          gsap.set(tile, { transformOrigin: "50% 60%" });
+          tl.fromTo(tile, { opacity: 0 }, { opacity: 1, duration: 4 * F, ease: "power1.out" }, t);
+          if (k === 0) {
+            tl.fromTo(tile, { scale: 0.5, rotation: -6 }, { scale: 1.06, rotation: 1, duration: 6 * F, ease: "power3.out" }, t);
+            tl.to(tile, { scale: 1, rotation: 0, duration: 9 * F, ease: "back.out(1.8)" }, t + 6 * F);
+          } else {
+            const tilt = c === 1 ? (r === 0 ? -4 : 4) : c === 0 ? -9 : 9;
+            P.arc(tile, t, { fromX, fromY, dur: 14 * F, tilt });
+            tl.fromTo(tile, { scale: 0.72 }, { scale: 1.04, duration: 9 * F, ease: "power3.out" }, t);
+            tl.to(tile, { scale: 1, duration: 8 * F, ease: "back.out(1.8)" }, t + 9 * F);
+          }
+        });
+        // secondary action: each tile floats a few px on its own period (never one rigid block)
+        tins.forEach((el, i) => P.floatY(el, 3, 1.15 + 0.09 * (i % 4)));
+
+        // ---------- HERO BEAT: "same time" — ALL tiles flip to deep at the same frame ----------
+        tins.forEach((el) => gsap.set(el, { transformPerspective: 1100, transformOrigin: "50% 50%" }));
+        const flipAt = 1.90, swap = flipAt + 4 * F;              // deep faces appear on "same" (2.03)
+        tl.to(tins, { scale: 0.95, duration: 3 * F, ease: "power2.in" }, flipAt - 3 * F);             // anticipation
+        tl.to(tins, { rotationY: 80, scale: 1, duration: 4 * F, ease: "power2.in" }, flipAt);
+        tl.set(fronts, { opacity: 0 }, swap);
+        tl.set(backs, { opacity: 1 }, swap);
+        tl.fromTo(tins, { rotationY: -80 }, { rotationY: 0, duration: 9 * F, ease: "back.out(1.6)", immediateRender: false }, swap);
+        tl.to(tins, { scale: 1.05, duration: 5 * F, ease: "power3.out" }, swap);
+        tl.to(tins, { scale: 1, duration: 9 * F, ease: "back.out(1.8)" }, swap + 5 * F);
+        P.punch(swap, { scale: 1.01, origin: "510px 916px", dur: 0.3 });                            // exaggeration
+        // light ripple sweeping diagonally across the grid + accent dots ring out
+        tiles.forEach((tile) => {
+          const r = +tile.dataset.r, c = +tile.dataset.c, d = (r + c) * 1.5 * F;
+          const sh = $(".tsheen", tile), dot = $(".back .dot", tile);
+          tl.fromTo(sh, { opacity: 0 }, { opacity: 1, duration: 3 * F, ease: "power1.out" }, swap + 2 * F + d);
+          tl.fromTo(sh, { backgroundPosition: "100% 0" }, { backgroundPosition: "0% 0", duration: 0.42, ease: "power2.inOut", immediateRender: false }, swap + 2 * F + d);
+          tl.to(sh, { opacity: 0, duration: 0.2, ease: "power1.in" }, swap + 0.32 + d);
+          gsap.set(dot, { transformOrigin: "50% 50%" });
+          tl.fromTo(dot, { scale: 0.3 }, { scale: 1.35, duration: 4 * F, ease: "power3.out", immediateRender: false }, swap + d);
+          tl.to(dot, { scale: 1, duration: 8 * F, ease: "back.out(2)" }, swap + 4 * F + d);
+        });
+        // secondary action through the hold: progress bars fill in every deep tile (2 f apart)
+        tiles.forEach((tile, k) => {
+          const i = +tile.id.slice(1);
+          tl.fromTo($(".fill", tile), { scaleX: 0.06 }, { scaleX: FILLS[i], duration: 2.4, ease: "power1.inOut", immediateRender: false }, 2.35 + k * 2 * F);
+        });
+
+        // ---------- BEAT B: grid shrinks up on a slight arc, recedes when the pills arrive ----------
+        gsap.set("#gwrap", { transformOrigin: "50% 50%" });
+        tl.to("#gwrap", { y: 14, scale: 1.01, duration: 4 * F, ease: "power2.in" }, 2.81);           // anticipation dip
+        tl.to("#gwrap", { y: -390, duration: 0.54, ease: "power2.inOut" }, 2.94);
+        tl.to("#gwrap", { scale: 0.76, duration: 0.54, ease: "power2.inOut" }, 2.94);
+        tl.to("#gwrap", { x: -22, rotation: -1.2, duration: 0.27, ease: "sine.out" }, 2.94);          // arc
+        tl.to("#gwrap", { x: 0, rotation: 0, duration: 0.34, ease: "sine.inOut" }, 3.21);
+        // feeds draw from the bottom tiles into the lower zone, then march (continuous → linear)
+        P.drawPath("#p2", 4.36, 0.5);
+        P.drawPath("#p1", 4.42, 0.5);
+        P.drawPath("#p3", 4.48, 0.5);
+        P.marchPath("#p1, #p2, #p3", 4.36, D - 4.36, 120);
+        P.recede("#gdim", 4.72, { opacity: 0.55, blur: 3, scale: 0.97, dur: 0.32 });
+
+        // pills: newest rises into the bottom slot (contact ~0.14 s before its word), the stack pushes up first
+        P.pillIn("#pTime", 4.80, { fromY: 30 });                                                    // time 5.21
+        tl.to("#s1", { y: -200, duration: 0.32, ease: "power3.inOut" }, 5.30);
+        P.pillIn("#pMoney", 5.50, { fromY: 30 });                                                   // money 5.91
+        tl.to("#s1", { y: -400, duration: 0.32, ease: "power3.inOut" }, 6.03);                      // top leads,
+        tl.to("#s2", { y: -200, duration: 0.32, ease: "power3.inOut" }, 6.03 + 2 * F);              // next lags 2 f
+        P.pillIn("#pEffort", 6.25, { fromY: 30 });                                                  // effort 6.68
+        // each landing pings the grid's accent dots (the departments feel it)
+        const dots = $$(".back .dot");
+        [5.07, 5.77, 6.52].forEach((t) => tl.to(dots, { scale: 1.3, duration: 3 * F, ease: "power2.out", stagger: F * 0.5 }, t)
+          .to(dots, { scale: 1, duration: 8 * F, ease: "back.out(2)", stagger: F * 0.5 }, t + 3 * F));
+
+        // ================= CREATIVE PASS =================
+        const loopTo = (el, vars, start, period, extra = {}) => {          // deterministic yoyo loop that ends before the cut
+          const reps = Math.max(1, Math.floor((D - start) / period) - 1);
+          tl.to(el, { ...vars, duration: period, ease: "sine.inOut", yoyo: true, repeat: reps, ...extra }, start);
+        };
+        // 1) the company comes alive: each deep icon gets its own micro-action, booting in a diagonal wave after the flip
+        tiles.forEach((tile) => {
+          const i = +tile.id.slice(1), r = +tile.dataset.r, c = +tile.dataset.c;
+          const b = 2.38 + (r + c) * 2 * F, q = (s) => $$(s, $(".back", tile));
+          if (i === 0) { gsap.set(q(".bh"), { transformOrigin: "50% 100%" });
+            tl.fromTo(q(".bh"), { y: 0 }, { y: -3.5, duration: 5 * F, ease: "power2.out", immediateRender: false }, b);
+            loopTo(q(".bh"), { y: -1 }, b + 5 * F, 0.42); }
+          if (i === 1) q(".cb").forEach((bar, k) => { gsap.set(bar, { transformOrigin: "50% 100%" });
+            tl.fromTo(bar, { scaleY: 0.15 }, { scaleY: 1, duration: 9 * F, ease: "back.out(2)", immediateRender: false }, b + k * 2 * F);
+            loopTo(bar, { scaleY: [0.62, 0.8, 0.7][k] }, b + 9 * F + k * 2 * F, 0.5 + 0.08 * k); });
+          if (i === 2) { gsap.set(q(".pr"), { transformOrigin: "50% 100%" });
+            tl.fromTo(q(".pr"), { scale: 0.2, opacity: 0 }, { scale: 1, opacity: 1, duration: 8 * F, ease: "back.out(2.2)", immediateRender: false }, b);
+            loopTo(q(".pr"), { y: -2.5 }, b + 8 * F, 0.46); }
+          if (i === 3) tl.fromTo(q(".gr"), { rotation: 0 }, { rotation: 300, duration: D - b, ease: "none", svgOrigin: "24 24", immediateRender: false }, b);
+          if (i === 4) q(".td").forEach((d, k) => { tl.fromTo(d, { opacity: 0.25 }, { opacity: 1, duration: 3 * F, immediateRender: false }, b + k * 3 * F);
+            loopTo(d, { y: -3, opacity: 0.35 }, b + 4 * F + k * 3 * F, 0.27); });
+          if (i === 5) q(".dl").forEach((l, k) => { const L = k ? 10 : 14; gsap.set(l, { strokeDasharray: `${L} ${L}` });
+            tl.fromTo(l, { strokeDashoffset: L }, { strokeDashoffset: 0, duration: 7 * F, ease: "power2.out", immediateRender: true }, b + k * 5 * F);
+            tl.fromTo(l, { strokeDashoffset: 0 }, { strokeDashoffset: -L, duration: 5 * F, ease: "power2.in", immediateRender: false }, 3.70 + k * 3 * F);
+            tl.fromTo(l, { strokeDashoffset: L }, { strokeDashoffset: 0, duration: 7 * F, ease: "power2.out", immediateRender: false }, 3.70 + 6 * F + k * 5 * F); });
+          if (i === 6) { const ck = q(".ck")[0]; gsap.set(ck, { strokeDasharray: "22 22" });
+            tl.fromTo(ck, { strokeDashoffset: 22 }, { strokeDashoffset: 0, duration: 7 * F, ease: "power2.out", immediateRender: true }, b + 2 * F); }
+          if (i === 7) { tl.fromTo(q(".tk"), { x: -3 }, { x: 0, duration: 6 * F, ease: "power2.out", immediateRender: false }, b);
+            loopTo(q(".tk"), { x: 3 }, b + 6 * F, 0.34);
+            tl.fromTo(q(".sl"), { opacity: 0 }, { opacity: 1, duration: 3 * F, immediateRender: true }, b);
+            loopTo(q(".sl"), { opacity: 0.25, x: -2 }, b + 3 * F, 0.17); }
+          if (i === 8) { gsap.set(q(".cn"), { transformOrigin: "50% 50%" });
+            tl.to(q(".cn"), { scaleX: -1, duration: 0.26, ease: "power2.inOut", yoyo: true, repeat: Math.floor((D - b) / 0.52) - 1, repeatDelay: 0.26 }, b); }
+        });
+        // 2) network pulse: gutter connectors light up from the centre tile outward (twice), then top→bottom into the feeds
+        const links = $$(".link");
+        const pulse = (t, key, step, rest) => links.forEach((l) => {
+          const s = t + (+l.dataset[key]) * step;
+          tl.to(l, { opacity: 1, scale: 1.25, duration: 3 * F, ease: "power2.out" }, s);
+          tl.to(l, { opacity: rest, scale: 1, duration: 10 * F, ease: "power2.inOut" }, s + 3 * F);
+        });
+        pulse(2.36, "d", 3 * F, 0.3);
+        pulse(3.62, "d", 3 * F, 0.3);
+        pulse(4.16, "r", 2.5 * F, 0.45);
+        // 3) feed dots ride each dotted line and are absorbed by the pill on its landing (contact = ping)
+        [["#fd1", "#p1", 5.07], ["#fd2", "#p3", 5.77], ["#fd3", "#p2", 6.52]].forEach(([dot, path, land]) => {
+          tl.fromTo(dot, { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 4 * F, ease: "power2.out", immediateRender: true }, land - 0.44);
+          P.ride(dot, path, land - 0.44, 0.44, { align: false });
+          tl.to(dot, { opacity: 0, scale: 1.8, duration: 3 * F, ease: "power2.in" }, land - 2 * F);
+        });
+        // 4) pills: ripple ring on contact + each icon does its thing
+        [["#pTime", 5.07], ["#pMoney", 5.77], ["#pEffort", 6.52]].forEach(([s, land]) => {
+          const pill = $(s), rip = $(".ripple", pill.parentElement);
+          Object.assign(rip.style, { left: pill.style.left, width: pill.offsetWidth + "px" });
+          tl.fromTo(rip, { opacity: 1, boxShadow: "0 0 0 0px rgba(46,156,203,.6)" },
+            { opacity: 1, boxShadow: "0 0 0 28px rgba(46,156,203,0)", duration: 0.45, ease: "power2.out", immediateRender: false }, land);
+          tl.set(rip, { opacity: 0 }, land + 0.46);
+        });
+        tl.fromTo("#pTime .mh", { rotation: 0 }, { rotation: 360, duration: 0.55, ease: "power2.inOut", svgOrigin: "12 12", immediateRender: false }, 5.07);
+        tl.to("#pTime .mh", { rotation: 360 + 120, duration: D - 5.62, ease: "none", svgOrigin: "12 12" }, 5.62);
+        tl.fromTo("#pTime .hh", { rotation: 0 }, { rotation: 30, duration: 0.55, ease: "power2.inOut", svgOrigin: "12 12", immediateRender: false }, 5.07);
+        gsap.set("#pMoney .pc", { transformOrigin: "50% 50%" });
+        tl.to("#pMoney .pc", { scaleX: -1, duration: 0.16, ease: "power1.inOut", yoyo: true, repeat: 3 }, 5.77);
+        loopTo("#pMoney .pc", { scaleX: 0.75 }, 5.77 + 0.66, 0.3);
+        gsap.set("#pEffort .bolt", { transformOrigin: "50% 50%" });
+        tl.fromTo("#pEffort .bolt", { opacity: 1 }, { keyframes: [{ opacity: 0.2, duration: F }, { opacity: 1, duration: F }, { opacity: 0.35, duration: F }, { opacity: 1, duration: 2 * F }], immediateRender: false }, 6.40);
+        tl.fromTo("#pEffort .bolt", { scale: 1 }, { scale: 1.3, duration: 4 * F, ease: "power2.out", immediateRender: false }, 6.52);
+        tl.to("#pEffort .bolt", { scale: 1, duration: 6 * F, ease: "back.out(2)" }, 6.52 + 4 * F);
+        // 5) "see": camera focus brackets snap onto the word, hunt once, and a glint twinkles on it
+        {
+          const w = $("#seeW"), line = w.closest(".line"), fs = parseFloat(getComputedStyle(line).fontSize);
+          const base = parseFloat(line.dataset.base);
+          const x0 = line.offsetLeft + w.offsetLeft - 24, x1 = Math.min(950, line.offsetLeft + w.offsetLeft + w.offsetWidth + 16);
+          const y0 = base - 0.6 * fs - 22, y1 = base + 0.1 * fs + 16, L = 34, Wd = x1 - x0, Ht = y1 - y0;
+          const fsvg = $("#focus");
+          Object.assign(fsvg.style, { left: x0 + "px", top: y0 + "px", width: Wd + "px", height: Ht + "px" });
+          fsvg.setAttribute("viewBox", `0 0 ${Wd} ${Ht}`);
+          $("#fb").setAttribute("d", `M0 ${L}V0H${L} M${Wd - L} 0H${Wd}V${L} M${Wd} ${Ht - L}V${Ht}H${Wd - L} M${L} ${Ht}H0V${Ht - L}`);
+          gsap.set(fsvg, { transformOrigin: "100% 55%" });            // anchored right: the snap never crosses x 960
+          tl.fromTo(fsvg, { opacity: 0, scale: 1.4, rotation: 3 }, { opacity: 1, scale: 0.96, rotation: 0, duration: 6 * F, ease: "power3.out", immediateRender: true }, 3.50 - 2 * F);
+          tl.to(fsvg, { scale: 1.03, duration: 4 * F, ease: "power2.inOut" }, 3.50 + 4 * F);       // autofocus hunt
+          tl.to(fsvg, { scale: 1, duration: 6 * F, ease: "back.out(2)" }, 3.50 + 8 * F);
+          loopTo(fsvg, { scale: 1.015 }, 3.50 + 14 * F, 0.4);
+          const g = $("#glint");
+          Object.assign(g.style, { left: x1 - 30 + "px", top: y0 + 34 + "px" });
+          gsap.set(g, { transformOrigin: "50% 50%" });
+          tl.fromTo(g, { opacity: 0, scale: 0.1, rotation: -45 }, { opacity: 1, scale: 1.2, rotation: 0, duration: 5 * F, ease: "power3.out", immediateRender: true }, 3.66);
+          tl.to(g, { scale: 0.85, duration: 6 * F, ease: "back.out(2)" }, 3.66 + 5 * F);
+          loopTo(g, { scale: 0.6, rotation: 30 }, 3.66 + 11 * F, 0.32);
+          P.exitUp([fsvg, g], 4.56, -40);                                                          // leaves with "see"
+        }
+      })();
+    </script>
+  </body>
+</html>

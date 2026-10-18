@@ -1,0 +1,25 @@
+/* adnaan-reel shared runtime — marker.css (v5): the hand-drawn marker layer on top of paper.css. Never edit per scene. */
+@font-face { font-family: "Caveat"; src: url("fonts/Caveat-Variable.ttf") format("truetype"); font-weight: 400 700; font-style: normal; font-display: block; }
+
+:root {
+  --marker: var(--brand-primary);      /* red marker strokes */
+  --marker-text: var(--brand-primary-dark); /* handwriting in red: darker for contrast on paper */
+  --marker-ink: #1d1b1a;               /* black felt-tip */
+  --pencil: #8e8780;                   /* grey pencil */
+}
+
+/* full-frame drawing layer: append inside #punch so the camera punch moves it with the scene */
+svg.mk-layer { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; overflow: visible; pointer-events: none; }
+svg.mk-layer path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+svg.mk-hl path { fill: none; }   /* highlighter swipes live in the card's own svg (v6.1 fix: no dark strike line) */
+
+/* handwritten margin notes (Caveat 700) — written on left→right by clip-path */
+.mk-note { position: absolute; font-family: "Caveat", cursive; font-weight: 700; line-height: 0.95; white-space: nowrap;
+  color: var(--marker-text); transform-origin: 0 100%; }
+.mk-note.ink { color: var(--marker-ink); }
+.mk-note.pencil { color: var(--pencil); }
+
+/* masking-tape strip for stuck-on cards */
+.mk-tape { position: absolute; width: 150px; height: 46px; background: rgba(236, 226, 205, 0.82);
+  box-shadow: 0 2px 6px rgba(60, 50, 40, 0.18); mix-blend-mode: multiply;
+  clip-path: polygon(2% 8%, 10% 0, 22% 9%, 35% 1%, 50% 7%, 64% 0, 78% 8%, 90% 1%, 100% 10%, 98% 92%, 88% 100%, 75% 91%, 60% 99%, 45% 92%, 30% 100%, 16% 92%, 4% 100%); }

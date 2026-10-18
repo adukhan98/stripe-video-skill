@@ -1,0 +1,323 @@
+<!doctype html>
+<!-- adnaan-reel scene: v10_labs (blank starter) — FUNNEL tier 3 = ~5,000 → the top AI labs.
+     Bespoke: a hand-drawn magnifier that really magnifies the spout (live 2x copy of the funnel drawing, clipped),
+     the real post strip with a highlighter, and a hand-drawn locked lab door (light leak, padlock click, systems/models
+     doodles in its window, ")))" sound waves). -->
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>v10_labs</title>
+    <link rel="stylesheet" href="brand.css" />
+    <link rel="stylesheet" href="paper.css" />
+    <link rel="stylesheet" href="marker.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+    <script src="paper.js"></script>
+    <script src="marker.js"></script>
+    <style>
+      @font-face { font-family: "Inter Tight"; src: url("fonts/InterTight-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Inter"; src: url("fonts/Inter-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Caveat"; src: url("fonts/Caveat-Variable.ttf") format("truetype"); font-weight: 400 700; font-style: normal; font-display: block; }
+
+      /* real post strip (post_b4.png, 958x236) at 0.87 in a soft white card, slight tilt */
+      #postW { position: absolute; left: 80px; top: 318px; width: 862px; height: 237px; transform: rotate(-1.2deg); }
+      #post { position: absolute; inset: 0; background: var(--brand-card); border-radius: 24px; box-shadow: var(--card-shadow); }
+      #strip { position: absolute; left: 14px; top: 16px; width: 958px; height: 236px; transform: scale(0.87); transform-origin: 0 0; }
+      #strip img { position: absolute; left: 0; top: 0; width: 958px; height: 236px; z-index: 1; }
+      #post .mk-tape { z-index: 3; }
+
+      /* door light: warm red glow leaking under the door + glow in the window (behind the marker strokes) */
+      .glow { position: absolute; opacity: 0; mix-blend-mode: multiply; filter: blur(5px);
+        background: radial-gradient(ellipse at 50% 50%, var(--brand-primary) 0%, transparent 68%); }
+      #doorGlow { left: 668px; top: 730px; width: 176px; height: 56px; }
+      #winGlow { left: 702px; top: 404px; width: 112px; height: 100px; filter: blur(9px); }
+
+      /* the magnifier: lens centre = #lens origin; the glass shows a live 2x copy of the drawing under it */
+      #lens { position: absolute; left: 0; top: 0; width: 0; height: 0; opacity: 0; z-index: 6; }
+      #lensS { position: absolute; left: 0; top: 0; width: 0; height: 0; }
+      .lsvg { position: absolute; left: -300px; top: -300px; width: 600px; height: 600px; overflow: visible; }
+      .lsvg path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+      #lensBack { filter: drop-shadow(10px 18px 12px rgba(40, 30, 20, 0.26)); }
+      #mag { position: absolute; left: -135px; top: -135px; width: 270px; height: 270px; border-radius: 50%; overflow: hidden;
+        background: var(--brand-background); box-shadow: 0 22px 34px -12px rgba(40, 30, 20, 0.34); }
+      #magIn { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; transform-origin: 0 0; }
+      #magGrid { position: absolute; left: -120px; top: -120px; width: 1320px; height: 2160px;
+        background-image: linear-gradient(to right, rgba(20, 20, 20, 0.055) 1.5px, transparent 1.5px),
+          linear-gradient(to bottom, rgba(20, 20, 20, 0.055) 1.5px, transparent 1.5px);
+        background-size: 60px 60px; }
+      #glass { position: absolute; left: -135px; top: -135px; width: 270px; height: 270px; border-radius: 50%; pointer-events: none;
+        background: radial-gradient(circle at 33% 27%, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0) 42%),
+          radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0) 72%, rgba(110, 95, 85, 0.13) 100%); }
+    </style>
+  </head>
+  <body data-face="0.42">
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="6.2833">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+      <div id="cam"><div id="punch">
+
+        <div id="doorGlow" class="glow"></div>
+        <div id="winGlow" class="glow"></div>
+
+        <!-- the real post strip (flashes on '5,000', then recedes) -->
+        <div id="postW"><div id="post"><div id="strip"><img src="assets/post_b4.png" alt="" /></div></div></div>
+
+        <!-- BEAT A: lower zone -->
+        <div class="line sup" id="lnAfter" data-x="80" data-base="1430" data-size="96" data-exit="1.22">
+          <span class="w" data-t="0.39" data-rise="34">after</span><span class="w gap-s" data-t="0.69" data-rise="34">that,</span>
+        </div>
+        <div class="line hero ocean" id="ln5k" data-x="76" data-base="1426" data-size="220">
+          <span class="w" data-t="1.55" data-hero data-rise="-60" data-punch="1.55">5,000</span>
+        </div>
+        <div class="line sup" id="lnPeople" data-right="946" data-base="1426" data-size="88">
+          <span class="w" data-t="1.91" data-rise="24">people</span>
+        </div>
+
+        <!-- BEAT B: top-left, beside the lab door -->
+        <div class="line hero" id="lnTop" data-x="80" data-base="448" data-size="124">
+          <span class="w" data-t="2.83" data-pop>top</span><span class="w gap-s" data-t="3.13" data-pop>AI</span>
+        </div>
+        <div class="line hero" id="lnLabs" data-x="236" data-base="592" data-size="140">
+          <span class="w" data-t="3.41" data-pop>labs</span>
+        </div>
+        <div class="line sup" id="lnHeard" data-x="80" data-base="716" data-size="104">
+          <span class="w" data-t="5.91" data-pop>heard</span><span class="w gap-s" data-t="6.21" data-pop>about</span>
+        </div>
+
+        <!-- the magnifier (re-appended above the marker layer at init) -->
+        <div id="lens">
+          <div id="lensS">
+            <svg class="lsvg" id="lensBack" viewBox="-300 -300 600 600">
+              <g transform="rotate(-38)">
+                <rect x="138" y="-10" width="46" height="20" rx="7" style="fill: var(--brand-card)" />
+                <rect x="176" y="-21" width="160" height="42" rx="21" style="fill: var(--brand-card)" />
+              </g>
+            </svg>
+            <div id="mag"><div id="magIn"><div id="magGrid"></div></div></div>
+            <div id="glass"></div>
+            <svg class="lsvg" id="lensInk" viewBox="-300 -300 600 600"></svg>
+          </div>
+        </div>
+
+      </div></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const P = await Paper.init({ extraFonts: ['700 60px "Caveat"'] });
+        const { tl, D, F, $, $$ } = P;
+        const M = Marker.init(P);
+        const NS = "http://www.w3.org/2000/svg";
+        const punchEl = $("#punch");
+        const mkG = (parent, id) => { const g = document.createElementNS(NS, "g"); if (id) g.id = id; parent.appendChild(g); return g; };
+        function rng(seed) { let s = seed >>> 0 || 1; return () => { s ^= s << 13; s >>>= 0; s ^= s >> 17; s ^= s << 5; s >>>= 0; return (s % 100000) / 100000; }; }
+
+        // ============ the shared funnel state at frame 0 (identical drawing in the world AND in the lens copy) ============
+        const FUNARGS = { x: 150, y: 820, w: 560, h: 330, neck: 0.16, tiers: 4, split: [0, 0.38, 0.66, 0.86, 1], spout: 56, color: "ink" };
+        // ~30 tiny red dots clustered in tier 3 (the ~5,000) — seeded, min spacing
+        const DOTS = [];
+        { const r = rng(5000); let guard = 0;
+          while (DOTS.length < 30 && guard++ < 4000) {
+            const a = r() * Math.PI * 2, q = Math.sqrt(r());
+            const x = 430 + Math.cos(a) * 44 * q, y = 1137 + Math.sin(a) * 12 * q;
+            if (DOTS.every((d) => Math.hypot(d[0] - x, (d[1] - y) * 1.6) > 9.5)) DOTS.push([x, y]);
+          } }
+        // v07_you final frame, reproduced exactly (same coordinates + seeds): 9 stick people in tier 0, the red map pin in tier 2
+        const PPX = [262, 304, 345, 388, 430, 474, 517, 560, 602];
+        const PIN_R = 40, PIN_CY = -88, PIN_X = 430, PIN_Y = 1080;
+        const PIN = (() => { const ac = Math.acos(PIN_R / -PIN_CY), pts = [[0, 0]];
+          const a0 = Math.PI / 2 + ac, a1 = Math.PI / 2 - ac + Math.PI * 2;
+          for (let k = 0; k <= 16; k++) { const a = a0 + (a1 - a0) * (k / 16); pts.push([Math.cos(a) * PIN_R, PIN_CY + Math.sin(a) * PIN_R]); }
+          pts.push([0, 0]); return pts; })();
+        function baseDrawing(MM, g, tag, withPeople) {
+          const FUN = MM.funnel(FUNARGS);
+          FUN.fill(0, 0, { color: "pencil", opacity: 0.45, parent: g });
+          FUN.fill(1, 0, { color: "pencil", opacity: 0.45, parent: g });
+          FUN.fill(2, 0, { parent: g });
+          FUN.draw(0, { parent: g });
+          for (let i = 0; i < 3; i++) FUN.divider(i, 0, { parent: g });
+          if (withPeople) {
+            PPX.forEach((x, i) => {
+              const pg = mkG(g); pg.setAttribute("class", "sp");
+              const fy = 944 - Math.round(Math.abs(x - 430) * 0.055) + (i % 2 ? -3 : 2);
+              const o = { color: "ink", width: 4.5, amp: 0.9, parent: pg };
+              MM.circle(x, fy - 33, 6, 6.5, 0, { ...o, turns: 1.05, seed: 900 + i * 31 });
+              MM.line([[x, fy - 26], [x, fy - 12]], 0, { ...o, seed: 1300 + i * 17 });
+              MM.line([[x - 7, fy], [x, fy - 12], [x + 7, fy]], 0, { ...o, seed: 1700 + i * 13 });
+              const up = i === 2 || i === 6;
+              MM.line(up ? [[x - 10, fy - 32], [x, fy - 22], [x + 9, fy - 17]] : [[x - 9, fy - 15], [x, fy - 22], [x + 9, fy - 15]], 0, { ...o, seed: 2100 + i * 11 });
+            });
+          }
+          // the 5,000: dots (popped in on 'about 5,000')
+          const dg = mkG(g); dg.setAttribute("class", "dots");
+          DOTS.forEach(([x, y], i) => {
+            const c = document.createElementNS(NS, "circle");
+            c.setAttribute("cx", x.toFixed(1)); c.setAttribute("cy", y.toFixed(1)); c.setAttribute("r", "3.3");
+            c.setAttribute("class", `dk dk${i}`); c.style.fill = "var(--marker)";
+            dg.appendChild(c);
+          });
+          // contact shadow + pin (v07: filled red, red-dark outline seed 5151, card hole + ring seed 6161)
+          const sh = document.createElementNS(NS, "ellipse");
+          Object.entries({ cx: PIN_X, cy: PIN_Y + 3, rx: 30, ry: 8 }).forEach(([k, v]) => sh.setAttribute(k, v));
+          sh.style.fill = "var(--marker-ink)"; sh.style.opacity = 0.32; g.appendChild(sh);
+          const pin = mkG(g); pin.setAttribute("transform", `translate(${PIN_X} ${PIN_Y})`);
+          const pf = document.createElementNS(NS, "path");
+          pf.setAttribute("d", MM.smooth(PIN) + " Z"); pf.style.fill = "var(--marker)"; pf.style.stroke = "none"; pf.style.opacity = 0.92; pin.appendChild(pf);
+          MM.line(PIN, 0, { color: "var(--brand-primary-dark)", width: 9, amp: 1.2, dur: 0.32, parent: pin, seed: 5151 });
+          const hole = document.createElementNS(NS, "circle");
+          hole.setAttribute("cx", 0); hole.setAttribute("cy", PIN_CY); hole.setAttribute("r", 14); hole.style.fill = "var(--brand-card)"; pin.appendChild(hole);
+          MM.circle(0, PIN_CY, 14, 14, 0, { color: "var(--brand-primary-dark)", width: 6, dur: 0.18, turns: 1.08, parent: pin, seed: 6161 });
+          return { FUN, dg };
+        }
+        const fz = mkG(M.layer, "fz");
+        const W = baseDrawing(M, fz, "w", true);
+
+        // ============ the magnifier: copy of the drawing at 2x inside a clipped glass ============
+        const lensEl = $("#lens");
+        punchEl.appendChild(lensEl);                       // above the marker layer
+        const M2 = Marker.init(P);                         // same seeds/boil → identical drawing, in sync
+        const magIn = $("#magIn");
+        magIn.appendChild(M2.layer);
+        const fz2 = mkG(M2.layer, "fz2");
+        const C = baseDrawing(M2, fz2, "c", false);
+        tl.fromTo("#magGrid", { x: 0, y: 0 }, { x: -20, y: -12, duration: D, ease: "none" }, 0); // same drift as the world grid
+
+        const R = 135, MAG = 2, PX = 430, PY = 1108;
+        gsap.set(lensEl, { transformOrigin: "0px 0px" });
+        gsap.set("#lensS", { transformOrigin: "0px 0px" });
+        gsap.set("#mag", { transformOrigin: "50% 50%" });
+        gsap.set(magIn, { transformOrigin: "0px 0px", scale: MAG });
+        // lens move: the glass magnifies whatever is under its centre → the copy mirrors every lens move (and un-rotates)
+        const gl = (v, dur, ease, t, extra = {}) => {
+          tl.to(lensEl, { ...v, duration: dur, ease, ...extra }, t);
+          const m = {};
+          if (v.x !== undefined) m.x = R - MAG * v.x;
+          if (v.y !== undefined) m.y = R - MAG * v.y;
+          if (Object.keys(m).length) tl.to(magIn, { ...m, duration: dur, ease, ...extra }, t);
+          if (v.rotation !== undefined) tl.to("#mag", { rotation: -v.rotation, duration: dur, ease, ...extra }, t);
+        };
+        const s0 = { x: 700, y: 690, rotation: 22 };
+        tl.set(lensEl, { x: s0.x, y: s0.y, rotation: s0.rotation }, 0);
+        tl.set(magIn, { x: R - MAG * s0.x, y: R - MAG * s0.y }, 0);
+        tl.set("#mag", { rotation: -s0.rotation }, 0);
+        // swing in on an arc ('after that'): x eases out, y falls in → curved path; tilt overshoots, settles
+        tl.to(lensEl, { opacity: 1, duration: 0.1, ease: "power1.out" }, 0.2);
+        tl.fromTo("#lensS", { scale: 0.62 }, { scale: 1, duration: 0.42, ease: "power3.out" }, 0.2);
+        gl({ x: PX - 8 }, 0.58, "power2.out", 0.2);
+        gl({ y: PY + 7 }, 0.58, "power2.in", 0.2);
+        gl({ rotation: -7 }, 0.58, "power2.out", 0.2);
+        gl({ x: PX }, 0.32, "back.out(2)", 0.78);
+        gl({ y: PY }, 0.32, "back.out(2)", 0.78);
+        gl({ rotation: 0 }, 0.45, "back.out(2.4)", 0.78);
+        P.squash("#lensS", 0.8, 0.06);
+        // the hand draws the lens while it flies: rim loop, then handle + neck
+        const lensInk = $("#lensInk");
+        M.circle(0, 0, R, R, 0.22, { color: "ink", width: 12, dur: 0.36, tilt: 0, parent: lensInk });
+        const ux = Math.cos((-38 * Math.PI) / 180), uy = Math.sin((-38 * Math.PI) / 180), vx = -uy, vy = ux;
+        const at = (r, s) => [ux * r + vx * s, uy * r + vy * s];
+        M.line([at(176, 21), at(318, 21), at(336, 8), at(336, -8), at(318, -21), at(176, -21), at(176, 21)], 0.5, { color: "ink", width: 9, dur: 0.24, amp: 1.4, parent: lensInk });
+        M.line([at(140, 10), at(177, 10)], 0.46, { color: "ink", width: 7, dur: 0.06, amp: 0.6, parent: lensInk });
+        M.line([at(140, -10), at(177, -10)], 0.5, { color: "ink", width: 7, dur: 0.06, amp: 0.6, parent: lensInk });
+        // glass highlight (one light direction: top-left)
+        const hl = document.createElementNS(NS, "path");
+        hl.setAttribute("d", "M -98 -34 A 104 104 0 0 1 -40 -96");
+        Object.assign(hl.style, { fill: "none", stroke: "#fff", strokeWidth: 7, strokeLinecap: "round", opacity: 0.8 });
+        lensInk.appendChild(hl);
+        tl.fromTo(hl, { opacity: 0 }, { opacity: 0.8, duration: 0.2, ease: "power1.out" }, 0.62);
+        // secondary: the hand holding it breathes — slow bob + sway (copy follows exactly)
+        gl({ y: PY - 4 }, 1.0, "sine.inOut", 1.12, { yoyo: true, repeat: 4 });
+        gl({ rotation: 1.6 }, 1.2, "sine.inOut", 1.25, { yoyo: true, repeat: 3 });
+
+        // ============ the 5,000: dots pop in one by one ('about 5,000'), centre-out ============
+        const order = DOTS.map((d, i) => [Math.hypot(d[0] - 430, (d[1] - 1137) * 2.5), i]).sort((a, b) => a[0] - b[0]).map((p) => p[1]);
+        order.forEach((i, k) => {
+          const t = 0.96 + k * (0.42 / DOTS.length);
+          tl.fromTo(`.dk${i}`, { opacity: 0, scale: 0, transformOrigin: "50% 50%" }, { opacity: 1, scale: 1.5, duration: 3 * F, ease: "power3.out" }, t);
+          tl.to(`.dk${i}`, { scale: 1, duration: 6 * F, ease: "back.out(2)" }, t + 3 * F);
+        });
+        // hero beat '5,000': shake, lens pulses (a flash of extra zoom), the cluster throbs
+        P.shake(1.55, 4);
+        P.pulse("#lensS", 1.5, 1.06);
+        tl.to([W.dg, C.dg], { scale: 1.22, svgOrigin: "430 1137", duration: 0.1, ease: "power2.out" }, 1.55);
+        tl.to([W.dg, C.dg], { scale: 1, svgOrigin: "430 1137", duration: 0.35, ease: "back.out(2)" }, 1.65);
+        M.note("~5,000", 598, 1090, 1.62, { size: 66, rot: -5 });
+
+        // ============ the real post strip: up on 'about', highlighter on '5,000', recedes on 'work' ============
+        P.cardIn("#post", 1.16, { fromY: 70, rot: -2 });
+        const tape = M.tape(28, 205, 9, 1.34);
+        $("#post").appendChild(tape);
+        M.highlight($("#strip"), [568, 31, 310, 54], 1.40);
+        P.exitUp("#post", 2.5, -22);
+        // marker arrow: these 5,000 → (where the lab door will be) on 'work at'
+        M.arrow(752, 1076, 762, 796, 2.28, { color: "marker", width: 9, bend: 0.14, head: 26 });
+        // staging: the lower zone recedes while the lab is the focal point
+        // staging: the funnel drawing (world + its lens copy, identically) steps back a little; the numbers stay fully opaque
+        tl.to(["#fz", "#fz2"], { opacity: 0.72, duration: 0.35, ease: "power2.inOut" }, 2.75);
+
+        // ============ BEAT B: the locked lab door ============
+        const FL = 660, FR = 850, FT = 365, FY = 756;
+        const door = mkG(M.layer, "door");
+        M.line([[FL, FY], [FL, FT], [FR, FT], [FR, FY]], 2.98, { color: "ink", width: 11, dur: 0.34, parent: door });
+        M.line([[FL - 32, FY + 1], [FR + 22, FY - 1]], 3.24, { color: "ink", width: 9, dur: 0.14, amp: 1.5, parent: door });
+        M.line([[FL + 18, FY - 13], [FL + 18, FT + 18], [FR - 18, FT + 18], [FR - 18, FY - 13], [FL + 18, FY - 13]], 3.34, { color: "ink", width: 7, dur: 0.26, amp: 1.8, parent: door });
+        // window (rounded) high on the panel
+        const wx0 = FL + 42, wx1 = FR - 42, wy0 = FT + 40, wy1 = FT + 140;
+        M.line([[wx0 + 10, wy0], [wx1 - 10, wy0], [wx1, wy0 + 10], [wx1, wy1 - 10], [wx1 - 10, wy1], [wx0 + 10, wy1], [wx0, wy1 - 10], [wx0, wy0 + 10], [wx0 + 10, wy0]], 3.5, { color: "ink", width: 6, dur: 0.18, amp: 1.1, parent: door });
+        M.circle(FL + 34, 606, 8, 8, 3.58, { color: "ink", width: 6, dur: 0.1, parent: door });
+        // light leaking from under the door (red line + glow + two little rays on the floor)
+        M.line([[FL + 26, FY - 6], [FR - 26, FY - 6]], 3.44, { color: "marker", width: 8, dur: 0.16, amp: 0.8, parent: door });
+        M.line([[FL + 30, FY + 6], [FL + 16, FY + 26]], 3.62, { color: "marker", width: 6, dur: 0.07, amp: 0.4, parent: door });
+        M.line([[FR - 30, FY + 6], [FR - 14, FY + 26]], 3.66, { color: "marker", width: 6, dur: 0.07, amp: 0.4, parent: door });
+        const flick = (sel, t0, base, seed) => {
+          const r = rng(seed);
+          tl.to(sel, { opacity: base, duration: 0.3, ease: "power2.out" }, t0);
+          for (let t = t0 + 0.3; t < D - 0.12; t += 0.14 + r() * 0.12) tl.to(sel, { opacity: base * (0.72 + r() * 0.42), duration: 0.12, ease: "sine.inOut" }, t);
+        };
+        flick("#doorGlow", 3.42, 0.6, 77);
+
+        // padlock + strap: drawn on 'labs', clicks shut on 'access'
+        const lock = mkG(M.layer, "lock");
+        const LX = 768, LY = 604; // body top-centre
+        const lb = document.createElementNS(NS, "rect");
+        lb.setAttribute("x", LX - 27); lb.setAttribute("y", LY); lb.setAttribute("width", 54); lb.setAttribute("height", 46); lb.setAttribute("rx", 8);
+        lb.style.fill = "var(--brand-card)";
+        const shackle = mkG(lock, "shackle");
+        M.line([[LX - 16, LY + 4], [LX - 16, LY - 14], [LX - 9, LY - 27], [LX + 9, LY - 27], [LX + 16, LY - 14], [LX + 16, LY + 4]], 3.6, { color: "ink", width: 8, dur: 0.12, amp: 0.8, parent: shackle });
+        lock.appendChild(lb);
+        tl.fromTo(lb, { opacity: 0 }, { opacity: 1, duration: 0.08 }, 3.66);
+        M.line([[LX - 27, LY + 6], [LX - 27, LY + 44], [LX + 27, LY + 44], [LX + 27, LY + 4], [LX - 27, LY + 4]], 3.66, { color: "ink", width: 8, dur: 0.14, amp: 0.9, parent: lock });
+        M.line([[LX, LY + 18], [LX, LY + 32]], 3.8, { color: "marker", width: 7, dur: 0.05, amp: 0.3, parent: lock });
+        M.line([[LX + 27, LY + 24], [FR - 2, LY + 24]], 3.72, { color: "ink", width: 7, dur: 0.08, amp: 0.6, parent: door });
+        // the click: lift (shackle pops open) → drop, squash on contact, shackle snaps shut, three red click ticks
+        tl.to(lock, { y: -12, duration: 0.12, ease: "power2.out" }, 3.74);
+        tl.to(shackle, { y: -7, duration: 0.1, ease: "power2.out" }, 3.74);
+        tl.to(lock, { y: 0, duration: 0.08, ease: "power2.in" }, 3.86);
+        tl.to(shackle, { y: 0, duration: 0.05, ease: "power3.in" }, 3.89);
+        tl.to(lock, { scaleX: 1.08, scaleY: 0.88, svgOrigin: `${LX} ${LY + 46}`, duration: 2 * F, ease: "power2.out" }, 3.94);
+        tl.to(lock, { scaleX: 1, scaleY: 1, svgOrigin: `${LX} ${LY + 46}`, duration: 8 * F, ease: "back.out(2.4)" }, 3.94 + 2 * F);
+        const ticks = [[[LX - 40, LY - 6], [LX - 54, LY - 18]], [[LX, LY - 36], [LX, LY - 54]], [[LX + 40, LY - 6], [LX + 54, LY - 18]]];
+        const tk = ticks.map((pts, i) => M.line(pts, 3.95 + i * F, { color: "marker", width: 6, dur: 0.06, amp: 0.3 }));
+        tk.forEach((s) => M.erase(s, 4.32, 0.14));
+
+        // systems & models: doodles appear in the window, which starts to glow
+        flick("#winGlow", 4.3, 0.42, 91);
+        const sv = (k, t) => M.line([[wx0 + 14, wy0 + 16 + k * 23], [wx0 + 60, wy0 + 16 + k * 23], [wx0 + 60, wy0 + 33 + k * 23], [wx0 + 14, wy0 + 33 + k * 23], [wx0 + 14, wy0 + 16 + k * 23]], t, { color: "ink", width: 5, dur: 0.07, amp: 0.5, parent: door });
+        [0, 1, 2].forEach((k) => { sv(k, 4.3 + k * 0.06); M.circle(wx0 + 51, wy0 + 24.5 + k * 23, 2.4, 2.4, 4.36 + k * 0.06, { color: "marker", width: 4, dur: 0.05, parent: door }); });
+        const cx = wx1 - 26, cy = wy0 + 52, cr = 19;
+        const hx = (a) => [cx + cr * Math.cos(((a - 90) * Math.PI) / 180), cy + cr * Math.sin(((a - 90) * Math.PI) / 180)];
+        M.line([hx(0), hx(60), hx(120), hx(180), hx(240), hx(300), hx(0)], 4.86, { color: "ink", width: 5, dur: 0.14, amp: 0.5, parent: door });
+        M.line([hx(300), [cx, cy], hx(60)], 4.98, { color: "ink", width: 5, dur: 0.07, amp: 0.4, parent: door });
+        M.line([[cx, cy], hx(180)], 5.04, { color: "ink", width: 5, dur: 0.04, amp: 0.3, parent: door });
+        // ")))" — three red sound waves pulse out from the door on 'heard about'
+        const WX = FR + 8, WY = 522;
+        const arcPts = (r) => Array.from({ length: 9 }, (_, k) => { const a = ((-48 + k * 12) * Math.PI) / 180; return [WX + Math.cos(a) * r, WY + Math.sin(a) * r]; });
+        const waves = [26, 50, 74].map((r, i) => M.line(arcPts(r), 5.72 + i * 0.08, { color: "marker", width: 9, dur: 0.12, amp: 0.9 }));
+        waves.forEach((s, i) => {
+          tl.fromTo(s.g, { x: -6 }, { x: 0, duration: 0.3, ease: "power2.out" }, 5.72 + i * 0.08);
+          tl.to(s.g, { opacity: 0.35, duration: 0.11, ease: "sine.inOut", yoyo: true, repeat: 1 }, 5.98 + i * 0.07);
+        });
+        tl.to("#doorGlow", { scaleX: 1.15, duration: 0.2, ease: "power2.out", yoyo: true, repeat: 1 }, 5.74);
+      })();
+    </script>
+  </body>
+</html>

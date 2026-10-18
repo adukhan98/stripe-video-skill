@@ -1,0 +1,16 @@
+[
+  {"t": 0.20, "sfx": "pop", "role": "structural", "what": "his face flips edge-on → mint mic disc swings round (habit 1)"},
+  {"t": 0.36, "sfx": "pop", "what": "'1' tag pops on the mic disc edge"},
+  {"t": 0.43, "sfx": "pop", "what": "'talk' lands + first sound ring off the mic"},
+  {"t": 1.01, "sfx": "pop", "what": "charcoal keyboard disc pops"},
+  {"t": 1.33, "sfx": "tick", "what": "clean strike line across the keyboard disc"},
+  {"t": 1.64, "sfx": "whoosh", "what": "camera travel down/right begins (silent: not named in SOUND)"},
+  {"t": 1.97, "sfx": "pop", "what": "Stanford wordmark card lands"},
+  {"t": 2.57, "sfx": "paper", "role": "structural", "what": "real Stanford strip slides up into place on 'showed'"},
+  {"t": 2.97, "sfx": "pop", "what": "race card + mic/keyboard icons pop on 'speaking'"},
+  {"t": 3.47, "sfx": "tick", "what": "highlighter behind '3.0x faster' + peach 1x appears on 'three'"},
+  {"t": 3.62, "sfx": "tick", "what": "odometer 1x → 2x"},
+  {"t": 3.80, "sfx": "tick", "what": "odometer 2x → 3x"},
+  {"t": 3.93, "sfx": "impact", "what": "mint bar hits the finish (squash) + flag pop + 'faster' lands (hero beat, camera punch)"},
+  {"t": 4.47, "sfx": "tick", "what": "typing keyboard slumps/wobbles on 'typing'"}
+]

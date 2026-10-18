@@ -1,0 +1,290 @@
+<!doctype html>
+<!-- adnaan-reel scene: EXPLAINER — v12_faster. Short card+phrase beat, then the graphic is the hero:
+     an unlabelled demand-vs-supply two-bar chart — the demand bar rockets past its track on "way faster",
+     the "FDEs & consultants" bar barely creeps, a dotted bracket marks the gap. Keep data-duration. -->
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>v12_faster</title>
+    <link rel="stylesheet" href="brand.css" />
+    <link rel="stylesheet" href="paper.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+    <script src="paper.js"></script>
+    <style>
+      @font-face { font-family: "Inter Tight"; src: url("fonts/InterTight-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Inter"; src: url("fonts/Inter-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+
+      /* ---------- hero object: demand vs supply chart (unlabelled) ---------- */
+      #chartwrap { position: absolute; inset: 0; }
+      #chart { left: 90px; top: 725px; width: 840px; height: 710px; overflow: visible;
+        box-shadow: 0 24px 38px -14px rgba(60, 50, 40, 0.3); }
+      #chart .track { position: absolute; top: 50px; width: 200px; height: 510px; border-radius: 30px;
+        background: color-mix(in srgb, var(--brand-background) 42%, var(--brand-card));
+        box-shadow: inset 0 8px 14px -8px rgba(60, 50, 40, 0.22); }
+      #chart .floor { position: absolute; left: 50px; right: 50px; top: 558px; height: 5px; border-radius: 3px; background: var(--wire); }
+      #chart .bar { position: absolute; bottom: 150px; width: 200px; height: 0; border-radius: 30px 30px 10px 10px; transform-origin: 50% 100%; }
+      #barL { left: 90px;
+        background: linear-gradient(180deg, color-mix(in srgb, var(--brand-primary) 72%, var(--brand-card)) 0%, var(--brand-primary) 30%, var(--brand-primary-dark) 100%);
+        box-shadow: 0 16px 26px -12px rgba(31, 126, 168, 0.55), 0 0 0 0 rgba(46, 156, 203, 0); }
+      #barR { left: 520px;
+        background: linear-gradient(180deg, color-mix(in srgb, var(--brand-text) 78%, var(--brand-card)) 0%, var(--brand-text) 100%);
+        box-shadow: 0 14px 22px -12px rgba(20, 20, 20, 0.5); }
+      #gap { position: absolute; left: 520px; top: 75px; width: 200px; height: 424px; border-radius: 30px 30px 8px 8px; opacity: 0;
+        background: linear-gradient(180deg, color-mix(in srgb, var(--brand-primary) 34%, transparent), color-mix(in srgb, var(--brand-primary) 12%, transparent)); }
+      #chip { left: 620px; top: 586px; font-size: 34px; }
+      #chip .more { display: inline-block; overflow: hidden; white-space: pre; vertical-align: bottom; }
+      /* creative pass: speed streaks, sparks, sweat drops, hatch, people, ghost trail */
+      #chart .streak { position: absolute; top: 0; width: 7px; border-radius: 4px; opacity: 0;
+        background: linear-gradient(180deg, color-mix(in srgb, var(--brand-primary) 0%, transparent), color-mix(in srgb, var(--brand-primary) 75%, transparent)); }
+      #chart .spark { position: absolute; left: 0; top: 0; border-radius: 50%; opacity: 0; background: var(--brand-primary);
+        box-shadow: 0 6px 10px -4px rgba(31, 126, 168, 0.5); }
+      #chart .spark.lt { background: color-mix(in srgb, var(--brand-primary) 45%, var(--brand-card)); }
+      #chart .spark.wh { background: var(--brand-card); box-shadow: 0 6px 10px -4px rgba(60, 50, 40, 0.35); }
+      #chart .drop { position: absolute; width: 20px; height: 20px; border-radius: 0 50% 50% 50%; opacity: 0;
+        background: color-mix(in srgb, var(--brand-primary) 55%, var(--brand-card)); box-shadow: 0 6px 10px -5px rgba(31, 126, 168, 0.45); }
+      #hatch { position: absolute; inset: 0; border-radius: inherit;
+        background-image: repeating-linear-gradient(135deg, color-mix(in srgb, var(--brand-primary) 40%, transparent) 0 8.5px, transparent 8.5px 21.2132px);
+        background-size: 30px 30px; }
+      #chart .ppl { position: absolute; top: 502px; width: 36px; height: 56px; opacity: 0; }
+      #chart .ppl i { position: absolute; display: block; background: var(--brand-muted); }
+      #chart .ppl .hd { left: 8px; top: 0; width: 20px; height: 20px; border-radius: 50%; }
+      #chart .ppl .bd { left: 0; top: 24px; width: 36px; height: 32px; border-radius: 18px 18px 8px 8px; }
+      #chart .ppl i.a { background: var(--brand-primary); opacity: 0; }
+      .ghost { opacity: 0; filter: blur(3px); }
+    </style>
+  </head>
+  <body data-face="0.47">
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="6.3833">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+      <div id="cam"><div id="punch">
+
+        <div class="spk small" data-x="70" data-y="300" data-w="420" data-h="310" data-face-at="0.56">
+          <div class="spk-card">
+            <div class="spk-vid"><video id="speaker" class="clip" src="assets/speaker.mp4" muted playsinline data-start="0" data-duration="6.3833" data-track-index="1"></video></div>
+            <div class="spk-sheen"></div>
+          </div>
+        </div>
+
+        <!-- HERO OBJECT: demand vs supply (in at full size by 0.68) -->
+        <div id="chartwrap">
+          <div id="chart" class="uicard">
+            <div class="track" style="left: 90px"></div>
+            <div class="track" style="left: 520px"></div>
+            <div id="gap"><div id="hatch"></div></div>
+            <div class="floor"></div>
+            <i class="g" style="left: 130px; top: 609px; width: 120px; height: 18px"></i>
+            <div id="barL" class="bar"></div>
+            <div id="barR" class="bar"></div>
+            <div id="chip" class="pill sm"><span>FDEs<span class="more"> &amp; consultants</span></span></div>
+            <i class="streak" style="left: 52px; height: 110px"></i><i class="streak" style="left: 68px; height: 70px"></i>
+            <i class="streak" style="left: 306px; height: 90px"></i><i class="streak" style="left: 322px; height: 130px"></i>
+            <i class="spark" style="width: 16px; height: 16px"></i><i class="spark lt" style="width: 12px; height: 12px"></i>
+            <i class="spark wh" style="width: 14px; height: 14px"></i><i class="spark" style="width: 10px; height: 10px"></i>
+            <i class="spark lt" style="width: 15px; height: 15px"></i><i class="spark wh" style="width: 11px; height: 11px"></i>
+            <i class="spark" style="width: 13px; height: 13px"></i>
+            <i id="drop1" class="drop" style="left: 712px; top: 470px"></i><i id="drop2" class="drop" style="left: 508px; top: 482px; width: 15px; height: 15px"></i>
+            <div class="ppl" id="pp1" style="left: 306px"><i class="hd"></i><i class="bd"></i><i class="hd a"></i><i class="bd a"></i></div>
+            <div class="ppl" id="pp2" style="left: 346px"><i class="hd"></i><i class="bd"></i><i class="hd a"></i><i class="bd a"></i></div>
+            <div class="ppl" id="pp3" style="left: 386px"><i class="hd"></i><i class="bd"></i><i class="hd a"></i><i class="bd a"></i></div>
+            <div class="ppl" id="pp4" style="left: 426px"><i class="hd"></i><i class="bd"></i><i class="hd a"></i><i class="bd a"></i></div>
+            <div class="ppl" id="pp5" style="left: 466px"><i class="hd"></i><i class="bd"></i><i class="hd a"></i><i class="bd a"></i></div>
+          </div>
+          <svg class="paths"><path id="bracket" class="dotted" d="M 392 800 L 860 800 L 860 1224 L 830 1224" /></svg>
+        </div>
+
+        <!-- BEAT A: beside the card + just below it -->
+        <div class="line sup" data-x="520" data-base="395" data-size="84" data-exit="2.16" data-exit-lag="2">
+          <span class="w" data-t="0.27">Companies</span>
+        </div>
+        <div class="line sup" data-x="520" data-base="530" data-size="100" data-exit="2.16">
+          <span class="w hero ocean" data-t="1.87" data-hero>want</span><span class="w gap-s" data-t="2.13">this</span>
+        </div>
+        <div class="line sup" data-right="946" data-base="705" data-size="96" data-exit="2.1">
+          <span class="w" data-t="0.49">&amp;</span><span class="w gap-s" data-t="1.03" data-accent>organizations</span>
+        </div>
+
+        <!-- BEAT B: "way" beside the card, "faster" over the upper chart, then it glides up beside "way" -->
+        <div class="line" data-x="540" data-base="440" data-size="150" data-exit="4.92">
+          <span class="w hero ink" data-t="2.53" data-hero>way</span>
+        </div>
+        <div id="ghost2" class="line ghost" data-right="930" data-base="930" data-size="200" aria-hidden="true"><span class="w hero ocean">faster</span></div>
+        <div id="ghost1" class="line ghost" data-right="930" data-base="930" data-size="200" aria-hidden="true"><span class="w hero ocean">faster</span></div>
+        <div id="fasterLine" class="line" data-right="930" data-base="930" data-size="200">
+          <span class="w hero ocean" data-t="2.99" data-hero>faster</span>
+        </div>
+
+        <!-- BEAT C: back in the y 300–700 band -->
+        <div class="line sup" data-x="76" data-base="395" data-size="100">
+          <span class="w" data-t="5.29">who</span><span class="w gap-s" data-t="5.43">can</span>
+        </div>
+        <div class="line sup" data-right="940" data-base="515" data-size="100">
+          <span class="w" data-t="5.71">actually</span><span class="w gap-s" data-t="5.85">do</span>
+        </div>
+        <div class="line" data-x="76" data-base="680" data-size="170">
+          <span class="w hero ink" data-t="6.03" data-hero>this</span><span class="w hero ink gap-s" data-t="6.2" data-pop>work</span>
+        </div>
+      </div></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const P = await Paper.init();
+        const { tl, D, F, $, $$ } = P;
+        const barL = $("#barL"), barR = $("#barR");
+
+        // the chart card is in at full size by ~0.68 (no half-empty frames); stubs pop, parts lag 3 f
+        gsap.set("#chartwrap", { transformOrigin: "510px 1080px" });
+        P.cardIn("#chart", 0.14, { fromY: 110, rot: -2 });
+        tl.fromTo(barL, { height: 0 }, { height: 40, duration: 10 * F, ease: "back.out(2)" }, 0.5);
+        tl.fromTo(barR, { height: 0 }, { height: 40, duration: 10 * F, ease: "back.out(2)" }, 0.5 + 3 * F);
+        tl.fromTo("#chart .g", { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: 10 * F, ease: "power3.out" }, 0.5 + 6 * F);
+
+        // "want": demand foreshadows — a small nudge up
+        tl.to(barL, { height: 110, duration: 0.32, ease: "back.out(2)" }, 1.72);
+
+        // staging: the speaker steps back while the graphic is the focal point
+        P.recede(".spk", 2.3, { opacity: 0.72, blur: 2, scale: 0.97 });
+
+        // DEMAND ROCKET — crouch → launch on "way" (stretched thin, speed streaks) → second kick builds with the riser
+        // and peaks ~60 px past the card top on "faster" (2.99, sparks) → IMPACT 3.10: drops to ~95 % of its track with
+        // a squash, ring flash, card jolt, camera shake + punch (THE hero beat)
+        tl.to(barL, { height: 92, scaleX: 1.07, duration: 3 * F, ease: "power2.in" }, 2.3);
+        tl.to(barL, { height: 330, duration: 0.24, ease: "expo.out" }, 2.4);
+        tl.to(barL, { scaleX: 0.88, duration: 4 * F, ease: "power2.out" }, 2.4);
+        tl.to(barL, { scaleX: 0.96, duration: 0.2, ease: "sine.out" }, 2.4 + 4 * F);
+        tl.to(barL, { height: 620, scaleX: 0.86, duration: 0.17, ease: "power3.out" }, 2.82);
+        tl.to(barL, { height: 485, scaleX: 1.1, duration: 0.11, ease: "power2.in" }, 2.99);
+        tl.to(barL, { scaleX: 1, duration: 10 * F, ease: "back.out(2)" }, 3.1);
+        tl.fromTo(barL, { boxShadow: "0 16px 26px -12px rgba(31,126,168,0.55), 0 0 0 0 rgba(46,156,203,0.6)" },
+          { boxShadow: "0 16px 26px -12px rgba(31,126,168,0.55), 0 0 0 34px rgba(46,156,203,0)", duration: 0.5, ease: "power2.out", immediateRender: false }, 3.1);
+        P.shake(3.1, 4);
+        P.punch(3.1, { scale: 1.006, origin: "510px 900px" });
+        tl.to("#chart", { rotation: 0.9, y: 4, duration: F, ease: "none" }, 3.1)
+          .to("#chart", { rotation: -0.6, y: -2, duration: F, ease: "none" }, 3.1 + F)
+          .to("#chart", { rotation: 0.3, y: 1, duration: F, ease: "none" }, 3.1 + 2 * F)
+          .to("#chart", { rotation: 0, y: 0, duration: 4 * F, ease: "power2.out" }, 3.1 + 3 * F);
+        // secondary: demand keeps straining against the ceiling until the cut
+        tl.to(barL, { height: 495, duration: 0.55, ease: "sine.inOut", yoyo: true, repeat: 5 }, 3.3);
+
+        // speed streaks rush DOWN past the rising bar (two bursts, 2 f stagger) — the eye reads upward speed
+        $$("#chart .streak").forEach((el, i) => {
+          [[2.4, 300, 470], [2.82, 70, 250]].forEach(([t, y0, y1]) => {
+            const s = t + i * 2 * F;
+            tl.fromTo(el, { y: y0, opacity: 0 }, { y: y1, duration: 0.24, ease: "power1.in", immediateRender: false }, s);
+            tl.to(el, { opacity: 0.85, duration: 3 * F, ease: "power1.out" }, s);
+            tl.to(el, { opacity: 0, duration: 4 * F, ease: "power1.in" }, s + 0.24 - 4 * F);
+          });
+        });
+        // sparks burst off the bar tip at the peak (arcs: x eases out, y rises then falls under gravity)
+        const SP = [[-78, -18], [-44, -30], [-12, -36], [24, -30], [62, -24], [98, -14], [128, -6]];
+        $$("#chart .spark").forEach((el, i) => {
+          const [dx, dy] = SP[i], s = 2.97 + (i % 3) * F;
+          const sz = parseFloat(el.style.width);
+          tl.set(el, { x: 190 - sz / 2, y: -60 - sz / 2, opacity: 1, scale: 1 }, s);
+          tl.to(el, { x: 190 - sz / 2 + dx * 1.6, duration: 0.55, ease: "power2.out" }, s);
+          tl.to(el, { y: -60 + dy, duration: 0.16, ease: "power2.out" }, s);
+          tl.to(el, { y: -60 + dy + 150, duration: 0.4, ease: "power2.in" }, s + 0.16);
+          tl.to(el, { opacity: 0, scale: 0.4, duration: 0.18, ease: "power1.in" }, s + 0.38);
+        });
+
+        // "faster" RIDES the bar tip (with a 2-frame-lagged ghost trail as motion blur), detaches above it, gets
+        // nudged by the impact, then glides up beside "way" (scale .78 around its right edge) to clear the chart
+        const ride = (sel, lag, op) => {
+          tl.set(sel, { y: 40 }, 0);
+          tl.to(sel, { y: -100, duration: 0.13, ease: "power2.in" }, 2.8 + lag);
+          tl.to(sel, { y: -135, duration: 0.15, ease: "power3.out" }, 2.93 + lag);
+          if (op) {
+            tl.set(sel, { opacity: op }, 2.83 + lag);
+            tl.to(sel, { opacity: 0, duration: 3 * F, ease: "power1.in" }, 2.93 + lag);
+          }
+        };
+        ride("#ghost2", 2 * F, 0.1);
+        ride("#ghost1", 1 * F, 0.22);
+        ride("#fasterLine", 0, 0);
+        tl.to("#fasterLine", { y: -118, duration: 3 * F, ease: "power2.out" }, 3.1);
+        tl.to("#fasterLine", { y: -126, duration: 0.3, ease: "back.out(2)" }, 3.1 + 3 * F);
+        gsap.set("#fasterLine", { transformOrigin: "100% 90%" });
+        P.moveTo("#fasterLine", 3.42, { y: -282, scale: 0.78, dur: 0.45 });
+        tl.to("#fasterLine", { y: -340, opacity: 0, filter: "blur(8px)", duration: 6 * F, ease: "power2.in" }, 4.88);
+
+        // SUPPLY TRIES — anticipation dip, strains up trembling, sinks back (twice, comic timing), sweats, then creeps
+        // to only ~12 % of its track
+        const strain = (t, hi, back) => {
+          const h0 = back[0];
+          tl.to(barR, { height: h0 - 5, scaleX: 1.06, duration: 3 * F, ease: "power2.in" }, t - 3 * F);
+          tl.to(barR, { height: hi, scaleX: 0.93, duration: 0.22, ease: "power2.out" }, t);
+          tl.to(barR, { scaleX: 1.03, duration: 2 * F, ease: "sine.inOut", yoyo: true, repeat: 5 }, t + 0.22);
+          tl.to(barR, { height: back[1], scaleX: 1.08, duration: 0.16, ease: "power2.in" }, t + 0.22 + 12 * F);
+          tl.to(barR, { scaleX: 1, duration: 9 * F, ease: "back.out(2.4)" }, t + 0.38 + 12 * F);
+        };
+        strain(3.32, 76, [40, 46]);      // sinks at ~3.94
+        strain(4.06, 90, [46, 54]);      // sinks at ~4.68
+        tl.to(barR, { height: 61, duration: 0.6, ease: "sine.inOut" }, 5.0);
+        // sweat drops fly off the top of the trembling bar (soft accent teardrops, arcs under gravity)
+        [["#drop1", 4.4, 46, -34], ["#drop2", 4.46, -40, -26]].forEach(([d, t, dx, dy]) => {
+          gsap.set(d, { rotation: dx > 0 ? 45 : -135, transformOrigin: "50% 50%" });
+          tl.fromTo(d, { opacity: 0, scale: 0.2 }, { opacity: 1, scale: 1, duration: 4 * F, ease: "back.out(2.5)", immediateRender: false }, t);
+          tl.to(d, { x: dx, duration: 0.5, ease: "power1.out" }, t);
+          tl.to(d, { y: dy, duration: 0.16, ease: "power2.out" }, t);
+          tl.to(d, { y: dy + 110, duration: 0.34, ease: "power2.in" }, t + 0.16);
+          tl.to(d, { opacity: 0, duration: 0.12, ease: "power1.in" }, t + 0.4);
+        });
+
+        // label pill (his words) pops under the supply bar on "FDEs", extends on "consultants"
+        const more = $("#chip .more");
+        const moreW = more.scrollWidth;
+        gsap.set("#chip", { xPercent: -50 });
+        tl.set(more, { maxWidth: 0, opacity: 0 }, 0);
+        P.pop("#chip", 3.73);
+        P.squash("#chip", 3.73 + 5 * F, 0.05);
+        tl.to(more, { maxWidth: moreW, duration: 0.26, ease: "power3.out" }, 4.44);
+        tl.to(more, { opacity: 1, duration: 0.18, ease: "power1.out" }, 4.47);
+
+        // the GAP: dotted bracket draws from the demand level down to the supply top, then marches + pulses; inside,
+        // a soft accent tint with diagonal hatching that marches (continuous mechanical motion → linear)
+        P.drawPath("#bracket", 4.62, 0.42);
+        P.marchPath("#bracket", 5.04, D - 5.04, 60);
+        tl.to("#bracket", { opacity: 0.4, duration: 0.3, ease: "sine.inOut", yoyo: true, repeat: 3 }, 5.1);
+        tl.fromTo("#gap", { opacity: 0 }, { opacity: 0.8, duration: 0.3, ease: "power2.out" }, 4.72);
+        tl.to("#gap", { opacity: 1, duration: 0.14, ease: "power2.out" }, 5.04);
+        tl.to("#gap", { opacity: 0.55, duration: 0.3, ease: "sine.inOut", yoyo: true, repeat: 3 }, 5.18);
+        tl.fromTo("#hatch", { backgroundPosition: "0px 0px" }, { backgroundPosition: "0px -180px", duration: D - 4.72, ease: "none" }, 4.72);
+
+        // WHO CAN ACTUALLY DO THIS WORK — five people pop up on the floor and hop for the gap: two make it onto the
+        // supply bar (turn ocean), three fall short, bonk back to the floor and stay grey
+        const people = ["#pp1", "#pp2", "#pp3", "#pp4", "#pp5"];
+        people.forEach((p, i) => P.pop(p, 5.22 + i * 2 * F, { peak: 1.12 }));
+        const hop = (p, t, dx, landY, apex, ok) => {
+          tl.to(p, { scaleY: 0.86, scaleX: 1.08, transformOrigin: "50% 100%", duration: 3 * F, ease: "power2.in" }, t - 3 * F);
+          tl.to(p, { scaleY: 1.08, scaleX: 0.94, duration: 4 * F, ease: "power2.out" }, t);
+          tl.to(p, { scaleY: 1, scaleX: 1, duration: 6 * F, ease: "sine.out" }, t + 4 * F);
+          tl.to(p, { x: dx, duration: 0.24, ease: "power1.inOut" }, t);
+          tl.to(p, { y: apex, duration: 0.12, ease: "power2.out" }, t);
+          tl.to(p, { y: landY, duration: 0.12, ease: "power2.in" }, t + 0.12);
+          tl.to(p, { scaleY: 0.82, scaleX: 1.14, duration: 2 * F, ease: "power2.out" }, t + 0.24);
+          tl.to(p, { scaleY: 1, scaleX: 1, duration: 8 * F, ease: "back.out(2.4)" }, t + 0.24 + 2 * F);
+          if (ok) tl.to(p + " .a", { opacity: 1, duration: 4 * F, ease: "power1.out" }, t + 0.22);
+        };
+        hop("#pp5", 5.56, 100, -59, -110, true);      // lands on the supply bar 5.80
+        hop("#pp4", 5.76, 180, -59, -110, true);      // lands 6.00
+        // the rest jump short and bonk back down
+        [["#pp3", 5.98, 50], ["#pp2", 6.02, 40], ["#pp1", 6.06, 34]].forEach(([p, t, dx]) => {
+          tl.to(p, { scaleY: 0.86, scaleX: 1.08, transformOrigin: "50% 100%", duration: 3 * F, ease: "power2.in" }, t - 3 * F);
+          tl.to(p, { scaleY: 1, scaleX: 1, duration: 4 * F, ease: "power2.out" }, t);
+          tl.to(p, { x: dx, duration: 0.24, ease: "power1.out" }, t);
+          tl.to(p, { y: -64, duration: 0.11, ease: "power2.out" }, t);
+          tl.to(p, { y: 0, duration: 0.11, ease: "power2.in" }, t + 0.11);
+          tl.to(p, { rotation: dx > 45 ? 10 : 8, duration: 0.11, ease: "power2.in" }, t + 0.11);
+          tl.to(p, { y: -12, rotation: 0, duration: 4 * F, ease: "power2.out" }, t + 0.22);
+          tl.to(p, { y: 0, duration: 4 * F, ease: "power2.in" }, t + 0.22 + 4 * F);
+        });
+
+        // Beat C needs the whole y 300–700 band: the speaker card clears (faster than it came), chart stays the anchor
+        tl.to(".spk", { opacity: 0, scale: 0.9, filter: "blur(8px)", duration: 6 * F, ease: "power2.in" }, 4.96);   // shrinks out in place (an upward exit would cross y 285)
+        P.floatY("#chartwrap", 3, 1.4);
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,122 @@
+[
+ {
+  "id": "v01_hook",
+  "start": 0.0,
+  "duration": 4.433,
+  "layout": "scene",
+  "brief": "FIRST read animations/SHARED.md (fully, incl. Project specifics) and look at the style frames it lists. FULL-SCREEN OPAQUE scene \u2014 HOOK. Copy v01_hook.html closely (background, hero speaker card, kinetic type).\nSpoken: 'Is it possible to reverse engineer all the apps that you use every single day?'\nTEXT HOOK (user-written, the ONE allowed exception to words.txt) \u2014 'Software is cooked and finished' \u2014 must be FULLY READABLE ON FRAME 0 (this frame is the thumbnail) and stay on screen for the whole scene. Place it at the top of the safe zone (y ~290\u2013520): 'Software is' Newsreader 600 ~110 px ink, 'cooked' Fraunces 700 italic accent ~200 px, 'and finished' Newsreader ~110 px (exact user copy: 'Software is cooked and finished'); collage-staggered across 2\u20133 lines, not centred block. Frame 0 = already landed (no entrance); give it continuous life: 1 % slow punch, a hand-drawn ocean underline under 'cooked' that is already drawn on frame 0, tiny float.\nSPEAKER (0\u20134.43): HERO speaker card (~868x600 or a bit smaller so it fits under the hook, e.g. ~820x560) in the middle (y ~560\u20131130), 3D settle \u2014 readable by frame 0 too (start already ~90 % settled, finish the settle by 0.3 s), face centred.\nKINETIC (below the card, y ~1150\u20131470): 'reverse engineer' lands on 'reverse' (~1.08 s): 'reverse' Fraunces italic accent ~200, 'engineer' Fraunces italic ink ~170, offset; then 'all the apps' Newsreader ~96 on 'apps' (~2.3); on 'every single day?' (3.25\u20134.29) a stack of 4\u20135 small plain app tiles (rounded squares, --brand-card / --brand-deep, simple wireframe glyphs, NO logos) pops in a 3-frame stagger beside the text and then, on 'day' (~4.29), the top tile splits into 3 exploded layers (isometric offset) \u2014 the reverse-engineering idea. 'every single day?' Newsreader ~84 lands with the tiles. Keep the text hook visible the whole time. Hold alive to the cut.",
+  "assets": []
+ },
+ {
+  "id": "v02_rea",
+  "start": 4.433,
+  "duration": 6.867,
+  "layout": "scene",
+  "brief": "FIRST read animations/SHARED.md (fully, incl. Project specifics) and look at the style frames it lists. FULL-SCREEN OPAQUE scene \u2014 CHAPTER + REAL PAGE. Copy v04_taste.html for the browser card/stat pill and v02_skills.html for the agent puck + dotted path.\nSpoken: 'There's a new open-source repo called Reverse Engineer Anything that lets Codex or Claude Code or any coding agent that you use' (exact times in words.txt).\nBEAT A (0\u20133.4): small Geist label 'open-source repo' (muted) appears on 'open-source' (~0.7); title 'Reverse Engineer Anything' as a big collage: 'Reverse' Fraunces italic accent ~210 lands on 'Reverse' (~2.06), 'Engineer' Newsreader ~150 (~2.48), 'Anything.' Fraunces italic ink ~210 (~3.0), top of zone. Behind/below it the REAL repo page hf/assets/rea_repo.png in a large tilted browser card (URL 'github.com/morluto/rea'), slow internal scroll from top (repo header, '100.8k stars' visible); black stat pill '\u2605 100.8k on GitHub' pops beside it on 'repo' (~1.26). Secondary/small speaker card (hf/assets/speaker.mp4) tucked at a lower corner overlapping the browser card from ~0.3 s, face centred.\nBEAT B (3.5\u20136.9): title compacts upward / browser card shrinks back; on 'Codex' (~3.92), 'Claude Code' (~4.44) and 'any coding agent' (~5.24\u20135.9) three black text pills pop in (plain Geist text, NO logos) and kinetic words land: 'Codex' and 'Claude Code' Fraunces italic ~120\u2013150 (one accent), 'any coding agent' Newsreader ~96. On 'agent' (~5.9) the black agent puck (robot face, accent eye dots) drops in centre-low and the three pills ride dotted paths into it; puck glows/bobs on 'use' (~6.6). Hold alive.",
+  "assets": [
+   "captures/rea_repo.png"
+  ],
+  "sfx": "chime"
+ },
+ {
+  "id": "v03_inside",
+  "start": 11.3,
+  "duration": 7.133,
+  "layout": "scene",
+  "brief": "FIRST read animations/SHARED.md (fully, incl. Project specifics) and look at the style frames it lists. FULL-SCREEN OPAQUE scene \u2014 EXPLAINER (graphics-led, small speaker card). Copy object styling from v02_skills.html / v06_layers.html.\nSpoken: 'take a look inside an app that it has no source code or no information about figure out how every single feature works'.\nBEAT A (0\u20133.3): a big sealed deep-teal APP CARD (--brand-deep, radius 28, ~640x780, wireframe UI glyphs in accent/grey, a small padlock badge) rises centre; the agent puck from the previous scene sits beside it. Kinetic: 'take a look' Newsreader ~96, 'inside' Fraunces italic accent ~210 lands on 'inside' (~0.57) \u2014 the puck slides INTO the card on a dotted path on 'inside'. On 'no source code' (~1.97\u20132.65): 'no source code' Newsreader ~110 with an ocean strike-through drawn on 'code' (~2.65); 'no information' (~3.25\u20133.75) smaller ~84, also struck.\nBEAT B (3.4\u20137.13): on 'figure out' (~4.49) an accent scan line sweeps the card, and the card SPLITS into 3 stacked isometric slabs (like v06 layers) labelled with REA's REAL step names, landing in sequence: '01 Decode branches' (~4.6), '02 Trace calls' (~5.1), '03 Recover the rule' (~5.6) \u2014 Geist labels on the slabs. Then on 'every single feature works' (5.71\u20136.95) 3\u20134 small white feature rows ('feature' wireframe bar + accent \u2713 drawn SVG) tick in a stagger beside/below; kinetic 'every single' Newsreader ~90 + 'feature' Fraunces italic ink ~200 + 'works.' Fraunces italic accent ~200 lands on 'works' (~6.95, punch). Small speaker card (~330x230) top-right corner the whole scene, face centred. Hold alive.",
+  "assets": [],
+  "sfx": "whoosh"
+ },
+ {
+  "id": "v04_evidence",
+  "start": 18.433,
+  "duration": 3.967,
+  "layout": "scene",
+  "brief": "FIRST read animations/SHARED.md (fully, incl. Project specifics) and look at the style frames it lists. FULL-SCREEN OPAQUE scene \u2014 MECHANISM \u2014 evidence \u2192 build.\nSpoken: 'show you the evidence for it and then build you a version of that same software'.\nBEAT A (0\u20132.0): the 3 REA slabs from the previous scene collapse into one white EVIDENCE card (--brand-card) that slides up: a mono pseudo-code snippet (Geist mono, illustrative, generic e.g. 'func search(query) \u2192 index.match(\u2026)' 4\u20135 lines, grey bars ok) with 2\u20133 accent pins and black note pills 'string ref', 'call trace', 'branch' (illustrative labels only). Kinetic: 'show you the' Newsreader ~96, 'evidence' Fraunces italic accent ~230 lands on 'evidence' (~0.93), with a dotted ellipse drawing around it.\nBEAT B (2.0\u20133.97): on 'build' (~2.13) a new deep-teal app card builds BLOCK BY BLOCK (header bar, hero block, 3 tiles, button \u2014 3-frame stagger) beside/below the evidence card, a dotted path linking them; label pill '\u2192 your version' black. Kinetic: 'build you a' Newsreader ~96, 'version' Fraunces italic ink ~210 lands ~2.67, 'of that same software' Newsreader ~84 (~3.2\u20133.7). Secondary speaker card (~560x390) may peek in from a corner in beat B (face centred) \u2014 optional if space; keep the lower zone filled. Hold alive.",
+  "assets": []
+ },
+ {
+  "id": "v05_making",
+  "start": 22.4,
+  "duration": 8.5,
+  "layout": "scene",
+  "brief": "FIRST read animations/SHARED.md (fully, incl. Project specifics) and look at the style frames it lists. FULL-SCREEN OPAQUE scene \u2014 B-ROLL COLLAGE \u2014 real clips of things people made (from a credited YouTube video). The three clips are in hf/assets/: game_minecraft.mp4 (1760x984, 1.85 s), game_sim.mp4 (1312x980, 1.35 s), game_fps.mp4 (548x976 vertical, 1.85 s). They are short: loop each (muted, framework-owned video; if looping is awkward, hold the last frame \u2014 no black frames ever). Keep their TikTok handle watermarks visible/uncropped where possible (they get credited).\nSpoken: 'people are using it for making games desktop applications mobile applications and literally every single piece of software that they can make with it'.\nBEAT A (0\u20133.4) GAMES: on 'games' (~2.07) a large tilted DESKTOP WINDOW card (light chrome bar, 3 dots) deals in playing game_minecraft.mp4, then a second smaller window with game_sim.mp4 overlaps it (~2.4); kinetic before that: 'people are using it' Newsreader ~90 (0.06\u20130.5), 'making' Newsreader ~110 (~1.12), 'games' Fraunces italic accent ~240 lands on 'games' (~2.07, punch).\nBEAT B (2.4\u20135.3): 'desktop' (~2.41) Fraunces italic ink ~170 beside the windows; on 'mobile' (~3.85) a PHONE card (rounded 52 px, dark bezel) rises playing game_fps.mp4 (it is vertical \u2014 fits the phone), 'mobile' Fraunces italic accent ~170; 'applications' Newsreader ~84 under each.\nBEAT C (5.4\u20138.5): on 'literally every single piece of software' (5.45\u20137.2) the windows + phone shrink into a fan and MANY small app cards (8\u201312 plain wireframe UI cards / app tiles, no logos) deal out around them in a 2-frame stagger, filling the frame; kinetic 'every single piece of' Newsreader ~90 + 'software' Fraunces italic ink ~220 lands ~7.19, 'they can make with it.' small ~70. Hold alive. No speaker card in this scene.",
+  "assets": [
+   "media/game_minecraft.mp4",
+   "media/game_sim.mp4",
+   "media/game_fps.mp4"
+  ]
+ },
+ {
+  "id": "v06_github",
+  "start": 30.9,
+  "duration": 4.25,
+  "layout": "scene",
+  "brief": "FIRST read animations/SHARED.md (fully, incl. Project specifics) and look at the style frames it lists. FULL-SCREEN OPAQUE scene \u2014 REAL PAGE + ACTION. Copy browser-card + stat-pill styling from v04_taste.html.\nSpoken: 'it's growing crazy on GitHub and you can try to just type in this command'.\nBEAT A (0\u20132.4): the REAL GitHub Trending page hf/assets/gh_trending.png in a big tilted browser card (URL 'github.com/trending'), scrolled so the first repo row 'morluto / rea' (it's the #1 row, ~y 680\u2013830 in the 1080-wide PNG at 2x, i.e. CSS y 340\u2013415) is visible; an accent highlight ring/box draws around that row on 'growing' (~0.47); black stat pill '\u2605 25,585 stars today' and a small '#1 Trending' pill pop beside it on 'crazy' (~1.13). Kinetic: 'growing' Newsreader ~120, 'crazy' Fraunces italic accent ~240 lands on 'crazy' (~1.13, punch), 'on GitHub' Newsreader ~110 (~1.71).\nBEAT B (2.4\u20134.25): browser card slides back/shrinks; a secondary speaker card (~560x390, face centred) enters; a black TERMINAL pill/card (Geist mono, white) types out '$ npx rea-agents@latest setup' character by character between 'try' (~2.51) and 'command' (~3.87), blinking accent cursor, then a white cursor arrow clicks a 'Copy' chip with a tiny 'Copied \u2713' flash. (The command is real \u2014 from rea.tools, hf/assets/rea_site.png shows it.) Kinetic: 'just type in' Newsreader ~96, 'this command' Fraunces italic ink ~180 lands on 'command' (~3.87). Hold alive.",
+  "assets": [
+   "captures/gh_trending.png",
+   "captures/rea_site.png"
+  ]
+ },
+ {
+  "id": "v07_adobe",
+  "start": 35.15,
+  "duration": 5.55,
+  "layout": "scene",
+  "brief": "FIRST read animations/SHARED.md (fully, incl. Project specifics) and look at the style frames it lists. FULL-SCREEN OPAQUE scene \u2014 LIST DEAL \u2014 seven apps. Copy coins from v01_hook.html and browser card from v04_taste.html.\nSpoken: 'last week someone else also used AI to rebuild seven applications of Adobe and make them all open source'.\nBEAT A (0\u20132.8): 'last week' Newsreader ~96 (0.05\u20130.27), 'someone else' Fraunces italic ink ~160 (~0.57), 'used AI' Newsreader ~110 (~1.81), 'to rebuild' Newsreader ~96 (~2.49). The REAL repo page hf/assets/photocraft_repo.png (storytold/photocraft \u2014 header shows '47.2k stars', README says 'clean-room reimplementation of Adobe Photoshop') in a tilted browser card (URL 'github.com/storytold/photocraft'), slow scroll, from ~0.5 s.\nBEAT B (2.8\u20135.55): on 'seven' (~2.93) the page shrinks to the upper area and 'seven' Fraunces italic accent ~260 lands huge (punch); coins 01\u201307 roll in (2-frame stagger) and each deals a white chip/card with the REAL app name in Geist 600: PhotoCraft, VectorCraft, FilmCraft, LightCraft, PdfCraft, EffectCraft, DesignCraft (slugs storytold/<lowercase>, muted). Grid them neatly 2 columns or a fan \u2014 all 7 legible (chip text \u2265 40 px). 'applications of Adobe' Newsreader ~96 on 'Adobe' (~3.89) \u2014 plain text, no logo. On 'open source' (5.17\u20135.43) every chip flips/ticks with an accent \u2713 (drawn SVG) in a fast stagger and a black pill 'all open source' stamps over the stack; 'open source.' Fraunces italic ink ~170. No speaker card. Hold alive.",
+  "assets": [
+   "captures/photocraft_repo.png",
+   "logos/adobe_photoshop.svg",
+   "logos/adobe_illustrator.svg",
+   "logos/adobe_premiere.svg",
+   "logos/adobe_lightroom.svg",
+   "logos/adobe_acrobat.svg",
+   "logos/adobe_aftereffects.svg",
+   "logos/adobe_indesign.svg"
+  ],
+  "sfx": "chime"
+ },
+ {
+  "id": "v08_perfect",
+  "start": 40.7,
+  "duration": 3.8,
+  "layout": "scene",
+  "brief": "FIRST read animations/SHARED.md (fully, incl. Project specifics) and look at the style frames it lists. FULL-SCREEN OPAQUE scene \u2014 SPEAKER + VERDICT. Copy hero card from v01_hook.html, strike-through from v09_taste.html.\nSpoken: 'now are they perfect no but do they work definitely yes which actually makes me wonder'.\nHERO speaker card (~868x600, face centred) top (y ~300\u2013900), lands fast (readable by 0.25 s).\nKINETIC below (y ~950\u20131470): 'are they' Newsreader ~96 + 'perfect?' Fraunces italic ink ~220 lands on 'perfect' (~0.69); on 'no' (~0.91) an ocean strike-through draws across 'perfect?' and a small black pill '\u2717 no' pops (drawn SVG \u2717). On 'work' (~1.57) the stack slides up/compacts: 'do they' Newsreader ~96 + 'work?' Fraunces italic accent ~240 lands; on 'yes' (~2.45) a big accent \u2713 (drawn SVG) draws beside it and a black pill '\u2713 definitely yes' pops; 1 % punch. 'makes me wonder' Newsreader ~84 fades in on 'wonder' (~3.55) with a tiny dotted '?' loop. Hold alive.",
+  "assets": []
+ },
+ {
+  "id": "v09_dead",
+  "start": 44.5,
+  "duration": 5.25,
+  "layout": "scene",
+  "brief": "FIRST read animations/SHARED.md (fully, incl. Project specifics) and look at the style frames it lists. FULL-SCREEN OPAQUE scene \u2014 THESIS. Hero type scene with one object.\nSpoken: 'is software really dead and also that software is going to get really hard to protect'.\nBEAT A (0\u20132.4): 'is' Newsreader ~110, 'software' Newsreader 600 ~210 (~0.55), 'really' Newsreader ~110 (~0.99), 'dead?' Fraunces italic accent ~260 lands on 'dead' (~1.35) with a punch and a dotted ellipse drawing around it. Big, filling the zone, staggered collage.\nBEAT B (2.4\u20135.25): text compacts to the top; a deep-teal APP CARD (same as v03) centre with a big soft white SHIELD + PADLOCK object (no outlines, soft shadow) closing over it on 'software' (~2.65); kinetic 'really hard to' Newsreader ~96 (~4.1\u20134.5) and 'protect' Fraunces italic ink ~220 lands ~4.85; at ~4.9 the shield CRACKS (2\u20133 pieces separate with a little rotation) and the padlock pops open \u2014 accent glint. Small speaker card (~330x230, face centred) at a corner during beat B. Hold alive into the cut.",
+  "assets": [],
+  "sfx": "whoosh"
+ },
+ {
+  "id": "v10_copy",
+  "start": 49.75,
+  "duration": 8.47,
+  "layout": "scene",
+  "brief": "FIRST read animations/SHARED.md (fully, incl. Project specifics) and look at the style frames it lists. FULL-SCREEN OPAQUE scene \u2014 MECHANISM \u2014 copy in minutes.\nSpoken: 'because if an AI agent can look at your app can look at your software can look at all the features and build someone else a version of it in the matter of a couple of minutes'.\nBEAT A (0\u20135.2): left-centre a deep-teal 'your app' card (Geist label pill 'your app'); the black agent puck enters on 'AI agent' (~0.68\u20131.1). Three LOOKS, one per spoken 'look at\u2026': the puck's eyes/scan beam (accent, soft cone or dotted lines) sweeps the card on 'app' (~2.2), 'software' (~3.28), 'all the features' (~4.65) \u2014 each look highlights a different layer: whole card \u2192 its code layer (mono bars) \u2192 its feature rows (\u2713). Kinetic per look, replacing each other quickly at top: 'can look at your' Newsreader ~84 + 'app' Fraunces italic accent ~220; then 'software' Fraunces italic ink ~200; then 'all the features' Fraunces italic accent ~170.\nBEAT B (5.2\u20138.47): on 'build' (~5.27) a COPY of the card peels off (lighter, slightly translucent then solidifies) and slides along a dotted path to the right to a small black pill 'someone else' (~5.61\u20135.85); kinetic 'build someone else a' Newsreader ~84, 'version' Fraunces italic ink ~200 (~6.31). On 'a couple of minutes' (7.67\u20138.31) a round timer ring (accent arc) sweeps quickly and 'minutes.' Fraunces italic accent ~240 lands on 'minutes' (~8.31) with punch. Secondary speaker card (~560x390, face centred) present in beat B upper area if it fits \u2014 otherwise small card. Hold alive.",
+  "assets": []
+ },
+ {
+  "id": "v11_personal",
+  "start": 58.22,
+  "duration": 10.23,
+  "layout": "scene",
+  "brief": "FIRST read animations/SHARED.md (fully, incl. Project specifics) and look at the style frames it lists. FULL-SCREEN OPAQUE scene \u2014 WRAP-UP. Copy hero card from v01_hook.html and strike/struck word from v09_taste.html.\nSpoken: 'our features are not what's going to keep you ahead of everyone else I think what's left of software is personal built for literally how you work with these softwares every single day'. NEVER show the word 'softwares'.\nBEAT A (0\u20133.7): HERO speaker card (~868x600, face centred) top; kinetic below: 'our' Newsreader ~96 + 'features' Fraunces italic ink ~230 lands on 'features' (~0.54); on 'not' (~1.3) an ocean strike-through draws across 'features'; 'keep you' Newsreader ~96 + 'ahead' Fraunces italic accent ~200 lands ~2.64, with a small up-arrow chip; 'of everyone else' ~70.\nBEAT B (3.8\u201310.23): card shrinks to secondary size (~560x390) and moves up/left; 'what's left of' Newsreader ~96 (~4.4), 'software is' Newsreader ~110 (~5.16), 'personal' Fraunces italic accent ~260 lands HUGE on 'personal' (~6.28) with a punch and an underline drawing. Then on 'built for literally how you work' (6.54\u20138.18) a set of 4\u20135 soft UI cards/tiles assembles AROUND the speaker card like a custom-fit layout (snapping into a frame shaped to it) \u2014 the 'built for how you work' idea; kinetic 'built for' Newsreader ~84, 'how you work' Fraunces italic ink ~170 lands on 'work' (~8.18). On 'every single day' (9.45\u201310.05) a tiny black pill row of day chips 'Mon Tue Wed Thu Fri' ticks accent in a stagger, 'every single day.' Newsreader ~84. Hold alive.",
+  "assets": [],
+  "sfx": "whoosh"
+ },
+ {
+  "id": "v12_cta",
+  "start": 68.45,
+  "duration": 9.717,
+  "layout": "scene",
+  "brief": "FIRST read animations/SHARED.md (fully, incl. Project specifics) and look at the style frames it lists. FULL-SCREEN OPAQUE scene \u2014 CTA. Copy v10_cta.html closely (Comment + giant quoted word + dotted loop + speaker card + inbox pill + alive end hold).\nSpoken: 'if you also want to try REA or reverse engineer anything out just comment reverse and I'll send you the link to the repository straight to your inbox. Just be a little careful of what you do.' Scene is 9.72 s; speech ends ~8.1 s, the rest is the freeze-frame end hold (speaker.mp4 is padded with a freeze) \u2014 keep it ALIVE.\nBEAT A (0\u20133.2): 'want to try' Newsreader ~96 + 'REA' Fraunces italic accent ~230 lands on 'REA' (~1.26); 'reverse engineer anything' Newsreader ~84 (~1.94\u20132.68). Small agent puck bobbing next to REA.\nBEAT B (3.2\u20136.6): replace with 'Comment' Newsreader ~150 (~3.36) and '\u201creverse\u201d' Fraunces italic accent ~240 in curly quotes lands on 'reverse' (~3.70) with punch; dotted loop path draws down to a tilted secondary/hero speaker card (face centred); on 'link to the repository' (~4.74\u20135.48) a white link chip 'github.com/morluto/rea' pops near the card and slides into a black pill '\u2192 your inbox' that lands on 'inbox' (~6.46); 'straight to your' Newsreader ~84 + 'inbox' Fraunces italic accent ~200.\nBEAT C (6.6\u20139.72): 'Just be a little' Newsreader ~96 (~6.62\u20137.0) + 'careful' Fraunces italic ink ~230 lands on 'careful' (~7.28), with a small black caution pill (drawn SVG \u26a0 triangle, accent) beside it; 'of what you do.' Newsreader ~84 (~7.9). Keep 'Comment \u201creverse\u201d' visible (compacted) at top through the end hold so the CTA is on the final frame. End hold alive: float, grid drift, pill pulse.",
+  "assets": [],
+  "sfx": "ping"
+ }
+]

@@ -1,0 +1,219 @@
+<!doctype html>
+<!-- v14_cta (built on the cta starter): CTA — 'Comment "X"' giant in accent (in quotes), a dotted loop down to a PORTRAIT card,
+     a "→ your inbox" pill; the end hold (freeze) stays alive: float, breathe, marching dots. Last scene = padded speaker clip. -->
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>v14_cta</title>
+    <link rel="stylesheet" href="brand.css" />
+    <link rel="stylesheet" href="paper.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+    <script src="paper.js"></script>
+  <style>
+      /* paper fade over the sweatshirt so the kinetic words land on paper, not on dark navy */
+      .cstrip { position: absolute; left: 0; right: 0; bottom: 0; height: 250px; pointer-events: none;
+        background: linear-gradient(180deg, rgba(228,222,217,0) 0%, rgba(228,222,217,0.8) 45%, rgba(228,222,217,0.94) 100%); }
+      /* comment box (soft UI card, no platform branding) */
+      #cb { left: 0; top: 0; width: 540px; height: 104px; }
+      #cb .av { position: absolute; left: 24px; top: 24px; width: 56px; height: 56px; border-radius: 50%; background: var(--wire); }
+      #cb .field { position: absolute; left: 96px; top: 18px; width: 330px; height: 68px; border-radius: 34px; background: var(--brand-background); }
+      #ctext { position: absolute; left: 128px; top: 18px; height: 68px; display: flex; align-items: center; white-space: nowrap;
+        font-family: var(--font-body); font-weight: 600; font-size: 40px; letter-spacing: 0.01em; color: var(--brand-text); }
+      #ctext .ch { opacity: 0; }
+      #caret { position: absolute; left: 128px; top: 31px; width: 4px; height: 42px; border-radius: 2px; background: var(--brand-primary); opacity: 0; }
+      #send { position: absolute; left: 446px; top: 18px; width: 68px; height: 68px; border-radius: 50%;
+        background: radial-gradient(circle at 35% 30%, var(--brand-primary), var(--brand-primary-dark) 80%);
+        box-shadow: 0 12px 20px -6px rgba(31,126,168,.55); display: flex; align-items: center; justify-content: center; }
+      #send svg { width: 34px; height: 34px; display: block; }
+      #bub { position: absolute; left: -64px; top: -32px; width: 128px; height: 64px; border-radius: 32px; opacity: 0;
+        background: radial-gradient(circle at 35% 30%, var(--brand-primary), var(--brand-primary-dark) 85%);
+        box-shadow: 0 18px 28px -8px rgba(31,126,168,.5); display: flex; align-items: center; justify-content: center;
+        font-family: var(--font-body); font-weight: 700; font-size: 34px; letter-spacing: 0.01em; color: #fff; }
+      .ring { position: absolute; width: 90px; height: 90px; margin-left: -45px; margin-top: -45px; border-radius: 50%; opacity: 0; }
+      #plane { position: absolute; left: 0; top: 0; width: 84px; height: 84px;opacity: 0; }
+    </style>
+  </head>
+  <body data-face="0.47">
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="4.0500">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+      <div id="cam"><div id="punch">
+
+        <div id="head" class="layer">
+          <div id="comment" class="line hero" data-x="76" data-base="450" data-size="180" data-fit="860">
+            <span class="w" data-t="0.13" data-hero data-peak="1.05">Comment</span>
+          </div>
+          <div id="word" class="line hero ocean" data-x="150" data-base="715" data-size="260" data-fit="800">
+            <span class="w" data-t="0.33" data-hero data-peak="1.1">“FDE”</span>
+          </div>
+        </div>
+
+        <svg class="paths"><path id="loop" class="dotted" d="M 700 745 C 790 780, 940 745, 915 835 C 895 915, 765 895, 768 835 C 770 800, 742 800, 742 825" /></svg>
+
+        <div class="spk portrait" data-x="70" data-y="780" data-w="720" data-h="665" data-face-at="0.42" data-at="1.0">
+          <div class="spk-card">
+            <div class="spk-vid"><video id="speaker" class="clip" src="assets/speaker.mp4" muted playsinline data-start="0" data-duration="4.0500" data-track-index="1"></video></div>
+            <div class="cstrip"></div>
+            <div class="spk-sheen"></div>
+          </div>
+        </div>
+
+        <!-- the CTA demonstrated: a comment box types FDE, send presses, the comment flies up into the headline -->
+        <div id="cbw" style="position:absolute; left:76px; top:742px; width:540px; height:104px">
+          <div id="cb" class="uicard">
+            <div class="av"></div><div class="field"></div>
+            <div id="ctext"><span class="ch">F</span><span class="ch">D</span><span class="ch">E</span></div>
+            <div id="caret"></div>
+            <div id="send"><svg viewBox="0 0 24 24"><path d="M12 19V6M6.5 11.5L12 6l5.5 5.5" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></div>
+          </div>
+        </div>
+        <div id="bub">FDE</div>
+        <div id="ringA" class="ring"></div>
+
+        <div id="ra" class="line sup kin" data-x="84" data-base="1418" data-size="84" data-exit="1.5">
+          <span class="w" data-t="0.73">and</span><span class="w gap-s" data-t="0.83">I'll</span><span class="w gap-s" data-t="1.05">send</span><span class="w gap-s" data-t="1.17">you</span><span class="w gap-s" data-t="1.29">a</span>
+        </div>
+
+        <div id="rc" class="line sup kin" data-x="92" data-base="1418" data-size="96">
+          <span class="w" data-t="1.73">to</span><span class="w gap-s" data-t="1.87" data-pop>get</span><span class="w gap-s ocean" data-t="2.11" data-hero data-peak="1.08" style="font-size:128px; letter-spacing:-0.04em">started.</span>
+        </div>
+
+        <!-- paper plane: leaves the speaker on "send you", flies the dotted arc, drops into the roadmap card -->
+        <svg class="paths"><path id="ppath" class="dotted accent" d="M 690 1318 C 780 1340, 905 1300, 905 1190 C 905 1090, 880 1010, 838 968" /></svg>
+        <svg id="plane" viewBox="0 0 84 84">
+          <path d="M 8 40 L 76 10 L 54 72 L 41 48 Z" fill="var(--brand-primary)"/>
+          <path d="M 8 40 L 41 48 L 76 10 Z" fill="var(--brand-primary-dark)" opacity="0.55"/>
+          <path d="M 41 48 L 46 66 L 54 72 Z" fill="var(--brand-primary-dark)"/>
+        </svg>
+
+        <div id="rm" class="pill" style="left: 76px; top: 735px"><svg viewBox="0 0 24 24"><path d="M4 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>roadmap</div>
+
+        <div id="rmw" style="position:absolute; left:600px; top:880px; width:340px; height:420px">
+          <div id="rmc" class="uicard" style="left:0; top:0; width:340px; height:420px">
+            <svg id="rmsvg" viewBox="0 0 340 420" width="340" height="420" style="position:absolute;left:0;top:0;overflow:visible">
+              <g fill="var(--wire)"><circle cx="70" cy="350" r="26"/><circle cx="265" cy="262" r="26"/><circle cx="88" cy="170" r="26"/><rect x="253" y="48" width="5" height="70" rx="2.5"/></g>
+              <path id="rpath" class="dotted accent" d="M 70 350 C 150 385, 285 355, 265 262 C 252 200, 105 235, 88 170 C 82 135, 175 140, 255 118" />
+              <circle id="k1" class="dring" cx="70" cy="350" r="26" fill="none" stroke="var(--brand-primary)" stroke-width="5" opacity="0"/>
+              <circle id="k2" class="dring" cx="265" cy="262" r="26" fill="none" stroke="var(--brand-primary)" stroke-width="5" opacity="0"/>
+              <circle id="k3" class="dring" cx="88" cy="170" r="26" fill="none" stroke="var(--brand-primary)" stroke-width="5" opacity="0"/>
+              <g id="d1"><circle cx="70" cy="350" r="26" fill="var(--brand-primary)"/>
+                <g transform="translate(70 350)" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M -12 -9 Q -6 -12 0 -8 Q 6 -12 12 -9 V 9 Q 6 6 0 10 Q -6 6 -12 9 Z"/><path d="M 0 -8 V 10"/></g></g>
+              <g id="d2"><circle cx="265" cy="262" r="26" fill="var(--brand-text)"/>
+                <g transform="translate(265 262)" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M -10 10 L 2 -2" stroke-width="5.5"/><circle cx="6" cy="-6" r="6.5"/><path d="M 7 -7 L 13 -13" stroke="var(--brand-text)" stroke-width="6"/></g></g>
+              <g id="d3"><circle cx="88" cy="170" r="26" fill="var(--brand-text)"/>
+                <g transform="translate(88 170)" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M -6 -8 L -13 0 L -6 8"/><path d="M 6 -8 L 13 0 L 6 8"/><path d="M 2 -9 L -2 9"/></g></g>
+              <g id="flag">
+                <rect x="253" y="48" width="5" height="70" rx="2.5" fill="var(--brand-text)"/>
+                <path id="cloth" d="M 258 50 L 318 68 L 258 88 Z" fill="var(--brand-primary)" stroke="var(--brand-primary)" stroke-width="6" stroke-linejoin="round"/>
+              </g>
+              <rect x="34" y="388" width="120" height="10" rx="5" fill="var(--wire)"/>
+              <rect x="34" y="404" width="76" height="8" rx="4" fill="var(--wire)"/>
+            </svg>
+          </div>
+        </div>
+        <div id="ringB" class="ring"></div>
+        <div id="ringC" class="ring"></div>
+
+      </div></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const P = await Paper.init();
+        const { tl, D, F, $ } = P;
+        gsap.registerPlugin(MotionPathPlugin);
+        const ring = (sel, t, x, y, size = 1) => {
+          gsap.set(sel, { left: x, top: y });
+          tl.fromTo(sel, { opacity: 1, scale: 0.55 * size, boxShadow: "0 0 0 6px rgba(46,156,203,.55)" },
+            { opacity: 0, scale: 1.7 * size, boxShadow: "0 0 0 2px rgba(46,156,203,0)", duration: 0.45, ease: "power2.out", immediateRender: false }, t);
+          tl.set(sel, { opacity: 0 }, 0);
+        };
+
+        // ---- loop: dotted path from the quotes into the card; the headline's hero beat (FDE 0.33)
+        P.drawPath("#loop", 0.5, 0.55);
+        P.marchPath("#loop", 0.5, D - 0.5);
+        P.punch(0.33, { scale: 1.012 });
+        P.breathe("#word", 1.015);
+
+        // ---- 1) the CTA demonstrated: comment box rises (0.36), types F-D-E (0.52/0.60/0.68), send presses (0.84), bubble flies up into FDE (lands 1.04)
+        P.cardIn("#cb", 0.36, { fromY: 70, rot: -3 });
+        const chars = P.$$("#ctext .ch");
+        const tx = chars.map((c) => c.offsetLeft + 128);          // caret x after n chars
+        const tEnd = chars[2].offsetLeft + chars[2].offsetWidth + 128;
+        gsap.set("#caret", { x: 0 });
+        const caretX = [128, tx[1], tx[2], tEnd];
+        tl.set("#caret", { opacity: 1, x: 0 }, 0.44);
+        P.typeIn("#ctext", 0.52, 12.5);
+        [0.52, 0.60, 0.68].forEach((t, i) => tl.set("#caret", { x: caretX[i + 1] - 128 }, t));
+        // caret blink while waiting (0.76 off, 0.80 on, 0.84 gone on send)
+        tl.set("#caret", { opacity: 0 }, 0.75).set("#caret", { opacity: 1 }, 0.79).set("#caret", { opacity: 0 }, 0.84);
+        // send button: anticipation squash, press, arrow nudges up
+        gsap.set("#send", { transformOrigin: "50% 50%" });
+        tl.to("#send", { scale: 0.86, duration: 3 * F, ease: "power2.in" }, 0.75);
+        tl.to("#send", { scale: 1.12, duration: 0.14, ease: "power3.out" }, 0.84);
+        tl.to("#send", { scale: 1, duration: 0.3, ease: "back.out(2.2)" }, 0.98);
+        tl.to("#send svg", { y: -14, opacity: 0, duration: 0.12, ease: "power2.in" }, 0.84).fromTo("#send svg", { y: 14, opacity: 0 }, { y: 0, opacity: 1, duration: 0.2, ease: "back.out(2)", immediateRender: false }, 0.96);
+        // the typed text lifts off as the bubble (field empties)
+        tl.to("#ctext", { opacity: 0, duration: 0.08, ease: "power1.in" }, 0.86);
+        // bubble: pops from the button, rises on an arc (x eases differently from y), lands in the headline
+        gsap.set("#bub", { x: 563, y: 795, transformOrigin: "50% 50%" });
+        tl.fromTo("#bub", { opacity: 0, scale: 0.4, rotation: -8 }, { opacity: 1, scale: 1.0, rotation: 0, duration: 0.1, ease: "power3.out", immediateRender: false }, 0.84);
+        tl.to("#bub", { x: 470, duration: 0.22, ease: "power2.inOut" }, 0.86);
+        tl.to("#bub", { y: 625, duration: 0.22, ease: "power2.in" }, 0.86);
+        tl.to("#bub", { scale: 1.25, duration: 0.22, ease: "power2.in" }, 0.86);
+        tl.to("#bub", { opacity: 0, scale: 0.7, duration: 0.07, ease: "power1.in" }, 1.04);
+        ring("#ringA", 1.04, 480, 640, 2.4);
+        P.pulse("#word .w", 1.04, 1.035);                            // FDE takes the hit
+        // box leaves quickly (exit faster than entrance) so the speaker card owns the stage
+        P.exitUp("#cbw", 1.02, -40);
+
+        // ---- staging: headline recedes while the roadmap is the focal point, then returns at hero size
+        gsap.set("#head", { transformOrigin: "540px 560px" });
+        P.recede("#head", 1.42, { opacity: 0.72, blur: 2.5, scale: 0.94, dur: 0.3 });
+        tl.to("#head", { opacity: 1, filter: "blur(0px)", scale: 1.035, duration: 0.2, ease: "power3.out" }, 2.42);
+        tl.to("#head", { scale: 1, duration: 0.36, ease: "back.out(1.8)" }, 2.62);
+
+        // ---- 2) "I'll send you": a paper plane leaves the speaker, flies the dotted arc, drops into the roadmap card
+        P.drawPath("#ppath", 1.05, 0.45);
+        tl.to("#ppath", { opacity: 0, duration: 0.25, ease: "power2.in" }, 1.55);
+        tl.set("#plane", { opacity: 1, scale: 0.4 }, 1.05);
+        tl.to("#plane", { scale: 1, duration: 0.18, ease: "back.out(2)" }, 1.05);
+        tl.to("#plane", { motionPath: { path: "#ppath", align: "#ppath", alignOrigin: [0.5, 0.5], autoRotate: true }, duration: 0.45, ease: "power2.inOut" }, 1.05);
+        tl.to("#plane", { scale: 0.15, opacity: 0, duration: 0.14, ease: "power2.in" }, 1.46);
+        tl.set("#plane", { opacity: 0 }, 1.62);
+
+        // ---- 3) roadmap (his word 1.53): pill on the card corner + bigger roadmap card slides in
+        P.pillIn("#rm", 1.3);
+        P.cardIn("#rmc", 1.5, { fromY: 70, rot: 4 });
+        tl.fromTo("#rmw", { x: 36 }, { x: 0, duration: 0.42, ease: "power3.out" }, 1.5);
+        P.floatY("#rmw", 5, 1.2);
+        ring("#ringB", 1.56, 840, 960, 1.6);
+
+        // end hold: path draws on; milestones plant with icons; flag raises (ding 3.35) and waves
+        gsap.set(["#d1", "#d2", "#d3", "#flag"], { opacity: 0 });
+        gsap.set("#d1", { svgOrigin: "70 350" }); gsap.set("#d2", { svgOrigin: "265 262" }); gsap.set("#d3", { svgOrigin: "88 170" }); gsap.set("#flag", { svgOrigin: "255 118" });
+        gsap.set("#cloth", { svgOrigin: "258 70" });
+        gsap.set(".dring", { opacity: 0 });
+        gsap.set("#k1", { svgOrigin: "70 350" }); gsap.set("#k2", { svgOrigin: "265 262" }); gsap.set("#k3", { svgOrigin: "88 170" });
+        P.drawPath("#rpath", 2.1, 1.25);
+        P.marchPath("#rpath", 2.1, D - 2.1, 90);
+        const dotAt = (id, kid, t) => {
+          tl.fromTo(id, { opacity: 0, scale: 0.3 }, { opacity: 1, scale: 1.25, duration: 0.14, ease: "power3.out" }, t - 0.1);
+          tl.to(id, { scale: 1, duration: 0.3, ease: "back.out(2)" }, t + 0.04);
+          tl.fromTo(kid, { opacity: 0.7, scale: 1 }, { opacity: 0, scale: 1.9, duration: 0.45, ease: "power2.out", immediateRender: false }, t);
+        };
+        dotAt("#d1", "#k1", 2.1); dotAt("#d2", "#k2", 2.55); dotAt("#d3", "#k3", 2.95);
+        tl.fromTo("#flag", { opacity: 0, scale: 0.2, rotation: -10 }, { opacity: 1, scale: 1.12, rotation: 3, duration: 0.2, ease: "power3.out" }, 3.2);
+        tl.to("#flag", { scale: 1, rotation: 0, duration: 0.35, ease: "back.out(2.2)" }, 3.4);
+        // the flag waves (cloth swings on the pole)
+        const wv = Math.max(1, Math.floor((D - 3.6) / 0.5));
+        tl.fromTo("#cloth", { rotation: -4, scaleX: 1 }, { rotation: 5, scaleX: 0.9, duration: 0.5, ease: "sine.inOut", yoyo: true, repeat: wv }, 3.6);
+        ring("#ringC", 3.35, 888, 952, 1.3);
+        P.pulse("#word .w", 3.35, 1.03);                             // ding: FDE echoes the flag
+        P.pulse("#rm", 2.9, 1.06);
+        P.pulse("#rm", 3.55, 1.06);
+      })();
+    </script>
+  </body>
+</html>

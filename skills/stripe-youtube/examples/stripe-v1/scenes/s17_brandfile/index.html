@@ -1,0 +1,148 @@
+<!doctype html>
+<!-- s17_brandfile — v7 proof, Stripe look. THE BRAND FILE CARD (brandcard.js, shared with s34/s35/s36): a white
+     'brand.json' card with the REAL brand_stripe.json typeset verbatim in Geist Mono, a swatch drawn beside each hex.
+     'one JSON file.' kinetic beside it; 'Colors, fonts, captions, styles, logo' = the camera pushes in, the window scrolls
+     and each key gets V.hl in turn; 'Every graphic reads from it' = 4 thin lines fan out to a disc, a caption word, a mini
+     scene card and the Stripe wordmark chip, each taking the brand as its line lands; 'Nothing is hard coded' = a '#hex'
+     chip is typed into the scene card and gets a strawberry cross. Runtime untouched; card zone clear. -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>s17_brandfile</title>
+    <link rel="stylesheet" href="board.css" />
+    <link rel="stylesheet" href="v7yt.css" />
+    <link rel="stylesheet" href="brand.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="board.js"></script>
+    <script src="v7yt.js"></script>
+    <script src="brandcard.js"></script>
+    <style>
+      .ph { background: color-mix(in srgb, var(--ink) 13%, var(--brand-card)); position: absolute; border-radius: 7px; }
+      #t3 { left: 1240px; top: 520px; width: 320px; height: 200px; }
+      #t4 { position: absolute; left: 1240px; top: 800px; width: 250px; height: 84px; border-radius: 42px; background: var(--brand-card);
+        box-shadow: var(--shadow); }
+      #t4 .ph { left: 34px; top: 34px; width: 182px; height: 16px; }
+      #t4 img { position: absolute; left: 50%; top: 50%; height: 46px; margin: -23px 0 0 -55px; }
+      #hex { position: absolute; left: 22px; top: 136px; height: 48px; padding: 0 16px; border-radius: 12px;
+        background: color-mix(in srgb, var(--ink) 7%, var(--brand-card)); font: 500 28px/48px "Geist Mono", monospace;
+        color: var(--ink); white-space: pre; }
+      #caret { display: inline-block; width: 3px; height: 30px; vertical-align: -5px; background: var(--ink); margin-left: 2px; }
+      #t2 { color: color-mix(in srgb, var(--ink) 22%, var(--bg)); }
+    </style>
+  </head>
+  <body data-theme="light">
+    <div id="root" class="mint" data-composition-id="main" data-start="0" data-width="1920" data-height="1080" data-duration="8.000">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+      <div id="cam"><div id="punch">
+        <!-- kinetic: It's one JSON file. -->
+        <div class="k" id="k1" style="left:1176px;top:150px;font-size:80px"><span class="w" data-t="0.08" data-out="1.86">It’s</span><span class="w gap" data-t="0.44" data-out="1.86">one</span></div>
+        <div class="k k900" id="k2" style="left:1160px;top:240px;font-size:200px"><span class="w mint" id="json" data-t="0.82" data-hero data-out="1.89">JSON</span></div>
+        <div class="k" id="k3" style="left:1172px;top:446px;font-size:130px"><span class="w" data-t="1.18" data-out="1.92">file.</span></div>
+
+        <!-- what reads from it: a disc, a caption word, a mini scene card, the wordmark chip -->
+        <div class="k k900" id="t2" style="left:1238px;top:350px;font-size:104px"><span id="t2w">graphic</span></div>
+        <div id="t3" class="v7-card">
+          <div class="ph" id="t3bar" style="left:24px;top:24px;width:272px;height:16px"></div>
+          <div class="v7-disc light" id="t3disc" style="--d:60px;left:58px;top:94px"><i class="v7-gl" style="--ic:url('assets/icons/image.svg')"></i></div>
+          <div class="ph" style="left:108px;top:74px;width:168px;height:13px"></div>
+          <div class="ph" style="left:108px;top:102px;width:118px;height:13px"></div>
+          <div id="hex"><span id="hext"></span><i id="caret"></i></div>
+        </div>
+        <div id="t4"><div class="ph"></div><img id="wm" src="assets/stripe_wordmark_blurple.svg" alt="Stripe" /></div>
+      </div></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const TXT = await BrandCard.load("assets/brand_stripe.json");
+        const B = await Board.init();
+        const V = V7Y.init(B);
+        const { tl, D, F } = B;
+        const $ = (s) => document.querySelector(s);
+        const P = $("#punch");
+        const tok = (n) => getComputedStyle(document.body).getPropertyValue(n).trim();
+        const ACC = tok("--brand-primary"), DEEP = tok("--brand-deep");
+
+        // ---------------------------------------------------------------- the card (hero), arriving at frame 0
+        const bc = BrandCard.make(P, TXT, { id: "card", x: 110, y: 110, w: 1000, rows: 19, font: 28,
+          logo: "assets/stripe_wordmark_blurple.svg" });
+        // frame 0 already shows the card: it rises in from below at full opacity and settles (no fade from nothing)
+        tl.fromTo(bc.el, { y: 120, rotation: -2.6 }, { y: -8, rotation: -0.5, duration: 14 * F, ease: "power3.out", immediateRender: true }, 0);
+        tl.to(bc.el, { y: 0, rotation: -0.8, duration: 8 * F, ease: "power2.inOut" }, 14 * F);
+        BrandCard.swatchesIn(tl, bc, 0.62, { gap: 2 * F });
+        tl.to(bc.el, { scale: 1.015, duration: 4 * F, ease: "power2.out" }, 1.26);          // 'file.' — the card nods
+        tl.to(bc.el, { scale: 1, duration: 9 * F, ease: "back.out(2)" }, 1.26 + 4 * F);
+        const jw = $("#json"), k2 = $("#k2");
+        const jbar = V.bar(P, k2.offsetLeft + jw.offsetLeft + 8, k2.offsetTop + jw.offsetTop + jw.offsetHeight + 2, jw.offsetWidth * 0.86, 1.12, { h: 16 });
+        B.out(jbar, 1.89, { dur: 6 * F });
+
+        // ---------------------------------------------------------------- camera
+        B.camSet(960, 540, 1.0);
+        tl.to("#cam", { x: 960 - 950 * 1.03, y: 540 - 545 * 1.03, scale: 1.03, duration: 1.7, ease: "sine.inOut" }, 0);
+        V.cam(1.72, 680, 558, 1.08, { dur: 0.85 });                                          // 'Colors…' push in on the file
+        tl.to("#cam", { x: 960 - 688 * 1.1, y: 540 - 560 * 1.1, scale: 1.1, duration: 2.1, ease: "sine.inOut" }, 2.57);
+        V.cam(4.66, 960, 540, 1.0, { dur: 0.9 });                                            // 'Every graphic' pull back
+        tl.to("#cam", { x: 960 - 990 * 1.04, y: 540 - 556 * 1.04, scale: 1.04, duration: D - 5.56, ease: "sine.inOut" }, 5.56);
+
+        // ---------------------------------------------------------------- 'Colors, fonts, captions, styles, logo' — V.hl on each key
+        V.hl(bc.code, BrandCard.box(bc, "colors"), 1.9, { dur: 0.24 });
+        BrandCard.scroll(tl, bc, 2.04, 15, { dur: 0.38 });
+        V.hl(bc.code, BrandCard.box(bc, "fonts"), 2.44, { dur: 0.22 });
+        V.hl(bc.code, BrandCard.box(bc, "captions", 1), 2.82, { dur: 0.26 });
+        V.hl(bc.code, BrandCard.box(bc, "card", 1), 3.44, { dur: 0.2 });                   // styles → the card style block
+        V.hl(bc.code, BrandCard.box(bc, "logos"), 3.9, { dur: 0.22 });
+        tl.to(bc.code, { y: -15 * bc.lh - 10, duration: 0.5, ease: "sine.inOut", yoyo: true, repeat: 1 }, 4.1);   // the file breathes
+
+        // ---------------------------------------------------------------- 'Every graphic reads from it'
+        tl.to(bc.el, { scale: 0.985, duration: 3 * F, ease: "power2.in" }, 4.9);              // anticipation, then it sends
+        tl.to(bc.el, { scale: 1, duration: 8 * F, ease: "back.out(2.4)" }, 4.9 + 3 * F);
+        const d1 = V.disc(P, { x: 1302, y: 200, d: 130, icon: "palette", cls: "light", id: "t1" });
+        // the targets arrive unbranded (light / grey)
+        V.discIn(d1, 4.82);
+        B.in("#t2", 4.86, { type: "pop" });
+        B.in("#t3", 4.9, { type: "pop" });
+        B.in("#t4", 4.94, { type: "pop" });
+        gsap.set("#wm", { opacity: 0 });
+        const lands = [];
+        const fan = [
+          [[1118, 330], [1190, 200], [1222, 200]],
+          [[1118, 440], [1180, 405], [1222, 405]],
+          [[1118, 560], [1180, 620], [1224, 620]],
+          [[1118, 690], [1170, 842], [1224, 842]],
+        ];
+        fan.forEach((pts, i) => {
+          const t = 5.0 + i * 0.25;
+          const ln = V.line(P, pts, t, { dur: 0.34, width: 4, curve: true });
+          tl.fromTo(ln, { opacity: 0 }, { opacity: 1, duration: F }, t);              // no round-cap dot before it draws
+          lands.push(t + 0.34);
+        });
+        // each recolours as its line lands
+        tl.to(d1, { backgroundColor: ACC, color: "#fff", duration: 6 * F, ease: "power2.out" }, lands[0]);
+        B.punch(d1, lands[0], 1.1);
+        tl.to("#t2", { color: ACC, duration: 6 * F, ease: "power2.out" }, lands[1]);
+        B.punch("#t2", lands[1], 1.05);
+        tl.to("#t3bar", { backgroundColor: ACC, duration: 6 * F, ease: "power2.out" }, lands[2]);
+        tl.to("#t3disc", { backgroundColor: DEEP, color: "#fff", duration: 6 * F, ease: "power2.out" }, lands[2] + 2 * F);
+        B.punch("#t3", lands[2], 1.04);
+        tl.to("#t4 .ph", { opacity: 0, scaleX: 0.6, duration: 4 * F, ease: "power2.in" }, lands[3]);
+        tl.fromTo("#wm", { opacity: 0, scale: 0.5, y: 10 }, { opacity: 1, scale: 1.1, y: -3, duration: 5 * F, ease: "power3.out" }, lands[3] + 2 * F);
+        tl.to("#wm", { scale: 1, y: 0, duration: 7 * F, ease: "power2.inOut" }, lands[3] + 7 * F);
+
+        // ---------------------------------------------------------------- 'Nothing is hard coded' — a '#hex' typed into the scene, crossed out
+        const HEX = BrandCard.hexOf(TXT, "colors.primary.hex");
+        const ht = $("#hext");
+        gsap.set("#hex", { opacity: 0 });
+        tl.fromTo("#hex", { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 4 * F, ease: "power2.out" }, 6.7);
+        const ty = { n: 0 };
+        tl.to(ty, { n: HEX.length, duration: 0.42, ease: "none", onUpdate: () => (ht.textContent = HEX.slice(0, Math.round(ty.n))) }, 6.84);
+        tl.to("#caret", { opacity: 0, duration: F, repeat: 5, yoyo: true, repeatDelay: 0.12 }, 6.7);
+        tl.to("#caret", { opacity: 0, duration: 2 * F }, 7.3);
+        const x = V.cross(P, 1240 + 22 + 196, 520 + 136 + 24, 7.36, { size: 64 });
+        x.classList.add("strawberry");
+        tl.to("#hex", { opacity: 0.45, duration: 6 * F, ease: "power2.out" }, 7.5);
+        tl.to("#hex", { x: -4, duration: 2 * F, ease: "sine.inOut", yoyo: true, repeat: 3 }, 7.4);
+      })();
+    </script>
+  </body>
+</html>

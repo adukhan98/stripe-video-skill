@@ -1,0 +1,17 @@
+[
+ {"t": 0.17, "sfx": "pop", "what": "Most people lands", "gain_db": -6},
+ {"t": 0.99, "sfx": "tick", "what": "still"},
+ {"t": 1.63, "sfx": "pop", "what": "AI lands", "gain_db": -4},
+ {"t": 2.37, "sfx": "pop", "what": "emails lands (envelope drawing under it)"},
+ {"t": 2.8, "sfx": "tick", "what": "envelope flap flips open"},
+ {"t": 2.9, "sfx": "pop", "what": "? bubble pops / quick", "gain_db": -2},
+ {"t": 3.18, "sfx": "tick", "what": "flap snaps shut"},
+ {"t": 3.43, "sfx": "pop", "what": "questions lands, ? bounces"},
+ {"t": 3.62, "sfx": "whoosh", "what": "doodles drop on an arc to the red sliver", "gain_db": -6},
+ {"t": 4.12, "sfx": "tick", "what": "doodles land beside the sliver (squash)"},
+ {"t": 4.36, "sfx": "tick", "what": "get - bar starts to load"},
+ {"t": 4.88, "sfx": "whoosh", "what": "brace un-draws into the red arrow shooting up", "gain_db": -4},
+ {"t": 5.11, "sfx": "riser", "what": "flood hits the top (cue starts 4.66)"},
+ {"t": 5.11, "sfx": "impact", "what": "further lands - hero beat, punch + shake"},
+ {"t": 5.5, "sfx": "ding", "what": "so much more checked", "gain_db": -5}
+]

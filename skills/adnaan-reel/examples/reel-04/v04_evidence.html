@@ -1,0 +1,1208 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>v04 evidence</title>
+    <link rel="stylesheet" href="brand.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      @font-face {
+        font-family: "Geist Mono";
+        src: url("fonts/GeistMono-Medium.ttf") format("truetype");
+        font-weight: 500;
+        font-style: normal;
+        font-display: block;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: var(--brand-background);
+      }
+      #root {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: var(--brand-background);
+        font-family: var(--font-heading);
+        color: var(--brand-text);
+      }
+
+      /* ---------- shared v2 background: paper + 60px grid + vignette (identical to v01_hook) ---------- */
+      #bg {
+        position: absolute;
+        inset: 0;
+        background: var(--brand-background);
+        overflow: hidden;
+      }
+      #grid {
+        position: absolute;
+        left: -120px;
+        top: -120px;
+        width: 1320px;
+        height: 2160px;
+        background-image:
+          linear-gradient(to right, rgba(20, 20, 20, 0.055) 1.5px, transparent 1.5px),
+          linear-gradient(to bottom, rgba(20, 20, 20, 0.055) 1.5px, transparent 1.5px);
+        background-size: 60px 60px;
+      }
+      #vignette {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(ellipse at 50% 45%, transparent 45%, rgba(90, 80, 72, 0.22) 100%);
+      }
+
+      /* ---------- camera ---------- */
+      #cam,
+      #punch {
+        position: absolute;
+        inset: 0;
+      }
+      .abs {
+        position: absolute;
+      }
+
+      /* ---------- REA slabs (continuity from v03, axonometric, built in JS) ---------- */
+      #slabs {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 0;
+        height: 0;
+      }
+      .slab,
+      .slab-body {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 0;
+        height: 0;
+      }
+      .slab-body {
+        filter: drop-shadow(0 14px 16px rgba(60, 50, 40, 0.2));
+      }
+      .slab svg {
+        position: absolute;
+        overflow: visible;
+      }
+
+      /* ---------- evidence card ---------- */
+      #ev-wrap {
+        position: absolute;
+        left: 110px;
+        top: 340px;
+        width: 820px;
+        height: 520px;
+      }
+      #ev-float,
+      #ev {
+        position: absolute;
+        inset: 0;
+      }
+      #ev-face {
+        position: absolute;
+        inset: 0;
+        border-radius: 28px;
+        overflow: hidden;
+        background: var(--brand-card);
+        box-shadow: 0 30px 50px -12px rgba(60, 50, 40, 0.3);
+      }
+      #ev-head {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 66px;
+        border-bottom: 1.5px solid #ece7e1;
+        display: flex;
+        align-items: center;
+        padding-left: 28px;
+        gap: 10px;
+      }
+      .dot {
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        background: #d9d3cc;
+        flex: none;
+      }
+      .hbar {
+        height: 14px;
+        border-radius: 7px;
+        background: #e5e0da;
+        flex: none;
+      }
+      .code-line {
+        position: absolute;
+        left: 0;
+        height: 56px;
+        width: 100%;
+        display: flex;
+        align-items: center;
+      }
+      .ln {
+        position: absolute;
+        left: 30px;
+        width: 30px;
+        text-align: right;
+        font-family: "Geist Mono", monospace;
+        font-weight: 500;
+        font-size: 24px;
+        color: #c3bcb4;
+      }
+      .code {
+        position: absolute;
+        left: 86px;
+        font-family: "Geist Mono", monospace;
+        font-weight: 500;
+        font-size: 35px;
+        letter-spacing: -0.01em;
+        color: var(--brand-text);
+        white-space: pre;
+      }
+      .code .m {
+        color: var(--brand-muted);
+      }
+      .code .tok {
+        position: relative;
+        z-index: 1;
+      }
+      .hl {
+        position: absolute;
+        height: 46px;
+        border-radius: 10px;
+        background: rgba(46, 156, 203, 0.16);
+        transform-origin: 0% 50%;
+      }
+      .pin {
+        position: absolute;
+        width: 26px;
+        height: 26px;
+        margin-left: -13px;
+        margin-top: -13px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 35% 30%, #6ac2e6, #2e9ccb 55%, #1f7ea8 100%);
+        box-shadow: 0 6px 12px rgba(31, 126, 168, 0.4);
+      }
+      .pin::after {
+        content: "";
+        position: absolute;
+        left: 9px;
+        top: 9px;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--brand-card);
+      }
+      .note {
+        position: absolute;
+        height: 52px;
+        margin-top: -26px;
+        padding: 0 24px 0 20px;
+        border-radius: 26px;
+        background: var(--brand-text);
+        color: #fbfaf8;
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        font-family: var(--font-body);
+        font-weight: 600;
+        font-size: 28px;
+        letter-spacing: -0.01em;
+        white-space: nowrap;
+        box-shadow: 0 16px 28px -8px rgba(30, 25, 20, 0.35);
+      }
+      .note i {
+        display: block;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: var(--brand-primary);
+      }
+      #ev-links {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 820px;
+        height: 520px;
+        overflow: visible;
+      }
+
+      /* ---------- dotted path evidence -> app ---------- */
+      #links {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1080px;
+        height: 1920px;
+        overflow: visible;
+      }
+      .rider {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 18px;
+        height: 18px;
+        margin-left: -9px;
+        margin-top: -9px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 35% 30%, #6ac2e6, #2e9ccb 55%, #1f7ea8 100%);
+        box-shadow: 0 0 12px rgba(46, 156, 203, 0.7);
+        opacity: 0;
+      }
+
+      /* ---------- built app card (deep teal, block by block) ---------- */
+      #app-wrap {
+        position: absolute;
+        left: 472px;
+        top: 600px;
+        width: 460px;
+        height: 480px;
+      }
+      #app-float,
+      #app {
+        position: absolute;
+        inset: 0;
+      }
+      #app {
+        border-radius: 28px;
+        overflow: hidden;
+        background: var(--brand-deep);
+        box-shadow:
+          0 16px 0 -2px var(--brand-primary),
+          0 50px 70px -10px rgba(40, 30, 20, 0.38);
+      }
+      #app .chrome {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 52px;
+        background: #f3f0ec;
+        display: flex;
+        align-items: center;
+        padding-left: 20px;
+        gap: 8px;
+      }
+      #app .chrome .dot {
+        width: 13px;
+        height: 13px;
+      }
+      #app .url-blank {
+        margin-left: 12px;
+        margin-right: 20px;
+        flex: 1;
+        height: 30px;
+        border-radius: 15px;
+        background: var(--brand-card);
+        position: relative;
+      }
+      #app .url-blank::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 10px;
+        width: 130px;
+        height: 10px;
+        margin-left: -65px;
+        border-radius: 5px;
+        background: #e5e0da;
+      }
+      .app-body {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 52px;
+        bottom: 0;
+      }
+      .blk {
+        position: absolute;
+        border-radius: 12px;
+      }
+      .b-white {
+        background: var(--brand-card);
+      }
+      .b-ocean {
+        background: linear-gradient(135deg, #5dbbe2, var(--brand-primary) 60%, var(--brand-primary-dark));
+      }
+      .b-dim {
+        background: rgba(228, 222, 217, 0.3);
+      }
+      .b-tile {
+        background: var(--brand-card);
+        border-radius: 16px;
+        box-shadow: 0 14px 22px -10px rgba(0, 0, 0, 0.45);
+      }
+      #app-light {
+        position: absolute;
+        inset: 0;
+        border-radius: 28px;
+        background: radial-gradient(ellipse at 50% 40%, rgba(255, 255, 255, 0.45), rgba(46, 156, 203, 0.2) 70%);
+        opacity: 0;
+      }
+      #badge {
+        position: absolute;
+        width: 66px;
+        height: 66px;
+        left: 392px;
+        top: -24px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 35% 30%, #6ac2e6, #2e9ccb 55%, #1f7ea8 100%);
+        box-shadow: 0 12px 22px rgba(31, 126, 168, 0.4);
+      }
+      #badge svg {
+        position: absolute;
+        inset: 0;
+      }
+      #ring {
+        position: absolute;
+        width: 66px;
+        height: 66px;
+        left: 392px;
+        top: -24px;
+        border-radius: 50%;
+        border: 4px solid var(--brand-primary);
+        opacity: 0;
+      }
+
+      /* ---------- "→ a version" pill ---------- */
+      #vpill {
+        position: absolute;
+        left: 352px;
+        top: 1036px;
+        height: 64px;
+        padding: 0 30px 0 22px;
+        border-radius: 32px;
+        background: var(--brand-text);
+        color: #fbfaf8;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-family: var(--font-body);
+        font-weight: 600;
+        font-size: 33px;
+        letter-spacing: -0.015em;
+        white-space: nowrap;
+        box-shadow: 0 20px 32px -10px rgba(30, 25, 20, 0.4);
+      }
+
+      /* ---------- speaker card (small secondary, same treatment as v01_hook) ---------- */
+      #card-float {
+        position: absolute;
+        left: 94px;
+        top: 662px;
+        width: 440px;
+        height: 308px;
+      }
+      #card {
+        position: absolute;
+        inset: 0;
+        border-radius: 30px;
+        overflow: hidden;
+        background: #1b1b1b;
+        box-shadow:
+          0 14px 0 -2px var(--brand-primary),
+          0 40px 60px -10px rgba(40, 30, 20, 0.35);
+        opacity: 0;
+      }
+      #vid-wrap {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        border-radius: 30px;
+      }
+      /* source 1080x1920 scaled to the card width (440x782); window = 21.5%–60.9% of the source height (face centred) */
+      #speaker {
+        position: absolute;
+        left: 0;
+        top: -168px;
+        width: 440px;
+        height: 782px;
+        object-fit: cover;
+      }
+      #sheen {
+        position: absolute;
+        inset: 0;
+        border-radius: 30px;
+        background: linear-gradient(
+          105deg,
+          transparent 30%,
+          rgba(255, 255, 255, 0.22) 45%,
+          rgba(255, 255, 255, 0.05) 55%,
+          transparent 65%
+        );
+        background-size: 300% 100%;
+        background-position: 100% 0;
+        opacity: 0;
+      }
+
+      /* ---------- kinetic serif ---------- */
+      .line {
+        position: absolute;
+        display: flex;
+        align-items: baseline;
+        white-space: nowrap;
+        line-height: 0.88;
+        letter-spacing: -0.03em;
+      }
+      .bl {
+        display: block;
+        width: 0;
+        height: 0;
+        align-self: baseline;
+      }
+      .w {
+        display: inline-block;
+        will-change: transform, opacity, filter;
+      }
+      .serif {
+        font-family: "Inter Tight", sans-serif;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        color: var(--brand-text);
+      }
+      .ital {
+        /* v2: hero words — Inter Tight 900, upright (accent = colour, no italics) */
+        font-family: "Inter Tight", sans-serif;
+        font-weight: 900;
+        font-style: normal;
+        letter-spacing: -0.045em;
+      }
+      .ocean {
+        color: var(--brand-primary);
+      }
+      .ink {
+        color: var(--brand-text);
+      }
+      .gap-s {
+        margin-left: 0.24em;
+      }
+      #ellipse {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1080px;
+        height: 1920px;
+        overflow: visible;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-width="1080" data-height="1920" data-duration="3.966">
+      <div id="bg">
+        <div id="grid"></div>
+        <div id="vignette"></div>
+      </div>
+
+      <div id="cam">
+        <div id="punch">
+          <!-- ===== REA slabs (frame 0 continuity) ===== -->
+          <div id="slabs"></div>
+
+          <!-- ===== dotted path + riders (beat B) ===== -->
+          <svg id="links" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <mask id="pathMask" maskUnits="userSpaceOnUse" x="0" y="0" width="1080" height="1920">
+                <path id="path-m" fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" />
+              </mask>
+            </defs>
+            <path id="path-d" fill="none" stroke="#141414" stroke-width="3" stroke-linecap="round" stroke-dasharray="2 12" mask="url(#pathMask)" />
+          </svg>
+
+          <!-- ===== speaker card (beat B, small) ===== -->
+          <div id="card-float">
+            <div id="card">
+              <div id="vid-wrap">
+                <video
+                  id="speaker"
+                  class="clip"
+                  src="assets/speaker.mp4"
+                  muted
+                  playsinline
+                  data-start="0"
+                  data-duration="3.966"
+                  data-track-index="1"
+                ></video>
+              </div>
+              <div id="sheen"></div>
+            </div>
+          </div>
+
+          <!-- ===== built app card ===== -->
+          <div id="app-wrap">
+            <div id="app-float">
+              <div id="app">
+                <div class="chrome">
+                  <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+                  <div class="url-blank"></div>
+                </div>
+                <div class="app-body" id="app-body">
+                  <!-- header bar -->
+                  <div class="blk sb" data-g="0" style="left: 22px; top: 18px; width: 416px; height: 40px; border-radius: 0">
+                    <div class="abs b-ocean" style="left: 0; top: 4px; width: 32px; height: 32px; border-radius: 50%"></div>
+                    <div class="abs b-white" style="left: 44px; top: 13px; width: 96px; height: 13px; border-radius: 7px"></div>
+                    <div class="abs b-dim" style="left: 196px; top: 14px; width: 52px; height: 11px; border-radius: 6px"></div>
+                    <div class="abs b-dim" style="left: 260px; top: 14px; width: 52px; height: 11px; border-radius: 6px"></div>
+                    <div class="abs b-ocean" style="left: 330px; top: 2px; width: 86px; height: 36px; border-radius: 18px"></div>
+                  </div>
+                  <!-- hero block -->
+                  <div class="blk b-ocean sb" data-g="1" style="left: 22px; top: 74px; width: 416px; height: 150px; border-radius: 20px; overflow: hidden">
+                    <div class="abs" style="left: 26px; top: 30px; width: 190px; height: 24px; border-radius: 8px; background: var(--brand-card)"></div>
+                    <div class="abs" style="left: 26px; top: 64px; width: 140px; height: 24px; border-radius: 8px; background: var(--brand-card)"></div>
+                    <div class="abs" style="left: 26px; top: 104px; width: 160px; height: 11px; border-radius: 6px; background: rgba(251, 250, 248, 0.55)"></div>
+                    <div class="abs" style="left: 330px; top: 22px; width: 44px; height: 44px; border-radius: 50%; background: rgba(251, 250, 248, 0.85)"></div>
+                    <div class="abs" style="left: 220px; top: 92px; width: 160px; height: 160px; border-radius: 26px; background: rgba(13, 39, 49, 0.32); transform: rotate(45deg)"></div>
+                    <div class="abs" style="left: 312px; top: 110px; width: 150px; height: 150px; border-radius: 26px; background: rgba(13, 39, 49, 0.5); transform: rotate(45deg)"></div>
+                  </div>
+                  <!-- three tiles -->
+                  <div class="blk b-tile sb" data-g="2" style="left: 22px; top: 240px; width: 128px; height: 104px">
+                    <div class="abs b-ocean" style="left: 16px; top: 16px; width: 34px; height: 34px; border-radius: 10px"></div>
+                    <div class="abs" style="left: 16px; top: 62px; width: 92px; height: 11px; border-radius: 6px; background: #e5e0da"></div>
+                    <div class="abs" style="left: 16px; top: 81px; width: 62px; height: 11px; border-radius: 6px; background: #e5e0da"></div>
+                  </div>
+                  <div class="blk b-tile sb" data-g="3" style="left: 166px; top: 240px; width: 128px; height: 104px">
+                    <div class="abs b-ocean" style="left: 16px; top: 16px; width: 34px; height: 34px; border-radius: 10px"></div>
+                    <div class="abs" style="left: 16px; top: 62px; width: 92px; height: 11px; border-radius: 6px; background: #e5e0da"></div>
+                    <div class="abs" style="left: 16px; top: 81px; width: 62px; height: 11px; border-radius: 6px; background: #e5e0da"></div>
+                  </div>
+                  <div class="blk b-tile sb" data-g="4" style="left: 310px; top: 240px; width: 128px; height: 104px">
+                    <div class="abs b-ocean" style="left: 16px; top: 16px; width: 34px; height: 34px; border-radius: 10px"></div>
+                    <div class="abs" style="left: 16px; top: 62px; width: 92px; height: 11px; border-radius: 6px; background: #e5e0da"></div>
+                    <div class="abs" style="left: 16px; top: 81px; width: 62px; height: 11px; border-radius: 6px; background: #e5e0da"></div>
+                  </div>
+                  <!-- button (last, on "version") -->
+                  <div class="blk b-ocean sb" data-g="5" id="app-btn" style="left: 22px; top: 362px; width: 176px; height: 50px; border-radius: 25px">
+                    <div class="abs" style="left: 40px; top: 19px; width: 96px; height: 12px; border-radius: 6px; background: var(--brand-card)"></div>
+                  </div>
+                  <div class="blk b-dim sb" data-g="5" style="left: 220px; top: 370px; width: 150px; height: 12px; border-radius: 6px"></div>
+                  <div class="blk b-dim sb" data-g="5" style="left: 220px; top: 392px; width: 104px; height: 12px; border-radius: 6px"></div>
+                </div>
+                <div id="app-light"></div>
+              </div>
+              <div id="ring"></div>
+              <div id="badge">
+                <svg viewBox="0 0 66 66" width="66" height="66">
+                  <path id="tick" d="M20,34 L29,43 L47,24" fill="none" stroke="#0D2731" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- ===== evidence card ===== -->
+          <div id="ev-wrap">
+            <div id="ev-float">
+              <div id="ev">
+                <div id="ev-face">
+                  <div id="ev-head">
+                    <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+                    <span class="hbar" style="width: 210px; margin-left: 18px"></span>
+                    <span class="hbar" style="width: 70px; margin-left: auto; margin-right: 30px; background: #ece7e1"></span>
+                  </div>
+                  <div id="code"></div>
+                </div>
+                <svg id="ev-links" viewBox="0 0 820 520" xmlns="http://www.w3.org/2000/svg"></svg>
+                <div id="pins"></div>
+                <div id="notes"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ===== "→ a version" pill ===== -->
+          <div id="vpill">
+            <svg width="30" height="22" viewBox="0 0 30 22">
+              <path d="M3,11 L25,11 M17,3 L25,11 L17,19" fill="none" stroke="#2E9CCB" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <span>a version</span>
+          </div>
+
+          <!-- ===== kinetic: beat A ===== -->
+          <svg id="ellipse" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <mask id="ellMask" maskUnits="userSpaceOnUse" x="0" y="0" width="1080" height="1920">
+                <path id="ell-m" fill="none" stroke="#fff" stroke-width="14" stroke-linecap="butt" />
+              </mask>
+            </defs>
+            <path id="ell-d" fill="none" stroke="#141414" stroke-width="3.2" stroke-linecap="round" stroke-dasharray="2 12" mask="url(#ellMask)" />
+          </svg>
+
+          <div id="a1" class="line serif ga" data-x="96" data-base="1024" style="font-size: 96px">
+            <span class="bl"></span>
+            <span class="w" data-t="0.09">show</span>
+            <span class="w gap-s" data-t="0.27">you</span>
+            <span class="w gap-s" data-t="0.61">the</span>
+          </div>
+          <div id="a2" class="line ital ocean ga" data-cx="520" data-base="1284" style="font-size: 182px">
+            <span class="bl"></span>
+            <span class="w" id="w-evidence" data-t="0.93" data-hero="1" data-origin="50% 80%">evidence</span>
+          </div>
+
+          <!-- ===== kinetic: beat B ===== -->
+          <div id="b1" class="line serif gb" data-x="92" data-base="1194" style="font-size: 96px">
+            <span class="bl"></span>
+            <span class="w" data-t="2.13">build</span>
+            <span class="w gap-s" data-t="2.27">you</span>
+            <span class="w gap-s" data-t="2.43">a</span>
+          </div>
+          <div id="b2" class="line ital ink gb" data-right="928" data-base="1378" style="font-size: 204px">
+            <span class="bl"></span>
+            <span class="w" data-t="2.67" data-hero="1" data-origin="70% 85%">version</span>
+          </div>
+          <div id="b3" class="line serif gb" data-x="96" data-base="1462" style="font-size: 84px">
+            <span class="bl"></span>
+            <span class="w" data-t="2.85">of</span>
+            <span class="w gap-s" data-t="2.99">that</span>
+            <span class="w gap-s" data-t="3.23">same</span>
+            <span class="w gap-s" id="w-software" data-t="3.69" data-pop="1">software</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const fontSpecs = ['900 100px "Inter Tight"', '800 100px "Inter Tight"', '700 100px "Inter Tight"', '500 40px "Inter"', '600 40px "Inter"', '500 30px "Geist Mono"'];
+        await Promise.all(fontSpecs.map((f) => document.fonts.load(f)));
+        await document.fonts.ready;
+        for (const f of fontSpecs) {
+          if (!document.fonts.check(f)) throw new Error("brand font missing: " + f);
+        }
+
+        const D = 3.966;
+        const F = 1 / 30;
+        const $ = (s) => document.querySelector(s);
+        const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+        const NS = "http://www.w3.org/2000/svg";
+        const svgEl = (tag, attrs) => {
+          const e = document.createElementNS(NS, tag);
+          for (const k in attrs) e.setAttribute(k, attrs[k]);
+          return e;
+        };
+
+        // ================= evidence card: code + pins + notes =================
+        // illustrative pseudo-code (generic), 6 lines
+        const LINES = [
+          [["func", "m"], [" search(query) {", ""]],
+          [["  key = ", ""], ['"search.index"', "tok", 0]],
+          [["  hits = ", ""], ["idx.match(q)", "tok", 1]],
+          [["  ", ""], ["if hits == 0 { … }", "tok", 2]],
+          [["  ", ""], ["return", "m"], [" rank(hits)", ""]],
+          [["}", "m"]],
+        ];
+        const NOTES = ["string ref", "call trace", "branch"];
+        const codeEl = $("#code");
+        const LT = (i) => 86 + i * 64; // line box top (card px)
+        const lineEls = [];
+        const toks = [];
+        LINES.forEach((parts, i) => {
+          const row = document.createElement("div");
+          row.className = "code-line";
+          row.style.top = LT(i) + "px";
+          const ln = document.createElement("span");
+          ln.className = "ln";
+          ln.textContent = String(i + 1);
+          row.appendChild(ln);
+          const code = document.createElement("span");
+          code.className = "code";
+          for (const [txt, cls, k] of parts) {
+            const s = document.createElement("span");
+            if (cls) s.className = cls;
+            s.textContent = txt;
+            code.appendChild(s);
+            if (cls === "tok") toks[k] = { el: s, row, i };
+          }
+          row.appendChild(code);
+          codeEl.appendChild(row);
+          lineEls.push(row);
+        });
+        // highlights, pins, dotted connectors, notes
+        const NOTE_X = 604;
+        const pinsEl = $("#pins"),
+          notesEl = $("#notes"),
+          evLinks = $("#ev-links");
+        const pinObjs = toks.map((t, k) => {
+          const codeSpan = t.row.querySelector(".code");
+          const x0 = 86 + t.el.offsetLeft - 8;
+          const w = t.el.offsetWidth + 16;
+          const cy = LT(t.i) + 28;
+          const hl = document.createElement("div");
+          hl.className = "hl";
+          Object.assign(hl.style, { left: x0 + "px", top: cy - 23 + "px", width: w + "px" });
+          t.row.parentNode.insertBefore(hl, t.row);
+          const px = x0 + w + 20;
+          const pin = document.createElement("div");
+          pin.className = "pin";
+          Object.assign(pin.style, { left: px + "px", top: cy + "px" });
+          pinsEl.appendChild(pin);
+          const note = document.createElement("div");
+          note.className = "note";
+          note.innerHTML = "<i></i>" + NOTES[k];
+          Object.assign(note.style, { left: NOTE_X + "px", top: cy + "px" });
+          notesEl.appendChild(note);
+          // dotted connector pin -> note
+          const d = `M${px + 16},${cy} L${NOTE_X - 6},${cy}`;
+          const p = svgEl("path", {
+            d,
+            fill: "none",
+            stroke: "#141414",
+            "stroke-width": 3,
+            "stroke-linecap": "round",
+            "stroke-dasharray": "2 9",
+          });
+          evLinks.appendChild(p);
+          return { hl, pin, note, link: p, cy, px };
+        });
+
+        // ================= kinetic lines: place by baseline =================
+        for (const line of $$(".line")) {
+          const bl = line.querySelector(".bl");
+          line.style.top = "0px";
+          line.style.left = "0px";
+          const baseOff = bl.offsetTop;
+          line.dataset.bo = baseOff;
+          line.style.top = parseFloat(line.dataset.base) - baseOff + "px";
+          if (line.dataset.right) line.style.left = parseFloat(line.dataset.right) - line.offsetWidth + "px";
+          else if (line.dataset.cx) line.style.left = parseFloat(line.dataset.cx) - line.offsetWidth / 2 + "px";
+          else line.style.left = line.dataset.x + "px";
+        }
+
+        // ================= dotted ellipse around "evidence" (hand-drawn loop, slight overshoot) =================
+        const ev = $("#w-evidence");
+        const a2 = $("#a2");
+        const evFs = parseFloat(getComputedStyle(ev).fontSize);
+        const ecx = a2.offsetLeft + a2.offsetWidth / 2;
+        const ecy = parseFloat(a2.dataset.base) - 0.36 * evFs;
+        const erx = Math.min(a2.offsetWidth / 2 + 34, 418);
+        const ery = 0.5 * evFs + 50;
+        const ROT = (-4 * Math.PI) / 180;
+        let ed = "";
+        const N = 120;
+        const th0 = (198 * Math.PI) / 180;
+        const sweep = 2 * Math.PI * 1.07;
+        for (let i = 0; i <= N; i++) {
+          const u = i / N;
+          const th = th0 + sweep * u;
+          const grow = 1 + 0.02 * u;
+          const ex = erx * grow * Math.cos(th);
+          const ey = ery * (1 - 0.06 * u) * Math.sin(th);
+          const X = ecx + ex * Math.cos(ROT) - ey * Math.sin(ROT);
+          const Y = ecy + ex * Math.sin(ROT) + ey * Math.cos(ROT);
+          ed += (i ? " L" : "M") + X.toFixed(1) + " " + Y.toFixed(1);
+        }
+        $("#ell-d").setAttribute("d", ed);
+        const ellM = $("#ell-m");
+        ellM.setAttribute("d", ed);
+        const ellLen = ellM.getTotalLength() + 20;
+        ellM.style.strokeDasharray = `${ellLen} ${ellLen}`;
+        ellM.style.strokeDashoffset = ellLen;
+
+        // ================= REA slabs (3, axonometric — copied from v06_layers geometry) =================
+        const ALPHA = (-22 * Math.PI) / 180,
+          BETA = (30 * Math.PI) / 180;
+        const cA = Math.cos(ALPHA),
+          sA = Math.sin(ALPHA),
+          cB = Math.cos(BETA),
+          sB = Math.sin(BETA);
+        const SW = 700,
+          SD = 190,
+          ST = 50,
+          SR = 28,
+          GAP = 8;
+        const PITCH = ST * cB + GAP;
+        const P = (u, v, h) => {
+          const x = u * cA - v * sA;
+          const z = u * sA + v * cA;
+          return [x, -h * cB + z * sB];
+        };
+        const L = (() => {
+          const v = [0.35, 0.75, 0.55];
+          const m = Math.hypot(...v);
+          return v.map((c) => c / m);
+        })();
+        const outline = (() => {
+          const NN = 10,
+            hw = SW / 2 - SR,
+            hd = SD / 2 - SR,
+            pts = [];
+          for (const [cu, cv, a0] of [
+            [hw, hd, 0],
+            [-hw, hd, 90],
+            [-hw, -hd, 180],
+            [hw, -hd, 270],
+          ]) {
+            for (let i = 0; i <= NN; i++) {
+              const a = ((a0 + (90 * i) / NN) * Math.PI) / 180;
+              pts.push({ u: cu + SR * Math.cos(a), v: cv + SR * Math.sin(a), nu: Math.cos(a), nv: Math.sin(a) });
+            }
+          }
+          return pts;
+        })();
+        const hex = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+        const mix = (a, b, t) => {
+          const A = hex(a),
+            B = hex(b);
+          return "rgb(" + A.map((c, i) => Math.round(c + (B[i] - c) * t)).join(",") + ")";
+        };
+        const poly = (pts) => "M" + pts.map((p) => p[0].toFixed(2) + " " + p[1].toFixed(2)).join(" L") + " Z";
+        const hull = (pts) => {
+          const s = pts.slice().sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+          const cross = (o, a, b) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
+          const lo = [],
+            up = [];
+          for (const p of s) {
+            while (lo.length >= 2 && cross(lo[lo.length - 2], lo[lo.length - 1], p) <= 0) lo.pop();
+            lo.push(p);
+          }
+          for (let i = s.length - 1; i >= 0; i--) {
+            const p = s[i];
+            while (up.length >= 2 && cross(up[up.length - 2], up[up.length - 1], p) <= 0) up.pop();
+            up.push(p);
+          }
+          up.pop();
+          lo.pop();
+          return lo.concat(up);
+        };
+        const STEPS = [
+          ["01", "Decode branches"],
+          ["02", "Trace calls"],
+          ["03", "Recover the rule"],
+        ];
+        const WHITE = { topF: "#FDFCFA", topB: "#EFEBE6", sideD: "#D3CBC3", sideL: "#F1EDE8", hi: "rgba(255,255,255,0.95)", num: "#8E8780" };
+        const OCEAN = { topF: "#6DC0E3", topB: "#2E9CCB", sideD: "#1F7EA8", sideL: "#38A5D3", hi: "rgba(255,255,255,0.55)", num: "#0D2731" };
+        const topPts = outline.map((p) => P(p.u, p.v, 0));
+        const botPts = outline.map((p) => P(p.u, p.v, -ST));
+        const allPts = topPts.concat(botPts);
+        const minX = Math.min(...allPts.map((p) => p[0])) - 6,
+          maxX = Math.max(...allPts.map((p) => p[0])) + 6,
+          minY = Math.min(...allPts.map((p) => p[1])) - 6,
+          maxY = Math.max(...allPts.map((p) => p[1])) + 6;
+        function buildSlabSVG(k, pal) {
+          const svg = svgEl("svg", { viewBox: `${minX} ${minY} ${maxX - minX} ${maxY - minY}`, width: maxX - minX, height: maxY - minY });
+          svg.style.left = minX + "px";
+          svg.style.top = minY + "px";
+          const defs = svgEl("defs", {});
+          const g0 = P(0, -SD / 2, 0),
+            g1 = P(0, SD / 2, 0);
+          const grad = svgEl("linearGradient", { id: "topg" + k, gradientUnits: "userSpaceOnUse", x1: g0[0], y1: g0[1], x2: g1[0], y2: g1[1] });
+          grad.appendChild(svgEl("stop", { offset: "0", "stop-color": pal.topB }));
+          grad.appendChild(svgEl("stop", { offset: "1", "stop-color": pal.topF }));
+          defs.appendChild(grad);
+          svg.appendChild(defs);
+          svg.appendChild(svgEl("path", { d: poly(hull(allPts)), fill: mix(pal.sideD, pal.sideL, 0.55) }));
+          const n = outline.length;
+          const hiEdges = [];
+          for (let i = 0; i < n; i++) {
+            const a = outline[i],
+              b = outline[(i + 1) % n];
+            let nu = (a.nu + b.nu) / 2,
+              nv = (a.nv + b.nv) / 2;
+            const m = Math.hypot(nu, nv) || 1;
+            nu /= m;
+            nv /= m;
+            const nx = nu * cA - nv * sA;
+            const nz = nu * sA + nv * cA;
+            if (nz <= 0.001) continue;
+            const dot = nx * L[0] + nz * L[2];
+            const shade = Math.max(0, Math.min(1, 0.18 + 0.95 * dot));
+            const col = mix(pal.sideD, pal.sideL, shade);
+            const q = [topPts[i], topPts[(i + 1) % n], botPts[(i + 1) % n], botPts[i]];
+            svg.appendChild(svgEl("path", { d: poly(q), fill: col, stroke: col, "stroke-width": 1, "stroke-linejoin": "round" }));
+            hiEdges.push(i);
+          }
+          svg.appendChild(svgEl("path", { d: poly(topPts), fill: `url(#topg${k})` }));
+          let hd = "";
+          let prev = -2;
+          for (const i of hiEdges) {
+            const a = topPts[i],
+              b = topPts[(i + 1) % n];
+            hd += (i === prev + 1 ? " L" : " M") + a[0].toFixed(2) + " " + a[1].toFixed(2) + " L" + b[0].toFixed(2) + " " + b[1].toFixed(2);
+            prev = i;
+          }
+          svg.appendChild(svgEl("path", { d: hd, fill: "none", stroke: pal.hi, "stroke-width": 2.2, "stroke-linecap": "round", "stroke-linejoin": "round" }));
+          const u0 = -(SW / 2 - SR) + 22;
+          const o = P(u0, SD / 2, 0);
+          const lg = svgEl("g", { class: "label" });
+          const txt = svgEl("text", {
+            transform: `matrix(${cA} ${sA * sB} 0 ${cB} ${o[0]} ${o[1]})`,
+            x: 0,
+            y: ST / 2 + 12,
+            "font-family": "Inter",
+            "font-size": 34,
+          });
+          const t1 = svgEl("tspan", { "font-weight": 600, fill: pal.num });
+          t1.textContent = STEPS[k][0];
+          const t2 = svgEl("tspan", { "font-weight": 500, fill: "#141414", dx: 14 });
+          t2.textContent = STEPS[k][1];
+          txt.appendChild(t1);
+          txt.appendChild(t2);
+          lg.appendChild(txt);
+          svg.appendChild(lg);
+          return svg;
+        }
+        // stack: slab k (0 = bottom = "01") — top face centres around (520, SCY)
+        const SCX = 520,
+          SCY = 660;
+        const slabEls = [];
+        for (let k = 0; k < 3; k++) {
+          const s = document.createElement("div");
+          s.className = "slab";
+          s.style.left = SCX + "px";
+          s.style.top = SCY + (1 - k) * PITCH + "px";
+          const body = document.createElement("div");
+          body.className = "slab-body";
+          body.appendChild(buildSlabSVG(k, k === 2 ? OCEAN : WHITE));
+          s.appendChild(body);
+          $("#slabs").appendChild(s);
+          slabEls.push(s);
+        }
+
+        // ================= dotted path evidence card -> app card =================
+        const PATH = "M570,452 C684,452 706,512 704,594";
+        $("#path-d").setAttribute("d", PATH);
+        const pathM = $("#path-m");
+        pathM.setAttribute("d", PATH);
+        const pLen = pathM.getTotalLength();
+        const pLen2 = pLen + 24;
+        pathM.style.strokeDasharray = `${pLen2} ${pLen2}`;
+        pathM.style.strokeDashoffset = pLen2;
+        const riders = [];
+        for (let i = 0; i < 3; i++) {
+          const r = document.createElement("div");
+          r.className = "rider";
+          $("#punch").insertBefore(r, $("#card-float"));
+          riders.push(r);
+        }
+
+        // ================= timeline =================
+        const tl = gsap.timeline({ paused: true });
+
+        // background drift (continuous, linear on purpose) + slow camera push
+        tl.fromTo("#grid", { x: 0, y: 0 }, { x: -20, y: -12, duration: D, ease: "none" }, 0);
+        tl.fromTo("#cam", { scale: 1, transformOrigin: "540px 900px" }, { scale: 1.012, duration: D, ease: "none" }, 0);
+
+        // ---------- word entrances (same recipes as v01_hook / v05_refine) ----------
+        const ZB = 1474;
+        for (const w of $$(".line .w")) {
+          const t = parseFloat(w.dataset.t);
+          const line = w.closest(".line");
+          const fs = parseFloat(getComputedStyle(w).fontSize);
+          const bottom = parseFloat(line.dataset.base) + 0.22 * fs;
+          const R = (r) => (bottom + r > ZB ? -0.7 * r : r);
+          if (w.dataset.hero) {
+            const s = Math.max(0, t - 0.2);
+            gsap.set(w, { transformOrigin: w.dataset.origin || "50% 80%" });
+            tl.fromTo(
+              w,
+              { opacity: 0, y: R(90), scale: 0.55, rotation: -7, filter: "blur(10px)" },
+              { opacity: 1, y: -8, scale: 1.08, rotation: 1.5, filter: "blur(0px)", duration: 0.2, ease: "power3.out" },
+              s,
+            );
+            tl.to(w, { y: 0, scale: 1, rotation: 0, duration: 0.32, ease: "back.out(1.6)" }, s + 0.2);
+          } else if (w.dataset.pop) {
+            const s = Math.max(0, t - 0.16);
+            gsap.set(w, { transformOrigin: w.dataset.origin || "50% 85%" });
+            tl.fromTo(
+              w,
+              { opacity: 0, y: R(60), scale: 0.72, rotation: -5, filter: "blur(6px)" },
+              { opacity: 1, y: -5, scale: 1.06, rotation: 1, filter: "blur(0px)", duration: 0.16, ease: "power3.out" },
+              s,
+            );
+            tl.to(w, { y: 0, scale: 1, rotation: 0, duration: 0.28, ease: "back.out(1.5)" }, s + 0.16);
+          } else {
+            const s = Math.max(0, t - 0.13);
+            tl.fromTo(w, { opacity: 0, y: R(50), filter: "blur(6px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.38, ease: "power3.out" }, s);
+          }
+        }
+
+        // ================= BEAT A: slabs collapse -> evidence card =================
+        // slabs (on screen at frame 0) squeeze together, labels fade, then they hand over to the card
+        tl.to(slabEls[2], { y: PITCH, duration: 0.2, ease: "power2.in" }, 0.0);
+        tl.to(slabEls[0], { y: -PITCH, duration: 0.2, ease: "power2.in" }, 0.0);
+        tl.to($$(".slab .label"), { opacity: 0, duration: 0.12, ease: "power1.in" }, 0.02);
+        tl.to(slabEls, { scaleY: 0.6, scaleX: 0.97, opacity: 0, duration: 0.12, ease: "power2.in" }, 0.17);
+
+        // evidence card: starts as the merged slab's top face (lying back, yawed), lifts up to face camera and slides up
+        gsap.set("#ev", { transformPerspective: 1600, transformOrigin: "50% 50%" });
+        tl.fromTo("#ev", { opacity: 0 }, { opacity: 1, duration: 0.08, ease: "power1.out" }, 0.13);
+        tl.fromTo("#ev", { y: 70 }, { y: -10, duration: 0.34, ease: "power3.out", immediateRender: false }, 0.13);
+        tl.to("#ev", { y: 0, duration: 0.28, ease: "back.out(1.6)" }, 0.47);
+        tl.fromTo("#ev", { rotationX: 60 }, { rotationX: 4, duration: 0.56, ease: "back.out(1.5)", immediateRender: false }, 0.13);
+        tl.fromTo("#ev", { rotation: -11 }, { rotation: 0, duration: 0.46, ease: "power3.out", immediateRender: false }, 0.13);
+        tl.fromTo("#ev", { rotationY: -8 }, { rotationY: -5, duration: 0.5, ease: "power3.out", immediateRender: false }, 0.13);
+        tl.fromTo("#ev", { scale: 0.9 }, { scale: 1, duration: 0.46, ease: "back.out(1.4)", immediateRender: false }, 0.13);
+        tl.to("#ev", { rotationY: -3, rotationX: 3, duration: 1.1, ease: "sine.inOut" }, 0.69);
+
+        // code lines write in left -> right, 2 f apart
+        lineEls.forEach((row, i) => {
+          const s = 0.3 + i * 2 * F;
+          tl.fromTo(
+            row,
+            { clipPath: "inset(0px 100% 0px 0px)", x: -10 },
+            { clipPath: "inset(0px 0% 0px 0px)", x: 0, duration: 0.26, ease: "power2.out" },
+            s,
+          );
+        });
+        tl.fromTo("#ev-head .hbar", { scaleX: 0, transformOrigin: "0% 50%" }, { scaleX: 1, duration: 0.3, ease: "power3.out", stagger: 2 * F }, 0.28);
+
+        // dotted ellipse draws around "evidence" as it lands
+        tl.fromTo(ellM, { strokeDashoffset: ellLen }, { strokeDashoffset: 0, duration: 0.46, ease: "power2.inOut" }, 0.84);
+
+        // pins + note pills land on "for" (1.21), "it" (1.41), "and" (1.71)
+        const PIN_T = [1.21, 1.41, 1.71];
+        pinObjs.forEach((o, k) => {
+          const t = PIN_T[k];
+          gsap.set(o.pin, { transformOrigin: "50% 50%" });
+          gsap.set(o.note, { transformOrigin: "0% 50%" });
+          const lnLen = NOTE_X - 6 - (o.px + 16);
+          o.link.style.strokeDasharray = "2 9";
+          tl.fromTo(o.hl, { scaleX: 0, opacity: 0 }, { scaleX: 1, opacity: 1, duration: 0.24, ease: "power3.out" }, t - 0.2);
+          tl.fromTo(o.pin, { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(2.6)" }, t - 0.17);
+          tl.fromTo(o.link, { opacity: 0 }, { opacity: 1, duration: 0.1, ease: "power1.out" }, t - 0.14);
+          tl.fromTo(
+            o.link,
+            { attr: { d: `M${o.px + 16},${o.cy} L${o.px + 17},${o.cy}` } },
+            { attr: { d: `M${o.px + 16},${o.cy} L${NOTE_X - 6},${o.cy}` }, duration: 0.16, ease: "power2.out" },
+            t - 0.14,
+          );
+          tl.fromTo(
+            o.note,
+            { opacity: 0, x: -36, scale: 0.6 },
+            { opacity: 1, x: 0, scale: 1, duration: 0.36, ease: "back.out(2)" },
+            t - 0.13,
+          );
+          // tiny nudge on the card as each pin lands
+          tl.fromTo("#ev-float", { y: 0 }, { y: 4, duration: 2 * F, ease: "power2.out", immediateRender: false }, t - 0.04);
+          tl.to("#ev-float", { y: 0, duration: 0.22, ease: "back.out(2)" }, t - 0.04 + 2 * F);
+        });
+
+        // ================= BEAT A -> B transition =================
+        // notes retract into their pins, connectors go
+        pinObjs.forEach((o, k) => {
+          tl.to(o.note, { opacity: 0, x: -30, scale: 0.4, duration: 0.16, ease: "power2.in" }, 1.86 + k * F);
+          tl.to(o.link, { opacity: 0, duration: 0.12, ease: "power1.in" }, 1.84 + k * F);
+        });
+        // beat A type exits bottom-up (blur-up)
+        tl.to(["#a2", "#ellipse"], { y: -56, opacity: 0, filter: "blur(8px)", duration: 0.18, ease: "power2.in" }, 1.78);
+        tl.to("#a1", { y: -56, opacity: 0, filter: "blur(8px)", duration: 0.18, ease: "power2.in" }, 1.78 + F);
+
+        // evidence card parks top-left (scale .58, turns to face the app card)
+        const EVS = 0.56;
+        const evTarget = { cx: 326, cy: 452 };
+        tl.to("#ev-wrap", { x: evTarget.cx - 520, duration: 0.42, ease: "power3.inOut" }, 1.8);
+        tl.to("#ev-wrap", { y: evTarget.cy - 600, duration: 0.42, ease: "power2.inOut" }, 1.8);
+        tl.to("#ev-wrap", { scale: EVS, duration: 0.42, ease: "power3.inOut" }, 1.8);
+        tl.to("#ev", { rotationY: 9, rotationX: 4, duration: 0.5, ease: "power2.inOut" }, 1.8);
+        tl.to("#ev", { rotationY: 7, rotationX: 3, duration: 1.6, ease: "sine.inOut" }, 2.36);
+        tl.fromTo("#ev-float", { y: 0 }, { y: -5, duration: 0.8, ease: "sine.inOut", yoyo: true, repeat: 1, immediateRender: false }, 2.36);
+        // pins stay lit and pulse once as their evidence leaves along the path
+        pinObjs.forEach((o, k) => {
+          tl.fromTo(o.pin, { scale: 1 }, { scale: 1.45, duration: 0.1, ease: "power2.out", immediateRender: false }, 2.12 + k * 3 * F);
+          tl.to(o.pin, { scale: 1, duration: 0.24, ease: "back.out(2)" }, 2.22 + k * 3 * F);
+        });
+
+        // ================= BEAT B: build =================
+        // app card shell rises (contact on "build" 2.13)
+        gsap.set("#app", { transformPerspective: 1600, transformOrigin: "50% 50%" });
+        tl.fromTo("#app-wrap", { opacity: 0 }, { opacity: 1, duration: 0.03, ease: "power1.out" }, 2.0);
+        tl.fromTo("#app", { y: 130 }, { y: -8, duration: 0.17, ease: "power3.out" }, 1.98);
+        tl.to("#app", { y: 0, duration: 0.3, ease: "back.out(1.8)" }, 2.15);
+        tl.fromTo("#app", { scale: 0.7 }, { scale: 1, duration: 0.46, ease: "back.out(1.5)", immediateRender: false }, 1.95);
+        tl.fromTo("#app", { rotationX: 26 }, { rotationX: 4, duration: 0.56, ease: "back.out(1.7)", immediateRender: false }, 1.95);
+        tl.fromTo("#app", { rotationY: 20 }, { rotationY: -6, duration: 0.52, ease: "power3.out", immediateRender: false }, 1.95);
+        tl.to("#app", { rotationY: -4, rotationX: 2.5, duration: 1.45, ease: "sine.inOut" }, 2.51);
+        tl.fromTo("#app-float", { y: 0 }, { y: -6, duration: 0.7, ease: "sine.inOut", yoyo: true, repeat: 1 }, 2.6);
+
+        // block by block, 3 f apart: header 2.10, hero 2.20, tiles 2.30/2.40/2.50, button 2.60 (lands on "version")
+        for (const b of $$("#app-body .sb")) {
+          const g = parseInt(b.dataset.g, 10);
+          const s = 2.1 + g * 3 * F;
+          const big = g === 1 || g === 5;
+          gsap.set(b, { transformOrigin: g === 0 ? "0% 50%" : "50% 60%" });
+          tl.fromTo(b, { opacity: 0 }, { opacity: 1, duration: 0.08, ease: "power1.out" }, s);
+          if (g === 0) {
+            tl.fromTo(b, { scaleX: 0.3 }, { scaleX: 1, duration: 0.32, ease: "back.out(1.5)" }, s);
+          } else {
+            tl.fromTo(b, { scale: big ? 0.6 : 0.5 }, { scale: big ? 1.07 : 1.06, duration: 0.14, ease: "power3.out" }, s);
+            tl.to(b, { scale: 1, duration: 0.24, ease: "back.out(1.8)" }, s + 0.14);
+            tl.fromTo(b, { y: 26 }, { y: 0, duration: 0.3, ease: "power2.out" }, s);
+          }
+        }
+        // button is the hero block: ocean ring pulse on "version"
+        tl.fromTo("#app-btn", { boxShadow: "0 0 0 0 rgba(46,156,203,0)" }, { boxShadow: "0 0 0 14px rgba(46,156,203,0.38)", duration: 0.16, ease: "power2.out" }, 2.67);
+        tl.to("#app-btn", { boxShadow: "0 0 0 26px rgba(46,156,203,0)", duration: 0.4, ease: "power2.out" }, 2.83);
+        tl.fromTo("#app-light", { opacity: 0 }, { opacity: 0.8, duration: 0.06, ease: "none" }, 2.66);
+        tl.to("#app-light", { opacity: 0, duration: 0.4, ease: "power2.out" }, 2.72);
+
+        // dotted path draws evidence -> app, riders carry the pins' evidence into the build
+        tl.fromTo(pathM, { strokeDashoffset: pLen2 }, { strokeDashoffset: 0, duration: 0.3, ease: "power2.out" }, 2.1);
+        riders.forEach((r, i) => {
+          const s = 2.14 + i * 3 * F;
+          const prog = { p: 0 };
+          const place = () => {
+            const pt = pathM.getPointAtLength(prog.p * pLen);
+            gsap.set(r, { x: pt.x, y: pt.y });
+          };
+          place();
+          tl.fromTo(r, { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1, duration: 0.08, ease: "power1.out" }, s);
+          tl.fromTo(prog, { p: 0 }, { p: 1, duration: 0.3, ease: "power2.inOut", onUpdate: place }, s);
+          tl.to(r, { opacity: 0, scale: 0.3, duration: 0.08, ease: "power1.in" }, s + 0.26);
+        });
+        // app card swallows each rider: tiny dip
+        [2.42, 2.52].forEach((t) => {
+          tl.fromTo("#app-wrap", { y: 0 }, { y: 4, duration: 2 * F, ease: "power2.out", immediateRender: false }, t);
+          tl.to("#app-wrap", { y: 0, duration: 0.18, ease: "back.out(2)" }, t + 2 * F);
+        });
+
+        // "→ a version" pill (contact on "a" 2.43)
+        gsap.set("#vpill", { transformOrigin: "20% 50%" });
+        tl.fromTo("#vpill", { opacity: 0, scale: 0.5, y: 22, rotation: -4 }, { opacity: 1, scale: 1.06, y: -3, rotation: 0, duration: 0.16, ease: "power3.out" }, 2.29);
+        tl.to("#vpill", { scale: 1, y: 0, duration: 0.28, ease: "back.out(2)" }, 2.45);
+        tl.to("#vpill", { y: -5, duration: 0.6, ease: "sine.inOut", yoyo: true, repeat: 1 }, 2.9);
+
+        // speaker card peeks in after "version" (rises from lower-left, soft 3D settle, sheen)
+        gsap.set("#card", { transformPerspective: 1600, transformOrigin: "50% 50%" });
+        tl.fromTo("#card", { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "power1.out" }, 2.74);
+        tl.fromTo("#card", { y: 90, x: -30 }, { y: 0, x: 0, duration: 0.46, ease: "power3.out", immediateRender: false }, 2.74);
+        tl.fromTo("#card", { scale: 0.82 }, { scale: 1, duration: 0.46, ease: "back.out(1.5)", immediateRender: false }, 2.74);
+        tl.fromTo("#card", { rotationX: 26 }, { rotationX: 4, duration: 0.58, ease: "back.out(1.8)", immediateRender: false }, 2.74);
+        tl.fromTo("#card", { rotationY: 18 }, { rotationY: 6, duration: 0.52, ease: "power3.out", immediateRender: false }, 2.74);
+        tl.fromTo("#card", { rotation: -4 }, { rotation: -2, duration: 0.52, ease: "power3.out", immediateRender: false }, 2.74);
+        tl.to("#card", { rotationY: 5, rotationX: 3, duration: 0.64, ease: "sine.inOut" }, 3.32);
+        tl.fromTo("#vid-wrap", { scale: 1.16 }, { scale: 1, duration: 0.7, ease: "power3.out" }, 2.74);
+        tl.fromTo("#sheen", { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "power1.out" }, 2.8);
+        tl.fromTo("#sheen", { backgroundPosition: "100% 0" }, { backgroundPosition: "0% 0", duration: 0.7, ease: "power2.inOut", immediateRender: false }, 2.8);
+        tl.to("#sheen", { opacity: 0, duration: 0.25, ease: "power1.in" }, 3.3);
+        tl.fromTo("#card-float", { y: 0 }, { y: -5, duration: 0.6, ease: "sine.inOut" }, 3.3);
+
+        // "same": ocean ✓ badge pops on the built app (it matches), ring pulse
+        gsap.set("#badge", { transformOrigin: "50% 50%" });
+        tl.fromTo("#badge", { opacity: 0, scale: 0.2, rotation: -40 }, { opacity: 1, scale: 1, rotation: 0, duration: 0.34, ease: "back.out(2.2)" }, 3.08);
+        const tick = $("#tick");
+        const tk = tick.getTotalLength() + 2;
+        tick.style.strokeDasharray = `${tk} ${tk}`;
+        tl.fromTo(tick, { strokeDashoffset: tk }, { strokeDashoffset: 0, duration: 0.24, ease: "power2.out" }, 3.2);
+        gsap.set("#ring", { transformOrigin: "50% 50%" });
+        tl.fromTo("#ring", { opacity: 0.8, scale: 1 }, { opacity: 0, scale: 1.55, duration: 0.5, ease: "power2.out", immediateRender: false }, 3.24);
+        // the evidence pins answer the badge (same software)
+        pinObjs.forEach((o, k) => {
+          tl.fromTo(o.hl, { opacity: 1 }, { opacity: 0.45, duration: 0.12, ease: "power1.out", yoyo: true, repeat: 1, immediateRender: false }, 3.2 + k * 2 * F);
+        });
+
+        // "software": tiny camera punch into the hard cut
+        tl.fromTo("#punch", { scale: 1, transformOrigin: "540px 900px" }, { scale: 1.008, duration: 0.4, ease: "power2.out" }, 3.56);
+
+        window.__timelines["main"] = tl;
+        if (window.__hfForceTimelineRebind) window.__hfForceTimelineRebind();
+      })();
+    </script>
+  </body>
+</html>

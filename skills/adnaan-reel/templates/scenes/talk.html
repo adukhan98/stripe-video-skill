@@ -1,0 +1,54 @@
+<!doctype html>
+<!-- adnaan-reel v7 starter: TALK — he fills the frame (no card, no strip); our kinetic captions in CHARCOAL with a soft
+     light glow (.g7), hero words in mint (.ocean, hero sizes ≥ 170 only — mint gets a soft dark shadow automatically).
+     Words low on his chest (y ~1150–1470) or beside his head, never over the face. Usually captions only; occasionally
+     ONE icon disc (V.disc) — no pills. Dark clothing that reel: use .w7 (white) instead of .g7. Keep data-duration. -->
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>scene</title>
+    <link rel="stylesheet" href="brand.css" />
+    <link rel="stylesheet" href="paper.css" />
+    <link rel="stylesheet" href="v7.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+    <script src="paper.js"></script>
+    <script src="v7.js"></script>
+    <style>
+      @font-face { font-family: "Inter Tight"; src: url("fonts/InterTight-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Inter"; src: url("fonts/Inter-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+    </style>
+  </head>
+  <body data-face="0.40">
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="5.000">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+
+      <div id="spk" class="spk full" data-push="1.02">
+        <div class="spk-card">
+          <div class="spk-vid"><video id="speaker" class="clip" src="assets/speaker.mp4" muted playsinline data-start="0" data-duration="5.000" data-track-index="1"></video></div>
+        </div>
+      </div>
+
+      <div id="cam"><div id="punch">
+        <!-- paste from words.html; collage-staggered, charcoal + glow, 1–2 mint hero words per phrase -->
+        <div class="line sup ink g7" data-x="80" data-base="1250" data-size="100" data-exit="2.4">
+          <span class="w" data-t="0.3">first</span><span class="w gap-s" data-t="0.5">words</span>
+        </div>
+        <div class="line hero ocean g7" data-x="80" data-base="1440" data-size="210" data-fit="820" data-exit="2.4" data-exit-lag="2">
+          <span class="w" data-t="1.0" data-hero data-punch="1.0">hero</span>
+        </div>
+      </div></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const P = await Paper.init();
+        const V = V7.init(P);       // v7 primitives (hf/v7.js header): discs, chain, shrink/grow, camera
+        const { tl, D, F, $ } = P;
+        // optional: ONE icon disc beside the hero word —
+        // const d = V.disc("#punch", { x: 170, y: 1040, d: 170, icon: "buildings" }); V.discIn(d, 1.1);
+      })();
+    </script>
+  </body>
+</html>

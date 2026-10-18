@@ -1,0 +1,276 @@
+<!doctype html>
+<!-- adnaan-reel scene v14_test — EXPLAINER, v6 three-mode system. MODE B (0–2.89): no speaker; "Have it / check" and a big
+     centred checklist own the canvas — rows drop in like notifications on test / number / scenario, icons come alive (play
+     press + run-bar, odometer to a value-free ###, map-pin drop), red marker ✓s draw in rhythm, header progress 1/3 → 3/3.
+     MODE A (2.95→): the footage band drops in on "That's" (data-at 2.95) while the checklist compacts into the bottom band;
+     "That's / how you / know" beside it (✓s pulse on know), then the card drops out and "actually / worked" (red hero) land with a
+     big red marker ✓ stamp + 4 sparkle ticks, punch + shake. Keep data-duration. -->
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>v14_test</title>
+    <link rel="stylesheet" href="brand.css" />
+    <link rel="stylesheet" href="paper.css" />
+    <link rel="stylesheet" href="marker.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+    <script src="paper.js"></script>
+    <script src="marker.js"></script>
+    <style>
+      @font-face { font-family: "Inter Tight"; src: url("fonts/InterTight-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Inter"; src: url("fonts/Inter-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Geist Mono"; src: url("fonts/GeistMono-Medium.ttf") format("truetype"); font-weight: 500; font-style: normal; font-display: block; }
+      @font-face { font-family: "Caveat"; src: url("fonts/Caveat-Variable.ttf") format("truetype"); font-weight: 400 700; font-style: normal; font-display: block; }
+
+      /* ---- hero object: the checklist card ---- */
+      #card { left: 110px; top: 790px; width: 800px; height: 580px; }
+      /* Mode B: the checklist owns the canvas — 1.08x about its centre (static; all moves happen on #card) */
+      #cardS { transform: scale(1.08); transform-origin: 510px 1080px; }
+      #card .hd { position: absolute; left: 30px; top: 38px; width: 220px; height: 22px; border-radius: 11px; background: var(--wire); }
+      #card .hd2 { position: absolute; left: 270px; top: 38px; width: 110px; height: 22px; border-radius: 11px; background: var(--wire); }
+      #card .seg { position: absolute; top: 37px; width: 74px; height: 24px; border-radius: 12px; background: var(--wire); overflow: hidden; }
+      #card .seg i { position: absolute; inset: 0; border-radius: inherit; background: var(--brand-primary); transform: scaleX(0); transform-origin: 0 50%; }
+      #card .slot { position: absolute; left: 20px; width: 760px; height: 140px; border-radius: 24px; background: var(--wire); opacity: 0.55; }
+      .row { position: absolute; left: 20px; width: 760px; height: 140px; border-radius: 24px; background: var(--brand-card);
+        box-shadow: 0 16px 28px -14px rgba(60, 50, 40, 0.38), 0 2px 6px rgba(60, 50, 40, 0.10); opacity: 0; }
+      .row .ic { position: absolute; left: 16px; top: 14px; width: 112px; height: 112px; border-radius: 28px; background: var(--brand-deep); overflow: hidden; }
+      .row .lb { position: absolute; left: 152px; top: 38px; font-family: var(--font-body); font-weight: 600; font-size: 56px; line-height: 1; letter-spacing: -0.02em; color: var(--brand-text); white-space: nowrap; }
+      .row .bx { position: absolute; left: 644px; top: 22px; width: 96px; height: 96px; border-radius: 24px; background: var(--brand-background);
+        box-shadow: inset 0 3px 7px rgba(60, 50, 40, 0.22); }
+      .row svg.rs { position: absolute; left: 0; top: 0; width: 760px; height: 140px; overflow: visible; pointer-events: none; }
+      .row svg.rs path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+      /* row 1: play button + run bar */
+      #play { position: absolute; left: 40px; top: 32px; width: 40px; height: 48px; }
+      #play path { transition: none; }
+      #runbar { position: absolute; left: 154px; top: 108px; width: 300px; height: 10px; border-radius: 5px; background: var(--wire); overflow: hidden; }
+      #runbar i { position: absolute; inset: 0; border-radius: inherit; background: var(--brand-primary); transform: scaleX(0); transform-origin: 0 50%; }
+      /* row 2: odometer */
+      .odo { position: absolute; top: 28px; width: 30px; height: 56px; overflow: hidden; }
+      .odo .strip { position: absolute; left: 0; top: 0; width: 30px; }
+      .odo .strip b { display: block; height: 56px; line-height: 56px; text-align: center; font-family: var(--font-mono); font-weight: 500; font-size: 44px; color: var(--brand-card); }
+      .odo .strip b.h { color: var(--brand-primary); }
+      /* row 3: map pin */
+      #map { position: absolute; left: 0; top: 0; width: 112px; height: 112px; }
+      #pin { position: absolute; left: 34px; top: 16px; width: 44px; height: 60px; }
+      #pinShadow { position: absolute; left: 38px; top: 78px; width: 36px; height: 12px; border-radius: 50%; background: rgba(0, 0, 0, 0.45); }
+      #ripple { position: absolute; left: 26px; top: 70px; width: 60px; height: 26px; border-radius: 50%; border: 4px solid var(--brand-primary); opacity: 0; }
+    </style>
+  </head>
+  <body data-face="0.41">
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="4.65">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+      <div id="cam"><div id="punch">
+
+        <!-- v6 Mode A: footage band (top half, edge to edge) drops in like a shutter, landing on "That's" -->
+        <div id="split" class="spk split" data-h="960" data-at="2.95">
+          <div class="spk-card">
+            <div class="spk-vid"><video id="speaker" class="clip" src="assets/speaker.mp4" muted playsinline data-start="0" data-duration="4.65" data-track-index="1"></video></div>
+            <div class="spk-sheen"></div>
+          </div>
+        </div>
+
+        <!-- ===== HERO OBJECT: the checklist card ===== -->
+        <div id="cardF" class="layer"><div id="cardS" class="layer"><div id="card" class="uicard">
+          <i class="hd"></i><i class="hd2"></i>
+          <i class="seg" style="left: 486px"><i></i></i><i class="seg" style="left: 570px"><i></i></i><i class="seg" style="left: 654px"><i></i></i>
+          <i class="slot" style="top: 100px"></i><i class="slot" style="top: 260px"></i><i class="slot" style="top: 420px"></i>
+
+          <div id="row1" class="row" style="top: 100px">
+            <div class="ic"><svg id="play" viewBox="0 0 40 48"><path id="playTri" d="M6 4 L36 24 L6 44 Z" fill="var(--brand-card)" stroke="var(--brand-card)" stroke-width="6" stroke-linejoin="round" /></svg></div>
+            <div class="lb">run a test</div>
+            <div id="runbar"><i></i></div>
+            <div class="bx"></div>
+            <svg class="rs" viewBox="0 0 760 140"></svg>
+          </div>
+          <div id="row2" class="row" style="top: 260px">
+            <div class="ic" id="odoBox"></div>
+            <div class="lb">a real number</div>
+            <div class="bx"></div>
+            <svg class="rs" viewBox="0 0 760 140"></svg>
+          </div>
+          <div id="row3" class="row" style="top: 420px">
+            <div class="ic">
+              <svg id="map" viewBox="0 0 112 112">
+                <path d="M -4 40 C 30 30, 60 52, 116 34" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="7" />
+                <path d="M 20 -4 C 30 40, 14 80, 34 116" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="7" />
+                <path d="M -4 92 C 40 80, 70 98, 116 84" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="7" />
+                <path d="M 88 -4 C 80 40, 96 70, 84 116" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="7" />
+              </svg>
+              <div id="pinShadow"></div>
+              <div id="ripple"></div>
+              <svg id="pin" viewBox="0 0 44 60"><path d="M22 58 C 14 44, 2 34, 2 22 A 20 20 0 0 1 42 22 C 42 34, 30 44, 22 58 Z" fill="var(--brand-primary)" /><circle cx="22" cy="21" r="7.5" fill="var(--brand-card)" /></svg>
+            </div>
+            <div class="lb">a real scenario</div>
+            <div class="bx"></div>
+            <svg class="rs" viewBox="0 0 760 140"></svg>
+          </div>
+        </div></div></div>
+
+        <!-- ===== MODE B words (whole canvas, no speaker) ===== -->
+        <div id="lHave" class="line sup" data-x="80" data-base="430" data-size="120" data-exit="2.42">
+          <span class="w" data-t="0.07">Have</span><span class="w gap-s" data-t="0.21">it</span>
+        </div>
+        <div id="lCheck" class="line hero" data-right="936" data-base="640" data-size="180" data-exit="2.42" data-exit-lag="2">
+          <span id="wCheck" class="w ocean" data-t="1.05" data-pop>check</span>
+        </div>
+
+        <!-- ===== MODE A words: bottom band on paper (y 1000–1480, x ≤ 900 below y 1200) ===== -->
+        <div id="lThats" class="line small" data-right="888" data-base="1098" data-size="84" data-exit="3.68" data-exit-dy="-20">
+          <span class="w" data-t="3.013">That's</span>
+        </div>
+        <div id="lHowYou" class="line small" data-right="888" data-base="1206" data-size="84" data-exit="3.68" data-exit-lag="1" data-exit-dy="-20">
+          <span class="w" data-t="3.193">how</span><span class="w gap-s" data-t="3.313">you</span>
+        </div>
+        <div id="lKnow" class="line sup" data-right="878" data-base="1352" data-size="130" data-exit="3.68" data-exit-lag="2" data-exit-dy="-20">
+          <span id="wKnow" class="w" data-t="3.493" data-pop>know</span>
+        </div>
+        <div id="lActually" class="line sup" data-x="80" data-base="1180" data-size="120">
+          <span class="w ink" data-t="4.093" data-accent>actually</span>
+        </div>
+        <div id="lWorked" class="line hero" data-x="76" data-base="1420" data-size="190">
+          <span id="wWorked" class="w ocean" data-t="4.373" data-hero data-peak="1.03" data-rise="24">worked</span>
+        </div>
+
+      </div></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      // ---- odometer columns (deterministic): # → digits → # (value-free) ----
+      const ODO = [["#", "3", "8", "1", "6", "9", "2", "7", "4", "0", "#"], ["#", "7", "2", "9", "4", "1", "8", "5", "0", "6", "3", "#"], ["#", "5", "1", "6", "0", "8", "3", "9", "2", "7", "4", "1", "#"]];
+      ODO.forEach((cells, j) => {
+        const col = document.createElement("div");
+        col.className = "odo"; col.style.left = 11 + j * 31 + "px";
+        col.innerHTML = `<div class="strip">${cells.map((c, k) => `<b class="${c === "#" ? "h" : ""}">${c}</b>`).join("")}</div>`;
+        document.getElementById("odoBox").appendChild(col);
+      });
+
+      (async () => {
+        const P = await Paper.init({ extraFonts: ['700 60px "Caveat"', '500 40px "Geist Mono"'] });
+        const M = Marker.init(P);
+        const { tl, D, F, $, $$ } = P;
+        const lineRect = (line, w) => {                       // layout rect of a word (no transforms), by its baseline
+          const fs = parseFloat(getComputedStyle(line).fontSize), base = parseFloat(line.dataset.base);
+          const x = line.offsetLeft + (w ? w.offsetLeft : 0), wd = w ? w.offsetWidth : line.offsetWidth;
+          return { x, w: wd, top: base - 0.74 * fs, bot: base + 0.22 * fs, base, fs };
+        };
+
+        // ================= MODE B (0–2.89, no speaker) — the checklist card owns the canvas =================
+        P.cardIn("#card", 0.02, { fromY: 110, rot: -1.5 });
+        P.floatY("#cardF", 3, 1.4);          // float on a wrapper: never fights the card's own moves
+
+        // a row drops into its slot like a notification: from above, unblurs, overshoots, settles (contact ≈ word − 0.17)
+        function rowIn(sel, tw) {
+          const el = $(sel), s = tw - 0.42;
+          gsap.set(el, { transformOrigin: "50% 0%" });
+          tl.fromTo(el, { opacity: 0, y: -46, scale: 0.94, filter: "blur(6px)" },
+            { opacity: 1, y: 5, scale: 1.015, filter: "blur(0px)", duration: 0.25, ease: "power3.out" }, s);
+          tl.to(el, { y: 0, scale: 1, duration: 0.3, ease: "back.out(2)" }, s + 0.25);
+          return s + 0.25;
+        }
+        // red marker ✓ into the row's box, box pops, header segment fills
+        const segs = $$("#card .seg i");
+        function tickRow(sel, i, t) {
+          const row = $(sel), svg = $("svg.rs", row), bx = $(".bx", row);
+          M.check(692, 66, 66, t, { parent: svg, width: 13, dur: 0.22, seed: 1401 + i * 7 });
+          gsap.set(bx, { transformOrigin: "50% 50%" });
+          tl.to(bx, { scale: 0.9, duration: 3 * F, ease: "power2.in" }, t - 3 * F);
+          tl.to(bx, { scale: 1.06, duration: 4 * F, ease: "power2.out" }, t);
+          tl.to(bx, { scale: 1, duration: 8 * F, ease: "back.out(2)" }, t + 4 * F);
+          tl.to(segs[i], { scaleX: 1, duration: 8 * F, ease: "power2.out" }, t + 0.16);
+        }
+
+        // row 1 — "run a test" (test 0.69): play button presses, turns red, run-bar fills, ✓
+        rowIn("#row1", 0.69);
+        const ic1 = $("#row1 .ic");
+        gsap.set(ic1, { transformOrigin: "50% 50%" });
+        tl.to(ic1, { scale: 0.86, duration: 3 * F, ease: "power2.in" }, 0.62);
+        tl.to(ic1, { scale: 1.06, duration: 4 * F, ease: "power2.out" }, 0.72);
+        tl.to(ic1, { scale: 1, duration: 8 * F, ease: "back.out(2)" }, 0.72 + 4 * F);
+        tl.to("#playTri", { attr: { fill: "var(--brand-primary)", stroke: "var(--brand-primary)" }, duration: 0.01 }, 0.72);
+        tl.to("#runbar i", { scaleX: 1, duration: 0.42, ease: "power1.inOut" }, 0.72);
+        tickRow("#row1", 0, 0.80);
+
+        // row 2 — "a real number" (number 1.63): odometer rolls through digits to ### (columns lag 2 f)
+        rowIn("#row2", 1.63);
+        $$("#odoBox .strip").forEach((st, j) => {
+          const n = st.children.length - 1;
+          tl.fromTo(st, { y: 0 }, { y: -n * 56, duration: 0.5 + j * 3 * F, ease: "power3.inOut" }, 1.30 + j * F);
+          tl.fromTo(st, { filter: "blur(0px)" }, { filter: "blur(2.5px)", duration: 0.2, ease: "power1.in", yoyo: true, repeat: 1, immediateRender: false }, 1.36 + j * F);
+        });
+        // settles with a tiny kick (follow-through)
+        $$("#odoBox .strip").forEach((st, j) => {
+          const yf = -(st.children.length - 1) * 56;
+          const te = 1.30 + j * F + 0.5 + j * 3 * F;          // end of this column's roll
+          tl.to(st, { y: yf + 7, duration: 3 * F, ease: "power2.out" }, te);
+          tl.to(st, { y: yf, duration: 6 * F, ease: "back.out(2)" }, te + 3 * F);
+        });
+        tickRow("#row2", 1, 1.74);
+
+        // row 3 — "a real scenario" (scenario 2.59): pin drops (stretch), squashes on the map, ripple, ✓
+        rowIn("#row3", 2.59);
+        gsap.set("#pin", { transformOrigin: "50% 100%" });
+        tl.fromTo("#pin", { y: -86, scaleY: 1.18, scaleX: 0.88 }, { y: 0, scaleY: 1.12, scaleX: 0.92, duration: 0.2, ease: "power2.in" }, 2.36);
+        tl.to("#pin", { scaleY: 0.8, scaleX: 1.16, duration: 2 * F, ease: "power2.out" }, 2.56);
+        tl.to("#pin", { scaleY: 1, scaleX: 1, duration: 9 * F, ease: "back.out(2.4)" }, 2.56 + 2 * F);
+        tl.fromTo("#pinShadow", { scale: 0.3, opacity: 0.2 }, { scale: 1, opacity: 1, duration: 0.2, ease: "power2.in" }, 2.36);
+        tl.fromTo("#ripple", { scale: 0.4, opacity: 0 }, { scale: 1.7, opacity: 1, duration: 4 * F, ease: "power2.out" }, 2.57);
+        tl.to("#ripple", { scale: 2.1, opacity: 0, duration: 0.3, ease: "power1.out" }, 2.57 + 4 * F);
+        tickRow("#row3", 2, 2.70);
+
+        // "check" — red underline (felt-tip) under the word
+        {
+          const r = lineRect($("#lCheck"), $("#wCheck"));
+          const ul = M.underline(r.x + 6, r.x + r.w - 6, r.base + 26, 1.12, { width: 13, dur: 0.24, seed: 1431 });
+          tl.to(ul.g, { y: -60, opacity: 0, duration: 6 * F, ease: "power2.in" }, 2.42 + 2 * F);   // leaves with its word
+        }
+
+        // ================= MODE B → MODE A: the footage band drops in (data-at 2.95, runtime splitIn), the checklist
+        // compacts DOWN into the bottom band (left), pushed by the shutter: lift 3 f, then a 0.52 s glide =================
+        gsap.set("#card", { transformOrigin: "0% 0%" });
+        tl.to("#card", { y: -10, duration: 3 * F, ease: "power2.out" }, 2.46);                 // anticipation lift
+        tl.to("#card", { y: 0, top: 1043, left: 108, scale: 0.574, height: 524, duration: 0.52, ease: "power3.inOut" }, 2.46 + 3 * F);
+        [["#row1", 76], ["#row2", 222], ["#row3", 368]].forEach(([s, top], i) => {
+          tl.to(s, { top, duration: 0.46, ease: "power3.inOut" }, 2.60 + i * 2 * F);
+        });
+        $$("#card .slot").forEach((s, i) => tl.to(s, { top: [76, 222, 368][i], duration: 0.46, ease: "power3.inOut" }, 2.60 + i * 2 * F));
+        tl.to("#card .hd, #card .hd2, #card .seg", { top: 26, duration: 0.46, ease: "power3.inOut" }, 2.60);
+
+        // secondary life in the band: pin bobs, the run-bar re-runs
+        tl.to("#pin", { y: -8, duration: 0.3, ease: "sine.inOut", yoyo: true, repeat: 3 }, 3.10);
+        tl.to("#runbar i", { scaleX: 0, duration: 0.01 }, 3.20);
+        tl.to("#runbar i", { scaleX: 1, duration: 0.45, ease: "power1.inOut" }, 3.22);
+
+        // "know": red underline + the three ✓ boxes ripple-pulse top→bottom
+        {
+          const r = lineRect($("#lKnow"), $("#wKnow"));
+          const ul = M.underline(r.x + 4, r.x + r.w - 4, r.base + 20, 3.42, { width: 12, dur: 0.22, seed: 1441 });
+          tl.to(ul.g, { y: -60, opacity: 0, duration: 6 * F, ease: "power2.in" }, 3.68 + 2 * F);
+        }
+        $$("#card .row .bx").forEach((bx, i) => P.pulse(bx, 3.50 + i * 3 * F, 1.1));
+        // the checklist has done its job: it drops out fast (6 f) to give the payoff the band
+        P.exitDown("#card", 3.70, 50);
+
+        // ================= HERO — "actually worked" + the big marker ✓ stamp (bottom band) =================
+        const SX = 797, SY = 1360;            // beside "worked" (x ≤ 697 at peak); tip ≈ (890, 1283), x ≤ 900 below y 1200
+        const stampG = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        M.layer.appendChild(stampG);
+        M.check(SX, SY, 164, 4.373, { parent: stampG, width: 20, dur: 0.18, seed: 1451 });
+        // stamp slam: lands big, squashes onto the paper, settles (svg transform about the stamp centre)
+        const st = { s: 1.05, r: -8 };
+        const applySt = () => stampG.setAttribute("transform", `translate(${SX} ${SY}) rotate(${st.r}) scale(${st.s}) translate(${-SX} ${-SY})`);
+        applySt();
+        tl.fromTo(st, { s: 1.05, r: -8 }, { s: 0.94, r: 2, duration: 0.14, ease: "power3.in", onUpdate: applySt }, 4.373);
+        tl.to(st, { s: 1, r: 0, duration: 0.22, ease: "back.out(2.6)", onUpdate: applySt }, 4.513);
+        // 4 sparkle ticks radiating up from the stamp (red felt-tip, ~1 f apart)
+        [[-135, 4.52], [-108, 4.54], [-84, 4.56], [-60, 4.58]].forEach(([a, t], i) => {
+          const rad = (a * Math.PI) / 180, r0 = 116, r1 = 162, CY = SY - 30;
+          M.line([[SX + Math.cos(rad) * r0, CY + Math.sin(rad) * r0], [SX + Math.cos(rad) * r1, CY + Math.sin(rad) * r1]], t,
+            { color: "marker", width: 12, dur: 0.05, amp: 0.6, seed: 1461 + i });
+        });
+        P.punch(4.393, { scale: 1.01, origin: "520px 1240px", dur: 0.18 });
+        P.shake(4.513, 2.5);
+      })();
+    </script>
+  </body>
+</html>

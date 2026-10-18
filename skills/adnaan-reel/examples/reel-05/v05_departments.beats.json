@@ -1,0 +1,77 @@
+[
+ {
+  "t": 0.36,
+  "sfx": "whoosh",
+  "gain_db": -19
+ },
+ {
+  "t": 1.23,
+  "sfx": "pop",
+  "gain_db": -22
+ },
+ {
+  "t": 2.03,
+  "sfx": "impact",
+  "gain_db": -15
+ },
+ {
+  "t": 2.36,
+  "sfx": "tick",
+  "gain_db": -25
+ },
+ {
+  "t": 2.4,
+  "sfx": "tick",
+  "gain_db": -26
+ },
+ {
+  "t": 2.47,
+  "sfx": "tick",
+  "gain_db": -26
+ },
+ {
+  "t": 2.53,
+  "sfx": "tick",
+  "gain_db": -26
+ },
+ {
+  "t": 2.6,
+  "sfx": "tick",
+  "gain_db": -26
+ },
+ {
+  "t": 2.94,
+  "sfx": "whoosh",
+  "gain_db": -22
+ },
+ {
+  "t": 3.5,
+  "sfx": "pop",
+  "gain_db": -20
+ },
+ {
+  "t": 3.66,
+  "sfx": "ding",
+  "gain_db": -24
+ },
+ {
+  "t": 4.61,
+  "sfx": "riser",
+  "gain_db": -21
+ },
+ {
+  "t": 5.07,
+  "sfx": "ping",
+  "gain_db": -19
+ },
+ {
+  "t": 5.77,
+  "sfx": "ping",
+  "gain_db": -19
+ },
+ {
+  "t": 6.52,
+  "sfx": "ping",
+  "gain_db": -19
+ }
+]

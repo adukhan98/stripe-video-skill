@@ -1,0 +1,250 @@
+<!doctype html>
+<!-- adnaan-reel v6 Mode B (full canvas, no speaker): the world + kinetic words + the scene's bespoke hero object.
+     v02_board: THE BOARD draws itself (black ink, seeds 701–705), two squiggle problems write on it (711/712),
+     small copies ride a dotted arc into a notebook card ("homework" tab), two red ✓ (721/722) on "solved both".
+     v03_unsolved opens with the board already drawn: copy the BOARD block below verbatim with board(M, null). Keep data-duration. -->
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>v02_board</title>
+    <link rel="stylesheet" href="brand.css" />
+    <link rel="stylesheet" href="paper.css" />
+    <link rel="stylesheet" href="marker.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+    <script src="paper.js"></script>
+    <script src="marker.js"></script>
+    <style>
+      @font-face { font-family: "Inter Tight"; src: url("fonts/InterTight-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Inter"; src: url("fonts/Inter-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Caveat"; src: url("fonts/Caveat-Variable.ttf") format("truetype"); font-weight: 400 700; font-style: normal; font-display: block; }
+
+      /* the notebook: a soft white card, ruled, red margin, punched holes; a tab rises from behind the page */
+      #nb { position: absolute; left: 120px; top: 1158px; width: 810px; height: 262px; }
+      #nb .nb-tilt { position: absolute; inset: 0; transform: rotate(-2deg); transform-origin: 50% 50%; }
+      #nb .nb-tab { position: absolute; left: 500px; top: -76px; width: 300px; height: 104px; border-radius: 20px 20px 6px 6px;
+        background: var(--brand-card); box-shadow: 0 10px 24px -10px rgba(60, 50, 40, 0.3); }
+      #nb .nb-page { position: absolute; inset: 0; border-radius: 26px; background: var(--brand-card); box-shadow: 0 22px 34px -14px rgba(60, 50, 40, 0.32); overflow: hidden; }
+      #nb .rule { position: absolute; left: 24px; right: 24px; height: 3px; border-radius: 2px; background: var(--wire); }
+      #nb .margin { position: absolute; left: 70px; top: 0; bottom: 0; width: 3px; background: var(--brand-primary); opacity: 0.45; }
+      #nb .hole { position: absolute; left: 20px; width: 22px; height: 22px; border-radius: 50%; background: var(--brand-background);
+        box-shadow: inset 0 3px 5px rgba(60, 50, 40, 0.28); }
+      #nb svg.nb-ink { position: absolute; left: 0; top: 0; width: 810px; height: 262px; overflow: visible; }
+      #nb svg.nb-ink path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+      #nb .mk-tape { z-index: 3; }
+
+      /* full-frame helper svgs (dotted arc, flying copies) on the marker layer's level */
+      .full { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; pointer-events: none; overflow: visible; }
+      .full path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+      .rider { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; pointer-events: none; }
+      .rider svg { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; overflow: visible; }
+      .rider svg path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+    </style>
+  </head>
+  <body data-face="0.41">
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="4.0500">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+      <!-- no camera push: the board must sit at its exact frame px on the last frame (v03 opens on it) -->
+      <div id="cam" data-push="1"><div id="punch">
+
+        <!-- Mode B (full canvas): no speaker. Board (top) + words (middle), then notebook (bottom) + words -->
+        <!-- the notebook (bottom, wide) -->
+        <div id="nb">
+          <div class="nb-tilt">
+            <div class="nb-tab" id="nbtab"></div>
+            <div class="nb-page" id="nbpage">
+              <div class="rule" style="top: 106px"></div>
+              <div class="rule" style="top: 200px"></div>
+              <div class="rule" style="top: 244px"></div>
+              <div class="margin"></div>
+              <div class="hole" style="top: 52px"></div>
+              <div class="hole" style="top: 130px"></div>
+              <div class="hole" style="top: 208px"></div>
+              <svg class="nb-ink" id="nbink" viewBox="0 0 810 262"></svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- kinetic words: "two / problems" staggered under the board, left of the arc (right gutter) -->
+        <div id="ltwo" class="line hero" data-x="84" data-base="932" data-size="160" data-exit="2.98" data-exit-dy="-16">
+          <span class="w" data-t="0.59" data-hero>two</span>
+        </div>
+        <div id="lprob" class="line hero" data-x="150" data-base="1050" data-size="150" data-exit="2.98" data-exit-lag="2" data-exit-dy="-16">
+          <span class="w" data-t="0.99" data-pop>problems</span>
+        </div>
+        <!-- "solved both" replaces it (both RED, the hero beat) -->
+        <div id="lsolved" class="line hero" data-x="84" data-base="1010" data-size="180" data-fit="880">
+          <span class="w" data-t="3.31" data-hero>solved</span><span class="w gap-s ocean" id="wboth" data-t="3.59" data-hero data-peak="1.1">both</span>
+        </div>
+
+      </div></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+
+      // ================================================================ THE BOARD (shared with v03 — copy verbatim)
+      // Geometry + seeds fixed in SHARED.md "RECURRING DRAWING 1". board(M, T): T = timing table (v02 draws it on);
+      // T = null → everything drawn at t = 0 (v03's opening state = v02's final state).
+      // Right edge centre-line sits at x 950 (not 960) so the 11 px ink + jitter + the hero punch stay inside x ≤ 960.
+      function boardRng(seed) {
+        let s = (seed >>> 0) || 1;
+        return () => { s ^= s << 13; s >>>= 0; s ^= s >> 17; s ^= s << 5; s >>>= 0; return (s % 100000) / 100000; };
+      }
+      // cursive "handwriting" loops along a baseline (illustrative squiggle maths, not readable)
+      function cursive(x0, x1, base, h, r, period = 30) {
+        const pts = [], n = Math.max(1, Math.round((x1 - x0) / period)), s = (x1 - x0) / (n * 2 * Math.PI), rx = period * 0.3;
+        const amps = Array.from({ length: n }, () => (r() < 0.22 ? h * 1.7 : h * (0.75 + r() * 0.45)));
+        for (let k = 0; k <= n * 16; k++) {
+          const th = (k / 16) * 2 * Math.PI, i = Math.min(n - 1, Math.floor(k / 16));
+          pts.push([x0 + s * th + rx * Math.sin(th), base - (amps[i] * (1 - Math.cos(th))) / 2]);
+        }
+        return pts;
+      }
+      function boardProblems() {
+        const r1 = boardRng(711), r2 = boardRng(712);
+        const p1 = [   // problem 1: y ≈ 450, x 240 → 820
+          cursive(240, 398, 466, 30, r1),
+          [[414, 436], [446, 434]], [[430, 420], [431, 452]],          // +
+          cursive(464, 604, 466, 30, r1),
+          cursive(612, 652, 422, 16, r1, 20),                          // superscript
+          [[672, 432], [710, 431]], [[672, 450], [711, 449]],          // =
+          cursive(730, 808, 466, 30, r1),
+        ];
+        const p2 = [   // problem 2: y ≈ 620, x 240 → 760 (a fraction, then = …)
+          cursive(248, 352, 598, 24, r2),
+          [[240, 614], [362, 612]],                                    // fraction bar
+          cursive(256, 344, 654, 22, r2),
+          cursive(390, 532, 636, 30, r2),
+          [[556, 612], [596, 611]], [[556, 630], [597, 629]],          // =
+          cursive(622, 760, 636, 30, r2),
+        ];
+        return { p1, p2 };
+      }
+      function board(M, T) {
+        const t = (k) => (T ? T[k] : 0);
+        const ink = { color: "ink", width: 11, amp: 1.8, texture: false };   // straight strokes: no felt-tip filter (its bbox region would clip a straight line thin)
+        // frame: 4 strokes like a hand (top, right, bottom, left), corners overshoot a little; then the chalk ledge
+        M.line([[114, 331], [950, 329]], t("top"), { ...ink, seed: 701, dur: 0.12 });
+        M.line([[948, 324], [950, 772]], t("right"), { ...ink, seed: 702, dur: 0.1 });
+        M.line([[952, 770], [116, 772]], t("bottom"), { ...ink, seed: 703, dur: 0.12 });
+        M.line([[120, 777], [121, 326]], t("left"), { ...ink, seed: 704, dur: 0.1 });
+        M.line([[140, 800], [940, 800]], t("ledge"), { ...ink, width: 10, seed: 705, dur: 0.09 });
+        // labels "1." / "2." (Caveat ink 64), vertically centred on y 450 / 620
+        M.note("1.", 166, 413, t("l1"), { size: 64, rot: -3, color: "ink", cps: 10 });
+        M.note("2.", 166, 583, t("l2"), { size: 64, rot: -3, color: "ink", cps: 10 });
+        // the two squiggle problems (seeds 7110+k / 7120+k per stroke; loop shapes from rng 711 / 712)
+        const { p1, p2 } = boardProblems();
+        const sq = { color: "ink", width: 7, amp: 1.1 };
+        const write = (lines, at, seed, durs) => {
+          let tt = at;
+          lines.forEach((pts, k) => { M.line(pts, tt, { ...sq, seed: seed + k, dur: durs[k], texture: pts.length > 2 }); tt += T ? durs[k] + 0.006 : 0; });
+        };
+        write(p1, t("p1"), 7110, [0.07, 0.02, 0.02, 0.06, 0.025, 0.018, 0.018, 0.045]);
+        write(p2, t("p2"), 7120, [0.045, 0.025, 0.04, 0.06, 0.018, 0.018, 0.05]);
+        // the two red ✓ (final state)
+        const c1 = M.check(870, 450, 84, t("c1"), { seed: 721, width: 12, dur: 0.2 });
+        const c2 = M.check(820, 620, 84, t("c2"), { seed: 722, width: 12, dur: 0.18 });
+        return { p1, p2, c1, c2 };
+      }
+      // ================================================================ /THE BOARD
+
+      (async () => {
+        const P = await Paper.init({ extraFonts: ['700 60px "Caveat"'] });
+        const M = Marker.init(P);
+        const { tl, D, F, $, $$ } = P;
+        const NS = "http://www.w3.org/2000/svg";
+        const host = $("#punch");
+        gsap.registerPlugin(MotionPathPlugin);
+
+        // ------------------------------------------------------------ HERO: the board draws itself
+        const BT = { top: 0.001, right: 0.12, bottom: 0.22, left: 0.34, ledge: 0.45,
+                     l1: 0.40, p1: 0.48, l2: 0.76, p2: 0.82, c1: 3.14, c2: 3.38 };
+        const B = board(M, BT);
+
+        // ------------------------------------------------------------ MICRO 1: the notebook
+        const nb = $("#nb"), tilt = $("#nb .nb-tilt"), tab = $("#nbtab");
+        P.cardIn("#nb", 0.22, { fromY: 30, rot: -4 });
+        P.floatY(nb, 3, 1.25);
+        // the tab hides behind the page until "thinking": it rises out of the notebook (anticipation dip, overshoot, settle)
+        gsap.set(tab, { y: 70 });
+        tl.to(tab, { y: 76, duration: 3 * F, ease: "power2.in" }, 1.84);
+        tl.to(tab, { y: -6, duration: 0.18, ease: "power3.out" }, 1.84 + 3 * F);
+        tl.to(tab, { y: 0, duration: 0.24, ease: "back.out(2)" }, 1.84 + 3 * F + 0.18);
+        // "homework" written on the tab (ink, 72) + a tape strip pressed over its corner
+        M.note("homework", 18, 2, 2.52, { size: 80, rot: -2, color: "ink", parent: tab, cps: 18 });
+        const tp = M.tape(0, 0, 0, 2.86);
+        tilt.appendChild(tp);
+        Object.assign(tp.style, { left: "600px", top: "-12px", width: "130px", height: "40px" });
+        tl.fromTo(tp, { opacity: 0, scale: 1.25, rotation: -8 }, { opacity: 1, scale: 1, rotation: -3, duration: 0.18, ease: "back.out(2)", immediateRender: false }, 2.86);
+
+        // copies in the notebook: the same squiggles at 0.8, on ruled lines 106 / 200 (page px)
+        const NBK = 0.8;
+        const toNb = (lines, bx, by, lx, ly) => lines.map((pts) => pts.map(([x, y]) => [(x - bx) * NBK + lx, (y - by) * NBK + ly]));
+        const nb1 = toNb(B.p1, 240, 466, 104, 98), nb2 = toNb(B.p2, 240, 636, 104, 186);
+        const nbsvg = $("#nbink");
+        const copyWrite = (lines, at, seed, total) => {
+          const per = total / lines.length;
+          lines.forEach((pts, k) => M.line(pts, at + k * per, { parent: nbsvg, color: "ink", width: 7, amp: 0.8, seed: seed + k, dur: per * 0.9, texture: pts.length > 2 }));
+        };
+        copyWrite(nb1, 1.26, 7310, 0.22);
+        copyWrite(nb2, 1.50, 7320, 0.2);
+
+        // ------------------------------------------------------------ the copies ride a dotted arc down the right gutter
+        const arcSvg = document.createElementNS(NS, "svg");
+        arcSvg.setAttribute("class", "full"); arcSvg.setAttribute("viewBox", "0 0 1080 1920");
+        arcSvg.innerHTML = `<path id="arc" d="M 790 818 C 870 850, 898 940, 884 1020 S 840 1110, 800 1150" stroke="var(--marker-ink)" stroke-width="6" stroke-dasharray="1 15"/>`;
+        host.appendChild(arcSvg);
+        P.drawPath("#arc", 0.8, 0.32);
+        P.marchPath("#arc", 1.12, 0.7, 90);
+        tl.to(arcSvg, { opacity: 0, duration: 0.16, ease: "power2.in" }, 1.76);
+
+        // where a notebook point lands in frame px (page rotated −2° about its centre; float ignored, ≤ 3 px)
+        const nbAbs = (lx, ly) => {
+          const a = (-2 * Math.PI) / 180, cx = 405, cy = 131, dx = lx - cx, dy = ly - cy;
+          return [120 + cx + dx * Math.cos(a) - dy * Math.sin(a), 1158 + cy + dx * Math.sin(a) + dy * Math.cos(a)];
+        };
+        const bbox = (lines) => { const xs = lines.flat().map((p) => p[0]), ys = lines.flat().map((p) => p[1]);
+          return [(Math.min(...xs) + Math.max(...xs)) / 2, (Math.min(...ys) + Math.max(...ys)) / 2]; };
+        const rider = (lines, seed, t0, land, nbLines, spawn, via) => {
+          const wrap = document.createElement("div");
+          wrap.className = "rider";
+          const svg = document.createElementNS(NS, "svg");
+          svg.setAttribute("viewBox", "0 0 1080 1920");
+          wrap.appendChild(svg);
+          host.appendChild(wrap);
+          lines.forEach((pts, k) => M.line(pts, 0, { parent: svg, color: "ink", width: 7, amp: 1.1, seed: seed + k, dur: 0.05, texture: pts.length > 2 }));
+          const [cx, cy] = bbox(lines), [lx, ly] = bbox(nbLines), [tx, ty] = nbAbs(lx, ly);
+          gsap.set(wrap, { transformOrigin: `${cx}px ${cy}px` });
+          tl.set(wrap, { opacity: 0 }, 0);
+          // a small copy pops out of the board's empty bottom strip (scale 0 → 0.36 → 0.3, on 5 f), then rides the
+          // dotted arc down the right gutter (arcs: x/y via curviness, sine.inOut) and lands at 0.8, tilted −2°
+          tl.set(wrap, { opacity: 1, x: spawn[0] - cx, y: spawn[1] - cy, scale: 0, rotation: -6 }, t0);
+          tl.to(wrap, { scale: 0.32, rotation: 2, duration: 4 * F, ease: "power3.out" }, t0);
+          tl.to(wrap, { scale: 0.26, rotation: 0, duration: 4 * F, ease: "back.out(2)" }, t0 + 4 * F);
+          const path = via.map(([x, y]) => ({ x: x - cx, y: y - cy })).concat([{ x: tx - cx, y: ty - cy }]);
+          tl.to(wrap, { motionPath: { path, curviness: 0.7 }, duration: land - t0 - 6 * F, ease: "sine.inOut" }, t0 + 6 * F);
+          tl.to(wrap, { scale: NBK, rotation: -2, duration: 0.24, ease: "power2.inOut" }, land - 0.24);
+          tl.to(wrap, { opacity: 0, duration: 3 * F, ease: "power1.in" }, land - 2 * F);
+          return wrap;
+        };
+        rider(B.p1, 7110, 0.82, 1.30, nb1, [610, 718], [[780, 800], [812, 960], [760, 1225]]);
+        rider(B.p2, 7120, 1.13, 1.55, nb2, [640, 718], [[780, 800], [812, 960], [760, 1300]]);
+        // the notebook takes each copy: a little squash on contact (a card is a shape)
+        P.squash(tilt, 1.30, 0.04);
+        P.squash(tilt, 1.55, 0.04);
+
+        // ------------------------------------------------------------ HERO BEAT: "solved both"
+        // ✓1 / ✓2 are in board(); "both" lands RED with a 1 % punch anchored at the board's right edge (zone-safe)
+        P.punch(3.59, { scale: 1.008, origin: "780px 880px", dur: 0.15 });
+        // (from layout offsets, not the live rect: the word is still in its entrance pose at build time)
+        const wb = $("#wboth"), lsv = $("#lsolved");
+        const ux0 = lsv.offsetLeft + wb.offsetLeft + 8, ux1 = lsv.offsetLeft + wb.offsetLeft + wb.offsetWidth - 10;
+        M.underline(ux0, ux1, 1010 + 16, 3.70, { seed: 731, width: 11, dur: 0.22, texture: false });
+        // the notebook nods along on "both" (secondary action)
+        tl.to(tilt, { rotation: -3.2, duration: 0.12, ease: "power2.out" }, 3.6);
+        tl.to(tilt, { rotation: -2, duration: 0.36, ease: "back.out(2)" }, 3.72);
+      })();
+    </script>
+  </body>
+</html>

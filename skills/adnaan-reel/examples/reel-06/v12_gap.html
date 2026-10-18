@@ -1,0 +1,181 @@
+<!doctype html>
+<!-- adnaan-reel scene: EXPLAINER (bespoke) — v12_gap. A hand-drawn marker chart on the paper: a RED curve
+     ("what AI can do") draws left→right and bends up to vertical, a flat INK line ("what people believe") draws
+     low across the same span, and a red curly bracket measures THE GAP between their ends (it stretches as the
+     red curve keeps climbing). Beat B: the chart glides up, "opportunity" lands IN the gap, the bracket's nib
+     flicks at it, and he slides up in a small card "in our hands". Keep data-duration (165 f). -->
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>v12_gap</title>
+    <link rel="stylesheet" href="brand.css" />
+    <link rel="stylesheet" href="paper.css" />
+    <link rel="stylesheet" href="marker.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+    <script src="paper.js"></script>
+    <script src="marker.js"></script>
+    <style>
+      @font-face { font-family: "Inter Tight"; src: url("fonts/InterTight-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Inter"; src: url("fonts/Inter-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Caveat"; src: url("fonts/Caveat-Variable.ttf") format("truetype"); font-weight: 400 700; font-style: normal; font-display: block; }
+
+      /* ---- bespoke: the hand-drawn gap chart (marker strokes live in #chartG inside the marker layer) ---- */
+      #chartHtml { position: absolute; inset: 0; pointer-events: none; }
+      .lt { display: inline-block; }
+      /* the card rises out of the zone's bottom edge (y 1480): the slot clips its entrance, then lets the soft shadow through */
+      #spkSlot { position: absolute; inset: 0; clip-path: inset(0 0 448px 0); }
+    </style>
+  </head>
+  <body data-face="0.42">
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="5.4833">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+      <div id="cam"><div id="punch">
+
+        <!-- notes of the chart (Caveat handwriting) move with the chart -->
+        <div id="chartHtml"></div>
+
+        <!-- BEAT A: "The gap" at the top of the zone (exits as the chart glides up) -->
+        <div id="gapLine" class="line sup" data-x="76" data-base="480" data-size="110" data-exit="3.08">
+          <span class="w" data-t="0.01">The</span><span class="w hero ocean gap-s" style="font-size: 1.727em" data-t="0.27" data-hero><span class="lt">g</span><span class="lt">a</span><span class="lt" id="gapP">p</span></span>
+        </div>
+
+        <!-- BEAT B: "the greatest" upper-left of the chart, "opportunity" IN the gap -->
+        <div class="line sup" data-x="92" data-base="455" data-size="84">
+          <span class="w" data-t="3.37">the</span>
+        </div>
+        <div class="line sup" data-x="150" data-base="600" data-size="120">
+          <span class="w ink" data-t="3.63" data-accent>greatest</span>
+        </div>
+        <div id="oppLine" class="line" data-x="86" data-base="935" data-size="170" data-fit="820">
+          <span class="w hero ocean" data-t="4.11" data-hero data-rise="50">opportunity</span>
+        </div>
+
+        <!-- BEAT B: he slides up from the bottom-left corner on "in our hands" -->
+        <div id="spkSlot">
+        <div class="spk small" data-x="80" data-y="1126" data-w="430" data-h="334" data-at="4.75" data-face-at="0.63" data-ry="6">
+          <div class="spk-card">
+            <div class="spk-vid"><video id="speaker" class="clip" src="assets/speaker.mp4" muted playsinline data-start="0" data-duration="5.4833" data-track-index="1"></video></div>
+            <div class="spk-sheen"></div>
+          </div>
+        </div>
+        </div>
+        <div class="line sup" data-x="562" data-base="1290" data-size="84">
+          <span class="w" data-t="4.75">in</span><span class="w gap-s" data-t="4.95">our</span>
+        </div>
+        <div id="handsLine" class="line sup" data-x="560" data-base="1435" data-size="116">
+          <span id="hands" class="w ink" data-t="5.33" data-pop>hands</span>
+        </div>
+      </div></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const P = await Paper.init({ extraFonts: ['700 60px "Caveat"'] });
+        const { tl, D, F, $, $$ } = P;
+        const M = Marker.init(P);
+        tl.set("#gapLine .hero", { opacity: 0 }, 0);   // "gap" stays hidden until its own contact (no anticipation this early)
+        const NS = "http://www.w3.org/2000/svg";
+        const SHIFT = -255;                       // Beat B: the chart glides up to make room
+
+        // chart group inside the marker layer (moves with the camera push, and as one drawing on the shift)
+        const chartG = document.createElementNS(NS, "g");
+        chartG.setAttribute("id", "chartG");
+        M.layer.appendChild(chartG);
+        const notes = $("#chartHtml");
+
+        // ---------------------------------------------------------------- BEAT A
+        // pencil axes (no numbers, no labels) set the stage on "The gap"; they clear as the chart glides up
+        const axY = M.line([[86, 1412], [85, 1000], [86, 596]], 0.12, { parent: chartG, color: "pencil", width: 6, amp: 1.2, dur: 0.26, seed: 1101 });
+        const axYh = M.line([[71, 622], [86, 594], [101, 622]], 0.4, { parent: chartG, color: "pencil", width: 6, amp: 0.6, dur: 0.08, seed: 1103 });
+        const axX = M.line([[86, 1412], [500, 1413], [902, 1411]], 0.3, { parent: chartG, color: "pencil", width: 6, amp: 1.2, dur: 0.3, seed: 1107 });
+        const axXh = M.line([[874, 1396], [904, 1411], [874, 1427]], 0.62, { parent: chartG, color: "pencil", width: 6, amp: 0.6, dur: 0.08, seed: 1109 });
+        [axY, axYh, axX, axXh].forEach((a) => M.erase(a, 3.0, 0.14));
+
+        // RED curve "what AI can do": flat-ish, then bends up to vertical at the right end.
+        // The hand ACCELERATES into the vertical (power1.in) — the tip arrives on "do" (1.63).
+        const RED = [[100, 1000], [240, 995], [370, 985], [480, 970], [575, 948], [655, 918], [720, 878], [772, 830],
+          [812, 775], [840, 715], [858, 665], [868, 630], [874, 600]];
+        const red = M.line(RED, 0.62, { parent: chartG, width: 12, amp: 2.2, dur: 0.98, seed: 1201 });
+        red.paths.forEach((p) => {
+          const len = p.getTotalLength() + 2;
+          tl.fromTo(p, { strokeDashoffset: len }, { strokeDashoffset: 0, duration: 0.98, ease: "power1.in", immediateRender: false }, 0.62);
+        });
+        M.note("what AI can do", 350, 590, 1.0, { size: 84, rot: -3, color: "ink", cps: 18, parent: notes });
+
+        // tiny dust burst off the tip as it goes vertical (soft red dots on gravity arcs + 3 marker zings)
+        const TIP = [874, 600];
+        const DUST = [[-46, -34, 7], [-20, -58, 5], [10, -66, 8], [30, -50, 5], [40, -22, 6], [-62, -8, 4], [26, -82, 4]];
+        DUST.forEach(([dx, dy, r], i) => {
+          const c = document.createElementNS(NS, "circle");
+          c.setAttribute("cx", TIP[0]); c.setAttribute("cy", TIP[1]); c.setAttribute("r", r);
+          c.setAttribute("fill", i % 3 === 2 ? "var(--marker-ink)" : "var(--marker)");
+          chartG.appendChild(c);
+          const s = 1.6 + (i % 3) * F;
+          tl.set(c, { opacity: 0 }, 0);
+          tl.set(c, { opacity: 0.95 }, s);
+          tl.fromTo(c, { x: 0 }, { x: dx * 1.4, duration: 0.6, ease: "power2.out", immediateRender: false }, s);
+          tl.fromTo(c, { y: 0 }, { y: dy, duration: 0.2, ease: "power2.out", immediateRender: false }, s);
+          tl.to(c, { y: dy + 90, duration: 0.42, ease: "power2.in" }, s + 0.2);
+          tl.to(c, { opacity: 0, duration: 0.16, ease: "power1.in" }, s + 0.44);
+        });
+        const zings = [
+          M.line([[TIP[0] - 30, TIP[1] - 22], [TIP[0] - 52, TIP[1] - 40]], 1.62, { parent: chartG, width: 8, dur: 0.08, amp: 1 }),
+          M.line([[TIP[0] + 2, TIP[1] - 34], [TIP[0] + 4, TIP[1] - 62]], 1.65, { parent: chartG, width: 8, dur: 0.08, amp: 1 }),
+          M.line([[TIP[0] + 26, TIP[1] - 18], [TIP[0] + 46, TIP[1] - 34]], 1.68, { parent: chartG, width: 8, dur: 0.08, amp: 1 }),
+        ];
+        zings.forEach((z) => M.erase(z, 2.25, 0.16));
+
+        // INK flat line "what people believe": draws low across the same span, lazy and flat
+        M.line([[100, 1261], [300, 1258], [520, 1260], [720, 1257], [874, 1259]], 1.84, { parent: chartG, color: "ink", width: 11, amp: 2, dur: 0.7, seed: 1307 });
+        M.note("what people believe", 330, 1276, 2.08, { size: 84, rot: -3, color: "ink", cps: 22, parent: notes });
+
+        // the GAP bracket: a red curly brace between the red tip and the ink line's end, its nib pointing left
+        // into the gap (where "opportunity" will land). Drawn as two strokes meeting at the nib (a sharp point).
+        const brk = document.createElementNS(NS, "g");
+        brk.setAttribute("id", "brk");
+        chartG.appendChild(brk);
+        const BX = 932, BT = 608, BB = 1250, NY = 1161, NX = 906;
+        M.line([[914, BT], [926, BT + 6], [931, BT + 20], [BX, BT + 70], [BX, NY - 60], [929, NY - 22], [NX, NY]],
+          2.8, { parent: brk, width: 10, amp: 1.4, dur: 0.24, seed: 1409 });
+        M.line([[NX, NY], [929, NY + 20], [BX, NY + 48], [BX, BB - 22], [927, BB - 8], [914, BB]],
+          3.04, { parent: brk, width: 10, amp: 1.2, dur: 0.1, seed: 1433 });
+
+        // the red curve keeps climbing a little (secondary) and the bracket STRETCHES with it (squash/stretch)
+        M.line([[TIP[0], TIP[1] + 2], [875, 582], [876, 560]], 3.06, { parent: chartG, width: 12, amp: 0.8, dur: 0.42, seed: 1511, texture: false });
+        const ST = (BB - 568) / (BB - BT);      // stretch so the bracket's top meets the new tip
+        gsap.set(brk, { svgOrigin: `${BX} ${BB}` });
+        tl.to(brk, { scaleY: ST * 1.03, scaleX: 0.9, duration: 0.36, ease: "power2.out" }, 3.08);
+        tl.to(brk, { scaleY: ST, scaleX: 1, duration: 0.3, ease: "back.out(2)" }, 3.44);
+
+        // ---------------------------------------------------------------- BEAT B
+        // the chart glides up as one drawing (anticipation dip, then up with a soft settle)
+        const chartParts = [chartG, notes];
+        tl.to(chartParts, { y: 8, duration: 3 * F, ease: "power2.in" }, 3.06);
+        tl.to(chartParts, { y: SHIFT - 6, duration: 0.42, ease: "power3.inOut" }, 3.16);
+        tl.to(chartParts, { y: SHIFT, duration: 0.24, ease: "back.out(1.6)" }, 3.58);
+
+        
+        // "opportunity" lands IN the gap: hero beat — punch, and the bracket's nib flicks at it (pulse)
+        P.punch(4.11, { scale: 1.01, origin: "480px 950px", dur: 0.3 });
+        tl.to(brk, { scaleX: 1.55, scaleY: ST * 1.02, duration: 0.12, ease: "power2.out" }, 4.06);
+        tl.to(brk, { scaleX: 1, scaleY: ST, duration: 0.4, ease: "back.out(2.6)" }, 4.18);
+        tl.to(brk, { scaleX: 1.22, duration: 0.1, ease: "power2.out" }, 4.62);
+        tl.to(brk, { scaleX: 1, duration: 0.3, ease: "back.out(2)" }, 4.72);
+
+        // the letters of "gap" drift apart while the chart's gap opens (type that performs, secondary)
+        const L3 = $$("#gapLine .lt");
+        tl.fromTo(L3[0], { x: 0 }, { x: -9, duration: 2.2, ease: "sine.inOut" }, 0.7);
+        tl.fromTo(L3[2], { x: 0 }, { x: 11, duration: 2.2, ease: "sine.inOut" }, 0.7);
+
+        tl.fromTo("#spkSlot", { clipPath: "inset(0px 0px 448px 0px)" }, { clipPath: "inset(0px 0px 300px 0px)", duration: 0.25, ease: "power1.inOut", immediateRender: false }, 4.5);
+
+        // "hands": a red double underline lands under it on the word (held alive into the cut)
+        const hw = $("#hands"), hl = $("#handsLine");
+        const hx0 = hl.offsetLeft + hw.offsetLeft, hx1 = hx0 + hw.offsetWidth;
+        M.underline(hx0 + 8, hx1 - 10, 1452, 5.24, { width: 10, dur: 0.2 });
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,61 @@
+[
+ {
+  "t": 0.17,
+  "sfx": "pop",
+  "what": "Comment lands"
+ },
+ {
+  "t": 0.63,
+  "sfx": "impact",
+  "what": "ambitious lands (hero beat, punch + shake)"
+ },
+ {
+  "t": 1.0,
+  "sfx": "pop",
+  "gain_db": -8,
+  "what": "I'll send you the article starts, headline steps back"
+ },
+ {
+  "t": 1.28,
+  "sfx": "pop",
+  "what": "article title sheet pops out"
+ },
+ {
+  "t": 1.77,
+  "sfx": "tick",
+  "what": "fold 1 lands"
+ },
+ {
+  "t": 1.89,
+  "sfx": "tick",
+  "what": "fold 2 (dart)"
+ },
+ {
+  "t": 1.93,
+  "sfx": "pop",
+  "gain_db": -4,
+  "what": "paper plane pops"
+ },
+ {
+  "t": 2.03,
+  "sfx": "whoosh",
+  "what": "plane flies the arc"
+ },
+ {
+  "t": 2.29,
+  "sfx": "ping",
+  "what": "plane lands in the pill, ripple"
+ },
+ {
+  "t": 2.4,
+  "sfx": "pop",
+  "gain_db": -6,
+  "what": "delivered badge"
+ },
+ {
+  "t": 3.05,
+  "sfx": "pop",
+  "gain_db": -5,
+  "what": "headline lifts back to full hero size (final energy lift)"
+ }
+]

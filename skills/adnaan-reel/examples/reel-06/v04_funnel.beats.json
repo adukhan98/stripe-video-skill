@@ -1,0 +1,188 @@
+[
+ {
+  "t": 0.47,
+  "sfx": "scribble",
+  "dur": 0.3,
+  "what": "highlighter swipe behind 'sharp funnel'"
+ },
+ {
+  "t": 0.85,
+  "sfx": "scribble",
+  "dur": 0.35,
+  "what": "funnel rim loop"
+ },
+ {
+  "t": 1.1,
+  "sfx": "whoosh",
+  "what": "post card whips up and out",
+  "gain_db": -3
+ },
+ {
+  "t": 1.27,
+  "sfx": "scribble",
+  "dur": 0.25,
+  "what": "funnel left wall"
+ },
+ {
+  "t": 1.46,
+  "sfx": "impact",
+  "what": "funnel. hero lands + 1% punch"
+ },
+ {
+  "t": 1.58,
+  "sfx": "scribble",
+  "dur": 0.25,
+  "what": "funnel right wall + spout"
+ },
+ {
+  "t": 1.9,
+  "sfx": "pop",
+  "what": "biggest lands"
+ },
+ {
+  "t": 1.95,
+  "sfx": "scribble",
+  "dur": 0.24,
+  "what": "divider 0"
+ },
+ {
+  "t": 2.07,
+  "sfx": "scribble",
+  "dur": 0.24,
+  "what": "divider 1"
+ },
+ {
+  "t": 2.18,
+  "sfx": "pop",
+  "what": "chunk lands",
+  "gain_db": -3
+ },
+ {
+  "t": 2.19,
+  "sfx": "scribble",
+  "dur": 0.24,
+  "what": "divider 2"
+ },
+ {
+  "t": 2.36,
+  "sfx": "tick",
+  "what": "first stick person lands in tier 0",
+  "gain_db": -6
+ },
+ {
+  "t": 2.55,
+  "sfx": "tick",
+  "what": "row 2 starts piling",
+  "gain_db": -6
+ },
+ {
+  "t": 2.83,
+  "sfx": "tick",
+  "what": "last person tops the pile",
+  "gain_db": -6
+ },
+ {
+  "t": 3.02,
+  "sfx": "scribble",
+  "dur": 0.45,
+  "what": "tier 0 pencil hatch"
+ },
+ {
+  "t": 3.2,
+  "sfx": "impact",
+  "what": "75% stamps, pile jolts"
+ },
+ {
+  "t": 3.9,
+  "sfx": "pop",
+  "what": "people, lands",
+  "gain_db": -4
+ },
+ {
+  "t": 4.05,
+  "sfx": "whoosh",
+  "what": "speaker card arcs in",
+  "gain_db": -6
+ },
+ {
+  "t": 5.3,
+  "sfx": "tick",
+  "what": "odometer 6 locks"
+ },
+ {
+  "t": 5.42,
+  "sfx": "scribble",
+  "dur": 0.2,
+  "what": "Caveat note 6B written"
+ },
+ {
+  "t": 5.52,
+  "sfx": "tick",
+  "what": "odometer zeros locking",
+  "gain_db": -4
+ },
+ {
+  "t": 5.66,
+  "sfx": "scribble",
+  "dur": 0.32,
+  "what": "arrow from 6B into tier 0"
+ },
+ {
+  "t": 5.8,
+  "sfx": "ding",
+  "what": "6,000,000,000 fully locked",
+  "gain_db": -4
+ },
+ {
+  "t": 6.56,
+  "sfx": "pop",
+  "what": "entire lands",
+  "gain_db": -5
+ },
+ {
+  "t": 6.86,
+  "sfx": "pop",
+  "what": "world lands, people wave"
+ },
+ {
+  "t": 7.3,
+  "sfx": "scribble",
+  "dur": 0.48,
+  "what": "chat bubble outline"
+ },
+ {
+  "t": 7.46,
+  "sfx": "pop",
+  "what": "never pops (red)"
+ },
+ {
+  "t": 7.82,
+  "sfx": "scribble",
+  "dur": 0.27,
+  "what": "bubble tail + three dots"
+ },
+ {
+  "t": 8.15,
+  "sfx": "tick",
+  "what": "typing dots bounce in the empty bubble",
+  "gain_db": -8
+ },
+ {
+  "t": 8.82,
+  "sfx": "scribble",
+  "dur": 0.16,
+  "what": "black X, first slash"
+ },
+ {
+  "t": 9.0,
+  "sfx": "pop",
+  "what": "crossed bubble shakes / at all",
+  "gain_db": -2
+ },
+ {
+  "t": 9.05,
+  "sfx": "scribble",
+  "dur": 0.16,
+  "what": "black X, second slash"
+ }
+]

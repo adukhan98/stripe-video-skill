@@ -1,0 +1,56 @@
+[
+ {
+  "t": 0.1,
+  "sfx": "whoosh",
+  "what": "paper strip rises under the first words",
+  "gain_db": -6
+ },
+ {
+  "t": 0.78,
+  "sfx": "pop",
+  "what": "entire lands"
+ },
+ {
+  "t": 1.18,
+  "sfx": "pop",
+  "what": "world lands"
+ },
+ {
+  "t": 2.4,
+  "sfx": "pop",
+  "what": "haven't lands"
+ },
+ {
+  "t": 2.42,
+  "sfx": "scribble",
+  "dur": 0.46,
+  "what": "double underline under haven't seen"
+ },
+ {
+  "t": 2.66,
+  "sfx": "tick",
+  "what": "seen lands"
+ },
+ {
+  "t": 3.08,
+  "sfx": "pop",
+  "what": "real lands (red)"
+ },
+ {
+  "t": 3.28,
+  "sfx": "scribble",
+  "dur": 0.42,
+  "what": "loop around real power"
+ },
+ {
+  "t": 3.34,
+  "sfx": "impact",
+  "what": "power slams in, 1% punch"
+ },
+ {
+  "t": 3.8,
+  "sfx": "ping",
+  "what": "AI. lands",
+  "gain_db": -4
+ }
+]

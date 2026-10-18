@@ -1,0 +1,58 @@
+<!doctype html>
+<!-- adnaan-reel v7 starter: CHAIN — the reel's map. He starts full-screen (TALK); on the list word the SIGNATURE SHRINK
+     takes his footage into disc 1 of the chain (V.shrink → {x, y, d}), the board + strong vignette are revealed, and the
+     connector draws through discs 2…N, each popping as the line reaches it (V.chainDraw). The chain geometry and icons
+     come from SHARED.md "Project specifics" (fixed per reel; the next scene opens on this exact end state with
+     V.chain + V.chainEnd + V.placed). Words go in the free space, never touching the chain. -->
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>scene</title>
+    <link rel="stylesheet" href="brand.css" />
+    <link rel="stylesheet" href="paper.css" />
+    <link rel="stylesheet" href="v7.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+    <script src="paper.js"></script>
+    <script src="v7.js"></script>
+    <style>
+      @font-face { font-family: "Inter Tight"; src: url("fonts/InterTight-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Inter"; src: url("fonts/Inter-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+    </style>
+  </head>
+  <body data-face="0.40">
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="5.000">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+      <div id="world"></div>
+
+      <div id="spk" class="spk full" data-push="1">
+        <div class="spk-card">
+          <div class="spk-vid"><video id="speaker" class="clip" src="assets/speaker.mp4" muted playsinline data-start="0" data-duration="5.000" data-track-index="1"></video></div>
+        </div>
+      </div>
+
+      <div id="cam"><div id="punch">
+        <div class="line hero ocean g7" data-right="924" data-base="470" data-size="200" data-fit="420">
+          <span class="w" data-t="0.5" data-hero>six</span>
+        </div>
+      </div></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const P = await Paper.init();
+        const V = V7.init(P);
+        const { tl, D, F, $ } = P;
+        // THE CHAIN — copy the geometry from SHARED.md (this is reel-08's)
+        const CHAIN = { points: [[300, 560], [620, 700], [330, 880], [640, 1030], [330, 1190], [600, 1360]], d: 180,
+          icons: ["microphone", "eye", "chat-circle-dots", "magnifying-glass", "folder-open", "watch"] };
+        const ch = V.chain("#world", CHAIN);
+        gsap.set(ch.discs[0], { opacity: 0 });                                   // his face lands on disc 1
+        const s = V.shrink("#spk", 0.45, { to: { x: CHAIN.points[0][0], y: CHAIN.points[0][1], d: CHAIN.d } });
+        tl.to(ch.discs[0], { opacity: 1, duration: 4 * F }, s.land - 2 * F);    // the backing disc (shadow) under his face
+        V.chainDraw(ch, s.land - 0.02);
+      })();
+    </script>
+  </body>
+</html>

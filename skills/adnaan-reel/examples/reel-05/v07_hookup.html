@@ -1,0 +1,352 @@
+<!doctype html>
+<!-- adnaan-reel scene: v07_hookup — MECHANISM on the shared runtime.
+     The agent puck drops in, four system cards deal out of it, dotted cables draw to each with an accent pulse riding them,
+     then a big accent check pops on top of the puck on "actually works". -->
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>v07_hookup</title>
+    <link rel="stylesheet" href="brand.css" />
+    <link rel="stylesheet" href="paper.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+    <script src="paper.js"></script>
+    <style>
+      @font-face { font-family: "Inter Tight"; src: url("fonts/InterTight-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Inter"; src: url("fonts/Inter-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+
+      /* system cards: wrapper deals / hops, inner card floats */
+      .sys { position: absolute; width: 220px; height: 180px; opacity: 0; }
+      .sys .scard { left: 0; top: 0; right: 0; bottom: 0; opacity: 1; }
+      .tile { position: absolute; left: 22px; top: 22px; width: 64px; height: 64px; border-radius: 18px; background: var(--brand-background);
+        display: flex; align-items: center; justify-content: center; }
+      .tile svg { width: 40px; height: 40px; display: block; }
+      .ico * { fill: none; stroke: var(--brand-text); stroke-width: 3.4; stroke-linecap: round; stroke-linejoin: round; }
+      .sdot { position: absolute; right: 24px; top: 30px; width: 20px; height: 20px; border-radius: 50%; background: var(--wire); }
+      .sdot i { position: absolute; inset: 0; border-radius: 50%; background: var(--brand-primary); opacity: 0;
+        box-shadow: 0 0 12px 3px color-mix(in srgb, var(--brand-primary) 55%, transparent); }
+      .slabel { position: absolute; left: 24px; top: 104px; font-family: var(--font-body); font-weight: 600; font-size: 36px;
+        letter-spacing: -0.015em; line-height: 1; color: var(--brand-text); white-space: nowrap; }
+
+      /* accent pulses that ride the cables */
+      .pulse { position: absolute; left: 0; top: 0; width: 22px; height: 22px; border-radius: 50%; opacity: 0;
+        background: var(--brand-primary); box-shadow: 0 0 16px 6px color-mix(in srgb, var(--brand-primary) 50%, transparent); }
+
+      /* the check badge on top of the puck */
+      #ok { position: absolute; left: 410px; top: 670px; width: 200px; height: 200px; opacity: 0; }
+      .ok-disc { position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(circle at 35% 30%, var(--brand-card), var(--brand-card) 55%, var(--wire) 120%);
+        box-shadow: 0 30px 50px -12px rgba(60, 50, 40, 0.38), inset 0 -6px 12px rgba(60, 50, 40, 0.06); }
+      .ok-disc svg { position: absolute; inset: 0; width: 200px; height: 200px; }
+      #okPath { fill: none; stroke: var(--brand-primary); stroke-width: 22; stroke-linecap: round; stroke-linejoin: round; opacity: 0; }
+      .ok-ring { position: absolute; inset: 0; border-radius: 50%; opacity: 0; box-shadow: 0 0 0 8px var(--brand-primary); }
+      /* creative pass: cable ghosts (taut geometry the riders follow), data packets, card micro-life, antenna, confetti */
+      .ghost { fill: none; stroke: none; }
+      .pk { position: absolute; left: 0; top: 0; width: 12px; height: 12px; border-radius: 50%; opacity: 0; background: var(--brand-primary);
+        box-shadow: 0 0 8px 2px color-mix(in srgb, var(--brand-primary) 45%, transparent); }
+      .pk.in { width: 9px; height: 9px; background: var(--brand-primary-dark); }
+      .tile .mail { position: absolute; right: 5px; top: 5px; width: 16px; height: 16px; border-radius: 50%; opacity: 0;
+        background: var(--brand-primary); box-shadow: 0 0 0 3px var(--brand-background); }
+      .ico .band { opacity: 0; }
+      .ico .wl { stroke-dasharray: 1 1; stroke-dashoffset: 1; opacity: 0; }
+      .g.fill { background: var(--brand-primary); transform: scaleX(0); transform-origin: 0 50%; }
+      .ant { position: absolute; left: 142px; top: -58px; width: 16px; height: 64px; transform-origin: 50% 100%; }
+      .ant .stem { position: absolute; left: 5px; top: 16px; width: 6px; height: 48px; border-radius: 3px; background: var(--brand-text); }
+      .ant .bulb { position: absolute; left: -3px; top: 0; width: 22px; height: 22px; border-radius: 50%; background: var(--brand-text); }
+      .ant .bulb b { position: absolute; inset: 0; border-radius: 50%; opacity: 0; background: var(--brand-primary);
+        box-shadow: 0 0 14px 4px color-mix(in srgb, var(--brand-primary) 70%, transparent); }
+      .cf { position: absolute; border-radius: 50%; opacity: 0; background: var(--brand-primary); }
+      .cf.dk { background: var(--brand-primary-dark); }
+      .cf.sq { border-radius: 4px; }
+    </style>
+  </head>
+  <body data-face="0.47">
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="6.5500">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+      <div id="cam"><div id="punch">
+
+        <!-- dotted cables: puck rim → each card's inner edge -->
+        <svg class="paths" viewBox="0 0 1080 1920">
+          <path id="g1" class="ghost" d="M420 880 C 372 858, 352 800, 302 800" />
+          <path id="g2" class="ghost" d="M600 880 C 648 858, 668 800, 718 800" />
+          <path id="g3" class="ghost" d="M600 1000 C 648 1022, 668 1080, 718 1080" />
+          <path id="g4" class="ghost" d="M420 1000 C 372 1022, 352 1080, 302 1080" />
+          <path id="k1" class="dotted" d="M420 880 C 384 936, 340 884, 302 800" />
+          <path id="k2" class="dotted" d="M600 880 C 636 936, 680 884, 718 800" />
+          <path id="k3" class="dotted" d="M600 1000 C 640 1076, 682 1116, 718 1080" />
+          <path id="k4" class="dotted" d="M420 1000 C 380 1076, 338 1116, 302 1080" />
+        </svg>
+        <div id="pkLayer" class="layer"></div>
+        <div id="p1" class="pulse"></div><div id="p2" class="pulse"></div><div id="p3" class="pulse"></div><div id="p4" class="pulse"></div>
+
+        <!-- four system cards (illustrative UI: drawn icons, generic labels) -->
+        <div id="sDb" class="sys" style="left: 76px; top: 668px">
+          <div class="uicard scard">
+            <div class="tile"><svg class="ico" viewBox="0 0 40 40"><ellipse cx="20" cy="8" rx="13" ry="4.5" /><path d="M7 8v24c0 2.5 5.8 4.5 13 4.5s13-2 13-4.5V8" /><path class="band" d="M7 16c0 2.5 5.8 4.5 13 4.5s13-2 13-4.5" /><path class="band" d="M7 24c0 2.5 5.8 4.5 13 4.5s13-2 13-4.5" /></svg></div>
+            <div class="sdot"><i></i></div>
+            <div class="slabel">database</div>
+            <i class="g" style="left: 24px; top: 148px; width: 110px; height: 10px"></i><i class="g fill" style="left: 24px; top: 148px; width: 110px; height: 10px"></i>
+          </div>
+        </div>
+        <div id="sIn" class="sys" style="left: 724px; top: 668px">
+          <div class="uicard scard">
+            <div class="tile"><svg class="ico" viewBox="0 0 40 40"><path d="M4 22l6-14h20l6 14v10H4z" /><path d="M4 22h9l3 5h8l3-5h9" /></svg><i class="mail"></i></div>
+            <div class="sdot"><i></i></div>
+            <div class="slabel">inbox</div>
+            <i class="g" style="left: 24px; top: 148px; width: 130px; height: 10px"></i><i class="g fill" style="left: 24px; top: 148px; width: 130px; height: 10px"></i>
+          </div>
+        </div>
+        <div id="sCrm" class="sys" style="left: 724px; top: 1018px">
+          <div class="uicard scard">
+            <div class="tile"><svg class="ico" viewBox="0 0 40 40"><rect x="4" y="8" width="32" height="24" rx="4" /><circle class="av" cx="14" cy="18" r="4" /><path d="M8 27c1.5-3 3.5-4 6-4s4.5 1 6 4" /><path d="M24 16h7M24 22h5" /></svg></div>
+            <div class="sdot"><i></i></div>
+            <div class="slabel">CRM</div>
+            <i class="g r1" style="left: 24px; top: 148px; width: 70px; height: 10px"></i><i class="g r2" style="left: 104px; top: 148px; width: 46px; height: 10px"></i>
+          </div>
+        </div>
+        <div id="sDoc" class="sys" style="left: 76px; top: 1018px">
+          <div class="uicard scard">
+            <div class="tile"><svg class="ico" viewBox="0 0 40 40"><path d="M10 4h14l8 8v24H10z" /><path d="M24 4v8h8" /><path class="wl" pathLength="1" d="M15 20h12" /><path class="wl" pathLength="1" d="M15 26h12" /><path class="wl" pathLength="1" d="M15 32h7" /></svg></div>
+            <div class="sdot"><i></i></div>
+            <div class="slabel">docs</div>
+            <i class="g" style="left: 24px; top: 148px; width: 120px; height: 10px"></i><i class="g fill" style="left: 24px; top: 148px; width: 120px; height: 10px"></i>
+          </div>
+        </div>
+
+        <!-- the agent puck (hub) and the check badge that pops out of it -->
+        <div id="cfLayer" class="layer"></div>
+        <div id="puck" class="puck" data-x="360" data-y="790" data-scale="0.7"></div>
+        <div id="ok"><div class="ok-ring"></div><div class="ok-disc"><svg viewBox="0 0 200 200"><path id="okPath" d="M58 104 L88 134 L144 74" /></svg></div></div>
+
+        <div class="spk small" data-x="526" data-y="302" data-w="420" data-h="330" data-face-at="0.55" data-ry="-8">
+          <div class="spk-card">
+            <div class="spk-vid"><video id="speaker" class="clip" src="assets/speaker.mp4" muted playsinline data-start="0" data-duration="6.5500" data-track-index="1"></video></div>
+            <div class="spk-sheen"></div>
+          </div>
+        </div>
+
+        <!-- TOP-LEFT slot (beside the speaker card) -->
+        <div id="lHook" class="line sup" data-x="76" data-base="420" data-size="130" data-exit="1.94" data-exit-lag="2"><span class="w" data-t="0.41" data-pop>hook</span></div>
+        <div id="lUp" class="line sup" data-x="250" data-base="540" data-size="130" data-exit="1.94"><span class="w" data-t="0.67" data-pop>up</span></div>
+        <div id="lCo" class="line sup" data-x="76" data-base="410" data-size="100" data-exit="3.70" data-exit-lag="2"><span class="w" data-t="3.11" data-pop>company</span></div>
+        <div id="lUses" class="line sup" data-x="200" data-base="514" data-size="100" data-exit="3.70"><span class="w" data-t="3.39">uses</span></div>
+        <div id="lWork" class="line sup ocean" data-x="76" data-base="415" data-size="124" data-exit="4.80" data-exit-lag="2"><span class="w" data-t="4.23" data-pop>work</span></div>
+        <div id="lDone" class="line sup" data-x="206" data-base="532" data-size="124" data-exit="4.80"><span class="w" data-t="4.47">done</span></div>
+        <div id="lMake" class="line sup" data-x="76" data-base="420" data-size="130"><span class="w" data-t="5.13" data-pop>make</span></div>
+        <div id="lSure" class="line sup" data-x="236" data-base="540" data-size="130"><span class="w" data-t="5.33" data-pop>sure</span></div>
+
+        <!-- LOWER slot -->
+        <div id="lAI" class="line sup" data-right="936" data-base="1440" data-size="88" data-exit="1.88">
+          <span class="w" data-t="1.03">all</span><span class="w gap-s" data-t="1.29">the</span><span class="w hero ocean" style="font-size: 2.73em; margin-left: 0.08em" data-t="1.49" data-hero>AI</span>
+        </div>
+        <div id="lSys" class="line hero" data-x="100" data-base="1424" data-size="190" data-exit="5.52"><span class="w" data-t="2.31" data-hero data-rise="20">systems</span></div>
+        <div id="lAct" class="line sup" data-x="76" data-base="1288" data-size="100"><span class="w" data-t="5.89" data-pop>actually</span></div>
+        <div id="lWorks" class="line hero ocean" data-right="904" data-base="1462" data-size="240"><span class="w" data-t="6.05" data-hero data-peak="1.1" data-rise="12">works</span></div>
+
+      </div></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const P = await Paper.init();
+        const { tl, D, F, $, $$ } = P;
+        const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+        const ACC = css("--brand-primary"), INK = css("--brand-text");
+        const puck = $("#puck"), disc = $(".puck-disc", puck), shadow = $(".puck-shadow", puck), glow = $(".puck-glow", puck), ring = $(".puck-ring", puck);
+        const eyes = $$(".eye", puck);
+        gsap.set(eyes, { transformOrigin: "50% 50%" });
+
+        // the puck's antenna (bespoke personality on the runtime puck): stem + bulb, wobbles with drag on every jolt
+        const ant = document.createElement("div");
+        ant.className = "ant";
+        ant.innerHTML = '<i class="stem"></i><i class="bulb"><b></b></i>';
+        disc.appendChild(ant);
+        const bulb = $(".bulb b", ant);
+        gsap.set(bulb, { transformOrigin: "50% 50%" });
+        const wob = (t, a) => {
+          tl.to(ant, { rotation: a, duration: 3 * F, ease: "power2.out" }, t)
+            .to(ant, { rotation: -a * 0.6, duration: 5 * F, ease: "sine.inOut" }, t + 3 * F)
+            .to(ant, { rotation: a * 0.28, duration: 5 * F, ease: "sine.inOut" }, t + 8 * F)
+            .to(ant, { rotation: 0, duration: 6 * F, ease: "sine.out" }, t + 13 * F);
+        };
+        const bulbFlash = (t) => {
+          tl.fromTo(bulb, { scale: 1.6 }, { scale: 1, duration: 8 * F, ease: "back.out(2)" }, t);
+        };
+
+        // ---------- BEAT A: the puck drops in on an arc, antenna trailing, squash on "hook up" (contact 0.45 = SFX pop)
+        tl.fromTo(disc, { y: -480 }, { y: 0, duration: 0.45, ease: "power2.in" }, 0);
+        tl.fromTo(disc, { x: -260 }, { x: 0, duration: 0.45, ease: "sine.inOut" }, 0);
+        tl.fromTo(disc, { rotation: -16 }, { rotation: 0, duration: 0.6, ease: "back.out(1.6)" }, 0);
+        tl.fromTo(ant, { rotation: 18 }, { rotation: 8, duration: 0.45, ease: "power1.in" }, 0);     // drag while falling
+        tl.fromTo(shadow, { opacity: 0, scale: 0.35 }, { opacity: 1, scale: 1, duration: 0.45, ease: "power2.in" }, 0);
+        P.squash(disc, 0.45, 0.12);
+        wob(0.45, -24);
+        P.floatY(puck, 4, 1.3);
+        // wakes up on "AI": eyes + antenna bulb light, glow ring
+        tl.set(eyes, { opacity: 0.22 }, 0);
+        tl.to(eyes, { opacity: 1, duration: 4 * F, ease: "power2.out" }, 1.44);
+        tl.to(bulb, { opacity: 1, duration: 4 * F, ease: "power2.out" }, 1.44);
+        bulbFlash(1.49);
+        P.puckFeed(puck, 1.49);
+        wob(1.49, 10);
+
+        // ---------- BEAT B: four system cards deal OUT of the puck on arcs (SFX ticks 2.12 / 2.25 / 2.38 / 2.52)
+        const cards = [["#sDb", 186, 758, -10], ["#sIn", 834, 758, 10], ["#sCrm", 834, 1108, 10], ["#sDoc", 186, 1108, -10]];
+        P.squash(disc, 2.14, 0.06);
+        cards.forEach(([s, cx, cy, tilt], i) => {
+          const t = 2.12 + i * 4 * F;
+          tl.fromTo(s, { opacity: 0, scale: 0.3 }, { opacity: 1, scale: 1.04, duration: 10 * F, ease: "power3.out" }, t);
+          tl.to(s, { scale: 1, duration: 8 * F, ease: "back.out(1.6)" }, t + 10 * F);
+          P.arc(s, t, { fromX: 510 - cx, fromY: 940 - cy, dur: 16 * F, tilt });
+          P.floatY($(".scard", $(s)), 3, [1.2, 1.4, 1.3, 1.5][i]);
+          tl.to(ant, { rotation: [-9, 9, 9, -9][i], duration: 2 * F, ease: "power2.out" }, t);       // antenna flicks toward each deal
+        });
+        wob(2.6, 8);
+
+        // ---------- cables: draw out SAGGING (rope under gravity), then snap TAUT with a rope wobble as they connect
+        const ks = ["#k1", "#k2", "#k3", "#k4"], gs = ["#g1", "#g2", "#g3", "#g4"];
+        ks.forEach((k, i) => {
+          const t = 2.62 + i * 0.12;
+          P.drawPath(k, t, 0.3);
+          const mask = $(k).ownerSVGElement.querySelector("defs").lastElementChild.firstElementChild;   // the reveal mask drawPath just made
+          tl.to([$(k), mask], { attr: { d: $(gs[i]).getAttribute("d") }, duration: 0.5, ease: "elastic.out(1, 0.42)" }, t + 0.1);
+          P.marchPath(k, t, D - t, 42);
+        });
+
+        // ---------- a pulse rides each (taut) cable; the eyes FOLLOW it; the card wakes up on arrival
+        const life = {
+          "#sDb": (t) => {      // database: storage layers stack in
+            $$("#sDb .band").forEach((b, j) => tl.fromTo(b, { opacity: 0, y: -8 }, { opacity: 1, y: 0, duration: 7 * F, ease: "back.out(3)" }, t + j * 3 * F));
+          },
+          "#sIn": (t) => {      // inbox: a new-mail dot slides in, the tray dips
+            const m = $("#sIn .mail"), ico = $("#sIn .ico");
+            gsap.set(m, { transformOrigin: "50% 50%" });
+            tl.fromTo(m, { opacity: 0, x: 34, scale: 0.6 }, { opacity: 1, x: 0, scale: 1.2, duration: 6 * F, ease: "power3.out" }, t);
+            tl.to(m, { scale: 1, duration: 8 * F, ease: "back.out(2.4)" }, t + 6 * F);
+            tl.to(ico, { y: 3, duration: 3 * F, ease: "power2.out" }, t + 4 * F).to(ico, { y: 0, duration: 8 * F, ease: "back.out(2.5)" }, t + 7 * F);
+          },
+          "#sCrm": (t) => {     // CRM: avatar fills accent, the rows shuffle twice
+            tl.to("#sCrm .av", { fill: ACC, stroke: ACC, duration: 4 * F, ease: "power2.out" }, t);
+            const r1 = $("#sCrm .r1"), r2 = $("#sCrm .r2");
+            [t + 2 * F, t + 0.42].forEach((u, j) => {
+              const d1 = j ? 0 : 80, d2 = j ? 0 : -80;
+              tl.to(r1, { x: d1, duration: 9 * F, ease: "power2.inOut" }, u).to(r1, { y: -9, duration: 4.5 * F, ease: "sine.out", yoyo: true, repeat: 1 }, u);
+              tl.to(r2, { x: d2, duration: 9 * F, ease: "power2.inOut" }, u + F).to(r2, { y: 9, duration: 4.5 * F, ease: "sine.out", yoyo: true, repeat: 1 }, u + F);
+            });
+          },
+          "#sDoc": (t) => {     // docs: the page lines write themselves
+            $$("#sDoc .wl").forEach((l, j) => {
+              tl.set(l, { opacity: 1 }, t + j * 4 * F);
+              tl.fromTo(l, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 5 * F, ease: "power2.out" }, t + j * 4 * F);
+            });
+          },
+        };
+        const rides = [["#p1", "#g1", "#sDb", 3.08, -9, -5], ["#p2", "#g2", "#sIn", 3.34, 9, -5], ["#p3", "#g3", "#sCrm", 3.6, 9, 5], ["#p4", "#g4", "#sDoc", 3.86, -9, 5]];
+        rides.forEach(([p, g, s, t, ex, ey]) => {
+          tl.to(eyes, { x: ex * 0.5, y: ey * 0.5, duration: 5 * F, ease: "power2.out" }, t - 6 * F);       // look at the cable
+          tl.to(eyes, { x: ex * 1.55, y: ey * 1.4, duration: 0.34, ease: "power2.inOut" }, t);            // follow the pulse out
+          bulbFlash(t);
+          tl.fromTo(p, { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 3 * F, ease: "power2.out" }, t);
+          P.ride(p, g, t, 0.34);
+          tl.to(p, { opacity: 0, scale: 1.6, duration: 4 * F, ease: "power2.in" }, t + 0.3);
+          const arr = t + 0.34, dot = $(s + " .sdot i");
+          gsap.set(dot, { transformOrigin: "50% 50%" });
+          tl.fromTo(dot, { opacity: 0, scale: 0.4 }, { opacity: 1, scale: 1.3, duration: 4 * F, ease: "power3.out" }, arr - 2 * F);
+          tl.to(dot, { scale: 1, duration: 8 * F, ease: "back.out(2)" }, arr + 2 * F);
+          P.pulse(s, arr, 1.035);
+          const fill = $(s + " .g.fill");
+          if (fill) tl.to(fill, { scaleX: 1, duration: 0.45, ease: "power2.out" }, arr + 2 * F);
+          life[s](arr);
+          // data keeps flowing both ways along the connected cable (packets out to the card, smaller ones back)
+          const layer = $("#pkLayer");
+          [[false, 0.12], [true, 0.43]].forEach(([back, off]) => {
+            const el = document.createElement("div");
+            el.className = back ? "pk in" : "pk";
+            layer.appendChild(el);
+            for (let u = arr + off; u + 0.5 <= D - 2 * F; u += 0.62) {
+              tl.fromTo(el, { opacity: 0 }, { opacity: 1, duration: 3 * F, ease: "power1.out", immediateRender: false }, u);
+              P.ride(el, g, u, 0.5, back ? { start: 1, end: 0 } : {});
+              tl.to(el, { opacity: 0, duration: 3 * F, ease: "power1.in" }, u + 0.5 - 3 * F);
+            }
+          });
+        });
+
+        // all four connected (4.26): happy squint ^^, a little hop with antenna whip, glow ring, then the glow breathes
+        tl.to(eyes, { x: 0, y: 0, duration: 6 * F, ease: "power2.inOut" }, 4.2);
+        tl.to(eyes, { scaleY: 0.3, y: -3, duration: 3 * F, ease: "power2.out" }, 4.24);
+        tl.to(eyes, { scaleY: 1, y: 0, duration: 6 * F, ease: "back.out(2)" }, 4.64);
+        tl.to(disc, { scaleX: 1.08, scaleY: 0.9, duration: 3 * F, ease: "power2.in" }, 4.13);            // anticipation
+        tl.to(disc, { scaleX: 0.96, scaleY: 1.05, duration: 3 * F, ease: "power2.out" }, 4.23);
+        tl.to(disc, { y: -26, duration: 6 * F, ease: "power2.out" }, 4.23);
+        tl.to(disc, { y: 0, duration: 5 * F, ease: "power2.in" }, 4.43);
+        P.squash(disc, 4.6, 0.08);
+        wob(4.6, -16);
+        tl.fromTo(ring, { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 4 * F, ease: "power2.out" }, 4.26);
+        tl.to(ring, { opacity: 0, scale: 1.14, duration: 0.4, ease: "power2.out" }, 4.26 + 4 * F);
+        tl.fromTo(glow, { opacity: 0, scale: 0.7 }, { opacity: 0.8, scale: 1, duration: 0.2, ease: "power2.out" }, 4.26);
+        tl.to(glow, { opacity: 0.2, duration: 0.45, ease: "sine.inOut" }, 4.5);
+        tl.to(glow, { opacity: 0.45, duration: 0.4, ease: "sine.inOut", yoyo: true, repeat: 1 }, 4.95);
+
+        // ---------- BEAT C: "make sure" — the eyes scan left → right, card dots blink as the gaze passes
+        tl.to(eyes, { x: -16, duration: 5 * F, ease: "power2.inOut" }, 4.98);
+        tl.to(eyes, { x: 16, duration: 9 * F, ease: "sine.inOut" }, 5.15);
+        tl.to(eyes, { x: 0, duration: 5 * F, ease: "power2.inOut" }, 5.45);
+        [["#sDb", 5.1], ["#sDoc", 5.14], ["#sIn", 5.38], ["#sCrm", 5.42]].forEach(([s, t]) => {
+          const dot = $(s + " .sdot i");
+          tl.to(dot, { scale: 1.45, duration: 3 * F, ease: "power2.out" }, t).to(dot, { scale: 1, duration: 7 * F, ease: "back.out(2)" }, t + 3 * F);
+        });
+
+        // "actually works": anticipation squash, the check badge shoots up out of the puck (launch 5.79 = SFX ding; impact 5.96)
+        const okT = 5.96;
+        tl.to(disc, { scaleX: 1.1, scaleY: 0.88, duration: 4 * F, ease: "power2.in" }, okT - 9 * F);
+        tl.to(disc, { scaleX: 0.95, scaleY: 1.06, duration: 3 * F, ease: "power2.out" }, okT - 5 * F);
+        tl.to(disc, { scaleX: 1, scaleY: 1, duration: 9 * F, ease: "back.out(2)" }, okT - 2 * F);
+        wob(okT - 5 * F, -18);
+        gsap.set("#ok", { transformOrigin: "50% 60%" });
+        tl.fromTo("#ok", { opacity: 0, y: 170, scale: 0.3, rotation: -14 },
+          { opacity: 1, y: -12, scale: 1.15, rotation: 3, duration: 5 * F, ease: "power3.out" }, okT - 5 * F);
+        tl.to("#ok", { y: 0, scale: 1, rotation: 0, duration: 10 * F, ease: "back.out(1.8)" }, okT);
+        tl.to("#ok", { y: -6, duration: D - 6.3, ease: "sine.inOut" }, 6.3);
+        const okPath = $("#okPath"), L = okPath.getTotalLength();
+        okPath.style.strokeDasharray = `${L} ${L}`;
+        tl.set(okPath, { opacity: 1 }, okT - 2 * F);
+        tl.fromTo(okPath, { strokeDashoffset: L }, { strokeDashoffset: 0, duration: 0.18, ease: "power2.out" }, okT - 2 * F);
+        tl.fromTo(".ok-ring", { opacity: 0.9, scale: 1 }, { opacity: 0, scale: 1.55, duration: 0.32, ease: "power2.out" }, okT);
+        tl.fromTo(glow, { opacity: 0, scale: 0.7 }, { opacity: 0.85, scale: 1, duration: 0.2, ease: "power2.out" }, okT);
+        tl.to(glow, { opacity: 0.45, duration: 0.3, ease: "sine.inOut" }, okT + 0.2);
+        P.shake(okT, 3);
+        // confetti in house style: a ring of small accent dots bursts from behind the badge, then drifts down and fades
+        const cfL = $("#cfLayer");
+        for (let i = 0; i < 16; i++) {
+          const el = document.createElement("div");
+          const sz = [12, 16, 10, 14][i % 4];
+          el.className = "cf" + (i % 3 === 1 ? " dk" : "") + (i % 5 === 2 ? " sq" : "");
+          Object.assign(el.style, { width: sz + "px", height: sz + "px", left: 510 - sz / 2 + "px", top: 770 - sz / 2 + "px" });
+          cfL.appendChild(el);
+          const a = (i / 16) * Math.PI * 2 + (((i * 7) % 5) - 2) * 0.07, dist = 128 + ((i * 37) % 62);
+          const x = Math.cos(a) * dist, y = Math.sin(a) * dist * 0.9 - 8;
+          tl.fromTo(el, { x: 0, y: 0, scale: 0.3, rotation: 0 }, { x, y, scale: 1, rotation: (i % 2 ? 1 : -1) * 90, duration: 0.42, ease: "power3.out" }, okT);
+          tl.fromTo(el, { opacity: 0 }, { opacity: 1, duration: 2 * F, ease: "none" }, okT);
+          tl.to(el, { opacity: 0, scale: 0.4, y: y + 22, duration: 0.28, ease: "power2.in" }, okT + 0.3);
+        }
+        // the cables flash accent once
+        tl.to(ks, { stroke: ACC, duration: 2 * F, ease: "power2.out" }, okT);
+        tl.to(ks, { stroke: INK, duration: 10 * F, ease: "power2.inOut" }, okT + 4 * F);
+        // all four cards do a synchronized happy hop (tiles lag 2 f), then a smaller second bounce into the cut
+        cards.forEach(([s], i) => {
+          const tile = $(s + " .tile"), r = i % 2 ? 2 : -2;
+          tl.to(s, { y: -18, rotation: r, duration: 4 * F, ease: "power2.out" }, okT);
+          tl.to(s, { y: 0, rotation: 0, duration: 5 * F, ease: "power2.in" }, okT + 4 * F);
+          tl.to(s, { y: -9, rotation: -r * 0.5, duration: 4 * F, ease: "power2.out" }, 6.26);
+          tl.to(s, { y: 0, rotation: 0, duration: 5 * F, ease: "power2.in" }, 6.26 + 4 * F);
+          tl.to(tile, { y: -7, duration: 4 * F, ease: "power2.out" }, okT + 2 * F).to(tile, { y: 0, duration: 7 * F, ease: "back.out(2.2)" }, okT + 6 * F);
+        });
+        // the puck is happy: squint ^^ through "works", reopen before the cut
+        tl.to(eyes, { scaleY: 0.3, y: -3, duration: 3 * F, ease: "power2.out" }, okT + F);
+        tl.to(eyes, { scaleY: 1, y: 0, duration: 5 * F, ease: "back.out(2)" }, 6.36);
+        // staging: "make sure" steps back so the check + "works" own the frame
+        P.recede("#lMake, #lSure", okT, { opacity: 0.45, blur: 3, scale: 0.97 });
+      })();
+    </script>
+  </body>
+</html>

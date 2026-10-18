@@ -1,0 +1,105 @@
+{
+  "name": "adnaan-reel \u2014 Ocean editorial",
+  "platform": "reels",
+  "source_docs": [],
+  "colors": {
+    "primary": {
+      "hex": "#2E9CCB",
+      "name": "Ocean",
+      "use": "key words, active coin, accent edge of speaker card, progress"
+    },
+    "primary_dark": {
+      "hex": "#1F7EA8",
+      "name": "Ocean dark",
+      "use": "coin gradient bottom, pressed states"
+    },
+    "deep": {
+      "hex": "#0D2731",
+      "name": "Ocean deep",
+      "use": "'picked'/hero UI cards, agent puck"
+    },
+    "background": {
+      "hex": "#E4DED9",
+      "name": "Grey paper",
+      "use": "every graphic scene background (with faint 60px grid + vignette)"
+    },
+    "card": {
+      "hex": "#FBFAF8",
+      "name": "Card white",
+      "use": "soft UI cards, coins"
+    },
+    "text": {
+      "hex": "#141414",
+      "name": "Ink",
+      "use": "serif phrases, labels"
+    },
+    "muted": {
+      "hex": "#8E8780",
+      "name": "Muted",
+      "use": "mono/small labels"
+    }
+  },
+  "fonts": {
+    "heading": {
+      "family": "Newsreader",
+      "weight": 600,
+      "file": "fonts/Newsreader-SemiBold.ttf",
+      "source": "brand-files"
+    },
+    "accent": {
+      "family": "Fraunces",
+      "weight": 700,
+      "file": "fonts/Fraunces-BoldItalic.ttf",
+      "source": "brand-files"
+    },
+    "body": {
+      "family": "Geist",
+      "weight": 500,
+      "file": "fonts/Geist-Medium.ttf",
+      "source": "brand-files"
+    },
+    "captions": {
+      "family": "Geist",
+      "weight": 600,
+      "file": "fonts/Geist-SemiBold.ttf",
+      "source": "brand-files"
+    }
+  },
+  "logos": [],
+  "captions": {
+    "mode": "box",
+    "color": "#141414",
+    "highlight": "#141414",
+    "box_color": "#FBFAF8",
+    "box_alpha": 0.12,
+    "case": "natural",
+    "size": 44,
+    "font_role": "captions",
+    "ass_fontname": "Geist SemiBold",
+    "fonts_dir": "fonts/static",
+    "font_file": "fonts/static/Geist-SemiBold.ttf"
+  },
+  "elements": {
+    "corner_radius": 28,
+    "card_shadow": "0 30px 50px -12px rgba(60,50,40,.30)",
+    "stroke": 0
+  },
+  "motion": {
+    "feel": "soft, tactile, editorial; things float, settle and stack",
+    "pop": "back.out(1.4)",
+    "entrance": "0.35-0.6 s"
+  },
+  "voice": "Plain-spoken creator, direct to camera.",
+  "imagery": "Soft tactile 3D-ish objects on grey paper: coins, cards, pills, dotted paths, agent puck. Real pages in browser cards. Speaker in a tilted floating video card.",
+  "rules": {
+    "do": [
+      "Accent only on 1-2 key words per phrase",
+      "Soft shadows, no outlines"
+    ],
+    "dont": [
+      "Hard outlines or offset shadows",
+      "Draw or imitate the Claude logo",
+      "More than one accent colour"
+    ]
+  }
+}

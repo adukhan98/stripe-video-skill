@@ -1,0 +1,192 @@
+<!doctype html>
+<!-- v05_article (rev 3, v6 Mode C cutout): CHAPTER + REAL PAGE (bespoke). The REAL page (felixrieseberg.com, dark mode as on the
+     site) fills a big browser card; HE stands on the bottom edge IN FRONT of it as a background-removed cutout (speaker_cut.webm),
+     the real title fully readable above his head. Beat A: the page rises in on "article", a reading-progress bar fills as he reads
+     the title, the highlighter swipes "ambitious:" + a red marker underline; "an article" → "ambitious" (red) on a paper strip
+     between the title and his head. Beat B: on "written" the page scrolls fast past the etching to "I work on Claude." while the
+     card compacts and he sinks lower in the frame; highlighter on "I work on Claude", Caveat "by Felix", "an engineer / working on
+     / Claude" and the official Claude chip swinging in on a red marker arrow like a hung sign. No photo of Felix.
+     Runtime (paper.js + marker.js) untouched. -->
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>v05_article</title>
+    <link rel="stylesheet" href="brand.css" />
+    <link rel="stylesheet" href="paper.css" />
+    <link rel="stylesheet" href="marker.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/MotionPathPlugin.min.js"></script>
+    <script src="paper.js"></script>
+    <script src="marker.js"></script>
+    <style>
+      @font-face { font-family: "Inter Tight"; src: url("fonts/InterTight-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Inter"; src: url("fonts/Inter-Variable.ttf") format("truetype"); font-weight: 100 900; font-style: normal; font-display: block; }
+      @font-face { font-family: "Caveat"; src: url("fonts/Caveat-Variable.ttf") format("truetype"); font-weight: 400 700; font-style: normal; font-display: block; }
+
+      /* the REAL page, dark mode as on the site (page colour rgb(18,17,14) = the capture's own background) */
+      #pcW { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; transform: rotate(-1deg); transform-origin: 510px 850px; }
+      #pc { left: 88px; top: 310px; width: 848px; height: 1082px; background: rgb(18, 17, 14);
+        box-shadow: 0 30px 50px -14px rgba(20, 20, 20, 0.42), 0 12px 22px -10px rgba(20, 20, 20, 0.3); }
+      #pc .chrome { background: var(--brand-deep); }
+      #pc .dot { background: rgba(255, 255, 255, 0.2); }
+      #pc .url { left: 112px; margin-left: 0; width: 330px; background: rgba(255, 255, 255, 0.09); color: rgb(196, 190, 182); }
+      #pc .viewport { background: rgb(18, 17, 14); }
+      #pg { position: absolute; left: 0; top: 0; width: 848px; height: 1800px; }
+      #pImg { position: absolute; left: -16px; top: 0; width: 900px; display: block; }   /* 900 / 1260 = 0.714 scale */
+      #pgsvg { position: absolute; left: 0; top: 0; overflow: visible; z-index: 3; }
+      .mk-hl { mix-blend-mode: screen !important; }            /* dark page: the highlighter glows behind the light type */
+      .mk-hl path { fill: none !important; }                   /* runtime highlighter fill bug — scene-level fix */
+      #prog { position: absolute; left: 0; bottom: 0; width: 848px; height: 6px; background: var(--brand-primary);
+        transform-origin: 0 50%; transform: scaleX(0); z-index: 3; }
+
+      /* Mode C cutout: full width so the footage's side crops sit on the frame edges (no visible cut), dropped so his hair clears the title band */
+      #spkW { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+
+      /* solid paper strip under the beat-A words, between the title and his head */
+      #strip { position: absolute; left: 64px; top: 592px; width: 770px; height: 160px; border-radius: 22px;
+        background: var(--brand-background); box-shadow: 0 14px 26px -16px rgba(20, 20, 20, 0.45); transform-origin: 0 50%; opacity: 0; }
+
+      /* official Claude chip: a hung sign (wrapper swings, chip squashes) */
+      .chip.big { height: 116px; padding: 0 32px 0 22px; border-radius: 58px; gap: 16px; font-size: 50px; }
+      .chip.big img { width: 72px; height: 72px; border-radius: 18px; }
+      #chipW { position: absolute; left: 0; top: 0; opacity: 0; }
+      #chipC { position: relative; opacity: 1; }
+
+      .lt { display: inline-block; }
+    </style>
+  </head>
+  <body data-face="0.41">
+    <div id="root" data-composition-id="main" data-start="0" data-width="1080" data-height="1920" data-duration="7.4833">
+      <div id="bg"><div id="grid"></div><div id="vignette"></div></div>
+      <div id="cam"><div id="punch">
+
+        <!-- REAL PAGE behind him (dark mode capture, 0.714 scale) -->
+        <div id="pcW">
+          <div id="pc" class="browser" data-float="2">
+            <div class="chrome"><i class="dot"></i><i class="dot"></i><i class="dot"></i><div class="url">felixrieseberg.com</div><div id="prog"></div></div>
+            <div class="viewport">
+              <div id="pg">
+                <img id="pImg" src="assets/art_page_dark.png" alt="13 October 2026 — How to be more ambitious: A tutorial for humans with models — I work on Claude." />
+                <svg id="pgsvg" width="848" height="1800" viewBox="0 0 848 1800"></svg>
+              </div>
+            </div>
+            <div class="sheen"></div>
+          </div>
+        </div>
+
+        <!-- Mode C: HE stands on the bottom edge in front of the page (background removed) -->
+        <div id="spkW">
+          <div class="spk cutout" data-w="1080" data-x="0" data-drop="392">
+            <video id="speaker" class="clip" src="assets/speaker_cut.webm" muted playsinline data-start="0" data-duration="7.4833" data-track-index="1"></video>
+          </div>
+        </div>
+
+        <div id="strip"></div>
+
+        <!-- ===== BEAT A words (on the paper strip under the title, above his head) ===== -->
+        <div id="art" class="line sup" data-x="92" data-base="716" data-size="120" data-exit="2.47">
+          <span class="w" data-t="0.65" data-rise="20">an</span><span class="w gap-s" data-t="0.85" data-pop data-rise="18">article</span>
+        </div>
+        <div id="amb" class="line hero ocean" data-x="90" data-base="732" data-size="172" data-fit="740" data-exit="4.98">
+          <span class="w" data-t="2.79" data-hero data-peak="1.03" data-rise="22"><span class="lt">a</span><span class="lt">m</span><span class="lt">b</span><span class="lt">i</span><span class="lt">t</span><span class="lt">i</span><span class="lt">o</span><span class="lt">u</span><span class="lt">s</span></span>
+        </div>
+
+        <!-- ===== BEAT B words (on paper, under the compacted page, above his head) ===== -->
+        <div id="eng" class="line sup" data-x="88" data-base="692" data-size="108">
+          <span class="w" data-t="6.18">an</span><span class="w gap-s" data-t="6.46" data-pop>engineer</span>
+        </div>
+        <div id="wo" class="line sup" data-x="88" data-base="812" data-size="108">
+          <span class="w" data-t="6.78" data-pop>working</span><span class="w gap-s" data-t="7.06">on</span>
+        </div>
+        <div id="cl" class="line hero ocean" data-x="80" data-base="986" data-size="170">
+          <span class="w" data-t="7.26" data-hero data-peak="1.05" data-rise="30">Claude</span>
+        </div>
+
+        <!-- the official Claude chip hangs off the red arrow -->
+        <div id="chipW"><div id="chipC" class="chip big"><img src="assets/claude.png" alt="Claude" />Claude</div></div>
+
+      </div></div>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const P = await Paper.init({ extraFonts: ['700 60px "Caveat"'] });
+        const M = Marker.init(P);
+        const { tl, D, F, $, $$ } = P;
+        const K = 900 / 1260;                    // page capture scale in the card
+        const pc = $("#pc"), pg = $("#pg"), pgsvg = $("#pgsvg");
+        const X = (x) => -16 + x * K, Y = (y) => y * K;      // capture px → page px
+        const VIEW_A = -199;                     // beat A: the title right under the chrome (frame y ~376–583)
+        const VIEW_B = 24 - Y(2072);             // beat B: "I work on Claude." line 24 px below the chrome
+
+        // =============================== BEAT A — THE ARTICLE ===============================
+        gsap.set(pg, { y: VIEW_A });
+        P.cardIn("#pc", 0.62, { fromY: 40, rot: -1.5, ry: 0 });           // contact on "article" (0.85)
+        // reading-progress bar: fills while he reads the title, jumps on the scroll
+        tl.to("#prog", { scaleX: 0.06, duration: 0.5, ease: "power2.out" }, 0.9);
+        tl.to("#prog", { scaleX: 0.3, duration: 2.9, ease: "none" }, 1.8);
+
+        // solid paper strip slides in under the words (left → right), leaves with "ambitious" before the scroll
+        tl.fromTo("#strip", { opacity: 0, scaleX: 0.2 }, { opacity: 1, scaleX: 1, duration: 0.34, ease: "power3.out" }, 0.48);
+        tl.to("#strip", { opacity: 0, y: -24, duration: 6 * F, ease: "power2.in" }, 5.0);
+
+        // highlighter BEHIND "ambitious:" in the real title (screen blend on the dark page) + red marker underline in the line gap
+        M.highlight(pg, [X(48), Y(384), 509 * K, 88 * K], 2.62, { dur: 0.32, k: 1.0, opacity: 0.62 });
+        M.underline(X(56), X(556), Y(484), 2.92, { color: "marker", width: 8, dur: 0.26, parent: pgsvg, seed: 5051 });
+
+        // "ambitious": after landing, the letters reach up one by one (a wave) and settle; pulse on "models"
+        $$("#amb .lt").forEach((lt, i) => {
+          tl.to(lt, { y: -10, duration: 4 * F, ease: "power2.out" }, 3.12 + i * 2 * F);
+          tl.to(lt, { y: 0, duration: 0.3, ease: "back.out(3)" }, 3.12 + i * 2 * F + 4 * F);
+        });
+        P.pulse("#amb .w", 4.62, 1.03);
+
+        // =============================== BEAT B — WHO WROTE IT ===============================
+        // anticipation dip, then a fast eased scroll (motion blur) past the etching to "I work on Claude."; the card compacts
+        const newVH = 200;
+        tl.to(pg, { y: VIEW_A + 8, duration: 4 * F, ease: "power2.in" }, 4.92);
+        tl.to(pg, { y: VIEW_B, duration: 0.56, ease: "power3.inOut" }, 5.05);
+        tl.to(pg, { filter: "blur(5px)", duration: 0.2, ease: "power2.in" }, 5.08);
+        tl.to(pg, { filter: "blur(0px)", duration: 0.22, ease: "power2.out" }, 5.34);
+        tl.to(pc, { height: 66 + newVH, duration: 0.52, ease: "power3.inOut" }, 5.10);
+        tl.to("#prog", { scaleX: 0.71, duration: 0.5, ease: "power3.inOut" }, 5.05);
+        tl.to("#prog", { scaleX: 0.74, duration: D - 5.6, ease: "none" }, 5.6);
+        // highlighter BEHIND "I work on Claude" on "Felix" (5.68)
+        M.highlight(pg, [X(48), Y(2058), 408 * K, 72 * K], 5.52, { dur: 0.34, opacity: 0.62 });
+
+        // he sinks lower in the frame (rises a touch first = anticipation), making room for the words above his head
+        {
+          const sw = $("#spkW");
+          tl.to(sw, { y: -10, duration: 4 * F, ease: "power2.out" }, 5.08);
+          tl.to(sw, { y: 262, duration: 0.6, ease: "power3.inOut" }, 5.08 + 4 * F);
+          tl.to(sw, { y: 256, duration: 0.3, ease: "sine.out" }, 5.08 + 4 * F + 0.6);
+        }
+        // "by Felix" handwritten beside the compacted card, red underline
+        M.note("by Felix", 652, 584, 5.44, { size: 74, color: "ink", rot: -4, cps: 18 });
+        M.underline(660, 860, 672, 5.88, { color: "marker", width: 9, dur: 0.22, seed: 5071 });
+
+        // =============================== HERO — CLAUDE ===============================
+        const wo = $("#wo"), chipW = $("#chipW"), chip = $("#chipC");
+        const woR = wo.offsetLeft + wo.offsetWidth;
+        const cw = chip.offsetWidth;
+        const chipX = 928 - cw, chipY = 872;
+        gsap.set(chipW, { x: chipX, y: chipY });
+        const hangX = chipX + cw / 2, hangY = chipY - 6;
+        // red marker arrow from "working on" swoops to the hang point (shaft, then the head flicks)
+        M.arrow(woR + 20, 772, hangX + 4, hangY - 4, 6.86, { bend: -0.36, width: 11, dur: 0.3, seed: 5091 });
+        // the chip swings in on the arrow's end like a hung sign (pendulum about a pivot above it), squash-lands on "Claude"
+        gsap.set(chipW, { transformOrigin: `${cw / 2}px -70px` });
+        tl.fromTo(chipW, { opacity: 0 }, { opacity: 1, duration: 3 * F, ease: "power1.out", immediateRender: false }, 7.08);
+        tl.fromTo(chipW, { y: chipY - 46 }, { y: chipY, duration: 0.2, ease: "power2.in", immediateRender: false }, 7.08);
+        tl.fromTo(chipW, { rotation: -11 }, { rotation: 3, duration: 0.2, ease: "sine.inOut", immediateRender: false }, 7.08);
+        tl.to(chipW, { rotation: -2, duration: 0.2, ease: "sine.inOut" }, 7.28);
+        P.squash("#chipC", 7.28, 0.07);
+        const tp = M.tape(cw - 178, -22, 7, 7.36);
+        chipW.appendChild(tp);
+        P.punch(7.28, { scale: 1.006, origin: "560px 900px" });
+        P.shake(7.28, 3);
+      })();
+    </script>
+  </body>
+</html>

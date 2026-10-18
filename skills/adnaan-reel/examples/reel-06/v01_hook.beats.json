@@ -1,0 +1,111 @@
+[
+ {
+  "t": 0.1,
+  "sfx": "whoosh",
+  "gain_db": -6,
+  "what": "speaker card settles"
+ },
+ {
+  "t": 0.52,
+  "sfx": "ping",
+  "gain_db": -12,
+  "what": "shimmer wave runs through the hook 0.2%"
+ },
+ {
+  "t": 1.06,
+  "sfx": "tick",
+  "gain_db": -8,
+  "what": "hook you're hops on 'you'"
+ },
+ {
+  "t": 1.54,
+  "sfx": "pop",
+  "what": "built lands"
+ },
+ {
+  "t": 1.92,
+  "sfx": "pop",
+  "what": "anything lands (letters cascade)"
+ },
+ {
+  "t": 2.12,
+  "sfx": "pop",
+  "gain_db": -5,
+  "what": "with"
+ },
+ {
+  "t": 2.34,
+  "sfx": "pop",
+  "what": "AI lands (echoes fan out)"
+ },
+ {
+  "t": 2.46,
+  "sfx": "tick",
+  "gain_db": -8,
+  "what": "you're hops, red underline drawn"
+ },
+ {
+  "t": 2.5,
+  "sfx": "scribble",
+  "dur": 0.26,
+  "what": "red underline under hook you're"
+ },
+ {
+  "t": 3.0,
+  "sfx": "whoosh",
+  "gain_db": -8,
+  "what": "phrase blurs out"
+ },
+ {
+  "t": 3.4,
+  "sfx": "whoosh",
+  "gain_db": -7,
+  "what": "red arrow leaves the hook 0.2%"
+ },
+ {
+  "t": 3.4,
+  "sfx": "scribble",
+  "dur": 0.42,
+  "what": "arrow shaft from hook 0.2% down to the stamp"
+ },
+ {
+  "t": 3.5,
+  "sfx": "pop",
+  "what": "top lands"
+ },
+ {
+  "t": 3.76,
+  "sfx": "impact",
+  "what": "0.2% STAMP"
+ },
+ {
+  "t": 3.82,
+  "sfx": "scribble",
+  "dur": 0.14,
+  "what": "arrow head flick"
+ },
+ {
+  "t": 3.86,
+  "sfx": "tick",
+  "gain_db": -8,
+  "what": "sparkle ticks flick out"
+ },
+ {
+  "t": 3.86,
+  "sfx": "scribble",
+  "dur": 0.2,
+  "what": "six sparkle ticks"
+ },
+ {
+  "t": 3.94,
+  "sfx": "scribble",
+  "dur": 0.4,
+  "what": "black double underline under stamp"
+ },
+ {
+  "t": 3.98,
+  "sfx": "tick",
+  "gain_db": -9,
+  "what": "double underline scribble"
+ }
+]

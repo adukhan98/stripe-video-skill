@@ -1,0 +1,154 @@
+[
+ {
+  "id": "v01_hook",
+  "start": 0.0,
+  "duration": 4.8,
+  "layout": "scene",
+  "type": "hook",
+  "bespoke": false,
+  "brief": "FIRST read animations/SHARED.md (fully, incl. Project specifics) and look at the style frames it lists. FULL-SCREEN OPAQUE scene \u2014 HOOK.\nSpoken: 'There's one job in AI everyone is hiring for right now and there aren't enough people to fill it.'\nTEXT HOOK (user-written \u2014 the ONE allowed exception to words.txt): 'the most in-demand AI job of 2027' \u2014 FULLY READABLE ON FRAME 0 (thumbnail), whole scene, top of the zone (y ~290\u2013560): collage-staggered over 2\u20133 lines e.g. 'the most' ~100 ink / 'in-demand' ~190 ACCENT with the hand-drawn ocean underline already drawn on frame 0 / 'AI job of 2027' ~120 ink. Inter Tight 900, lowercase as written. Continuous life (1 % slow punch, tiny float), no entrance.\nSPEAKER: PORTRAIT hero card (~760x880) below the hook (y ~580\u20131460), already ~90 % settled on frame 0, settle done by 0.3 s, full head + shoulders. data-face 0.47.\nKINETIC (on paper beside/below the card, or over his chest on a .paper-strip \u2014 navy sweatshirt): 'one job' lands on 'one' (0.64): 'one' accent ~220, 'job' ink ~200; then 'everyone is hiring' (1.84\u20132.26) ~110 supporting. OBJECT: on 'hiring' a soft white JOB POSTING card (wireframe bars, an accent 'Hiring' black pill with a tiny pulsing dot, illustrative \u2014 no company names) pops at one side of the card; on 'aren't enough people' (3.54\u20134.06) a row of 4 dashed empty seat/avatar outlines deals in under it and stays EMPTY (one gives a tiny hopeful wobble and stays empty) \u2014 'aren't enough people' ~96 ink lands. Keep the text hook visible throughout; no collisions with it. Word times below are scene-local (exact ones in words.txt; contact frame 0.13\u20130.2 s before the word). Hold alive to the cut.",
+  "assets": []
+ },
+ {
+  "id": "v02_fde",
+  "start": 4.8,
+  "duration": 5.8,
+  "layout": "scene",
+  "type": "explainer",
+  "bespoke": true,
+  "brief": "FIRST read animations/SHARED.md (fully, incl. Project specifics) and look at the style frames it lists. FULL-SCREEN OPAQUE scene \u2014 EXPLAINER (bespoke).\nSpoken: 'Yes, I'm talking about the forward deployed engineer or the FDE and hiring for this role is only going to go up and up.'\nBEAT A (0\u20133.3): small speaker card (\u2265420 wide) top-right from ~0.1. A soft white ID BADGE / lanyard card (clip at top, avatar circle placeholder, wireframe bars) swings in on an arc and settles (pendulum overshoot) centre-left. Kinetic stack beside/below it: 'forward' (1.38) 'deployed' (1.72) 'engineer' (2.18) Inter Tight 900 ~150\u2013190 collage-staggered ink. On 'FDE' (2.80) the three words collapse/squeeze toward their first letters and snap into ONE giant accent 'FDE' (~270, the exaggerated beat, 1 % punch) which also stamps onto the badge as an accent label.\nBEAT B (3.4\u20135.8): badge + FDE compact upward; 'hiring for this role' ~96 (3.70\u20134.28); a soft UI chart card (no axis numbers, no labels) slides up in the lower zone and an accent line draws on rising steeply, the line tip + 'up' ~200 accent landing on 'up' (5.46) and a second 'up' ~240 stepping higher right after (stagger 3\u20134 frames) with an arrow head. Fill the lower zone.\nStudy examples/reel-04/v02_skills.html for idea only. Word times below are scene-local (exact ones in words.txt; contact frame 0.13\u20130.2 s before the word). Hold alive to the cut.",
+  "assets": [],
+  "sfx": "whoosh"
+ },
+ {
+  "id": "v03_work",
+  "start": 10.6,
+  "duration": 5.567,
+  "layout": "scene",
+  "type": "explainer",
+  "bespoke": true,
+  "brief": "FIRST read animations/SHARED.md (fully, incl. Project specifics) and look at the style frames it lists. FULL-SCREEN OPAQUE scene \u2014 EXPLAINER (bespoke).\nSpoken: 'It's because AI is reliably getting good at business work and knowledge work in enterprises'\nBEAT A (0\u20132.9): small speaker card (\u2265420) top-left. 'AI' accent ~240 lands on 'AI' (0.91); 'reliably getting good' ~110 ink on 'reliably' (1.77)\u2013'good' (2.47).\nBEAT B (2.9\u20135.5): two soft white WORK CARDS deal in side by side on arcs: card 1 header 'business work' (Inter 600) on 'business' (3.19), card 2 'knowledge work' on 'knowledge' (4.15); each has 4 wireframe task rows whose checkboxes tick accent \u2713 one by one (drawn SVG checks, 3-frame stagger, a small squash on each tick) \u2014 cards are the hero, big (each ~400x520). Kinetic 'business work' / 'knowledge work' are the card headers big enough (~64\u201380) OR as kinetic lines under them. On 'enterprises' (5.33) a large rounded 'enterprise window' frame (light chrome bar with 3 dots, deep teal --brand-deep body) scales in behind and around both cards, enclosing them; 'enterprises' ~170 ink lands in the lower zone. Fill the lower zone. Word times below are scene-local (exact ones in words.txt; contact frame 0.13\u20130.2 s before the word). Hold alive to the cut.",
+  "assets": []
+ },
+ {
+  "id": "v04_once",
+  "start": 16.167,
+  "duration": 5.333,
+  "layout": "scene",
+  "type": "fullscreen",
+  "bespoke": false,
+  "brief": "FIRST read animations/SHARED.md (fully, incl. Project specifics) and look at the style frames it lists. FULL-SCREEN OPAQUE scene \u2014 FULLSCREEN \u2014 him edge to edge, slow push 1.0\u21921.03, nothing else on screen.\nSpoken: 'and that's when organizations and companies will want to have it all at once. They're going to want it'\nWORDS low (y \u2265 1400, on a .paper-strip because the sweatshirt is navy): 'organizations & companies' small-ish ~84 ink appears on 'organizations' (1.55)\u2013'companies' (2.33) and blurs up out by ~3.3; then the hero: 'all at once' \u2014 'all' ~200 ink on 'all' (3.58), 'at once' ~220 ACCENT on 'once' (4.10), overshoot + 1 % punch; hold to the cut. Keep face clear. data-face 0.47. Word times below are scene-local (exact ones in words.txt; contact frame 0.13\u20130.2 s before the word). Hold alive to the cut.",
+  "assets": []
+ },
+ {
+  "id": "v05_departments",
+  "start": 21.5,
+  "duration": 6.733,
+  "layout": "scene",
+  "type": "mechanism",
+  "bespoke": true,
+  "brief": "FIRST read animations/SHARED.md (fully, incl. Project specifics) and look at the style frames it lists. FULL-SCREEN OPAQUE scene \u2014 MECHANISM (bespoke). No speaker card in this scene.\nSpoken: 'in every single department at the same time because that's where they see their cost of value and their time and their money and their effort'\nBEAT A (0\u20133.0): 'every single department' kinetic top (~120\u2013190, 'department' accent) lands on 'every' (0.29)/'department' (1.23). Below it a 3x3 grid of soft white DEPARTMENT TILES (rounded ~240x200 each, each with a simple drawn line icon \u2014 briefcase, chart, people, gear, chat bubble, document, shield, truck, dollar coin \u2014 NO text labels) deals in fast in a staggered wave (overlap, arcs). Every tile has a small grey status dot. On 'same time' (2.03\u20132.33) ALL tiles flip to --brand-deep with accent dots at the SAME instant (one exaggerated beat: the whole grid punches 1 % and a ripple of light sweeps across) \u2014 'same time' ~200 accent.\nBEAT B (3.4\u20136.7): grid recedes/dims and shrinks up; three black pills (Inter 600 white, big ~64 text): 'time' on 'time' (5.21), 'money' on 'money' (5.91), 'effort' on 'effort' (6.68) drop in and stack like notifications in the lower zone, each with a small drawn icon (clock, coin, bolt) in accent. Fill the lower zone. Do not show 'cost of value'. Word times below are scene-local (exact ones in words.txt; contact frame 0.13\u20130.2 s before the word). Hold alive to the cut.",
+  "assets": []
+ },
+ {
+  "id": "v06_somebody",
+  "start": 28.233,
+  "duration": 7.134,
+  "layout": "scene",
+  "type": "opinion",
+  "bespoke": false,
+  "brief": "FIRST read animations/SHARED.md (fully, incl. Project specifics) and look at the style frames it lists. FULL-SCREEN OPAQUE scene \u2014 OPINION.\nSpoken: 'but somebody still has to set that whole thing up. That person has to understand how the work actually goes on in those departments in that company'\nBEAT A (0\u20132.8): PORTRAIT hero card (~760x900) settles. 'somebody' ~230 ACCENT lands on 'somebody' (0.49) with a dotted ellipse drawn around it; 'still has to' ~90; 'set that whole thing up' ~120\u2013170 ink on 'set' (1.53)\u2013'thing' (2.07). Words on paper above/below the card or on a .paper-strip over the navy chest.\nBEAT B (2.9\u20137.1): words exit fast (blur-up); card shifts/shrinks to one side (secondary size \u2265600); a soft white WORKFLOW card appears beside it \u2014 4\u20135 wireframe boxes joined by dotted arrows (an illustrative process, no labels) \u2014 and a magnifier glass (drawn, soft) glides along the flow on an arc from 'understand' (3.85) through 'work' (4.53)\u2013'actually goes on' (4.97\u20135.19), each box it passes brightens to accent edge. 'how the work actually goes on' kinetic ~110 with 'work' accent ~190; on 'departments' (6.21) the flow boxes gently fan out. Fill the lower zone. Word times below are scene-local (exact ones in words.txt; contact frame 0.13\u20130.2 s before the word). Hold alive to the cut.",
+  "assets": []
+ },
+ {
+  "id": "v07_hookup",
+  "start": 35.367,
+  "duration": 6.567,
+  "layout": "scene",
+  "type": "mechanism",
+  "bespoke": true,
+  "brief": "FIRST read animations/SHARED.md (fully, incl. Project specifics) and look at the style frames it lists. FULL-SCREEN OPAQUE scene \u2014 MECHANISM (bespoke).\nSpoken: 'then hook up all the AI to the systems that the company uses for getting their work done and then make sure it actually works.'\nBEAT A (0\u20132.3): small speaker card (\u2265420) top-right. The black AGENT PUCK (P.puck, accent eye-dots) drops in centre with squash on 'hook up' (0.41\u20130.67); 'hook up all the AI' kinetic top-left ~110\u2013200 ('AI' accent on 1.49).\nBEAT B (2.3\u20134.8): on 'systems' (2.31) four soft SYSTEM CARDS deal in around the puck on arcs (illustrative, no brand names, drawn icons + one Inter 600 label each: 'database', 'inbox', 'docs', 'CRM') \u2014 these generic labels are illustrative UI. Dotted cables (ink 3px, dash '2 12') draw from the puck to each card in turn (3\u20134 frame stagger), then a little accent pulse rides each cable to its card and that card's dot turns accent. 'systems' ~170 ink kinetic.\nBEAT C (4.9\u20136.3): on 'make sure' (5.13) the puck's eyes do a quick scan; on 'actually works' (5.89+) a big drawn accent \u2713 in a white circle pops on top with overshoot (the exaggerated beat, small shake of all cards like a settle), 'works' ~240 accent + 'actually' ~100 in the lower zone. Fill the lower zone. Study examples/reel-04/v03_inside.html / v10_copy.html for the puck idea only. Word times below are scene-local (exact ones in words.txt; contact frame 0.13\u20130.2 s before the word). Hold alive to the cut.",
+  "assets": []
+ },
+ {
+  "id": "v08_job",
+  "start": 41.934,
+  "duration": 3.766,
+  "layout": "scene",
+  "type": "fullscreen",
+  "bespoke": false,
+  "brief": "FIRST read animations/SHARED.md (fully, incl. Project specifics) and look at the style frames it lists. FULL-SCREEN OPAQUE scene \u2014 FULLSCREEN \u2014 him edge to edge, slow push 1.0\u21921.03, nothing else.\nSpoken: 'That's the job of the FDE and right now there aren't that many of them.'\nWORDS low (y \u2265 1380, .paper-strip behind \u2014 navy sweatshirt): 'the job of the' ~96 ink on 'job' (0.47); 'FDE' ~260 ACCENT on 'FDE' (1.13) with overshoot + 1 % punch; then quick swap: 'aren't that many' ~150 ink on 'aren't' (2.75) with 'many' accent on 3.31 (the FDE line can compact up one notch to make room). Keep face clear. data-face 0.47. Word times below are scene-local (exact ones in words.txt; contact frame 0.13\u20130.2 s before the word). Hold alive to the cut.",
+  "assets": []
+ },
+ {
+  "id": "v09_anthropic",
+  "start": 45.7,
+  "duration": 5.834,
+  "layout": "scene",
+  "type": "chapter_page",
+  "bespoke": false,
+  "brief": "FIRST read animations/SHARED.md (fully, incl. Project specifics) and look at the style frames it lists. FULL-SCREEN OPAQUE scene \u2014 CHAPTER + REAL PAGE.\nSpoken: 'In fact, Anthropic has committed a hundred million dollars to train 10,000 people by the end of 2027.'\nBEAT A (0\u20132.0): chip with the OFFICIAL Anthropic logo (hf/assets/anthropic.png as <img>) + 'Anthropic' Inter Tight 900 ~170 lands on 'Anthropic' (0.81); the REAL page hf/assets/frontier_academy.png in a large tilted browser card (URL 'claude.com/programs/frontier-academy', Claude logo hf/assets/claude.png small in a chip above the card) slides in behind, slow internal scroll so its stat block ($100M / 10,000 / 2027) is visible by ~2.0. Secondary speaker card (\u2265600 wide, landscape) tucked at a lower corner overlapping the browser card.\nBEAT B (2.0\u20135.8): the page's three stats pop OUT of the page as big kinetic numbers on their spoken words, collage-staggered: '$100 million' (~230 ACCENT; this is the spoken 'a hundred million dollars') on 'hundred'/'million' (2.05\u20132.33); '10,000 people' ~200 ink with 'people' ~96 on '10,000' (3.69); '2027' ~240 ACCENT on '2027' (5.27) with underline + 1 % punch. Each number gets a small paper glow; the browser card recedes (dims/blurs slightly) as they land (staging). Fill the lower zone. Word times below are scene-local (exact ones in words.txt; contact frame 0.13\u20130.2 s before the word). Hold alive to the cut.",
+  "assets": [
+   "captures/frontier_academy.png",
+   "logos/anthropic.png",
+   "logos/claude.png"
+  ],
+  "sfx": "chime"
+ },
+ {
+  "id": "v10_salesforce",
+  "start": 51.534,
+  "duration": 6.133,
+  "layout": "scene",
+  "type": "chapter_page",
+  "bespoke": true,
+  "brief": "FIRST read animations/SHARED.md (fully, incl. Project specifics) and look at the style frames it lists. FULL-SCREEN OPAQUE scene \u2014 CHAPTER + REAL PAGE (bespoke 'tripled' object).\nSpoken: 'Salesforce has actually tripled their FDE team in the last six months and every single other company is hiring for'\nBEAT A (0\u20131.5): chip with the OFFICIAL Salesforce logo (hf/assets/salesforce.png <img>) + 'Salesforce' ~170 ink lands on 'Salesforce' (0.17); the REAL article hf/assets/salesforce_fde.png in a tilted browser card (URL 'salesforce.com/news') slides in, slow scroll; secondary speaker card (\u2265600) at a lower corner.\nBEAT B (1.5\u20133.9): browser card recedes up; 'tripled' ~240 ACCENT lands on 'tripled' (1.63) with the exaggerated beat; a TEAM object: a soft white card with a row of 3 simple avatar circles labelled 'FDE team' (Inter 600) on 'FDE team' (2.05\u20132.43) duplicates into 3 stacked rows (\u00d73 \u2014 copies peel off with overlap and arcs; a small black '\u00d73' pill pops); 'in the last six months' ~90 ink with 'six months' ~130 (3.05\u20133.33).\nBEAT C (4.0\u20136.1): 'every single other company' ~110 ink (4.12\u20135.10) and on 'hiring' (5.60) 4\u20135 black notification pills ('Hiring: FDE' with a tiny pulsing accent dot, illustrative, no company names) stack in fast from the bottom like notifications. Fill the lower zone. Word times below are scene-local (exact ones in words.txt; contact frame 0.13\u20130.2 s before the word). Hold alive to the cut.",
+  "assets": [
+   "captures/salesforce_fde.png",
+   "logos/salesforce.png"
+  ],
+  "sfx": "chime"
+ },
+ {
+  "id": "v11_runout",
+  "start": 57.667,
+  "duration": 5.133,
+  "layout": "scene",
+  "type": "opinion",
+  "bespoke": true,
+  "brief": "FIRST read animations/SHARED.md (fully, incl. Project specifics) and look at the style frames it lists. FULL-SCREEN OPAQUE scene \u2014 OPINION (bespoke gauge).\nSpoken: 'them. Even with all that, I think we're going to run out of people who can actually implement AI in'\nPORTRAIT hero card (~720x880) on one side (slightly left), settles at 0\u20130.3. 'Even with all that,' ~84 ink (0.16\u20130.84) small top; 'I think' ~84.\nHERO (1.8\u20133.2): 'run out' ~230 ACCENT on 'run' (1.92)/'out' (2.24); 'of people' ~120 ink on 'people' (2.70). OBJECT beside the card: a tall soft white GAUGE / tank card with a column of 6\u20138 tiny person icons stacked in it; from 'run' they drain away one by one (fall out the bottom with arcs, 2\u20133 frame stagger) until the tank is EMPTY \u2014 its fill line drops to zero with a small wobble (no label, no numbers). Then 'implement AI' ~110 (4.00\u20134.28, 'AI' accent) lands in the lower zone. Words on paper or a .paper-strip over the navy chest. Word times below are scene-local (exact ones in words.txt; contact frame 0.13\u20130.2 s before the word). Hold alive to the cut.",
+  "assets": []
+ },
+ {
+  "id": "v12_faster",
+  "start": 62.8,
+  "duration": 6.4,
+  "layout": "scene",
+  "type": "explainer",
+  "bespoke": true,
+  "brief": "FIRST read animations/SHARED.md (fully, incl. Project specifics) and look at the style frames it lists. FULL-SCREEN OPAQUE scene \u2014 EXPLAINER (bespoke demand vs supply).\nSpoken: 'businesses. Companies and organizations are going to want this way faster than there are FDEs and consultants that are left who can actually do this work.'\nBEAT A (0\u20132.3): small speaker card (\u2265420) top-left. 'Companies & organizations' ~96 ink (0.27\u20131.03); 'want this' ~110 on 'want' (1.87).\nBEAT B (2.3\u20135.0): a big soft white CHART card (no axes numbers, no % \u2014 unlabelled) fills the middle/lower zone with TWO bars side by side: the left bar rockets up in accent on 'way faster' (2.53\u20132.99) \u2014 overshoots past the top of its track and settles, a tiny shake (the exaggerated beat) \u2014 'way faster' ~220 ACCENT lands; the right bar (ink/grey) under it creeps up only a little; its label chip 'FDEs & consultants' (Inter 600 \u2014 those are his words) pops under it on 'FDEs' (3.73)\u2013'consultants' (4.57). A dotted bracket draws between the two bar tops marking the GAP, the gap area pulses accent softly.\nBEAT C (5.0\u20136.4): 'who can actually do this work' ~100 with 'this work' ~170 ink lands in the remaining space (5.15\u20136.23). Fill the lower zone. Study examples/reel-04/v09_dead.html for a one-object thesis idea only. Word times below are scene-local (exact ones in words.txt; contact frame 0.13\u20130.2 s before the word). Hold alive to the cut.",
+  "assets": [],
+  "sfx": "whoosh"
+ },
+ {
+  "id": "v13_expert",
+  "start": 69.2,
+  "duration": 8.334,
+  "layout": "scene",
+  "type": "fullscreen",
+  "bespoke": false,
+  "brief": "FIRST read animations/SHARED.md (fully, incl. Project specifics) and look at the style frames it lists. FULL-SCREEN OPAQUE scene \u2014 FULLSCREEN via P.growFull \u2014 starts as a PORTRAIT card, grows to full frame on 'lock'.\nSpoken: 'if you know how work gets done in your field and you're the domain expert, lock in and learn how to do all of this stuff now because that is where this industry is headed.'\nBEAT A (0\u20133.3, paper world): PORTRAIT hero card (~760x900) settles. 'how work gets done' ~110 (0.27\u20131.11) top; 'in your field' ~96 (1.71); hero 'domain expert' \u2014 'domain' ~200 ink on 'domain' (2.47), 'expert' ~220 ACCENT on 'expert' (3.03) with underline; words on paper (outside the card) or .paper-strip.\nBEAT B (3.3\u20138.3, FULL SCREEN): P.growFull the card into the full frame on 'lock' (3.45) \u2014 anticipation dip then fill; paper words exit fast before. Low words (y \u2265 1380, .paper-strip): 'lock in' ~240 ACCENT on 'lock'/'in' (3.45\u20133.71) + 1 % punch; then swap to 'learn' ~150 ink (4.11) + 'now' ~200 accent (5.79); then on 'industry' (7.67) 'where this industry is headed' collage ~96\u2013170 with 'headed' accent on 8.09 \u2014 the previous lines blur up out to make room, no collisions. Keep face clear. data-face 0.47. Word times below are scene-local (exact ones in words.txt; contact frame 0.13\u20130.2 s before the word). Hold alive to the cut.",
+  "assets": []
+ },
+ {
+  "id": "v14_cta",
+  "start": 77.534,
+  "duration": 4.066,
+  "layout": "scene",
+  "type": "cta",
+  "bespoke": false,
+  "brief": "FIRST read animations/SHARED.md (fully, incl. Project specifics) and look at the style frames it lists. FULL-SCREEN OPAQUE scene \u2014 CTA.\nSpoken: 'Comment \"FDE\" and I'll send you a roadmap to get started.' (+ 1.6 s freeze end hold after 'started' ~2.4 \u2014 speaker.mp4 is padded with the frozen last frame).\n'Comment' ~180 ink lands on 'Comment' (0.13); '\"FDE\"' ~260 ACCENT in curly quotes on 'FDE' (0.33) with overshoot; a dotted loop path draws from the quotes down to a PORTRAIT speaker card (~720x860) that settles below. On 'roadmap' (1.53) a black pill '\u2192 roadmap' (Inter 600, his word) pops on the card corner, and a small soft white roadmap card (3 dots joined by a dotted winding path, flag at the end, drawn) slides in beside it \u2014 the path draws on during the end hold; 'get started' ~110 on 2.11. End hold (2.5\u20134.07): CTA returns to hero size, everything alive (float, path draw, pill pulse). Word times below are scene-local (exact ones in words.txt; contact frame 0.13\u20130.2 s before the word). Hold alive to the cut.",
+  "assets": [],
+  "sfx": "ping"
+ }
+]

@@ -1,0 +1,85 @@
+/* v7yt.css — the v7 "MINT" look (adnaan-reel's house design system) on the stripe-youtube 16:9 board runtime. DEFAULT look
+   (scenes.json "look": "v7"; board.py installs it after board.css). Approved by Adnaan on IMG_2533 (2026-10-17): grey paper +
+   grid with a strong vignette, mint #7CC49E as the ONE accent (current item, hero word, rings), charcoal #2B2B2B discs/cards
+   with white Phosphor glyphs, strawberry red #E8435A for DATA ONLY (he chose it over peach), Inter Tight + Inter, clean flat
+   vector props with soft shadows. NO hand-drawn marker, NO Caveat, NO pastel category hues. API: hf/v7yt.js.
+   Global look changes go HERE (then `board.py runtime`), never per scene. */
+
+/* declared only because Board.init asserts it (marker.css is not loaded in this look) — never use Caveat */
+@font-face { font-family: "Caveat"; src: url("fonts/Caveat-Variable.ttf") format("truetype"); font-weight: 400 700; font-display: block; }
+
+:root, body[data-theme], body[data-theme="light"] {
+  --bg: #E4DED9; --card: #FBFAF8; --ink: #232323; --muted: #8E8780;
+  --brand-primary: #7CC49E; --brand-primary-dark: #2F8A63; --brand-deep: #2B2B2B; --brand-text: #232323; --brand-card: #FBFAF8;
+  --mint-soft: #CFEAD9; --mint-panel: #8FCBA8; --strawberry: #E8435A; --strawberry-dark: #C42B44;
+  --peach: var(--strawberry); --peach-dark: var(--strawberry-dark);   /* data colour: strawberry red (he chose it 2026-10-17); --peach kept as an alias */
+  --disc-shadow: 0 22px 36px -10px rgba(30, 30, 30, .38), 0 6px 12px -4px rgba(30, 30, 30, .22);
+  --vignette-strong: radial-gradient(ellipse at 50% 42%, transparent 30%, rgba(60, 55, 50, .42) 100%);
+  --shadow: 0 30px 50px -14px rgba(40, 36, 32, .32), 0 6px 14px -6px rgba(40, 36, 32, .18);
+  --hl: #CFEAD9; --tag: #2B2B2B; --tag-text: #FFFFFF;
+  --marker: #2B2B2B; --marker-text: #2B2B2B; --marker-ink: #2B2B2B; --pencil: #8E8780; --callout: #2B2B2B;
+  --tile-text: #232323; --tile-rim: 0px;
+  --grid-a: rgba(20, 20, 20, 0.055);
+}
+/* the old category hues all collapse onto the one accent (a stray hue class can't bring a pastel back) */
+#root, .blue, .green, .yellow, .violet, .orange, .teal {
+  --hue-solid: var(--brand-primary); --fill: var(--brand-card); --rim: transparent;
+}
+
+/* ---- the board: paper + grid + the STRONG vignette */
+#vignette { background: var(--vignette-strong) !important; }
+.v7-panel { position: absolute; inset: 0; background: var(--mint-panel); }          /* full-bleed mint punctuation (rare) */
+
+/* ---- type: hero word in mint (soft dark shadow so it holds on paper), supporting ink */
+.emph, .mint { color: var(--brand-primary); text-shadow: 0 3px 14px rgba(30, 30, 30, .16); }
+.mint-dark { color: var(--brand-primary-dark); }
+.peach, .strawberry { color: var(--strawberry-dark); }
+.k { color: var(--ink); }
+/* TALK captions over his footage (transparent overlays): he wears a BLACK jacket outdoors → white words */
+.w7 { color: #fff; text-shadow: 0 3px 18px rgba(0, 0, 0, .55), 0 1px 3px rgba(0, 0, 0, .45); }
+.w7 .mint, .w7.mint { color: var(--brand-primary); text-shadow: 0 3px 18px rgba(0, 0, 0, .6), 0 1px 3px rgba(0, 0, 0, .5); }
+.g7 { text-shadow: 0 0 22px rgba(240, 236, 230, .95), 0 0 8px rgba(240, 236, 230, .9); }
+
+/* ---- flat cards, real pages, highlighter */
+.tile, .v7-card { position: absolute; background: var(--brand-card); color: var(--ink); border: none; border-radius: 28px;
+  box-shadow: var(--shadow); }
+.tile.dark, .v7-card.dark { background: var(--brand-deep); color: #fff; }
+.tile.mint, .v7-card.mint { background: var(--brand-primary); color: #fff; }
+.page { border-radius: 24px; box-shadow: var(--shadow); }
+.v7-hl { position: absolute; background: var(--mint-soft); border-bottom: 4px solid var(--brand-primary-dark);
+  transform-origin: 0 50%; mix-blend-mode: multiply; border-radius: 4px; }
+.v7-bar { position: absolute; height: 12px; border-radius: 6px; background: var(--brand-primary); transform-origin: 0 50%; }
+.label { color: var(--ink); }
+.label.muted { color: var(--muted); }
+
+/* ---- icon discs: white Phosphor FILL glyph masked into a circle — charcoal = default, mint = the current item */
+.v7-disc { position: absolute; width: var(--d, 150px); height: var(--d, 150px);
+  margin: calc(var(--d, 150px) / -2) 0 0 calc(var(--d, 150px) / -2); border-radius: 50%;
+  background: var(--brand-deep); box-shadow: var(--disc-shadow); color: #fff;
+  display: flex; align-items: center; justify-content: center; }
+.v7-disc.mint { background: var(--brand-primary); }
+.v7-disc.peach, .v7-disc.strawberry { background: var(--strawberry); }
+.v7-disc.light { background: var(--brand-card); color: var(--brand-deep); }
+.v7-gl { display: block; width: 46%; height: 46%; background: currentColor;
+  -webkit-mask: var(--ic) center / contain no-repeat; mask: var(--ic) center / contain no-repeat; }
+.v7-tag { position: absolute; min-width: 52px; height: 52px; padding: 0 14px; border-radius: 26px; background: var(--brand-deep);
+  color: #fff; font: 700 30px/52px "Inter", sans-serif; text-align: center; box-shadow: 0 8px 16px -6px rgba(20, 20, 20, .45); }
+.v7-disc .v7-tag { right: -6%; top: -6%; }
+.v7-disc.mint .v7-tag { background: var(--brand-deep); }
+.v7-cap { position: absolute; transform: translateX(-50%); white-space: nowrap; font: 700 34px "Inter", sans-serif; color: var(--ink); }
+
+/* coins → discs (numbers in Inter 700, charcoal; mint when current) */
+.coin { background: var(--brand-deep); color: #fff; box-shadow: var(--disc-shadow); font-family: "Inter", sans-serif; font-weight: 700; }
+.coin.mint { background: var(--brand-primary); }
+.chap .t { color: var(--ink); }
+
+/* ---- the disc chain + clean strokes (even width, round caps, no boil) */
+.v7-chain { position: absolute; left: 0; top: 0; }
+.v7-link, .v7-stroke { position: absolute; left: 0; top: 0; overflow: visible; pointer-events: none; }
+.v7-link path { fill: none; stroke: var(--brand-deep); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+.v7-stroke path, .v7-stroke rect, .v7-stroke ellipse { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ---- his card (composited later by compose.py at x 1600 y 640, 260×346, r 24, white 6 px rim): a mint ring outside it */
+.v7-cardring { position: absolute; left: 1588px; top: 628px; width: 284px; height: 370px; border-radius: 36px;
+  border: 6px solid var(--brand-primary); pointer-events: none; }
+body[data-bg="transparent"] .v7-cardring, body[data-nocard] .v7-cardring { display: none; }

@@ -1,0 +1,658 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>v01 hook</title>
+    <link rel="stylesheet" href="brand.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: var(--brand-background);
+      }
+      #root {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: var(--brand-background);
+        font-family: var(--font-heading);
+        color: var(--brand-text);
+      }
+
+      /* ---------- shared v2 background: paper + 60px grid + vignette ---------- */
+      #bg {
+        position: absolute;
+        inset: 0;
+        background: var(--brand-background);
+        overflow: hidden;
+      }
+      #grid {
+        position: absolute;
+        left: -120px;
+        top: -120px;
+        width: 1320px;
+        height: 2160px;
+        background-image:
+          linear-gradient(to right, rgba(20, 20, 20, 0.055) 1.5px, transparent 1.5px),
+          linear-gradient(to bottom, rgba(20, 20, 20, 0.055) 1.5px, transparent 1.5px);
+        background-size: 60px 60px;
+      }
+      #vignette {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(ellipse at 50% 45%, transparent 45%, rgba(90, 80, 72, 0.22) 100%);
+      }
+
+      /* ---------- camera ---------- */
+      #cam,
+      #punch {
+        position: absolute;
+        inset: 0;
+      }
+
+      /* ---------- text hook (user-written, landed on frame 0) ---------- */
+      #hook,
+      #hook-float {
+        position: absolute;
+        inset: 0;
+      }
+      #hook-ul {
+        position: absolute;
+        left: 0;
+        top: 0;
+        overflow: visible;
+      }
+
+      /* ---------- speaker card ---------- */
+      #card-float {
+        position: absolute;
+        left: 140px;
+        top: 630px;
+        width: 740px;
+        height: 810px;
+      }
+      #card {
+        position: absolute;
+        inset: 0;
+        border-radius: 34px;
+        overflow: hidden;
+        background: #1b1b1b;
+        box-shadow:
+          0 16px 0 -2px var(--brand-primary),
+          0 26px 44px -16px rgba(40, 30, 20, 0.34);
+      }
+      #vid-wrap {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        border-radius: 34px;
+      }
+      /* PORTRAIT hero card: source 1080x1920 scaled to the card width (740x1316); window = 16.5%–78% of the
+         source height: full head (hair top at ~19.5%) + shoulders + sweatshirt, eyes at ~40% of the card height */
+      #speaker {
+        position: absolute;
+        left: 0;
+        top: -217px;
+        width: 740px;
+        height: 1316px;
+        object-fit: cover;
+      }
+      #sheen {
+        position: absolute;
+        inset: 0;
+        border-radius: 34px;
+        background: linear-gradient(
+          105deg,
+          transparent 30%,
+          rgba(255, 255, 255, 0.22) 45%,
+          rgba(255, 255, 255, 0.05) 55%,
+          transparent 65%
+        );
+        background-size: 300% 100%;
+        background-position: 100% 0;
+        opacity: 0;
+      }
+
+      /* ---------- kinetic serif ---------- */
+      .line {
+        position: absolute;
+        display: flex;
+        align-items: baseline;
+        white-space: nowrap;
+        line-height: 0.95;
+        letter-spacing: -0.015em;
+      }
+      .bl {
+        display: block;
+        width: 0;
+        height: 0;
+        align-self: baseline;
+      }
+      .w {
+        display: inline-block;
+        will-change: transform, opacity, filter;
+      }
+      .serif {
+        font-family: "Inter Tight", system-ui, sans-serif;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        color: var(--brand-text);
+      }
+      .hero {
+        font-family: "Inter Tight", system-ui, sans-serif;
+        font-weight: 900;
+        letter-spacing: -0.045em;
+      }
+      .ocean {
+        color: var(--brand-primary);
+      }
+      .ink {
+        color: var(--brand-text);
+      }
+      .gap-s {
+        margin-left: 0.22em;
+      }
+      /* kinetic words sit over the lower card: soft paper glow so they always read */
+      .kin {
+        text-shadow:
+          0 0 28px rgba(228, 222, 217, 0.95),
+          0 0 6px rgba(228, 222, 217, 0.9);
+      }
+
+      /* hook sizes */
+      #k1 {
+        font-size: 92px;
+        font-weight: 900;
+      }
+      #k2 {
+        font-size: 184px;
+        line-height: 0.88;
+      }
+      #k3 {
+        font-size: 92px;
+        font-weight: 900;
+      }
+
+      /* kinetic sizes */
+      #p0a {
+        font-size: 96px;
+      }
+      #p0b {
+        font-size: 96px;
+      }
+      #p0b .hero {
+        font-size: 176px;
+      }
+      #a1 {
+        font-size: 170px;
+        line-height: 0.88;
+      }
+      #a2 {
+        font-size: 120px;
+        line-height: 0.88;
+      }
+      #b1 {
+        font-size: 96px;
+      }
+      #b1 .hero {
+        font-size: 190px;
+      }
+      #c1 {
+        font-size: 70px;
+      }
+      #c2 {
+        font-size: 150px;
+        line-height: 0.88;
+      }
+
+      /* ---------- app tiles (isometric stack) ---------- */
+      #tiles-pos {
+        position: absolute;
+        left: 800px;
+        top: 1374px;
+        width: 0;
+        height: 0;
+      }
+      #tiles-float {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 0;
+        height: 0;
+        perspective: 2200px;
+      }
+      #iso {
+        position: absolute;
+        left: -70px;
+        top: -70px;
+        width: 140px;
+        height: 140px;
+        transform-style: preserve-3d;
+        transform: rotateX(58deg) rotateZ(-45deg) scale(1.5);
+      }
+      #ground {
+        position: absolute;
+        left: -40px;
+        top: -40px;
+        width: 212px;
+        height: 212px;
+        border-radius: 60px;
+        background: radial-gradient(closest-side, rgba(60, 50, 40, 0.3), rgba(60, 50, 40, 0.12) 60%, transparent);
+        opacity: 0;
+      }
+      .tile {
+        position: absolute;
+        inset: 0;
+        transform-style: preserve-3d;
+      }
+      .tile .lay {
+        position: absolute;
+        inset: 0;
+        border-radius: 30px;
+      }
+      .tile .side {
+        background: #cfc8c0;
+        transform: translateZ(-15px);
+      }
+      .tile .side2 {
+        background: #d9d3cc;
+        transform: translateZ(-8px);
+      }
+      .tile.deep .side2 {
+        background: #08202a;
+      }
+      .tile.deep .side {
+        background: #061820;
+      }
+      .tile .face {
+        background: var(--brand-card);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.6);
+      }
+      .tile.deep .face {
+        background: var(--brand-deep);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+      }
+      .g {
+        position: absolute;
+        border-radius: 6px;
+        background: #e5e0da;
+      }
+      .deep .g {
+        background: rgba(255, 255, 255, 0.16);
+      }
+      .g.acc {
+        background: var(--brand-primary);
+      }
+      .g.round {
+        border-radius: 50%;
+      }
+      /* exploded layers of the top tile */
+      .tile.top .mid {
+        background: rgba(251, 250, 248, 0.0);
+      }
+      .tile.top .glyph {
+        background: rgba(46, 156, 203, 0.0);
+      }
+      .tile.top .mid .g {
+        background: rgba(251, 250, 248, 0.92);
+      }
+      .tile.top .glyph .g.acc {
+        box-shadow: 0 0 18px rgba(46, 156, 203, 0.55);
+      }
+      #guides {
+        position: absolute;
+        left: 0;
+        top: 0;
+        overflow: visible;
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-width="1080"
+      data-height="1920"
+      data-duration="4.433"
+    >
+      <div id="bg">
+        <div id="grid"></div>
+        <div id="vignette"></div>
+      </div>
+
+      <div id="cam">
+        <div id="punch">
+          <!-- text hook: already landed on frame 0 (thumbnail) -->
+          <div id="hook">
+            <div id="hook-float">
+              <div id="k1" class="line serif" data-x="76" data-base="368">
+                <span class="bl"></span>
+                <span>Software</span>
+                <span class="gap-s">is</span>
+              </div>
+              <div id="k2" class="line hero ocean" data-right="940" data-base="508">
+                <span class="bl"></span>
+                <span id="w-cooked">cooked</span>
+              </div>
+              <div id="k3" class="line serif" data-x="84" data-base="612">
+                <span class="bl"></span>
+                <span>and</span>
+                <span class="gap-s">finished</span>
+              </div>
+              <svg id="hook-ul" width="1080" height="1920" viewBox="0 0 1080 1920">
+                <defs>
+                  <linearGradient id="ulg" x1="0" x2="1" y1="0" y2="0">
+                    <stop offset="0" stop-color="var(--brand-primary)" />
+                    <stop offset="1" stop-color="var(--brand-primary-dark)" />
+                  </linearGradient>
+                </defs>
+                <path id="ul-path" d="" fill="none" stroke="url(#ulg)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </div>
+          </div>
+
+          <!-- speaker card -->
+          <div id="card-float">
+            <div id="card">
+              <div id="vid-wrap">
+                <video
+                  id="speaker"
+                  class="clip"
+                  src="assets/speaker.mp4"
+                  muted
+                  playsinline
+                  data-start="0"
+                  data-duration="4.433"
+                  data-track-index="1"
+                ></video>
+              </div>
+              <div id="sheen"></div>
+            </div>
+          </div>
+
+          <!-- phase 0: "is it possible" (left of / below his face) -->
+          <div id="p0a" class="line serif kin" data-x="76" data-base="1298">
+            <span class="bl"></span>
+            <span class="w" data-t="0.13">is</span>
+            <span class="w gap-s" data-t="0.20">it</span>
+          </div>
+          <div id="p0b" class="line serif kin" data-x="74" data-base="1438">
+            <span class="bl"></span>
+            <span class="w hero ink" data-t="0.56" data-accent="1" data-rise="6">possible</span>
+          </div>
+
+          <!-- phase A: "reverse engineer" (on the sweatshirt) -->
+          <div id="a1" class="line hero ocean kin" data-x="74" data-base="1372">
+            <span class="bl"></span>
+            <span class="w" data-t="1.08" data-hero="1" data-rise="40" data-origin="30% 85%" data-peak="1.08">reverse</span>
+          </div>
+          <div id="a2" class="line hero ink kin" data-right="936" data-base="1446">
+            <span class="bl"></span>
+            <span class="w" data-t="1.44" data-pop="1" data-rise="8" data-origin="60% 80%">engineer</span>
+          </div>
+
+          <!-- phase B: "all the apps" -->
+          <div id="b1" class="line serif kin" data-x="76" data-base="1418">
+            <span class="bl"></span>
+            <span class="w" data-t="1.88" data-rise="24">all</span>
+            <span class="w gap-s" data-t="2.08" data-rise="24">the</span>
+            <span class="w hero ocean" style="margin-left: 0.12em" data-t="2.32" data-hero="1" data-rise="30" data-origin="35% 80%" data-peak="1.08">apps</span>
+          </div>
+
+          <!-- phase C: "every single day?" + app tiles -->
+          <div id="c1" class="line serif kin" data-x="78" data-base="1322">
+            <span class="bl"></span>
+            <span class="w" data-t="3.25" data-rise="24">every</span>
+            <span class="w gap-s" data-t="3.85" data-rise="24">single</span>
+          </div>
+          <div id="c2" class="line hero ocean kin" data-x="86" data-base="1442">
+            <span class="bl"></span>
+            <span class="w" data-t="4.29" data-hero="1" data-rise="30" data-origin="30% 80%" data-peak="1.1">day?</span>
+          </div>
+
+          <div id="tiles-pos">
+            <svg id="guides" width="1" height="1">
+              <line class="gl" x1="-149" y1="-88" x2="-149" y2="-190" stroke="var(--brand-text)" stroke-width="3" stroke-linecap="round" stroke-dasharray="2 10" />
+              <line class="gl" x1="149" y1="-88" x2="149" y2="-190" stroke="var(--brand-text)" stroke-width="3" stroke-linecap="round" stroke-dasharray="2 10" />
+            </svg>
+            <div id="tiles-float">
+              <div id="iso">
+                <div id="ground"></div>
+                <div class="tile" id="t0">
+                  <div class="lay side"></div>
+                  <div class="lay side2"></div>
+                  <div class="lay face">
+                    <div class="g acc round" style="left: 20px; top: 20px; width: 26px; height: 26px"></div>
+                    <div class="g" style="left: 56px; top: 26px; width: 56px; height: 14px"></div>
+                    <div class="g" style="left: 20px; top: 64px; width: 92px; height: 14px"></div>
+                    <div class="g" style="left: 20px; top: 90px; width: 64px; height: 14px"></div>
+                  </div>
+                </div>
+                <div class="tile deep" id="t1">
+                  <div class="lay side"></div>
+                  <div class="lay side2"></div>
+                  <div class="lay face">
+                    <div class="g" style="left: 20px; top: 20px; width: 92px; height: 50px; border-radius: 10px"></div>
+                    <div class="g acc" style="left: 20px; top: 84px; width: 40px; height: 14px"></div>
+                    <div class="g" style="left: 68px; top: 84px; width: 44px; height: 14px"></div>
+                  </div>
+                </div>
+                <div class="tile" id="t2">
+                  <div class="lay side"></div>
+                  <div class="lay side2"></div>
+                  <div class="lay face">
+                    <div class="g" style="left: 20px; top: 20px; width: 40px; height: 40px; border-radius: 10px"></div>
+                    <div class="g acc" style="left: 72px; top: 20px; width: 40px; height: 40px; border-radius: 10px"></div>
+                    <div class="g" style="left: 20px; top: 72px; width: 40px; height: 40px; border-radius: 10px"></div>
+                    <div class="g" style="left: 72px; top: 72px; width: 40px; height: 40px; border-radius: 10px"></div>
+                  </div>
+                </div>
+                <div class="tile deep" id="t3">
+                  <div class="lay side"></div>
+                  <div class="lay side2"></div>
+                  <div class="lay face">
+                    <div class="g round" style="left: 46px; top: 22px; width: 40px; height: 40px"></div>
+                    <div class="g" style="left: 26px; top: 76px; width: 80px; height: 12px"></div>
+                    <div class="g acc" style="left: 40px; top: 98px; width: 52px; height: 12px"></div>
+                  </div>
+                </div>
+                <!-- top tile: three layers that explode on "day?" -->
+                <div class="tile deep top" id="t4">
+                  <div class="lay side"></div>
+                  <div class="lay side2"></div>
+                  <div class="lay face plate"></div>
+                  <div class="lay mid">
+                    <div class="g" style="left: 20px; top: 20px; width: 92px; height: 14px"></div>
+                    <div class="g" style="left: 20px; top: 46px; width: 56px; height: 14px"></div>
+                    <div class="g" style="left: 20px; top: 98px; width: 92px; height: 14px"></div>
+                  </div>
+                  <div class="lay glyph">
+                    <div class="g acc round" style="left: 84px; top: 46px; width: 30px; height: 30px"></div>
+                    <div class="g acc" style="left: 20px; top: 72px; width: 44px; height: 14px"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const fontSpecs = ['900 100px "Inter Tight"', '800 100px "Inter Tight"', '700 100px "Inter Tight"', '500 40px "Inter"', '600 40px "Inter"'];
+        await Promise.all(fontSpecs.map((f) => document.fonts.load(f)));
+        await document.fonts.ready;
+        for (const f of fontSpecs) {
+          if (!document.fonts.check(f)) throw new Error("brand font missing: " + f);
+        }
+
+        const D = 4.433;
+        const F = 1 / 30;
+        const $ = (s) => document.querySelector(s);
+        const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+
+        // ---- place each line by its baseline (deterministic layout, measured once) ----
+        for (const line of $$(".line")) {
+          const bl = line.querySelector(".bl");
+          line.style.top = "0px";
+          line.style.left = "0px";
+          const baseOff = bl.offsetTop;
+          line.style.top = parseFloat(line.dataset.base) - baseOff + "px";
+          if (line.dataset.right) {
+            line.style.left = parseFloat(line.dataset.right) - line.offsetWidth + "px";
+          } else {
+            line.style.left = line.dataset.x + "px";
+          }
+        }
+
+        // ---- hand-drawn underline under "cooked" (already drawn on frame 0) ----
+        const k2 = $("#k2");
+        const ck = $("#w-cooked");
+        const ux0 = k2.offsetLeft + ck.offsetLeft + 10;
+        const ux1 = k2.offsetLeft + ck.offsetLeft + ck.offsetWidth - 14;
+        const uy = parseFloat(k2.dataset.base) + 18;
+        const L = ux1 - ux0;
+        $("#ul-path").setAttribute(
+          "d",
+          `M ${ux0} ${uy + 4} C ${ux0 + L * 0.22} ${uy - 3}, ${ux0 + L * 0.45} ${uy + 6}, ${ux0 + L * 0.66} ${uy + 1} ` +
+            `S ${ux1 - 30} ${uy - 6}, ${ux1} ${uy - 2}`,
+        );
+
+        // ================= timeline =================
+        const tl = gsap.timeline({ paused: true });
+
+        // background drift (continuous, linear on purpose) + slow camera push
+        tl.fromTo("#grid", { x: 0, y: 0 }, { x: -20, y: -12, duration: D, ease: "none" }, 0);
+        tl.fromTo("#cam", { scale: 1, transformOrigin: "510px 880px" }, { scale: 1.006, duration: D, ease: "none" }, 0);
+
+        // text hook: landed on frame 0, slow 1 % punch + tiny float
+        tl.fromTo("#hook", { scale: 1, transformOrigin: "510px 480px" }, { scale: 1.01, duration: D, ease: "sine.inOut" }, 0);
+        tl.fromTo("#hook-float", { y: 0 }, { y: 3, duration: D / 2, ease: "sine.inOut", yoyo: true, repeat: 1 }, 0);
+
+        // speaker card: already ~90 % settled on frame 0, finishes its 3D settle by 0.3 s
+        gsap.set("#card", { transformPerspective: 1600, transformOrigin: "50% 50%" });
+        tl.fromTo("#card", { y: -10 }, { y: 0, duration: 0.3, ease: "power3.out" }, 0);
+        tl.fromTo("#card", { scale: 0.97 }, { scale: 1, duration: 0.3, ease: "back.out(1.6)", immediateRender: false }, 0);
+        tl.fromTo("#card", { rotationX: 8 }, { rotationX: 3, duration: 0.32, ease: "back.out(2)", immediateRender: false }, 0);
+        tl.fromTo("#card", { rotationY: -10 }, { rotationY: -5, duration: 0.3, ease: "power3.out", immediateRender: false }, 0);
+        tl.to("#card", { rotationY: -3.5, rotationX: 2.2, duration: D - 0.32, ease: "sine.inOut" }, 0.32);
+        gsap.set("#vid-wrap", { transformOrigin: "50% 22%" });
+        tl.fromTo("#vid-wrap", { scale: 1.04 }, { scale: 1, duration: 0.4, ease: "power3.out" }, 0);
+        tl.to("#vid-wrap", { scale: 1.012, duration: D - 0.4, ease: "none" }, 0.4);
+        tl.fromTo("#sheen", { opacity: 0 }, { opacity: 1, duration: 0.1, ease: "power1.out" }, 0);
+        tl.fromTo(
+          "#sheen",
+          { backgroundPosition: "100% 0" },
+          { backgroundPosition: "0% 0", duration: 0.7, ease: "power2.inOut", immediateRender: false },
+          0,
+        );
+        tl.to("#sheen", { opacity: 0, duration: 0.25, ease: "power1.in" }, 0.5);
+        tl.fromTo("#card-float", { y: 0 }, { y: -4, duration: 1.1, ease: "sine.inOut", yoyo: true, repeat: 3 }, 0);
+
+        // ---- word entrances (contact frame on the spoken word) ----
+        for (const w of $$(".kin .w")) {
+          const t = parseFloat(w.dataset.t);
+          if (w.dataset.hero) {
+            const s = Math.max(0, t - 0.2);
+            const peak = parseFloat(w.dataset.peak || "1.07");
+            gsap.set(w, { transformOrigin: w.dataset.origin || "50% 80%" });
+            tl.fromTo(
+              w,
+              { opacity: 0, y: parseFloat(w.dataset.rise || "100"), scale: 0.55, rotation: -7, filter: "blur(10px)" },
+              { opacity: 1, y: -8, scale: peak, rotation: 1.5, filter: "blur(0px)", duration: 0.2, ease: "power3.out" },
+              s,
+            );
+            tl.to(w, { y: 0, scale: 1, rotation: 0, duration: 0.32, ease: "back.out(1.6)" }, s + 0.2);
+          } else if (w.dataset.pop) {
+            const s = Math.max(0, t - 0.16);
+            gsap.set(w, { transformOrigin: w.dataset.origin || "50% 85%" });
+            tl.fromTo(
+              w,
+              { opacity: 0, y: parseFloat(w.dataset.rise || "84"), scale: 0.72, rotation: -5, filter: "blur(8px)" },
+              { opacity: 1, y: -5, scale: 1.05, rotation: 1, filter: "blur(0px)", duration: 0.16, ease: "power3.out" },
+              s,
+            );
+            tl.to(w, { y: 0, scale: 1, rotation: 0, duration: 0.28, ease: "back.out(1.5)" }, s + 0.16);
+          } else if (w.dataset.accent) {
+            const s = Math.max(0, t - 0.16);
+            gsap.set(w, { transformOrigin: "50% 85%" });
+            tl.fromTo(
+              w,
+              { opacity: 0, y: parseFloat(w.dataset.rise || "80"), scale: 0.78, rotation: -1.5, filter: "blur(8px)" },
+              { opacity: 1, y: 0, scale: 1, rotation: 0, filter: "blur(0px)", duration: 0.46, ease: "back.out(2.2)" },
+              s,
+            );
+          } else {
+            const s = Math.max(0, t - 0.13);
+            tl.fromTo(
+              w,
+              { opacity: 0, y: parseFloat(w.dataset.rise || "56"), filter: "blur(6px)" },
+              { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.36, ease: "power3.out" },
+              s,
+            );
+          }
+        }
+
+        // phase exits: quick blur-up, bottom line 2 f behind
+        const exitUp = (sel, t) =>
+          tl.to(sel, { y: -60, opacity: 0, filter: "blur(8px)", duration: 0.2, ease: "power2.in" }, t);
+        exitUp("#p0a", 0.68);
+        exitUp("#p0b", 0.68 + 2 * F);
+        exitUp("#a1", 1.62);
+        exitUp("#a2", 1.62 + 2 * F);
+        exitUp("#b1", 2.92);
+
+        // small camera punch on "reverse"
+        tl.fromTo("#punch", { scale: 1, transformOrigin: "510px 1000px" }, { scale: 1.004, duration: 0.4, ease: "power2.out" }, 1.0);
+
+        // ---- app tiles: isometric stack pops in (3 f stagger) on "every" ----
+        const tiles = $$(".tile");
+        const Z = 25;
+        tl.fromTo("#ground", { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.35, ease: "power2.out" }, 3.12);
+        tiles.forEach((tile, i) => {
+          const s = 3.14 + i * 3 * F;
+          tl.fromTo(tile, { z: i * Z + 200, scale: 0.6 }, { z: i * Z, scale: 1, duration: 0.34, ease: "back.out(1.7)" }, s);
+          tl.fromTo(tile.children, { opacity: 0 }, { opacity: 1, duration: 0.1, ease: "power1.out" }, s);
+        });
+        // anticipation on "single": the top tile lifts and its glyph glows, then sinks back
+        const top = $("#t4");
+        tl.to(top, { z: 4 * Z + 30, duration: 0.18, ease: "power2.out" }, 3.72);
+        tl.to(top, { z: 4 * Z - 4, duration: 0.2, ease: "power2.in" }, 3.94);
+        tl.to(top, { z: 4 * Z, duration: 0.1, ease: "power1.out" }, 4.14);
+        // "day?": the top tile splits into three exploded layers
+        const mid = top.querySelector(".mid");
+        const glyph = top.querySelector(".glyph");
+        tl.fromTo(mid, { z: 0 }, { z: 55, duration: 0.3, ease: "back.out(1.8)" }, 4.12);
+        tl.fromTo(glyph, { z: 0 }, { z: 110, duration: 0.32, ease: "back.out(1.8)" }, 4.14);
+        tl.fromTo(mid, { backgroundColor: "rgba(251, 250, 248, 0)" }, { backgroundColor: "rgba(251, 250, 248, 0.82)", duration: 0.2, ease: "power1.out", immediateRender: false }, 4.14);
+        tl.fromTo(".tile.top .mid .g", { backgroundColor: "rgba(251, 250, 248, 0.92)" }, { backgroundColor: "rgba(206, 198, 189, 1)", duration: 0.2, ease: "power1.out" }, 4.14);
+        tl.fromTo(glyph, { backgroundColor: "rgba(46, 156, 203, 0)" }, { backgroundColor: "rgba(46, 156, 203, 0.22)", duration: 0.2, ease: "power1.out", immediateRender: false }, 4.16);
+        tl.fromTo(top, { z: 4 * Z }, { z: 4 * Z + 6, duration: 0.3, ease: "power2.out", immediateRender: false }, 4.24);
+        tl.to(".tile.top .glyph .g.acc", { scale: 1.12, duration: 0.14, yoyo: true, repeat: 1, ease: "sine.inOut" }, 4.22);
+        // dotted guides between the exploded layers
+        tl.fromTo("#guides", { opacity: 0 }, { opacity: 0.55, duration: 0.16, ease: "power1.out" }, 4.18);
+        tl.fromTo(".gl", { attr: { y2: -88 } }, { attr: { y2: -190 }, duration: 0.3, ease: "power3.out" }, 4.14);
+        // tiles float
+        tl.fromTo("#tiles-float", { y: 0 }, { y: -4, duration: 0.6, ease: "sine.inOut", yoyo: true, repeat: 1 }, 3.5);
+
+        window.__timelines["main"] = tl;
+        if (window.__hfForceTimelineRebind) window.__hfForceTimelineRebind();
+      })();
+    </script>
+  </body>
+</html>

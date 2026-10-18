@@ -1,0 +1,1186 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>v05 refine</title>
+    <link rel="stylesheet" href="brand.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: var(--brand-background);
+      }
+      #root {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: var(--brand-background);
+        font-family: var(--font-heading);
+        color: var(--brand-text);
+      }
+
+      /* ---------- shared v2 background: paper + 60px grid + vignette (identical to v01_hook) ---------- */
+      #bg {
+        position: absolute;
+        inset: 0;
+        background: var(--brand-background);
+        overflow: hidden;
+      }
+      #grid {
+        position: absolute;
+        left: -120px;
+        top: -120px;
+        width: 1320px;
+        height: 2160px;
+        background-image:
+          linear-gradient(to right, rgba(20, 20, 20, 0.055) 1.5px, transparent 1.5px),
+          linear-gradient(to bottom, rgba(20, 20, 20, 0.055) 1.5px, transparent 1.5px);
+        background-size: 60px 60px;
+      }
+      #vignette {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(ellipse at 50% 45%, transparent 45%, rgba(90, 80, 72, 0.22) 100%);
+      }
+
+      /* ---------- camera ---------- */
+      #cam,
+      #punch {
+        position: absolute;
+        inset: 0;
+      }
+
+      /* ---------- README browser card (chapter, behind the speaker card) ---------- */
+      #readme-float {
+        position: absolute;
+        left: 262px;
+        top: 826px;
+        width: 668px;
+        height: 540px;
+      }
+      #readme {
+        position: absolute;
+        inset: 0;
+        border-radius: 24px;
+        overflow: hidden;
+        background: var(--brand-card);
+        box-shadow: 0 30px 50px -12px rgba(60, 50, 40, 0.3);
+      }
+      #chrome {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 58px;
+        background: var(--brand-card);
+        display: flex;
+        align-items: center;
+        padding-left: 22px;
+        gap: 9px;
+        border-bottom: 1.5px solid #ece7e1;
+      }
+      .dot {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: #d9d3cc;
+        flex: none;
+      }
+      #url {
+        margin-left: 14px;
+        font-family: var(--font-body);
+        font-weight: 500;
+        font-size: 30px;
+        letter-spacing: -0.01em;
+        color: var(--brand-muted);
+        white-space: nowrap;
+      }
+      #viewport {
+        position: absolute;
+        left: 0;
+        top: 58px;
+        width: 100%;
+        height: 482px;
+        overflow: hidden;
+        background: #0d1117;
+      }
+      #readme-img {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 668px;
+        height: auto;
+        display: block;
+      }
+
+      /* ---------- speaker card (same treatment as v01_hook, secondary size) ---------- */
+      #card-float {
+        position: absolute;
+        left: 84px;
+        top: 994px;
+        width: 560px;
+        height: 390px;
+      }
+      #card {
+        position: absolute;
+        inset: 0;
+        border-radius: 30px;
+        overflow: hidden;
+        background: #1b1b1b;
+        box-shadow:
+          0 16px 0 -2px var(--brand-primary),
+          0 50px 70px -10px rgba(40, 30, 20, 0.35);
+      }
+      #vid-wrap {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        border-radius: 30px;
+      }
+      /* source 1080x1920 scaled to the card width (560x996); window = 20.5%–59.6% of the source height (face centred) */
+      #speaker {
+        position: absolute;
+        left: 0;
+        top: -204px;
+        width: 560px;
+        height: 996px;
+        object-fit: cover;
+      }
+      #sheen {
+        position: absolute;
+        inset: 0;
+        border-radius: 30px;
+        background: linear-gradient(
+          105deg,
+          transparent 30%,
+          rgba(255, 255, 255, 0.22) 45%,
+          rgba(255, 255, 255, 0.05) 55%,
+          transparent 65%
+        );
+        background-size: 300% 100%;
+        background-position: 100% 0;
+        opacity: 0;
+      }
+
+      /* ---------- dotted links (pill → cards) ---------- */
+      #links {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1080px;
+        height: 1920px;
+        overflow: visible;
+      }
+
+      /* ---------- fan of variation cards ---------- */
+      .vc {
+        position: absolute;
+      }
+      .vc-float,
+      .vc-lift,
+      .vc-flip {
+        position: absolute;
+        inset: 0;
+      }
+      .vc-flip {
+        transform-style: preserve-3d;
+      }
+      .face {
+        position: absolute;
+        inset: 0;
+        border-radius: 24px;
+        overflow: hidden;
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+      }
+      .face.front {
+        background: var(--brand-card);
+        box-shadow: 0 30px 50px -12px rgba(60, 50, 40, 0.3);
+      }
+      .face.back {
+        background: var(--brand-deep);
+        box-shadow:
+          0 12px 0 -2px var(--brand-primary),
+          0 34px 54px -12px rgba(30, 30, 30, 0.38);
+        transform: rotateY(180deg);
+      }
+      .r {
+        position: absolute;
+      }
+
+      /* ---------- merged card ---------- */
+      #merged-wrap {
+        position: absolute;
+        left: 210px;
+        top: 530px;
+        width: 600px;
+        height: 340px;
+      }
+      #glow {
+        position: absolute;
+        left: -260px;
+        top: -260px;
+        width: 1120px;
+        height: 860px;
+        background: radial-gradient(ellipse at 50% 50%, rgba(46, 156, 203, 0.5), rgba(46, 156, 203, 0) 60%);
+        opacity: 0;
+      }
+      #merged-pop {
+        position: absolute;
+        inset: 0;
+      }
+      #merged {
+        position: absolute;
+        inset: 0;
+        border-radius: 28px;
+        overflow: hidden;
+        background: var(--brand-deep);
+        box-shadow:
+          0 14px 0 -2px var(--brand-primary),
+          0 44px 64px -12px rgba(30, 30, 30, 0.38);
+      }
+      #merged-light {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(ellipse at 50% 40%, rgba(255, 255, 255, 0.55), rgba(46, 156, 203, 0.25) 70%);
+        opacity: 0;
+      }
+      #mpill {
+        position: absolute;
+        right: -26px;
+        top: -34px;
+        height: 64px;
+        padding: 0 28px 0 22px;
+        border-radius: 32px;
+        background: var(--brand-text);
+        color: #fbfaf8;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-family: var(--font-body);
+        font-weight: 600;
+        font-size: 32px;
+        letter-spacing: -0.01em;
+        box-shadow: 0 16px 28px -8px rgba(30, 25, 20, 0.35);
+        white-space: nowrap;
+      }
+      #mpill i {
+        display: block;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: var(--brand-primary);
+      }
+
+      /* ---------- codebase pill ---------- */
+      #pill-row {
+        position: absolute;
+        left: 0;
+        top: 936px;
+        width: 1080px;
+        height: 84px;
+        display: flex;
+        justify-content: center;
+      }
+      #pill {
+        position: relative;
+        height: 84px;
+        padding: 0 40px 0 34px;
+        border-radius: 42px;
+        background: var(--brand-text);
+        color: #fbfaf8;
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        font-family: var(--font-body);
+        font-weight: 600;
+        font-size: 40px;
+        letter-spacing: -0.015em;
+        white-space: nowrap;
+        box-shadow: 0 22px 36px -10px rgba(30, 25, 20, 0.38);
+      }
+      #pill .code {
+        color: var(--brand-primary);
+        font-weight: 600;
+      }
+      #badge {
+        position: absolute;
+        width: 72px;
+        height: 72px;
+        right: -44px;
+        top: -38px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 35% 30%, #6ac2e6, #2e9ccb 55%, #1f7ea8 100%);
+        box-shadow: 0 12px 22px rgba(31, 126, 168, 0.4);
+      }
+      #badge svg {
+        position: absolute;
+        inset: 0;
+      }
+      #ring {
+        position: absolute;
+        width: 72px;
+        height: 72px;
+        right: -44px;
+        top: -38px;
+        border-radius: 50%;
+        border: 4px solid var(--brand-primary);
+        opacity: 0;
+      }
+
+      /* ---------- coin 02 ---------- */
+      #coin {
+        position: absolute;
+        left: 86px;
+        top: 320px;
+        width: 220px;
+        height: 220px;
+      }
+      #coin-body {
+        position: absolute;
+        inset: 0;
+      }
+      .coin-face {
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-body);
+        font-weight: 600;
+        font-size: 92px;
+        letter-spacing: -0.04em;
+      }
+      #coin-white {
+        background: radial-gradient(circle at 35% 30%, #ffffff, #f1eeea 70%);
+        box-shadow:
+          0 18px 30px rgba(60, 50, 40, 0.22),
+          inset 0 -6px 12px rgba(60, 50, 40, 0.06);
+        color: var(--brand-text);
+      }
+      #coin-ocean {
+        background: radial-gradient(circle at 35% 30%, #6ac2e6, #2e9ccb 55%, #1f7ea8 100%);
+        color: var(--brand-deep);
+        clip-path: circle(0% at 35% 30%);
+      }
+      .tick {
+        position: absolute;
+        border-radius: 3px;
+      }
+      #coin-white .tick {
+        background: #cfc9c2;
+      }
+      #coin-ocean .tick {
+        background: rgba(13, 39, 49, 0.35);
+      }
+
+      /* ---------- kinetic serif ---------- */
+      .line {
+        position: absolute;
+        display: flex;
+        align-items: baseline;
+        white-space: nowrap;
+        line-height: 0.95;
+        letter-spacing: -0.015em;
+      }
+      .bl {
+        display: block;
+        width: 0;
+        height: 0;
+        align-self: baseline;
+      }
+      .w {
+        display: inline-block;
+        will-change: transform, opacity, filter;
+      }
+      .serif {
+        font-family: var(--font-heading);
+        font-weight: 600;
+        color: var(--brand-text);
+      }
+      .ital {
+        font-family: var(--font-accent);
+        font-weight: 700;
+        font-style: italic;
+        letter-spacing: -0.02em;
+      }
+      .ocean {
+        color: var(--brand-primary);
+      }
+      .ink {
+        color: var(--brand-text);
+      }
+      .gap-s {
+        margin-left: 0.24em;
+      }
+      .slug {
+        font-family: var(--font-body);
+        font-weight: 500;
+        font-size: 38px;
+        letter-spacing: -0.01em;
+        color: var(--brand-muted);
+      }
+
+      .sw {
+        display: inline-block;
+      }
+
+      /* ---------- cursor ---------- */
+      #cursor-pos {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 0;
+        height: 0;
+      }
+      #cursor {
+        position: absolute;
+        left: -8px;
+        top: -8px;
+        width: 81px;
+        height: 113px;
+        filter: drop-shadow(0 10px 12px rgba(40, 30, 20, 0.28));
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-width="1080"
+      data-height="1920"
+      data-duration="8.466"
+    >
+      <div id="bg">
+        <div id="grid"></div>
+        <div id="vignette"></div>
+      </div>
+
+      <div id="cam">
+        <div id="punch">
+          <!-- ===== chapter media: real README in a browser card, speaker card in front ===== -->
+          <div id="readme-float">
+            <div id="readme">
+              <div id="chrome">
+                <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+                <span id="url">github.com/0xdesign/design-plugin</span>
+              </div>
+              <div id="viewport">
+                <img id="readme-img" src="assets/refine.png" alt="" />
+              </div>
+            </div>
+          </div>
+
+          <div id="card-float">
+            <div id="card">
+              <div id="vid-wrap">
+                <video
+                  id="speaker"
+                  class="clip"
+                  src="assets/speaker.mp4"
+                  muted
+                  playsinline
+                  data-start="0"
+                  data-duration="1.7"
+                  data-track-index="1"
+                ></video>
+              </div>
+              <div id="sheen"></div>
+            </div>
+          </div>
+
+          <!-- ===== dotted links, fan, merged card, codebase pill ===== -->
+          <svg id="links" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+            <defs id="link-defs"></defs>
+            <g id="link-paths"></g>
+          </svg>
+
+          <div id="fan"></div>
+
+          <div id="merged-wrap">
+            <div id="glow"></div>
+            <div id="merged-pop">
+              <div id="merged"></div>
+              <div id="mpill"><i></i>merged</div>
+            </div>
+          </div>
+
+          <div id="pill-row">
+            <div id="pill">
+              <span class="code">&lt;/&gt;</span><span>my codebase</span>
+              <div id="ring"></div>
+              <div id="badge">
+                <svg viewBox="0 0 72 72" width="72" height="72">
+                  <path
+                    id="tick"
+                    d="M22,37 L32,47 L51,27"
+                    fill="none"
+                    stroke="#0D2731"
+                    stroke-width="7.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- ===== chapter header: coin 02 + title ===== -->
+          <div id="coin">
+            <div id="coin-body">
+              <div id="coin-white" class="coin-face">02</div>
+              <div id="coin-ocean" class="coin-face">02</div>
+            </div>
+          </div>
+
+          <div id="c-second" class="line serif" data-x="336" data-base="392" style="font-size: 76px">
+            <span class="bl"></span>
+            <span class="w" data-t="0.08">second</span>
+            <span class="w gap-s" data-t="0.24">one,</span>
+          </div>
+          <div id="c-design" class="line serif" data-x="332" data-base="548" style="font-size: 156px">
+            <span class="bl"></span>
+            <span class="w" data-t="0.55" data-pop="1">Design</span>
+          </div>
+          <div id="c-amp" class="line ital ocean" data-x="232" data-base="712" style="font-size: 190px">
+            <span class="bl"></span>
+            <span class="w" data-t="0.85" data-accent="1">&amp;</span>
+          </div>
+          <div id="c-refine" class="line serif" data-x="398" data-base="712" style="font-size: 156px">
+            <span class="bl"></span>
+            <span class="w" data-t="1.05" data-pop="1">Refine.</span>
+          </div>
+          <div id="c-slug" class="line slug" data-x="404" data-base="782">
+            <span class="bl"></span>
+            <span class="sw">0xdesign/design-plugin</span>
+          </div>
+
+          <!-- ===== T1: "it actually makes / 5 variations / of any UI" ===== -->
+          <div id="t1a" class="line serif g1" data-x="150" data-base="1116" style="font-size: 70px">
+            <span class="bl"></span>
+            <span class="w" data-t="1.57">it</span>
+            <span class="w gap-s" data-t="1.79">actually</span>
+            <span class="w gap-s" data-t="2.09">makes</span>
+          </div>
+          <div id="t1b" class="line g1" data-x="126" data-base="1318">
+            <span class="bl"></span>
+            <span class="w ital ocean" style="font-size: 220px" data-t="2.41" data-hero="1" data-origin="40% 85%">5</span>
+            <span class="w serif" style="font-size: 136px; margin-left: 0.16em" data-t="2.65" data-pop="1" data-origin="0% 85%">variations</span>
+          </div>
+          <div id="t1c" class="line serif g1" data-right="932" data-base="1436" style="font-size: 104px">
+            <span class="bl"></span>
+            <span class="w" data-t="3.19">of</span>
+            <span class="w gap-s" data-t="3.43">any</span>
+            <span class="w gap-s" data-t="3.71" data-accent="1">UI</span>
+          </div>
+
+          <!-- ===== T2: "I pick / what I like," ===== -->
+          <div id="t2a" class="line serif g2" data-x="150" data-base="1254">
+            <span class="bl"></span>
+            <span class="w" style="font-size: 104px" data-t="5.19">I</span>
+            <span class="w" style="font-size: 204px; margin-left: 0.14em" data-t="5.37" data-hero="1" data-origin="30% 85%"
+              >pick</span
+            >
+          </div>
+          <div id="t2b" class="line serif g2" data-right="932" data-base="1404" style="font-size: 116px">
+            <span class="bl"></span>
+            <span class="w" data-t="5.61">what</span>
+            <span class="w gap-s" data-t="5.79">I</span>
+            <span class="w gap-s" data-t="5.91">like,</span>
+          </div>
+
+          <!-- ===== T3: "and then / it merges it / into my entire / code base." ===== -->
+          <div id="t3a" class="line serif g3" data-right="900" data-base="1094" style="font-size: 72px">
+            <span class="bl"></span>
+            <span class="w" data-t="6.17">and</span>
+            <span class="w gap-s" data-t="6.37">then</span>
+          </div>
+          <div id="t3b" class="line g3" data-x="132" data-base="1248">
+            <span class="bl"></span>
+            <span class="w serif" style="font-size: 88px" data-t="6.49">it</span>
+            <span class="w ital ocean" style="font-size: 184px; margin-left: 0.1em" data-t="6.59" data-hero="1" data-origin="35% 80%"
+              >merges</span
+            >
+            <span class="w serif" style="font-size: 88px; margin-left: 0.22em" data-t="6.91">it</span>
+          </div>
+          <div id="t3c" class="line serif g3" data-right="932" data-base="1356" style="font-size: 84px">
+            <span class="bl"></span>
+            <span class="w" data-t="7.09">into</span>
+            <span class="w gap-s" data-t="7.35">my</span>
+            <span class="w gap-s" data-t="7.59">entire</span>
+          </div>
+          <div id="t3d" class="line ital ink g3" data-x="196" data-base="1462" style="font-size: 112px">
+            <span class="bl"></span>
+            <span class="w" data-t="7.89" data-pop="1">code</span>
+            <span class="w" style="margin-left: 0.2em" data-t="8.17" data-pop="1">base.</span>
+          </div>
+
+          <!-- ===== cursor ===== -->
+          <div id="cursor-pos">
+            <div id="cursor">
+              <svg viewBox="-4 -4 60 84" width="81" height="113">
+                <path
+                  d="M2,2 L2,62 L16.5,48.5 L27,72 L38.5,67 L28,44 L48,44 Z"
+                  fill="#FBFAF8"
+                  stroke="#141414"
+                  stroke-width="3.5"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (async () => {
+        const fontSpecs = ['600 64px "Newsreader"', 'italic 700 64px "Fraunces"', '600 30px "Geist"', '500 30px "Geist"'];
+        await Promise.all(fontSpecs.map((f) => document.fonts.load(f)));
+        await document.fonts.ready;
+        for (const f of fontSpecs) {
+          if (!document.fonts.check(f)) throw new Error("brand font missing: " + f);
+        }
+        const img = document.getElementById("readme-img");
+        if (!img.complete) await new Promise((res) => img.addEventListener("load", res, { once: true }));
+
+        const D = 8.466;
+        const F = 1 / 30;
+        const $ = (s) => document.querySelector(s);
+        const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+        const rad = Math.PI / 180;
+
+        // ---------------- layout: place each line by its baseline ----------------
+        for (const line of $$(".line")) {
+          const bl = line.querySelector(".bl");
+          line.style.top = "0px";
+          line.style.left = "0px";
+          const baseOff = bl.offsetTop;
+          line.dataset.bo = baseOff;
+          line.style.top = parseFloat(line.dataset.base) - baseOff + "px";
+          if (line.dataset.right) {
+            line.style.left = parseFloat(line.dataset.right) - line.offsetWidth + "px";
+          } else {
+            line.style.left = line.dataset.x + "px";
+          }
+        }
+
+        // ---------------- coin ticks ----------------
+        for (const face of $$(".coin-face")) {
+          for (const [x, y, w, h] of [
+            [107, 14, 6, 18],
+            [107, 188, 6, 18],
+            [14, 107, 18, 6],
+            [188, 107, 18, 6],
+          ]) {
+            const t = document.createElement("span");
+            t.className = "tick";
+            Object.assign(t.style, { left: x + "px", top: y + "px", width: w + "px", height: h + "px" });
+            face.appendChild(t);
+          }
+        }
+
+        // ---------------- fan cards ----------------
+        const CW = 188,
+          CH = 276;
+        const SX = CW / 196,
+          SY = CH / 284;
+        const SLOTS = [
+          { x: 190, y: 716, r: -8 },
+          { x: 350, y: 680, r: -3.5 },
+          { x: 510, y: 668, r: 0 },
+          { x: 670, y: 680, r: 3.5 },
+          { x: 830, y: 716, r: 8 },
+        ];
+        // [x, y, w, h, radius, kind] in a 196x284 design space
+        // kinds: b bar, k block, K block (ocean tint when picked), a accent (button), c circle
+        const rows4 = [];
+        for (const y of [20, 68, 116]) {
+          rows4.push([16, y, 36, 36, 18, y === 20 ? "a" : "c"], [62, y + 6, 112, 10, 5, "b"], [62, y + 22, 72, 10, 5, "b"]);
+        }
+        const LAYOUTS = [
+          [
+            [16, 18, 60, 10, 5, "b"],
+            [16, 40, 164, 118, 14, "k"],
+            [16, 174, 150, 11, 5.5, "b"],
+            [16, 193, 112, 11, 5.5, "b"],
+            [16, 230, 84, 32, 16, "a"],
+          ],
+          [
+            [16, 18, 164, 28, 10, "b"],
+            [16, 58, 78, 72, 12, "a"],
+            [102, 58, 78, 72, 12, "k"],
+            [16, 138, 78, 72, 12, "k"],
+            [102, 138, 78, 72, 12, "K"],
+            [16, 224, 128, 11, 5.5, "b"],
+            [16, 243, 84, 11, 5.5, "b"],
+          ],
+          [
+            [16, 18, 44, 10, 5, "b"],
+            [16, 38, 150, 16, 8, "b"],
+            [16, 68, 164, 146, 14, "k"],
+            [16, 228, 164, 10, 5, "b"],
+            [16, 245, 134, 10, 5, "b"],
+            [16, 262, 92, 10, 5, "b"],
+          ],
+          [...rows4, [16, 166, 164, 52, 12, "K"], [16, 232, 164, 34, 17, "a"]],
+          [
+            [16, 18, 72, 136, 12, "k"],
+            [98, 22, 82, 10, 5, "b"],
+            [98, 40, 64, 10, 5, "b"],
+            [98, 58, 76, 10, 5, "b"],
+            [98, 100, 82, 54, 10, "k"],
+            [16, 170, 164, 10, 5, "b"],
+            ...[40, 62, 30, 74, 52].map((h, i) => [16 + i * 34, 266 - h, 24, h, 6, "k"]),
+          ],
+        ];
+        const WHITE = { b: "#E5E0DA", k: "#EEEAE5", K: "#EEEAE5", a: "#DDD7D0", c: "#E5E0DA" };
+        const DEEP = {
+          b: "rgba(228,222,217,0.16)",
+          k: "rgba(228,222,217,0.08)",
+          K: "rgba(46,156,203,0.42)",
+          a: "#2E9CCB",
+          c: "rgba(228,222,217,0.16)",
+        };
+        const paint = (face, layout, pal, sx, sy) => {
+          for (const [x, y, w, h, r, k] of layout) {
+            const d = document.createElement("div");
+            d.className = "r";
+            Object.assign(d.style, {
+              left: x * sx + "px",
+              top: y * sy + "px",
+              width: w * sx + "px",
+              height: h * sy + "px",
+              borderRadius: r * Math.min(sx, sy) + "px",
+              background: pal[k],
+            });
+            face.appendChild(d);
+          }
+        };
+        const fan = $("#fan");
+        const cards = SLOTS.map((s, i) => {
+          const vc = document.createElement("div");
+          vc.className = "vc";
+          Object.assign(vc.style, {
+            left: s.x - CW / 2 + "px",
+            top: s.y - CH / 2 + "px",
+            width: CW + "px",
+            height: CH + "px",
+          });
+          vc.innerHTML =
+            '<div class="vc-float"><div class="vc-lift"><div class="vc-flip"><div class="face front"></div>' +
+            (i === 1 || i === 3 ? '<div class="face back"></div>' : "") +
+            "</div></div></div>";
+          paint(vc.querySelector(".front"), LAYOUTS[i], WHITE, SX, SY);
+          if (i === 1 || i === 3) paint(vc.querySelector(".back"), LAYOUTS[i], DEEP, SX, SY);
+          fan.appendChild(vc);
+          return {
+            el: vc,
+            float: vc.querySelector(".vc-float"),
+            lift: vc.querySelector(".vc-lift"),
+            flip: vc.querySelector(".vc-flip"),
+            slot: s,
+          };
+        });
+
+        // ---------------- merged card wireframe (600x340) ----------------
+        paint(
+          $("#merged"),
+          [
+            [28, 26, 200, 14, 7, "b"],
+            [496, 22, 76, 22, 11, "k"],
+            [28, 60, 320, 150, 18, "K"],
+            [364, 60, 208, 70, 14, "k"],
+            [364, 140, 208, 70, 14, "k"],
+            [380, 78, 34, 34, 17, "a"],
+            [426, 84, 120, 10, 5, "b"],
+            [426, 102, 80, 10, 5, "b"],
+            [28, 230, 200, 52, 26, "a"],
+            [248, 236, 190, 12, 6, "b"],
+            [248, 258, 130, 12, 6, "b"],
+            [28, 300, 544, 10, 5, "k"],
+          ],
+          DEEP,
+          1,
+          1,
+        );
+        const mLight = document.createElement("div");
+        mLight.id = "merged-light";
+        $("#merged").appendChild(mLight);
+
+        // ---------------- pill geometry + dotted links ----------------
+        const pill = $("#pill");
+        const pillTop = 936,
+          pillCY = 978;
+        const svgNS = "http://www.w3.org/2000/svg";
+        const defs = $("#link-defs");
+        const gPaths = $("#link-paths");
+        const linkMasks = [];
+        SLOTS.forEach((s, i) => {
+          const bx = s.x - (CH / 2) * Math.sin(s.r * rad);
+          const by = s.y + (CH / 2) * Math.cos(s.r * rad) + 18;
+          const sx = 510 + (i - 2) * 64;
+          const sy = pillTop - 10;
+          const d = `M${sx},${sy} C${sx},${sy - 44} ${bx},${by + 50} ${bx},${by}`;
+          const m = document.createElementNS(svgNS, "mask");
+          m.setAttribute("id", "lk" + i);
+          m.setAttribute("maskUnits", "userSpaceOnUse");
+          m.setAttribute("x", "0");
+          m.setAttribute("y", "0");
+          m.setAttribute("width", "1080");
+          m.setAttribute("height", "1920");
+          const mp = document.createElementNS(svgNS, "path");
+          mp.setAttribute("d", d);
+          mp.setAttribute("fill", "none");
+          mp.setAttribute("stroke", "#fff");
+          mp.setAttribute("stroke-width", "12");
+          mp.setAttribute("stroke-linecap", "butt");
+          m.appendChild(mp);
+          defs.appendChild(m);
+          const len = mp.getTotalLength() + 24;
+          mp.style.strokeDasharray = `${len} ${len}`;
+          const p = document.createElementNS(svgNS, "path");
+          p.setAttribute("d", d);
+          p.setAttribute("fill", "none");
+          p.setAttribute("stroke", "#141414");
+          p.setAttribute("stroke-width", "3");
+          p.setAttribute("stroke-linecap", "round");
+          p.setAttribute("stroke-dasharray", "2 12");
+          p.setAttribute("mask", `url(#lk${i})`);
+          gPaths.appendChild(p);
+          linkMasks.push({ mp, len });
+        });
+
+        // ---------------- header targets for the chapter title ----------------
+        const HS = 0.575; // header scale of the title words
+        const HB = 420; // header baseline
+        const HX = 252;
+        const cDesign = $("#c-design"),
+          cAmp = $("#c-amp"),
+          cRefine = $("#c-refine"),
+          cSlug = $("#c-slug");
+        const hx = [];
+        hx[0] = HX;
+        hx[1] = hx[0] + cDesign.offsetWidth * HS + 20;
+        hx[2] = hx[1] + cAmp.offsetWidth * HS + 22;
+        const titleLines = [cDesign, cAmp, cRefine];
+        for (const l of [...titleLines, cSlug]) {
+          gsap.set(l, { transformOrigin: `0px ${l.dataset.bo}px` });
+        }
+
+        // ================= timeline =================
+        const tl = gsap.timeline({ paused: true });
+
+        // background drift (continuous, linear on purpose) + slow camera push
+        tl.fromTo("#grid", { x: 0, y: 0 }, { x: -20, y: -12, duration: D, ease: "none" }, 0);
+        tl.fromTo("#cam", { scale: 1, transformOrigin: "510px 1080px" }, { scale: 1.015, duration: D, ease: "none" }, 0);
+
+        // ---------- word entrances (contact frame on the spoken word; same recipes as v01_hook) ----------
+        const ZB = 1470;
+        for (const w of $$(".line .w")) {
+          const t = parseFloat(w.dataset.t);
+          const line = w.closest(".line");
+          const fs = parseFloat(getComputedStyle(w).fontSize);
+          const bottom = parseFloat(line.dataset.base) + 0.26 * fs;
+          const R = (r) => (bottom + r > ZB ? -0.7 * r : r);
+          if (w.dataset.hero) {
+            const s = Math.max(0, t - 0.2);
+            gsap.set(w, { transformOrigin: w.dataset.origin || "50% 80%" });
+            tl.fromTo(
+              w,
+              { opacity: 0, y: R(80), scale: 0.55, rotation: -7, filter: "blur(8px)" },
+              { opacity: 1, y: -8, scale: 1.1, rotation: 1.5, filter: "blur(0px)", duration: 0.2, ease: "power3.out" },
+              s,
+            );
+            tl.to(w, { y: 0, scale: 1, rotation: 0, duration: 0.32, ease: "back.out(1.6)" }, s + 0.2);
+          } else if (w.dataset.pop) {
+            const s = Math.max(0, t - 0.16);
+            gsap.set(w, { transformOrigin: w.dataset.origin || "50% 85%" });
+            tl.fromTo(
+              w,
+              { opacity: 0, y: R(60), scale: 0.72, rotation: -5, filter: "blur(6px)" },
+              { opacity: 1, y: -5, scale: 1.06, rotation: 1, filter: "blur(0px)", duration: 0.16, ease: "power3.out" },
+              s,
+            );
+            tl.to(w, { y: 0, scale: 1, rotation: 0, duration: 0.28, ease: "back.out(1.5)" }, s + 0.16);
+          } else if (w.dataset.accent) {
+            const s = Math.max(0, t - 0.16);
+            gsap.set(w, { transformOrigin: "50% 85%" });
+            tl.fromTo(
+              w,
+              { opacity: 0, y: R(56), scale: 0.78, rotation: -6, filter: "blur(6px)" },
+              { opacity: 1, y: 0, scale: 1, rotation: 0, filter: "blur(0px)", duration: 0.46, ease: "back.out(2.2)" },
+              s,
+            );
+          } else {
+            const s = Math.max(0, t - 0.13);
+            tl.fromTo(
+              w,
+              { opacity: 0, y: R(40), filter: "blur(5px)" },
+              { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.38, ease: "power3.out" },
+              s,
+            );
+          }
+        }
+
+        // ================= CHAPTER (0 – 1.76) =================
+        // coin 02: pop in white, then turns ocean on "one,"
+        gsap.set("#coin", { transformOrigin: "50% 50%" });
+        tl.fromTo("#coin", { opacity: 0.3 }, { opacity: 1, duration: 0.1, ease: "power1.out" }, 0);
+        tl.fromTo(
+          "#coin-body",
+          { scale: 0.45, y: 40, rotation: -40 },
+          { scale: 1, y: 0, rotation: 0, duration: 0.42, ease: "back.out(1.5)" },
+          0,
+        );
+        tl.fromTo(
+          "#coin-ocean",
+          { clipPath: "circle(0% at 35% 30%)" },
+          { clipPath: "circle(80% at 35% 30%)", duration: 0.32, ease: "power2.out" },
+          0.12,
+        );
+        tl.to("#coin", { scale: 1.07, duration: 0.1, ease: "power2.out" }, 0.18);
+        tl.to("#coin", { scale: 1, duration: 0.3, ease: "back.out(2)" }, 0.28);
+
+        // slug
+        tl.fromTo(
+          "#c-slug .sw",
+          { opacity: 0, x: -24 },
+          { opacity: 1, x: 0, duration: 0.36, ease: "power3.out" },
+          1.1,
+        );
+
+        // README browser card (behind) + speaker card (front)
+        gsap.set("#readme", { transformPerspective: 1600, transformOrigin: "50% 50%" });
+        tl.fromTo("#readme", { opacity: 0 }, { opacity: 1, duration: 0.16, ease: "power1.out" }, 0.1);
+        tl.fromTo(
+          "#readme",
+          { y: 64, scale: 0.9, rotationY: -24, rotationX: 18, rotation: 4 },
+          { y: 0, scale: 1, rotationY: -11, rotationX: 5, rotation: 2.5, duration: 0.6, ease: "power3.out", immediateRender: false },
+          0.1,
+        );
+        tl.to("#readme", { rotationY: -8.5, rotationX: 3.5, duration: 0.7, ease: "sine.inOut" }, 0.7);
+        tl.fromTo("#readme-img", { y: -1000 }, { y: -1050, duration: 1.4, ease: "sine.inOut" }, 0.1);
+
+        gsap.set("#card", { transformPerspective: 1600, transformOrigin: "50% 50%" });
+        tl.fromTo("#card", { opacity: 0.3 }, { opacity: 1, duration: 0.12, ease: "power1.out" }, 0);
+        tl.fromTo("#card", { y: 70 }, { y: 0, duration: 0.5, ease: "power3.out", immediateRender: false }, 0);
+        tl.fromTo("#card", { scale: 0.88 }, { scale: 1, duration: 0.48, ease: "back.out(1.5)", immediateRender: false }, 0);
+        tl.fromTo("#card", { rotationX: 28 }, { rotationX: 5, duration: 0.62, ease: "back.out(1.8)", immediateRender: false }, 0);
+        tl.fromTo("#card", { rotationY: 22 }, { rotationY: 9, duration: 0.55, ease: "power3.out", immediateRender: false }, 0);
+        tl.fromTo("#card", { rotation: -2 }, { rotation: -1.5, duration: 0.55, ease: "power3.out", immediateRender: false }, 0);
+        tl.to("#card", { rotationY: 6.5, rotationX: 3.5, duration: 0.7, ease: "sine.inOut" }, 0.62);
+        tl.fromTo("#vid-wrap", { scale: 1.16 }, { scale: 1, duration: 0.7, ease: "power3.out" }, 0);
+        tl.to("#vid-wrap", { scale: 1.03, duration: 0.7, ease: "none" }, 0.7);
+        tl.fromTo("#sheen", { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "power1.out" }, 0.08);
+        tl.fromTo(
+          "#sheen",
+          { backgroundPosition: "100% 0" },
+          { backgroundPosition: "0% 0", duration: 0.7, ease: "power2.inOut", immediateRender: false },
+          0.08,
+        );
+        tl.to("#sheen", { opacity: 0, duration: 0.25, ease: "power1.in" }, 0.55);
+        tl.fromTo("#card-float", { y: 0 }, { y: -7, duration: 0.7, ease: "sine.inOut" }, 0.5);
+
+        // chapter media exits (quick, 2 f apart)
+        tl.to("#readme-float", { y: 70, scale: 0.92, opacity: 0, duration: 0.24, ease: "power2.in" }, 1.2);
+        tl.to("#card-float", { y: 60, scale: 0.9, opacity: 0, duration: 0.24, ease: "power2.in" }, 1.2 + 2 * F);
+        // "second one," exits up
+        tl.to("#c-second", { y: -40, opacity: 0, filter: "blur(6px)", duration: 0.2, ease: "power2.in" }, 1.3);
+
+        // title compacts into the header row
+        tl.to("#coin", { x: -44, y: -38, scale: 150 / 220, duration: 0.42, ease: "power3.inOut" }, 1.34);
+        const compactAt = [1.34, 1.34 + 3 * F, 1.34 + 3 * F]; // Design first; "&" + "Refine." travel as one unit (never overlap)
+        titleLines.forEach((l, i) => {
+          const t = compactAt[i];
+          tl.to(l, { x: hx[i] - parseFloat(l.style.left), duration: 0.42, ease: "power3.inOut" }, t);
+          tl.to(l, { y: HB - parseFloat(l.dataset.base), duration: 0.42, ease: i ? "power4.inOut" : "power3.inOut" }, t + (i ? 0.04 : 0));
+          tl.to(l, { scale: HS, duration: 0.42, ease: "power3.inOut" }, t);
+        });
+        // slug travels with the "& Refine." row (same timing + eases) so it stays tucked underneath
+        const slugT = 1.34 + 3 * F;
+        tl.to(cSlug, { x: HX + 4 - parseFloat(cSlug.style.left), duration: 0.42, ease: "power3.inOut" }, slugT);
+        tl.to(cSlug, { y: HB + 48 - parseFloat(cSlug.dataset.base), duration: 0.42, ease: "power4.inOut" }, slugT + 0.04);
+        tl.to(cSlug, { scale: 0.88, duration: 0.42, ease: "power3.inOut" }, slugT);
+        // header lives: gentle coin bob
+        tl.fromTo(
+          "#coin-body",
+          { y: 0 },
+          { y: -4, duration: 1.1, ease: "sine.inOut", yoyo: true, repeat: 5, immediateRender: false },
+          1.8,
+        );
+
+        // ================= VARIATIONS (1.56 – 4.95) =================
+        const dealT = [1.56, 1.8, 2.0, 2.2, 2.4];
+        cards.forEach((c, i) => {
+          const s = c.slot;
+          const t = dealT[i];
+          gsap.set(c.el, { transformOrigin: "50% 50%" });
+          tl.fromTo(c.el, { opacity: 0 }, { opacity: 1, duration: 0.1, ease: "power1.out" }, t);
+          tl.fromTo(c.el, { x: 510 - s.x }, { x: 0, duration: 0.4, ease: "power3.out", immediateRender: false }, t);
+          tl.fromTo(c.el, { y: 940 - s.y }, { y: 0, duration: 0.4, ease: "power2.out", immediateRender: false }, t);
+          tl.fromTo(c.el, { rotation: -s.r * 1.8 - 6 }, { rotation: s.r, duration: 0.48, ease: "back.out(1.6)", immediateRender: false }, t);
+          tl.fromTo(c.el, { scale: 0.5 }, { scale: 1, duration: 0.44, ease: "back.out(1.7)", immediateRender: false }, t);
+          // gentle float (phase offset per card)
+          tl.fromTo(
+            c.float,
+            { y: 0 },
+            { y: i % 2 ? -5 : 5, duration: 0.95 + i * 0.06, ease: "sine.inOut", yoyo: true, repeat: 5 },
+            t + 0.48,
+          );
+        });
+        // ripple across the fan on "any UI"
+        cards.forEach((c, i) => {
+          const t = 3.5 + i * 3 * F;
+          tl.fromTo(c.lift, { y: 0 }, { y: -14, duration: 0.14, ease: "power2.out" }, t);
+          tl.to(c.lift, { y: 0, duration: 0.3, ease: "back.out(2)" }, t + 0.14);
+        });
+
+        // T1 exit
+        tl.to("#t1a", { y: -46, opacity: 0, filter: "blur(6px)", duration: 0.2, ease: "power2.in" }, 4.8);
+        tl.to("#t1b", { y: -46, opacity: 0, filter: "blur(6px)", duration: 0.2, ease: "power2.in" }, 4.8 + 2 * F);
+        tl.to("#t1c", { y: -46, opacity: 0, filter: "blur(6px)", duration: 0.2, ease: "power2.in" }, 4.8 + 4 * F);
+
+        // codebase pill slides up under the fan (contact ~4.2), dotted lines draw up to each card
+        gsap.set(pill, { transformOrigin: "50% 50%" });
+        tl.fromTo(pill, { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "power1.out" }, 3.98);
+        tl.fromTo(pill, { y: 34 }, { y: -6, duration: 0.24, ease: "power3.out", immediateRender: false }, 3.98);
+        tl.to(pill, { y: 0, duration: 0.26, ease: "back.out(1.8)" }, 4.22);
+        tl.fromTo(pill, { scale: 0.86 }, { scale: 1, duration: 0.42, ease: "back.out(1.8)", immediateRender: false }, 3.98);
+        const linkOrder = [2, 1, 3, 0, 4];
+        linkOrder.forEach((i, k) => {
+          const { mp, len } = linkMasks[i];
+          tl.fromTo(mp, { strokeDashoffset: len }, { strokeDashoffset: 0, duration: 0.36, ease: "power2.out" }, 4.36 + k * 3 * F);
+        });
+        tl.to("#links", { opacity: 0, duration: 0.22, ease: "power1.in" }, 5.06);
+        // pill breathes while waiting
+        tl.fromTo(pill, { scale: 1 }, { scale: 1.025, duration: 0.8, ease: "sine.inOut", yoyo: true, repeat: 3 }, 4.5);
+
+        // ================= PICK (4.98 – 6.3) =================
+        // cursor arcs in, clicks card 2 (5.37) then card 4 (5.91)
+        const cur = "#cursor-pos";
+        gsap.set("#cursor", { transformOrigin: "8px 8px" });
+        tl.fromTo(cur, { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "power1.out" }, 4.98);
+        tl.fromTo(cur, { x: 890 }, { x: 372, duration: 0.34, ease: "power2.inOut" }, 4.98);
+        tl.fromTo(cur, { y: 1150 }, { y: 772, duration: 0.34, ease: "power3.out" }, 4.98);
+        tl.fromTo("#cursor", { scale: 1 }, { scale: 0.8, duration: 3 * F, ease: "power2.in" }, 5.3);
+        tl.to("#cursor", { scale: 1, duration: 0.18, ease: "back.out(2.5)" }, 5.3 + 3 * F);
+        tl.to(cur, { x: 690, duration: 0.38, ease: "power2.inOut" }, 5.45);
+        tl.to(cur, { y: 712, duration: 0.19, ease: "power2.out" }, 5.45);
+        tl.to(cur, { y: 772, duration: 0.19, ease: "power2.in" }, 5.64);
+        tl.to("#cursor", { scale: 0.8, duration: 3 * F, ease: "power2.in" }, 5.83);
+        tl.to("#cursor", { scale: 1, duration: 0.18, ease: "back.out(2.5)" }, 5.83 + 3 * F);
+        tl.to(cur, { x: 800, y: 900, opacity: 0, duration: 0.24, ease: "power2.in" }, 6.04);
+
+        const pick = (c, t, z) => {
+          tl.set(c.el, { zIndex: z }, t - 0.06);
+          gsap.set(c.lift, { transformOrigin: "50% 60%" });
+          gsap.set(c.flip, { transformPerspective: 900, transformOrigin: "50% 50%" });
+          tl.fromTo(c.lift, { scale: 1 }, { scale: 0.95, duration: 2 * F, ease: "power2.in" }, t - 2 * F);
+          tl.to(c.lift, { y: -36, scale: 1.08, duration: 0.32, ease: "back.out(1.8)" }, t);
+          tl.fromTo(c.flip, { rotationY: 0 }, { rotationY: 180, duration: 0.38, ease: "power2.inOut" }, t);
+        };
+        pick(cards[1], 5.37, 10);
+        pick(cards[3], 5.91, 11);
+
+        // T2 exit
+        tl.to("#t2a", { y: -46, opacity: 0, filter: "blur(6px)", duration: 0.2, ease: "power2.in" }, 6.02);
+        tl.to("#t2b", { y: -46, opacity: 0, filter: "blur(6px)", duration: 0.2, ease: "power2.in" }, 6.02 + 2 * F);
+
+        // ================= MERGE (6.15 – 7.5) =================
+        // unpicked cards recede
+        [0, 2, 4].forEach((i, k) => {
+          tl.to(
+            cards[i].el,
+            { opacity: 0.26, scale: 0.9, filter: "blur(3px)", duration: 0.34, ease: "power2.out" },
+            6.15 + k * 2 * F,
+          );
+        });
+        // picked cards fly together (arcs) and fuse
+        const MX = 510,
+          MY = 700;
+        [
+          [cards[1], -40],
+          [cards[3], 40],
+        ].forEach(([c, off]) => {
+          const s = c.slot;
+          tl.to(c.el, { x: MX + off - s.x, duration: 0.24, ease: "power2.in" }, 6.28);
+          tl.to(c.el, { y: MY - 10 - s.y, duration: 0.24, ease: "sine.in" }, 6.28);
+          tl.to(c.el, { rotation: -off / 8, scale: 1.12, duration: 0.24, ease: "power2.in" }, 6.28);
+          tl.to(c.el, { opacity: 0, duration: 0.07, ease: "none" }, 6.5);
+        });
+        // merged card pops (contact on "merges" 6.59) with a soft ocean flash
+        gsap.set("#merged-pop", { transformOrigin: "50% 50%" });
+        tl.fromTo("#merged-pop", { opacity: 0 }, { opacity: 1, duration: 0.06, ease: "none" }, 6.48);
+        tl.fromTo(
+          "#merged-pop",
+          { scale: 0.62, y: 6 },
+          { scale: 1.05, y: -4, duration: 0.13, ease: "power3.out", immediateRender: false },
+          6.48,
+        );
+        tl.to("#merged-pop", { scale: 1, y: 0, duration: 0.3, ease: "back.out(1.6)" }, 6.61);
+        tl.fromTo("#glow", { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1.05, duration: 0.14, ease: "power2.out" }, 6.5);
+        tl.to("#glow", { opacity: 0, scale: 1.35, duration: 0.5, ease: "power2.out" }, 6.64);
+        tl.fromTo("#merged-light", { opacity: 0.9 }, { opacity: 0, duration: 0.42, ease: "power2.out" }, 6.5);
+        // tiny camera punch on the hero beat
+        tl.fromTo(
+          "#punch",
+          { scale: 1, transformOrigin: "510px 1080px" },
+          { scale: 1.01, duration: 0.4, ease: "power2.out" },
+          6.52,
+        );
+        // 'merged' pill
+        gsap.set("#mpill", { transformOrigin: "80% 100%" });
+        tl.fromTo("#mpill", { opacity: 0, scale: 0.5, y: 18 }, { opacity: 1, scale: 1, y: 0, duration: 0.34, ease: "back.out(2.2)" }, 6.7);
+        // merged card floats while held
+        tl.fromTo("#merged-wrap", { y: 0 }, { y: -6, duration: 0.42, ease: "sine.inOut" }, 6.9);
+        tl.to("#merged-wrap", { y: 0, duration: 0.22, ease: "sine.inOut" }, 7.32);
+
+        // ================= DROP INTO THE CODEBASE (7.5 – 8.47) =================
+        tl.to("#mpill", { opacity: 0, scale: 0.7, duration: 0.14, ease: "power2.in" }, 7.48);
+        gsap.set("#merged-wrap", { transformOrigin: "50% 50%" });
+        tl.to("#merged-wrap", { y: -16, scale: 1.02, duration: 0.1, ease: "power2.out" }, 7.56);
+        tl.to("#merged-wrap", { y: 912 - MY, duration: 0.24, ease: "power2.in" }, 7.66);
+        tl.to("#merged-wrap", { scale: 0.5, duration: 0.24, ease: "power2.in" }, 7.66);
+        tl.to("#merged-wrap", { rotation: -2, duration: 0.12, ease: "power1.out" }, 7.66);
+        tl.to("#merged-wrap", { rotation: 0, duration: 0.3, ease: "back.out(2)" }, 7.9);
+        tl.to("#merged-wrap", { y: 912 - MY + 8, duration: 3 * F, ease: "power2.out" }, 7.9);
+        tl.to("#merged-wrap", { y: 912 - MY - 4, duration: 0.3, ease: "back.out(2)" }, 7.9 + 3 * F);
+        // ghosts recede a bit more
+        [0, 2, 4].forEach((i) => tl.to(cards[i].el, { opacity: 0.2, duration: 0.3, ease: "power1.out" }, 7.6));
+        // pill: squash on contact (shape), ocean ✓ badge, ring pulse
+        tl.to(pill, { scaleX: 1.07, scaleY: 0.86, duration: 3 * F, ease: "power2.out" }, 7.9);
+        tl.to(pill, { scaleX: 1.16, scaleY: 1.16, duration: 0.36, ease: "back.out(2.2)" }, 7.9 + 3 * F);
+        gsap.set("#badge", { transformOrigin: "50% 50%" });
+        tl.fromTo("#badge", { opacity: 0, scale: 0.2, rotation: -40 }, { opacity: 1, scale: 1, rotation: 0, duration: 0.34, ease: "back.out(2.2)" }, 7.86);
+        const tick = $("#tick");
+        const tl0 = tick.getTotalLength() + 2;
+        tick.style.strokeDasharray = `${tl0} ${tl0}`;
+        tl.fromTo(tick, { strokeDashoffset: tl0 }, { strokeDashoffset: 0, duration: 0.24, ease: "power2.out" }, 7.98);
+        gsap.set("#ring", { transformOrigin: "50% 50%" });
+        tl.fromTo(
+          "#ring",
+          { opacity: 0.8, scale: 1 },
+          { opacity: 0, scale: 2.3, duration: 0.5, ease: "power2.out", immediateRender: false },
+          8.0,
+        );
+        tl.fromTo(pill, { y: 0 }, { y: -5, duration: 0.3, ease: "sine.inOut" }, 8.16);
+
+        window.__timelines["main"] = tl;
+        if (window.__hfForceTimelineRebind) window.__hfForceTimelineRebind();
+      })();
+    </script>
+  </body>
+</html>

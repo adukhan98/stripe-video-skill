@@ -1,0 +1,843 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>v12 cta</title>
+    <link rel="stylesheet" href="brand.css" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: var(--brand-background);
+      }
+      #root {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: var(--brand-background);
+        font-family: var(--font-heading);
+        color: var(--brand-text);
+      }
+
+      /* ---------- shared background: paper + 60px grid + vignette ---------- */
+      #bg {
+        position: absolute;
+        inset: 0;
+        background: var(--brand-background);
+        overflow: hidden;
+      }
+      #grid {
+        position: absolute;
+        left: -120px;
+        top: -120px;
+        width: 1320px;
+        height: 2160px;
+        background-image:
+          linear-gradient(to right, rgba(20, 20, 20, 0.055) 1.5px, transparent 1.5px),
+          linear-gradient(to bottom, rgba(20, 20, 20, 0.055) 1.5px, transparent 1.5px);
+        background-size: 60px 60px;
+      }
+      #vignette {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(ellipse at 50% 45%, transparent 45%, rgba(90, 80, 72, 0.22) 100%);
+      }
+
+      #cam,
+      #punch {
+        position: absolute;
+        inset: 0;
+      }
+
+      #path-svg {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1080px;
+        height: 1920px;
+        overflow: visible;
+      }
+
+      /* ---------- portrait hero speaker card (v2) ---------- */
+      #card-pos {
+        position: absolute;
+        left: 124px;
+        top: 298px;
+        width: 800px;
+        height: 1000px;
+      }
+      #card-float {
+        position: absolute;
+        inset: 0;
+      }
+      #card {
+        position: absolute;
+        inset: 0;
+        border-radius: 34px;
+        overflow: hidden;
+        background: #1b1b1b;
+        box-shadow:
+          0 16px 0 -2px var(--brand-primary),
+          0 50px 70px -10px rgba(40, 30, 20, 0.35);
+      }
+      #vid-wrap {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        border-radius: 34px;
+      }
+      /* source 1080x1920 scaled to the card width (800x1422); window = 16.4%–86.7% of the source height:
+         full head (hair at ~8 % of the card), face centre at ~40 %, shoulders + sweatshirt below */
+      #speaker {
+        position: absolute;
+        left: 0;
+        top: -233px;
+        width: 800px;
+        height: 1422px;
+        object-fit: cover;
+      }
+      #sheen {
+        position: absolute;
+        inset: 0;
+        border-radius: 34px;
+        background: linear-gradient(
+          105deg,
+          transparent 30%,
+          rgba(255, 255, 255, 0.2) 45%,
+          rgba(255, 255, 255, 0.05) 55%,
+          transparent 65%
+        );
+        background-size: 300% 100%;
+        background-position: 100% 0;
+        opacity: 0;
+      }
+
+      /* ---------- link chip (white, Inter 600) ---------- */
+      #chip-pos {
+        position: absolute;
+        left: 552px;
+        top: 300px;
+        height: 66px;
+      }
+      #chip {
+        position: relative;
+        height: 66px;
+        padding: 0 24px 0 20px;
+        border-radius: 33px;
+        background: var(--brand-card);
+        box-shadow: 0 24px 40px -12px rgba(60, 50, 40, 0.38);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-family: var(--font-body);
+        font-weight: 600;
+        font-size: 27px;
+        letter-spacing: -0.01em;
+        white-space: nowrap;
+        color: var(--brand-text);
+      }
+      #chip svg {
+        width: 28px;
+        height: 28px;
+        flex: none;
+      }
+      #chip .mut {
+        color: var(--brand-muted);
+      }
+
+      /* ---------- black pills (Inter 600) ---------- */
+      #pill-pos {
+        position: absolute;
+        left: 650px;
+        top: 1040px;
+        width: 280px;
+        height: 84px;
+      }
+      #pill {
+        position: absolute;
+        inset: 0;
+        border-radius: 42px;
+        background: var(--brand-text);
+        box-shadow: 0 24px 38px -12px rgba(40, 30, 20, 0.45);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        font-family: var(--font-body);
+        font-weight: 600;
+        font-size: 36px;
+        letter-spacing: -0.01em;
+        color: #fbfaf8;
+        white-space: nowrap;
+      }
+      #pill-arrow,
+      #pill-text {
+        display: inline-block;
+      }
+      #warn-pos {
+        position: absolute;
+        width: 116px;
+        height: 84px;
+      }
+      #warn {
+        position: absolute;
+        inset: 0;
+        border-radius: 42px;
+        background: var(--brand-text);
+        box-shadow: 0 24px 38px -12px rgba(40, 30, 20, 0.45);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      #warn svg {
+        width: 52px;
+        height: 48px;
+        overflow: visible;
+      }
+      #warn-glow {
+        position: absolute;
+        left: -40px;
+        top: -40px;
+        width: 196px;
+        height: 164px;
+        border-radius: 50%;
+        background: radial-gradient(ellipse, rgba(46, 156, 203, 0.38) 0%, rgba(46, 156, 203, 0) 68%);
+        opacity: 0;
+      }
+
+      /* ---------- agent puck (copied from v02_skills, scaled 0.5) ---------- */
+      #puck-pos {
+        position: absolute;
+        left: 110px;
+        top: 1318px;
+        width: 300px;
+        height: 300px;
+        transform-origin: 0 0;
+        transform: scale(0.5);
+      }
+      #puck-float,
+      #puck-bob,
+      #puck {
+        position: absolute;
+        inset: 0;
+      }
+      #puck-glow {
+        position: absolute;
+        left: -110px;
+        top: -110px;
+        width: 520px;
+        height: 520px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(46, 156, 203, 0.5) 0%, rgba(46, 156, 203, 0.2) 42%, rgba(46, 156, 203, 0) 70%);
+        opacity: 0;
+      }
+      #puck-ring {
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        box-shadow:
+          0 0 0 9px var(--brand-primary),
+          0 0 46px 14px rgba(46, 156, 203, 0.45);
+        opacity: 0;
+      }
+      #puck-disc {
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        background: radial-gradient(circle at 34% 26%, #3d3d3d 0%, #1d1d1d 42%, #141414 72%);
+        box-shadow:
+          0 34px 54px -10px rgba(40, 30, 20, 0.5),
+          inset 0 -8px 18px rgba(0, 0, 0, 0.45);
+      }
+      #visor {
+        position: absolute;
+        left: 58px;
+        top: 106px;
+        width: 184px;
+        height: 92px;
+        border-radius: 46px;
+        background: linear-gradient(180deg, #070707 0%, #1f1f1f 100%);
+        box-shadow:
+          inset 0 3px 8px rgba(0, 0, 0, 0.7),
+          0 1px 0 rgba(255, 255, 255, 0.09);
+      }
+      .eye {
+        position: absolute;
+        top: 30px;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: var(--brand-primary);
+        opacity: 0.32;
+      }
+      #eye-l {
+        left: 42px;
+      }
+      #eye-r {
+        left: 110px;
+      }
+
+      /* ---------- kinetic type v2: Inter Tight, accent = colour, no italics ---------- */
+      .line {
+        position: absolute;
+        display: flex;
+        align-items: baseline;
+        white-space: nowrap;
+        line-height: 0.88;
+        font-family: var(--font-heading);
+        color: var(--brand-text);
+      }
+      .bl {
+        display: block;
+        width: 0;
+        height: 0;
+        align-self: baseline;
+      }
+      .w {
+        display: inline-block;
+        will-change: transform, opacity, filter;
+        text-shadow:
+          0 0 28px rgba(228, 222, 217, 0.95),
+          0 0 6px rgba(228, 222, 217, 0.9);
+      }
+      .sup {
+        font-weight: 800;
+        letter-spacing: -0.03em;
+      }
+      .hero {
+        font-weight: 900;
+        letter-spacing: -0.045em;
+      }
+      .ocean {
+        color: var(--brand-primary);
+      }
+      .ink {
+        color: var(--brand-text);
+      }
+      .gap-s {
+        margin-left: 0.24em;
+      }
+
+      #hdr {
+        position: absolute;
+        inset: 0;
+      }
+      #hd1 {
+        font-size: 144px;
+      }
+      #hd2 {
+        font-size: 186px;
+      }
+      #hd2 .q {
+        font-size: 0.8em;
+      }
+      #q-open {
+        margin-right: 0.02em;
+      }
+      #q-close {
+        margin-left: 0.01em;
+      }
+
+      .s64 {
+        font-size: 64px;
+      }
+      .s72 {
+        font-size: 72px;
+      }
+      .s88 {
+        font-size: 88px;
+      }
+      .s92 {
+        font-size: 92px;
+      }
+      .s96 {
+        font-size: 96px;
+      }
+      #rea {
+        font-size: 230px;
+      }
+      #w-anything {
+        font-size: 130px;
+      }
+      #w-link {
+        font-size: 124px;
+      }
+      #w-inbox {
+        font-size: 170px;
+      }
+      #careful {
+        font-size: 170px;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-width="1080"
+      data-height="1920"
+      data-duration="9.699"
+    >
+      <div id="bg">
+        <div id="grid"></div>
+        <div id="vignette"></div>
+      </div>
+
+      <div id="cam">
+        <div id="punch">
+          <!-- dotted loop (end layout): under “reverse” → into the card's right edge -->
+          <svg id="path-svg" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <mask id="mask-d" maskUnits="userSpaceOnUse" x="0" y="0" width="1080" height="1920">
+                <path id="mpath-d" fill="none" stroke="#fff" stroke-width="22" stroke-linecap="round" />
+              </mask>
+            </defs>
+            <path
+              id="dots-d"
+              fill="none"
+              stroke="#141414"
+              stroke-width="3.2"
+              stroke-linecap="round"
+              stroke-dasharray="2 12"
+              mask="url(#mask-d)"
+            />
+          </svg>
+
+          <!-- portrait speaker card -->
+          <div id="card-pos">
+            <div id="card-float">
+              <div id="card">
+                <div id="vid-wrap">
+                  <video
+                    id="speaker"
+                    class="clip"
+                    src="assets/speaker.mp4"
+                    muted
+                    playsinline
+                    data-start="0"
+                    data-duration="9.699"
+                    data-track-index="1"
+                  ></video>
+                </div>
+                <div id="sheen"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- black pill "→ your inbox" -->
+          <div id="pill-pos">
+            <div id="pill"><span id="pill-arrow">→</span><span id="pill-text">your inbox</span></div>
+          </div>
+
+          <!-- white link chip -->
+          <div id="chip-pos">
+            <div id="chip">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#2E9CCB" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7" />
+                <path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7" />
+              </svg>
+              <span><span class="mut">github.com/</span>morluto/rea</span>
+            </div>
+          </div>
+
+          <!-- agent puck (beat A) -->
+          <div id="puck-pos">
+            <div id="puck-float">
+              <div id="puck-bob">
+                <div id="puck">
+                  <div id="puck-glow"></div>
+                  <div id="puck-ring"></div>
+                  <div id="puck-disc">
+                    <div id="visor">
+                      <div id="eye-l" class="eye"></div>
+                      <div id="eye-r" class="eye"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ===== beat A (over the sweatshirt + paper below the card) ===== -->
+          <div id="a1" class="line" data-x="100" data-base="1092">
+            <span class="bl"></span>
+            <span class="w sup s64" data-t="0.04">if</span>
+            <span class="w sup s64 gap-s" data-t="0.16">you</span>
+            <span class="w sup s64 gap-s" data-t="0.44">also</span>
+            <span class="w sup s96 gap-s" data-t="0.58">want</span>
+            <span class="w sup s96 gap-s" data-t="0.70">to</span>
+            <span class="w sup s96 gap-s" data-t="0.96">try</span>
+          </div>
+          <div id="a-rea" class="line" data-x="96" data-base="1300">
+            <span class="bl"></span>
+            <span class="w hero ocean" id="rea" data-t="1.26" data-hero="1" data-peak="1.08">REA</span>
+          </div>
+          <div id="a2" class="line" data-x="556" data-base="1190">
+            <span class="bl"></span>
+            <span class="w sup s64" data-t="1.68">or</span>
+            <span class="w sup s88 gap-s" data-t="1.94">reverse</span>
+          </div>
+          <div id="a3" class="line" data-x="556" data-base="1300">
+            <span class="bl"></span>
+            <span class="w sup s96" data-t="2.30">engineer</span>
+          </div>
+          <div id="a4" class="line" data-right="930" data-base="1440" data-dy="6">
+            <span class="bl"></span>
+            <span class="w hero ink" id="w-anything" data-t="2.68" data-hero="1" data-peak="1.05">anything</span>
+          </div>
+
+          <!-- ===== beat B: header (laid out at its END position; shown 740 px lower during beat B) ===== -->
+          <div id="hdr">
+            <div id="hd1" class="line hero" data-center="540" data-base="410">
+              <span class="bl"></span>
+              <span class="w" id="w-comment">Comment</span>
+            </div>
+            <div id="hd2" class="line hero ocean" data-center="540" data-base="585">
+              <span class="bl"></span>
+              <span class="w q" id="q-open">“</span>
+              <span class="w" id="w-reverse">reverse</span>
+              <span class="w q" id="q-close">”</span>
+            </div>
+          </div>
+          <div id="p1" class="line" data-x="96" data-base="1446" data-dy="10">
+            <span class="bl"></span>
+            <span class="w sup s72" data-t="4.12">I’ll</span>
+            <span class="w sup s92 gap-s" data-t="4.34">send</span>
+            <span class="w sup s72 gap-s" data-t="4.46">you</span>
+            <span class="w sup s72 gap-s" data-t="4.58">the</span>
+            <span class="w hero ink" id="w-link" style="margin-left: 0.16em" data-t="4.74" data-hero="1" data-peak="1.05">link</span>
+          </div>
+          <div id="p2a" class="line" data-x="100" data-base="1316">
+            <span class="bl"></span>
+            <span class="w sup s72" data-t="5.84">straight</span>
+            <span class="w sup s64 gap-s" data-t="6.00">to</span>
+            <span class="w sup s64 gap-s" data-t="6.10">your</span>
+          </div>
+          <div id="p2b" class="line" data-right="930" data-base="1466" data-dy="5">
+            <span class="bl"></span>
+            <span class="w hero ocean" id="w-inbox" data-t="6.46" data-hero="1" data-peak="1.06">inbox</span>
+          </div>
+
+          <!-- ===== beat C ===== -->
+          <div id="c1" class="line" data-x="100" data-base="1240">
+            <span class="bl"></span>
+            <span class="w sup s64" data-t="6.62">Just</span>
+            <span class="w sup s64 gap-s" data-t="6.76">be</span>
+            <span class="w sup s64 gap-s" data-t="6.84">a</span>
+            <span class="w sup s64 gap-s" data-t="6.98">little</span>
+          </div>
+          <div id="c2" class="line" data-x="96" data-base="1392">
+            <span class="bl"></span>
+            <span class="w hero ink" id="careful" data-t="7.28" data-hero="1" data-peak="1.06">careful</span>
+          </div>
+          <div id="warn-pos">
+            <div id="warn-glow"></div>
+            <div id="warn">
+              <svg viewBox="0 0 52 48">
+                <path d="M26 4 L49 44 L3 44 Z" fill="#2E9CCB" stroke="#2E9CCB" stroke-width="6" stroke-linejoin="round" />
+                <path d="M26 17 L26 30" stroke="#141414" stroke-width="5.5" stroke-linecap="round" />
+                <circle cx="26" cy="37.5" r="3.1" fill="#141414" />
+              </svg>
+            </div>
+          </div>
+          <div id="c3" class="line" data-right="930" data-base="1452" data-dy="8">
+            <span class="bl"></span>
+            <span class="w sup s72" data-t="7.48">of</span>
+            <span class="w sup s72 gap-s" data-t="7.58">what</span>
+            <span class="w sup s72 gap-s" data-t="7.70">you</span>
+            <span class="w sup s72 gap-s" data-t="7.92">do.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      (async () => {
+        const fontSpecs = ["900 100px 'Inter Tight'", "800 100px 'Inter Tight'", "700 100px 'Inter Tight'", "500 40px Inter", "600 40px Inter"];
+        await Promise.all(fontSpecs.map((f) => document.fonts.load(f)));
+        await document.fonts.ready;
+        for (const f of fontSpecs) {
+          if (!document.fonts.check(f)) throw new Error("brand font missing: " + f);
+        }
+
+        const D = 9.699;
+        const F = 1 / 30;
+        const $ = (s) => document.querySelector(s);
+        const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+
+        // ---- place each line by its baseline ----
+        for (const line of $$(".line")) {
+          const bl = line.querySelector(".bl");
+          line.style.top = "0px";
+          line.style.left = "0px";
+          const baseOff = bl.offsetTop;
+          line.style.top = parseFloat(line.dataset.base) - baseOff + "px";
+          if (line.dataset.center) {
+            line.style.left = parseFloat(line.dataset.center) - line.offsetWidth / 2 + "px";
+          } else if (line.dataset.right) {
+            line.style.left = parseFloat(line.dataset.right) - line.offsetWidth + "px";
+          } else {
+            line.style.left = line.dataset.x + "px";
+          }
+        }
+        // caution pill right of "careful", centred on its x-height
+        {
+          const c2 = $("#c2");
+          const cw = $("#careful");
+          const wp = $("#warn-pos");
+          wp.style.left = c2.offsetLeft + cw.offsetLeft + cw.offsetWidth + 28 + "px";
+          wp.style.top = 1392 - 0.27 * 170 - 42 + "px";
+        }
+
+        // ---- dotted loop D (paper column right of the compact card) ----
+        const PATH_D =
+          "M 806 612 C 846 660, 924 676, 920 738 C 916 800, 852 814, 836 786 " +
+          "C 820 758, 848 732, 872 750 C 902 774, 822 842, 696 838";
+        $("#dots-d").setAttribute("d", PATH_D);
+        $("#mpath-d").setAttribute("d", PATH_D);
+        const LD = $("#mpath-d").getTotalLength();
+        $("#mpath-d").style.strokeDasharray = LD + " " + LD;
+        gsap.set("#dots-d", { opacity: 0 });
+
+        // header lives at the bottom (over the sweatshirt) during beat B
+        gsap.set("#hdr", { y: 740 });
+
+        // ================= timeline =================
+        const tl = gsap.timeline({ paused: true });
+        tl.fromTo("#grid", { x: 0, y: 0 }, { x: -20, y: -12, duration: D, ease: "none" }, 0);
+        tl.fromTo("#cam", { scale: 1, transformOrigin: "540px 880px" }, { scale: 1.01, duration: D, ease: "none" }, 0);
+
+        // ---- portrait card: rise + gentle 3D settle from f0 ----
+        gsap.set("#card", { transformPerspective: 1600, transformOrigin: "50% 50%" });
+        gsap.set("#vid-wrap", { transformOrigin: "50% 40%" });
+        tl.fromTo("#card", { opacity: 0.3 }, { opacity: 1, duration: 0.12, ease: "power1.out" }, 0);
+        tl.fromTo("#card", { y: 90 }, { y: 0, duration: 0.5, ease: "power3.out", immediateRender: false }, 0);
+        tl.fromTo("#card", { scale: 0.9 }, { scale: 1, duration: 0.48, ease: "back.out(1.4)", immediateRender: false }, 0);
+        tl.fromTo("#card", { rotationX: 20 }, { rotationX: 3, duration: 0.62, ease: "back.out(1.7)", immediateRender: false }, 0);
+        tl.fromTo("#card", { rotationY: 11 }, { rotationY: 5, duration: 0.55, ease: "power3.out", immediateRender: false }, 0);
+        tl.fromTo("#card", { rotation: -5 }, { rotation: -1.2, duration: 0.6, ease: "back.out(1.4)", immediateRender: false }, 0);
+        tl.to("#card", { rotationY: 3.8, rotationX: 2.4, rotation: -0.8, duration: 5.0, ease: "sine.inOut" }, 0.62);
+        tl.fromTo("#vid-wrap", { scale: 1.12 }, { scale: 1, duration: 0.7, ease: "power3.out" }, 0);
+        tl.to("#vid-wrap", { scale: 1.03, duration: D - 0.7, ease: "none" }, 0.7);
+        tl.fromTo("#sheen", { opacity: 0 }, { opacity: 1, duration: 0.12, ease: "power1.out" }, 0.08);
+        tl.fromTo("#sheen", { backgroundPosition: "100% 0" }, { backgroundPosition: "0% 0", duration: 0.7, ease: "power2.inOut", immediateRender: false }, 0.08);
+        tl.to("#sheen", { opacity: 0, duration: 0.25, ease: "power1.in" }, 0.55);
+        tl.to("#card-float", { y: -4, duration: 1.1, ease: "sine.inOut", yoyo: true, repeat: 3 }, 0.6);
+
+        // ---- generic word entrances (contact on the spoken word) ----
+        for (const w of $$(".line .w[data-t]")) {
+          const t = parseFloat(w.dataset.t);
+          const ldy = w.closest(".line").dataset.dy;
+          const dy = ldy ? parseFloat(ldy) : 40;
+          if (w.dataset.hero) {
+            const s0 = Math.max(0, t - 0.18);
+            const pk = parseFloat(w.dataset.peak || "1.07");
+            gsap.set(w, { transformOrigin: "45% 90%" });
+            tl.fromTo(
+              w,
+              { opacity: 0, y: ldy ? 2 * dy : 80, scale: 0.56, rotation: -5, filter: "blur(8px)" },
+              { opacity: 1, y: -6, scale: pk, rotation: 1, filter: "blur(0px)", duration: t - s0, ease: "power3.out" },
+              s0,
+            );
+            tl.to(w, { y: 0, scale: 1, rotation: 0, duration: 0.34, ease: "back.out(1.6)" }, t);
+          } else {
+            const s0 = Math.max(0, t - 0.13);
+            const pre = t - 0.13 < 0 ? (0.13 - t) / 0.38 : 0;
+            tl.fromTo(
+              w,
+              { opacity: pre * 1.5, y: dy * (1 - pre), filter: `blur(${5 * (1 - pre)}px)` },
+              { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.38 - pre * 0.38, ease: "power3.out" },
+              s0,
+            );
+          }
+        }
+
+        // ================= BEAT A =================
+        gsap.set("#puck", { transformOrigin: "50% 50%" });
+        tl.fromTo("#puck", { opacity: 0 }, { opacity: 1, duration: 0.08, ease: "none" }, 1.06);
+        tl.fromTo("#puck", { scale: 0.35, y: 50, rotation: -18 }, { scale: 1, y: 0, rotation: 0, duration: 0.42, ease: "back.out(1.9)", immediateRender: false }, 1.06);
+        tl.fromTo("#puck-ring", { opacity: 0 }, { opacity: 1, duration: 0.1, ease: "power2.out" }, 1.24);
+        tl.fromTo("#puck-glow", { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1.08, duration: 0.24, ease: "power3.out" }, 1.24);
+        tl.to("#puck-glow", { scale: 0.96, duration: 0.5, ease: "sine.inOut", yoyo: true, repeat: 2 }, 1.48);
+        tl.to(".eye", { opacity: 1, boxShadow: "0 0 18px 5px rgba(46,156,203,0.85)", duration: 0.1, ease: "power2.out" }, 1.24);
+        gsap.set(".eye", { transformOrigin: "50% 50%" });
+        tl.to(".eye", { scaleY: 0.12, duration: 0.05, ease: "power2.in" }, 2.0);
+        tl.to(".eye", { scaleY: 1, duration: 0.08, ease: "power2.out" }, 2.05);
+        tl.fromTo("#puck-bob", { y: 0 }, { y: -16, duration: 0.1, ease: "power2.out", immediateRender: false }, 1.22);
+        tl.to("#puck-bob", { y: 0, duration: 0.34, ease: "back.out(2.2)" }, 1.32);
+        tl.to("#puck-float", { y: -14, duration: 0.45, ease: "sine.inOut", yoyo: true, repeat: 2 }, 1.66);
+        tl.to("#puck-bob", { y: -12, rotation: 6, duration: 0.1, ease: "power2.out" }, 2.6);
+        tl.to("#puck-bob", { y: 0, rotation: 0, duration: 0.3, ease: "back.out(2)" }, 2.7);
+
+        // beat A exits (bottom-up blur-up) 3.0–3.24
+        tl.to("#a4", { y: -30, opacity: 0, filter: "blur(8px)", duration: 0.18, ease: "power2.in" }, 2.98);
+        tl.to("#puck", { scale: 0.5, y: -30, opacity: 0, filter: "blur(6px)", duration: 0.18, ease: "power2.in" }, 2.98);
+        tl.to(["#a-rea", "#a3"], { y: -36, opacity: 0, filter: "blur(8px)", duration: 0.18, ease: "power2.in" }, 2.98 + 2 * F);
+        tl.to(["#a1", "#a2"], { y: -36, opacity: 0, filter: "blur(8px)", duration: 0.18, ease: "power2.in" }, 2.98 + 3 * F);
+
+        // ================= BEAT B (header over the sweatshirt) =================
+        gsap.set("#w-comment", { transformOrigin: "50% 85%" });
+        tl.fromTo(
+          "#w-comment",
+          { opacity: 0, y: 46, scale: 0.94, filter: "blur(6px)" },
+          { opacity: 1, y: -4, scale: 1.015, filter: "blur(0px)", duration: 0.16, ease: "power3.out" },
+          3.2,
+        );
+        tl.to("#w-comment", { y: 0, scale: 1, duration: 0.26, ease: "sine.inOut" }, 3.36);
+        gsap.set(["#q-open", "#q-close"], { transformOrigin: "50% 70%" });
+        gsap.set("#w-reverse", { transformOrigin: "50% 90%" });
+        tl.fromTo("#q-open", { opacity: 0, y: 40, scale: 0.5, rotation: -14 }, { opacity: 1, y: 0, scale: 1, rotation: 0, duration: 0.3, ease: "back.out(2.2)" }, 3.46);
+        tl.fromTo(
+          "#w-reverse",
+          { opacity: 0, y: 90, scale: 0.55, rotation: -6, filter: "blur(8px)" },
+          { opacity: 1, y: -10, scale: 1.06, rotation: 1.2, filter: "blur(0px)", duration: 0.18, ease: "power3.out" },
+          3.52,
+        );
+        tl.to("#w-reverse", { y: 0, scale: 1, rotation: 0, duration: 0.36, ease: "back.out(1.6)" }, 3.7);
+        tl.fromTo("#q-close", { opacity: 0, y: 40, scale: 0.5, rotation: 14 }, { opacity: 1, y: 0, scale: 1, rotation: 0, duration: 0.3, ease: "back.out(2.2)" }, 3.71);
+        tl.fromTo("#punch", { scale: 1, transformOrigin: "540px 880px" }, { scale: 1.008, duration: 0.45, ease: "power2.out" }, 3.68);
+        tl.to("#punch", { scale: 1, duration: 0.8, ease: "sine.inOut" }, 4.4);
+        tl.to("#card-pos", { y: 6, duration: 0.1, ease: "power2.out" }, 3.72);
+        tl.to("#card-pos", { y: 0, duration: 0.38, ease: "back.out(2)" }, 3.84);
+
+        // link chip pops at the card's top-right corner on "link", pulses on "repository"
+        gsap.set("#chip", { transformOrigin: "10% 60%" });
+        tl.fromTo("#chip", { opacity: 0 }, { opacity: 1, duration: 0.08, ease: "none" }, 4.6);
+        tl.fromTo("#chip", { scale: 0.5, y: 30, rotation: -8 }, { scale: 1.04, y: -3, rotation: 1, duration: 0.16, ease: "power3.out", immediateRender: false }, 4.6);
+        tl.to("#chip", { scale: 1, y: 0, rotation: 0, duration: 0.3, ease: "back.out(1.8)" }, 4.76);
+        tl.fromTo("#chip svg", { rotation: -30 }, { rotation: 0, duration: 0.5, ease: "back.out(2.4)" }, 4.66);
+        tl.to("#chip", { scale: 1.04, duration: 0.1, ease: "power2.out" }, 5.4);
+        tl.to("#chip", { scale: 1, duration: 0.28, ease: "back.out(2)" }, 5.5);
+        tl.to("#chip-pos", { y: 5, duration: 0.5, ease: "sine.inOut", yoyo: true, repeat: 1 }, 4.86);
+
+        // ---- re-layout (5.50–6.24): header + p1 clear, card compacts under the top, the CTA re-lands as the hero ----
+        tl.to("#p1", { y: -30, opacity: 0, filter: "blur(8px)", duration: 0.18, ease: "power2.in" }, 5.5);
+        tl.to("#hdr", { opacity: 0, scale: 0.94, transformOrigin: "540px 500px", filter: "blur(8px)", duration: 0.16, ease: "power2.in" }, 5.52);
+        tl.to("#card-pos", { x: -24, y: 330, scale: 0.76, transformOrigin: "0px 0px", duration: 0.46, ease: "power3.inOut" }, 5.6);
+        tl.to("#card", { rotationY: 8, rotation: -2.4, duration: 0.24, ease: "power2.out" }, 5.6);
+        tl.to("#card", { rotationY: 5, rotationX: 3, rotation: -1.2, duration: 0.5, ease: "back.out(1.6)" }, 5.84);
+        tl.to("#card", { rotationY: 4, rotationX: 2.2, rotation: -0.8, duration: D - 6.34, ease: "sine.inOut" }, 6.34);
+        tl.fromTo("#sheen", { backgroundPosition: "100% 0", opacity: 0 }, { backgroundPosition: "0% 0", opacity: 0.8, duration: 0.6, ease: "power2.inOut", immediateRender: false }, 5.8);
+        tl.to("#sheen", { opacity: 0, duration: 0.2, ease: "power1.in" }, 6.4);
+        // header re-lands at the top (5.86–6.24)
+        tl.set("#hdr", { y: 0 }, 5.7);
+        tl.to("#hdr", { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.22, ease: "power3.out" }, 5.86);
+        tl.fromTo("#hdr", { y: -30 }, { y: 0, duration: 0.3, ease: "back.out(1.8)", immediateRender: false }, 5.86);
+        tl.to("#w-reverse", { scale: 1.06, duration: 0.12, ease: "power2.out" }, 6.0);
+        tl.to("#w-reverse", { scale: 1, duration: 0.32, ease: "back.out(2)" }, 6.12);
+
+        // pill pops on the card's right edge (shoulder height)
+        gsap.set("#pill", { transformOrigin: "50% 60%" });
+        tl.fromTo("#pill", { opacity: 0, scale: 0.5, y: 30 }, { opacity: 1, scale: 1.06, y: -3, duration: 0.16, ease: "power3.out" }, 5.98);
+        tl.to("#pill", { scale: 1, y: 0, duration: 0.26, ease: "back.out(1.6)" }, 6.14);
+        // chip drops down an arc into the pill (6.10–6.38)
+        {
+          const chipC = { x: 552 + 190, y: 300 + 33 };
+          const pillC = { x: 650 + 140, y: 1040 + 42 };
+          tl.to("#chip-pos", { x: pillC.x - chipC.x, duration: 0.28, ease: "power2.inOut" }, 6.1);
+          tl.to("#chip-pos", { y: pillC.y - chipC.y, duration: 0.28, ease: "power2.in" }, 6.1);
+          tl.to("#chip", { scale: 0.42, rotation: 6, duration: 0.28, ease: "power2.in" }, 6.1);
+          tl.to("#chip", { opacity: 0, duration: 0.07, ease: "power1.in" }, 6.33);
+        }
+        tl.to("#pill-pos", { y: 6, duration: 0.06, ease: "power2.out" }, 6.38);
+        tl.to("#pill-pos", { y: 0, duration: 0.22, ease: "back.out(2)" }, 6.44);
+        const IB = 6.46;
+        tl.to("#pill", { scale: 1.09, duration: 0.1, ease: "power2.out" }, IB - 0.04);
+        tl.to("#pill", { scale: 1, duration: 0.32, ease: "back.out(2)" }, IB + 0.06);
+        tl.fromTo("#pill-arrow", { x: 0 }, { x: 9, duration: 0.12, ease: "power2.out" }, IB - 0.04);
+        tl.to("#pill-arrow", { x: 0, duration: 0.3, ease: "back.out(2)" }, IB + 0.08);
+        tl.fromTo("#pill-arrow", { color: "#FBFAF8" }, { color: "#2E9CCB", duration: 0.16, ease: "power1.out", immediateRender: false }, IB - 0.04);
+        tl.fromTo("#punch", { scale: 1 }, { scale: 1.006, duration: 0.4, ease: "power2.out", immediateRender: false }, IB - 0.02);
+        tl.to("#punch", { scale: 1, duration: 1.0, ease: "sine.inOut" }, IB + 0.6);
+
+        // loop D: from under the hero “reverse” into the card's right edge, marches to the end
+        tl.set("#dots-d", { opacity: 1 }, 6.3);
+        tl.fromTo("#mpath-d", { strokeDashoffset: LD }, { strokeDashoffset: 0, duration: 0.46, ease: "power1.inOut" }, 6.3);
+        tl.fromTo("#dots-d", { strokeDashoffset: 0 }, { strokeDashoffset: -84, duration: D - 6.3, ease: "none" }, 6.3);
+
+        // ================= BEAT C =================
+        // "straight to your" clears as "inbox" lands (room for "Just be a little"); "inbox" holds until "careful"
+        tl.to("#p2a", { y: -20, opacity: 0, filter: "blur(8px)", duration: 0.14, ease: "power2.in" }, 6.44);
+        tl.to("#p2b", { y: -22, opacity: 0, filter: "blur(8px)", duration: 0.17, ease: "power2.in" }, 7.0);
+        gsap.set("#warn", { transformOrigin: "50% 60%" });
+        tl.fromTo("#warn", { opacity: 0, scale: 0.4, y: 26, rotation: -12 }, { opacity: 1, scale: 1.08, y: -3, rotation: 2, duration: 0.16, ease: "power3.out" }, 7.38);
+        tl.to("#warn", { scale: 1, y: 0, rotation: 0, duration: 0.3, ease: "back.out(1.8)" }, 7.54);
+        tl.fromTo("#warn svg", { scale: 0.6 }, { scale: 1, duration: 0.36, ease: "back.out(2.6)" }, 7.44);
+        tl.fromTo("#warn-glow", { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1.05, duration: 0.24, ease: "power3.out" }, 7.42);
+        tl.to("#warn-glow", { opacity: 0.35, scale: 0.95, duration: 0.4, ease: "sine.inOut" }, 7.66);
+        tl.to("#warn", { rotation: -7, duration: 0.07, ease: "sine.inOut" }, 7.84);
+        tl.to("#warn", { rotation: 6, duration: 0.09, ease: "sine.inOut" }, 7.91);
+        tl.to("#warn", { rotation: 0, duration: 0.18, ease: "back.out(2)" }, 8.0);
+
+        // ================= END HOLD: card grows, caution block compacts (8.04–8.46) =================
+        {
+          const T2 = 8.04;
+          const DU = 0.42;
+          const E2 = "power3.inOut";
+          const lineTo = (sel, sc, x, base, ex = E2, yDelay = 0) => {
+            const el = $(sel);
+            const bo = el.querySelector(".bl").offsetTop;
+            gsap.set(sel, { transformOrigin: "0px 0px" });
+            tl.to(sel, { x: x - el.offsetLeft, scale: sc, duration: DU, ease: ex }, T2);
+            tl.to(sel, { y: base - el.offsetTop - bo * sc, duration: DU - yDelay, ease: E2 }, T2 + yDelay);
+          };
+          // card grows to the largest portrait that fits under the CTA (664x830), pill rides its right edge
+          tl.to("#card-pos", { scale: 0.83, duration: DU, ease: E2 }, T2);
+          tl.to("#pill-pos", { x: 10, y: 66, duration: DU, ease: E2 }, T2);
+          // "Just be a little careful" on one line, "of what you do." ⚠ below — over the sweatshirt
+          const c1 = $("#c1"), c3 = $("#c3"), wp = $("#warn-pos");
+          const s2 = 116 / 170, s3 = 64 / 72, sw = 0.85;
+          const XL = 104;
+          lineTo("#c2", s2, XL + c1.offsetWidth + 20, 1318, "power3.out");
+          lineTo("#c1", 1, XL, 1318, "power3.out", 0.06);
+          lineTo("#c3", s3, XL, 1420);
+          const wx = XL + c3.offsetWidth * s3 + 26;
+          const wy = 1420 - 0.27 * 64 - (84 * sw) / 2;
+          tl.to(wp, { scale: 0.4, opacity: 0, transformOrigin: "50% 50%", duration: 0.14, ease: "power2.in" }, T2);
+          tl.set(wp, { x: wx - wp.offsetLeft, y: wy - wp.offsetTop, transformOrigin: "0px 0px" }, T2 + 0.15);
+          tl.to(wp, { scale: sw, opacity: 1, duration: 0.3, ease: "back.out(2)" }, T2 + 0.36);
+          // the CTA gets one more beat
+          tl.to("#w-reverse", { scale: 1.05, duration: 0.12, ease: "power2.out" }, T2 + DU - 0.06);
+          tl.to("#w-reverse", { scale: 1, duration: 0.34, ease: "back.out(2)" }, T2 + DU + 0.06);
+          tl.to("#q-open", { rotation: -8, duration: 0.12, ease: "power2.out" }, T2 + DU - 0.04);
+          tl.to("#q-open", { rotation: 0, duration: 0.3, ease: "back.out(2.4)" }, T2 + DU + 0.08);
+          tl.to("#q-close", { rotation: 8, duration: 0.12, ease: "power2.out" }, T2 + DU - 0.02);
+          tl.to("#q-close", { rotation: 0, duration: 0.3, ease: "back.out(2.4)" }, T2 + DU + 0.1);
+        }
+        // alive to the cut
+        tl.to("#hdr", { y: -5, duration: 0.58, ease: "sine.inOut", yoyo: true, repeat: 1 }, 8.5);
+        tl.to("#card-float", { y: -7, duration: 0.6, ease: "sine.inOut", yoyo: true, repeat: 1 }, 8.46);
+        tl.to("#pill", { scale: 1.07, duration: 0.14, ease: "power2.out" }, 8.6);
+        tl.to("#pill", { scale: 1, duration: 0.34, ease: "back.out(2)" }, 8.74);
+        tl.to("#pill-arrow", { x: 8, duration: 0.14, ease: "power2.out" }, 8.6);
+        tl.to("#pill-arrow", { x: 0, duration: 0.32, ease: "back.out(2)" }, 8.74);
+        tl.to("#warn", { scale: 1.08, duration: 0.14, ease: "power2.out" }, 8.95);
+        tl.to("#warn", { scale: 1, duration: 0.34, ease: "back.out(2)" }, 9.09);
+        tl.to("#warn-glow", { opacity: 0.9, scale: 1.08, duration: 0.18, ease: "power2.out" }, 8.95);
+        tl.to("#warn-glow", { opacity: 0.35, scale: 0.95, duration: 0.45, ease: "sine.inOut" }, 9.13);
+        tl.to("#pill", { scale: 1.06, duration: 0.13, ease: "power2.out" }, 9.3);
+        tl.to("#pill", { scale: 1, duration: 0.3, ease: "back.out(2)" }, 9.43);
+        tl.to("#pill-arrow", { x: 7, duration: 0.13, ease: "power2.out" }, 9.3);
+        tl.to("#pill-arrow", { x: 0, duration: 0.25, ease: "back.out(2)" }, 9.43);
+        tl.fromTo("#sheen", { backgroundPosition: "100% 0", opacity: 0 }, { backgroundPosition: "0% 0", opacity: 0.8, duration: 0.8, ease: "power2.inOut", immediateRender: false }, 8.55);
+        tl.to("#sheen", { opacity: 0, duration: 0.2, ease: "power1.in" }, 9.36);
+
+        window.__timelines["main"] = tl;
+        if (window.__hfForceTimelineRebind) window.__hfForceTimelineRebind();
+      })();
+    </script>
+  </body>
+</html>
